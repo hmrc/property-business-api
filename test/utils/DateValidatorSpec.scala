@@ -21,13 +21,13 @@ class DateValidatorSpec extends UnitSpec {
       }
     }
     "return an error" when {
-      "when the 'from' date format is incorrect" in {
+      "the 'from' date format is incorrect" in {
         DateValidator.validateFromAndToDates(invalidFormatDate, None) shouldBe Validated.invalid(Seq(FromDateFormatError))
       }
-      "when the 'to' date format is incorrect" in {
+      "the 'to' date format is incorrect" in {
         DateValidator.validateFromAndToDates(None, invalidFormatDate) shouldBe Validated.invalid(Seq(ToDateFormatError))
       }
-      "when the 'to' date is before the 'from' date" in {
+      "the 'to' date is before the 'from' date" in {
         DateValidator.validateFromAndToDates(fromDate = validToDate, toDate = validFromDate) shouldBe Validated.invalid(Seq(RuleToDateBeforeFromDateError))
       }
     }

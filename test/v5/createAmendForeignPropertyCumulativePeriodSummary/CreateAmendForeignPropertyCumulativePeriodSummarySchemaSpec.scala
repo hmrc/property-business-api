@@ -25,7 +25,7 @@ import support.UnitSpec
 class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
 
   "schema lookup" when {
-    "a tax year is present" must {
+    "a tax year is present" should {
       "use Def1 for tax year 2025-26" in {
         val taxYear = TaxYear.fromMtd("2025-26")
         CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor(taxYear.asMtd) shouldBe Valid(
@@ -33,25 +33,16 @@ class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec extends UnitSp
       }
     }
 
-    "the tax year is present but not valid" when {
-
-      "the tax year is invalid" must {
-        "return a TaxYearFormatError" in {
+    "an invalid tax year is present" should {
+        "return a RuleTaxYearNotSupportedError" in {
           CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2024-25") shouldBe Invalid(Seq(RuleTaxYearNotSupportedError))
         }
-      }
-
-      "the tax year format is invalid" must {
         "return a TaxYearFormatError" in {
           CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("NotATaxYear") shouldBe Invalid(Seq(TaxYearFormatError))
         }
-      }
-
-      "the tax year range is invalid" must {
         "return a RuleTaxYearRangeInvalidError" in {
           CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2020-99") shouldBe Invalid(Seq(RuleTaxYearRangeInvalidError))
         }
-      }
     }
   }
 

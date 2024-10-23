@@ -48,7 +48,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
     "be successful" when {
       "given a valid request" in {
         MockedCreateAmendForeignPropertyCumulativePeriodSummaryConnector
-          .createForeignProperty(requestData)
+          .createAmendForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         val result = await(service.createAmendForeignProperty(requestData))
@@ -60,7 +60,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
         s"a $downstreamErrorCode error is returned from the service" in {
 
           MockedCreateAmendForeignPropertyCumulativePeriodSummaryConnector
-            .createForeignProperty(requestData)
+            .createAmendForeignProperty(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
           val result = await(service.createAmendForeignProperty(requestData))

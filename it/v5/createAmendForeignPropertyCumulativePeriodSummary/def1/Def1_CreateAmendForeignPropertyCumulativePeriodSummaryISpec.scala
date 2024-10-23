@@ -27,7 +27,7 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 
-class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   private def invalidEntryWithConsolidatedExpenses() =
     Json.parse(s"""
@@ -61,7 +61,7 @@ class Def1_CreateForeignPropertyPeriodCumulativeSummaryISpec extends Integration
   private val entry       = entryWith("AFG")
   private val requestBody = requestBodyWith(entry)
 
-  "calling the create endpoint" should {
+  "calling the create and amend endpoint" should {
 
     "return a 204 status" when {
 

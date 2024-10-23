@@ -17,14 +17,13 @@
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
-import play.api.libs.json.{JsObject, JsValue}
+import play.api.libs.json.JsObject
 import play.api.mvc.Result
 import utils.MockIdGenerator
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
@@ -42,20 +41,19 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
     with MockMtdIdLookupService
     with MockCreateAmendForeignPropertyCumulativePeriodSummaryService
     with MockCreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory
-    with MockAuditService
     with MockIdGenerator
     with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
   private val taxYear    = "2025-26"
   private val businessId = "XAIS12345678910"
 
-  "CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec" should {
+  "CreateAmendForeignPropertyCumulativePeriodSummaryController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
         MockedCreateAmendForeignPropertyCumulativePeriodSummaryService
-          .createForeignProperty(requestData)
+          .createAmendForeignProperty(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         runOkTest(expectedStatus = NO_CONTENT, maybeExpectedResponseBody = None)
@@ -73,7 +71,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
           willUseValidator(returningSuccess(requestData))
 
           MockedCreateAmendForeignPropertyCumulativePeriodSummaryService
-            .createForeignProperty(requestData)
+            .createAmendForeignProperty(requestData)
             .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleMisalignedPeriodError))))
 
           runErrorTest(RuleMisalignedPeriodError)
@@ -82,14 +80,13 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+  trait Test extends ControllerTest {
 
     val controller = new CreateAmendForeignPropertyCumulativePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateAmendForeignPropertyCumulativePeriodSummaryService,
       validatorFactory = mockCreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory,
-      auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -101,21 +98,6 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
     MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBody))
-
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
-      AuditEvent(
-        auditType = "CreateAmendForeignPropertyCumulativePeriodSummary",
-        transactionName = "create-foreign-property-period-cumulative-summary",
-        detail = GenericAuditDetail(
-          versionNumber = "5.0",
-          userType = "Individual",
-          agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear, "businessId" -> businessId),
-          requestBody = maybeRequestBody,
-          `X-CorrelationId` = correlationId,
-          auditResponse = auditResponse
-        )
-      )
 
     val requestBody: JsObject = JsObject.empty
 

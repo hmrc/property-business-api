@@ -17,11 +17,10 @@
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
 import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.Version
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -33,7 +32,6 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryController @Inject() (
     val lookupService: MtdIdLookupService,
     validatorFactory: CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory,
     service: CreateAmendForeignPropertyCumulativePeriodSummaryService,
-    auditService: AuditService,
     cc: ControllerComponents,
     idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
@@ -56,16 +54,6 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryController @Inject() (
         RequestHandler
           .withValidator(validator)
           .withService(service.createAmendForeignProperty)
-          .withAuditing(
-            AuditHandler(
-              auditService,
-              "CreateAmendForeignPropertyCumulativePeriodSummary",
-              "create-amend-foreign-property-cumulative-period-summary",
-              Version(request),
-              Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
-              Some(request.body)
-            )
-          )
           .withNoContentResult()
 
       requestHandler.handleRequest()

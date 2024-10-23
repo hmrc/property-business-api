@@ -31,7 +31,7 @@ trait MockCreateAmendForeignPropertyCumulativePeriodSummaryService extends MockF
 
   object MockedCreateAmendForeignPropertyCumulativePeriodSummaryService {
 
-    def createForeignProperty(
+    def createAmendForeignProperty(
         requestData: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockCreateAmendForeignPropertyCumulativePeriodSummaryService

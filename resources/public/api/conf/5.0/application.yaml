@@ -69,8 +69,8 @@ tags:
     description: Resources relating to an individual's historic non-FHL UK Property Income & Expenses Period Summaries
   - name: Foreign Property Income & Expenses Period Summary
     description: Resources relating to an individual's Foreign Property Income & Expenses Period Summary
-  - name: Foreign Property Cumulative Summary
-    description: Resources relating to an individual's Foreign Property Cumulative Summary
+  - name: Foreign Property Cumulative Period Summary
+    description: Resources relating to an individual's Foreign Property Cumulative Period Summary
   - name: Foreign Property Annual Submission
     description: Resources relating to an individual's Foreign Property Annual Submission
   - name: UK or Foreign Property Annual Submission Deletion

@@ -351,7 +351,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       "passed a body with an invalidly formatted fromDate" in {
 
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
-        print(invalidBody)
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -373,7 +372,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
 
-        print(invalidBody)
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 

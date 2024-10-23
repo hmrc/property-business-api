@@ -31,9 +31,9 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val 
     extends BaseDownstreamConnector {
 
   def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
-                                                                                                        hc: HeaderCarrier,
-                                                                                                        ec: ExecutionContext,
-                                                                                                        correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val downstreamUri =
       TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/business/property/periodic/${request.nino}/${request.businessId}")

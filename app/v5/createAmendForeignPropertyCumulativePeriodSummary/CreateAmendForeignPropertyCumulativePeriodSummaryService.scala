@@ -30,8 +30,8 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryService @Inject() (connec
     extends BaseService {
 
   def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
-                                                                                                        ctx: RequestContext,
-                                                                                                        ec: ExecutionContext): Future[ServiceOutcome[Unit]] =
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] =
     connector.createAmendForeignProperty(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
   private val downstreamErrorMap: Map[String, MtdError] = Map(

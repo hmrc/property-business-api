@@ -75,6 +75,16 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
   private val validBody = bodyWith(entry)
 
+  private def emptyDatesBodyWith(Entries: JsValue*) = Json.parse(
+    s"""
+       |{
+       |   "foreignProperty": ${JsArray(Entries)}
+       |}
+       |""".stripMargin
+  )
+
+  private val emptyDatesBody = emptyDatesBodyWith(entry)
+
   private def entryConsolidated = Json.parse(s"""
        |{
        |     "countryCode":"$validCountryCode",
@@ -184,6 +194,12 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
     foreignProperty = Seq(parsedForeignPropertyEntry)
   )
 
+  private val emptyDateParsedBody = Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
+    fromDate = None,
+    toDate = None,
+    foreignProperty = Seq(parsedForeignPropertyEntry)
+  )
+
   private val parsedBodyConsolidated = parsedBody.copy(foreignProperty = Seq(parsedForeignPropertyEntryConsolidated))
 
   private val parsedBodyMinimalForeign =
@@ -235,6 +251,17 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
               parsedBusinessId,
               TaxYear.fromMtd(taxYearString),
               parsedBody))
+      }
+
+      "passed a request with no 'from' and 'to' dates" in {
+        val taxYearString = "2025-26"
+        validator(validNino, validBusinessId, taxYearString, emptyDatesBody).validateAndWrapResult() shouldBe
+          Right(
+            Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
+              parsedNino,
+              parsedBusinessId,
+              TaxYear.fromMtd(taxYearString),
+              emptyDateParsedBody))
       }
     }
 

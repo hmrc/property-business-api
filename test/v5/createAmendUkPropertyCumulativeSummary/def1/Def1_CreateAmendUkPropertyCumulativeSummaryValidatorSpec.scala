@@ -355,6 +355,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
             "/ukProperty/income/taxDeducted",
             "/ukProperty/income/otherIncome",
             "/ukProperty/income/rentARoom/rentsReceived",
+            "/ukProperty/expenses/rentARoom/amountClaimed",
             "/ukProperty/expenses/residentialFinancialCost",
             "/ukProperty/expenses/residentialFinancialCostsCarriedForward"
           ).foreach(path => testValueFormatErrorWith(path, fullRequestJson.update(path, JsNumber(123.456))))

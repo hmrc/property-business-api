@@ -64,7 +64,7 @@ class ExpensesSpec extends UnitSpec {
     """.stripMargin
   )
 
-  val fullExpensesMtdRequestJson: JsValue = Json.parse(
+  val fullExpensesDownstreamRequest: JsValue = Json.parse(
     """{
       |  "premisesRunningCosts": 4.11,
       |  "repairsAndMaintenance": 4.12,
@@ -140,7 +140,7 @@ class ExpensesSpec extends UnitSpec {
 
       "write to JSON" should {
         "return the expected JSON" in {
-          Json.toJson(expenses) shouldBe fullExpensesMtdRequestJson
+          Json.toJson(expenses) shouldBe fullExpensesDownstreamRequest
         }
       }
     }

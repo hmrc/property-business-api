@@ -55,7 +55,4 @@ object RuleEarlyDataSubmissionNotAccepted
     extends MtdError("RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED", "Cannot submit data more than 10 days before end of Period.", BAD_REQUEST)
 
 object RuleDuplicateCountryCode
-    extends MtdError(
-      "RULE_DUPLICATE_COUNTRY_CODE",
-      "You cannot supply the same country code for multiple properties. If there are multiple properties per country the income and expenses should be the total across all properties.",
-      BAD_REQUEST)
+    extends MtdError("RULE_DUPLICATE_COUNTRY_CODE", "You cannot supply the same country code for multiple properties.", BAD_REQUEST)

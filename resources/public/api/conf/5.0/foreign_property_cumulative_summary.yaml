@@ -1,12 +1,12 @@
 get:
-  $ref: "./foreign_property_cumulative_retrieve.yaml"
+  $ref: "./foreign_property_cumulative_summary_retrieve.yaml"
   summary: Retrieve a Foreign Property Cumulative Period Summary
   security:
     - User-Restricted:
         - read:self-assessment
 
 put:
-  $ref: "./foreign_property_cumulative_create_and_amend.yaml"
+  $ref: "./foreign_property_cumulative_summary_create_and_amend.yaml"
   summary:  Create and Amend a Foreign Property Cumulative Period Summary
   security:
     - User-Restricted:

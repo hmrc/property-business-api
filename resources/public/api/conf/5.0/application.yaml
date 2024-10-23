@@ -73,8 +73,6 @@ tags:
     description: Resources relating to an individual's Foreign Property Cumulative Summary
   - name: Foreign Property Annual Submission
     description: Resources relating to an individual's Foreign Property Annual Submission
-  - name: Foreign Property Cumulative Summary
-    description: Resources relating to an individual's Foreign Property Cumulative Period Summary
   - name: UK or Foreign Property Annual Submission Deletion
     description: Resources relating to an individual's UK or Foreign Property Annual Submission Deletion
   - name: UK or Foreign Property Income and Expenses Period Summaries List
@@ -104,7 +102,7 @@ paths:
   /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}:
     $ref: "./foreign_property_period_summary.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/cumulative/{taxYearFrom2025}:
-    $ref: "./foreign_property_cumulative.yaml"
+    $ref: "./foreign_property_cumulative_summary.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}:
     $ref: "./foreign_property_annual_submission.yaml"
   /individuals/business/property/{nino}/{businessId}/annual/{taxYear}:

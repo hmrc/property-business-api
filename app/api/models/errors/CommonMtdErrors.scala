@@ -90,69 +90,6 @@ object RuleTaxYearRangeInvalidError
 
 object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "The specified tax year has not yet ended", BAD_REQUEST)
 
-object RuleAdvanceSubmissionRequiresPeriodEndDateError
-    extends MtdError(
-      "RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE",
-      "For advance submission, end date must be the end of the period",
-      BAD_REQUEST
-    )
-
-object RuleSubmissionEndDateCannotMoveBackwardsError
-    extends MtdError(
-      "RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS",
-      "Submission end date cannot be earlier than existing submission",
-      BAD_REQUEST
-    )
-
-object RuleStartDateNotAlignedWithReportingTypeError
-    extends MtdError(
-      "RULE_START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE",
-      "Start date does not align with the reporting type",
-      BAD_REQUEST
-    )
-
-object RuleStartDateNotAlignedToCommencementDateError
-    extends MtdError(
-      "RULE_START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE",
-      "Start date does not align with the commencement date",
-      BAD_REQUEST
-    )
-
-object RuleEndDateNotAlignedWithReportingTypeError
-    extends MtdError(
-      "RULE_END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE",
-      "End date does not align with the reporting type",
-      BAD_REQUEST
-    )
-
-object RuleStartAndEndDateNotAllowedError
-    extends MtdError(
-      "RULE_START_AND_END_DATE_NOT_ALLOWED",
-      "Start/end date not accepted for annual/latent submission",
-      BAD_REQUEST
-    )
-
-object RuleOutsideAmendmentWindowError
-    extends MtdError(
-      "RULE_OUTSIDE_AMENDMENT_WINDOW",
-      "Request cannot be completed as you are outside the amendment window",
-      BAD_REQUEST
-    )
-
-object RuleEarlyDataSubmissionNotAcceptedError
-    extends MtdError(
-      "RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED",
-      "Cannot submit data more than 10 days before end of period",
-      BAD_REQUEST
-    )
-
-object RuleMissingSubmissionDatesError
-    extends MtdError(
-      "RULE_MISSING_SUBMISSION_DATES",
-      "Submission start/end date not provided",
-      BAD_REQUEST
-    )
-
 object RulePropertyIncomeAllowanceError
     extends MtdError(
       "RULE_PROPERTY_INCOME_ALLOWANCE",

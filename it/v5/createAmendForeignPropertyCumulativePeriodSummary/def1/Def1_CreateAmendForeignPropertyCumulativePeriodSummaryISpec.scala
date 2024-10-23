@@ -241,6 +241,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
          |   "reason": "downstream message"
          |}
        """.stripMargin
+
   }
 
 }

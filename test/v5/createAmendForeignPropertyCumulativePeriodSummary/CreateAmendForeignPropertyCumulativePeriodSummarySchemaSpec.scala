@@ -34,15 +34,15 @@ class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec extends UnitSp
     }
 
     "an invalid tax year is present" should {
-        "return a RuleTaxYearNotSupportedError" in {
-          CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2024-25") shouldBe Invalid(Seq(RuleTaxYearNotSupportedError))
-        }
-        "return a TaxYearFormatError" in {
-          CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("NotATaxYear") shouldBe Invalid(Seq(TaxYearFormatError))
-        }
-        "return a RuleTaxYearRangeInvalidError" in {
-          CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2020-99") shouldBe Invalid(Seq(RuleTaxYearRangeInvalidError))
-        }
+      "return a RuleTaxYearNotSupportedError" in {
+        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2024-25") shouldBe Invalid(Seq(RuleTaxYearNotSupportedError))
+      }
+      "return a TaxYearFormatError" in {
+        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("NotATaxYear") shouldBe Invalid(Seq(TaxYearFormatError))
+      }
+      "return a RuleTaxYearRangeInvalidError" in {
+        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2020-99") shouldBe Invalid(Seq(RuleTaxYearRangeInvalidError))
+      }
     }
   }
 

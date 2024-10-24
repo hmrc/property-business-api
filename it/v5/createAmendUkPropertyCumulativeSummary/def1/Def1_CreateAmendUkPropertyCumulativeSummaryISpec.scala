@@ -119,7 +119,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, Status.NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().post(requestBodyJson))
+        val response: WSResponse = await(request().put(requestBodyJson))
         response.status shouldBe NO_CONTENT
         response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
@@ -214,7 +214,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           MtdIdLookupStub.ninoFound(nino)
         }
 
-        val response: WSResponse = await(request().post(allInvalidFieldsRequestBodyJson))
+        val response: WSResponse = await(request().put(allInvalidFieldsRequestBodyJson))
         response.status shouldBe BAD_REQUEST
         response.json shouldBe Json.toJson(wrappedErrors)
       }
@@ -323,7 +323,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
               MtdIdLookupStub.ninoFound(nino)
             }
 
-            val response: WSResponse = await(request().post(requestBodyJson))
+            val response: WSResponse = await(request().put(requestBodyJson))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
@@ -349,7 +349,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request().post(requestBodyJson))
+            val response: WSResponse = await(request().put(requestBodyJson))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }

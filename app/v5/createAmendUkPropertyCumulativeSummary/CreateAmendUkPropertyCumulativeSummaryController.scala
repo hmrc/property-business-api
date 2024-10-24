@@ -55,7 +55,7 @@ class CreateAmendUkPropertyCumulativeSummaryController @Inject() (val authServic
           auditService,
           "CreateAmendUkPropertyCumulativeSummary",
           "create-amend-uk-property-cumulative-summary",
-          Version.from(request, orElse = Version4),
+          Version(request),
           Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
           Some(request.body)
         ))

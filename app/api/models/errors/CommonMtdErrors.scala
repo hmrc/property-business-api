@@ -102,9 +102,6 @@ object RuleInvalidSubmissionPeriodError
       "Property income and expenses submissions cannot be more than 10 days before the end of the Period",
       BAD_REQUEST)
 
-object RuleInvalidSubmissionEndDateError
-    extends MtdError("RULE_INVALID_SUBMISSION_END_DATE", "The submitted end date must be the end of the quarter", BAD_REQUEST)
-
 // Missing Date Errors
 object MissingFromDateError extends MtdError("MISSING_FROM_DATE", "The From date parameter is missing", BAD_REQUEST)
 object MissingToDateError   extends MtdError("MISSING_TO_DATE", "The To date parameter is missing", BAD_REQUEST)

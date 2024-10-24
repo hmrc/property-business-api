@@ -26,7 +26,7 @@ class RetrieveUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec w
   private def validatorFor(taxYear: String) =
     new RetrieveUkPropertyCumulativeSummaryValidatorFactory().validator(nino = "ignoredNino", businessId = "ignored", taxYear = taxYear)
 
-  "RetrieveForeignPropertyBsasValidatorFactory" when {
+  "RetrieveUkPropertyCumulativeSummaryValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {
       "return a Def1 validator" in {
         validatorFor("2025-26") shouldBe a[Def1_RetrieveUkPropertyCumulativeSummaryValidator]

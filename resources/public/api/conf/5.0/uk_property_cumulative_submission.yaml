@@ -1,0 +1,13 @@
+get:
+  $ref: "./uk_property_cumulative_submission_retrieve.yaml"
+  summary: Retrieve a UK Property Period Submission
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
+put:
+  $ref: "./uk_property_cumulative_submission_create_and_amend.yaml"
+  summary: Create and Amend a UK Property Period Submission
+  security:
+    - User-Restricted:
+        - write:self-assessment

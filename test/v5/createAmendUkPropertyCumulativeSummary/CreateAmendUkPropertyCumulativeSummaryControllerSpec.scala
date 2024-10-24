@@ -68,17 +68,17 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
 
-        runErrorTestWithAudit(NinoFormatError, Some(consolidatedRequestBodyJson))
+        runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-        willUseValidator(returningSuccess(consolidatedRequestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendUkPropertyCumulativeSummaryService
-          .createUkProperty(consolidatedRequestData)
+          .createUkProperty(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
-        runErrorTestWithAudit(RuleTaxYearNotSupportedError, Some(consolidatedRequestBodyJson))
+        runErrorTestWithAudit(RuleTaxYearNotSupportedError, Some(requestBodyJson))
       }
     }
   }
@@ -101,7 +101,7 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
 
     MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(consolidatedRequestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -117,68 +117,6 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
           auditResponse = auditResponse
         )
       )
-
-    private val consolidatedRequestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
-      Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
-        fromDate = Some("2023-04-01"),
-        toDate = Some("2024-04-01"),
-        ukProperty = UkProperty(
-          income = Some(
-            Income(
-              premiumsOfLeaseGrant = Some(42.12),
-              reversePremiums = Some(84.31),
-              periodAmount = Some(9884.93),
-              taxDeducted = Some(842.99),
-              otherIncome = Some(31.44),
-              rentARoom = Some(RentARoomIncome(rentsReceived = Some(947.66)))
-            )
-          ),
-          expenses = Some(
-            Expenses(
-              premisesRunningCosts = None,
-              repairsAndMaintenance = None,
-              financialCosts = None,
-              professionalFees = None,
-              costOfServices = None,
-              other = None,
-              residentialFinancialCost = Some(9000.10),
-              travelCosts = None,
-              residentialFinancialCostsCarriedForward = Some(300.13),
-              rentARoom = Some(RentARoomExpenses(amountClaimed = Some(860.88))),
-              consolidatedExpenses = Some(-988.18)
-            )
-          )
-        )
-      )
-
-    protected val consolidatedRequestBodyJson: JsValue = Json.parse(
-      """
-        |{
-        |  "fromDate": "2023-04-01",
-        |  "toDate": "2024-04-01",
-        |  "ukProperty": {
-        |    "income": {
-        |      "premiumsOfLeaseGrant": 42.12,
-        |      "reversePremiums": 84.31,
-        |      "periodAmount": 9884.93,
-        |      "taxDeducted": 842.99,
-        |      "otherIncome": 31.44,
-        |      "rentARoom": {
-        |        "rentsReceived": 947.66
-        |      }
-        |    },
-        |    "expenses": {
-        |      "residentialFinancialCost": 9000.10,
-        |      "residentialFinancialCostsCarriedForward": 300.13,
-        |      "rentARoom": {
-        |        "amountClaimed": 860.88
-        |      },
-        |      "consolidatedExpenses": -988.18
-        |    }
-        |  }
-        |}
-        """.stripMargin
-    )
 
     val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(
@@ -247,9 +185,6 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
         |}
   """.stripMargin
     )
-
-    protected val consolidatedRequestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
-      Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), consolidatedRequestBody)
 
     protected val requestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)

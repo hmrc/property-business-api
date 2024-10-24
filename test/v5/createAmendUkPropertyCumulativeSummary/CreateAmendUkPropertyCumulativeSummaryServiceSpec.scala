@@ -107,6 +107,7 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowed,
           "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindow,
           "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
+          "SUBMITTED_TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
           "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAccepted,
           "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCode,
           "SERVER_ERROR"                       -> InternalError,

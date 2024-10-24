@@ -266,6 +266,34 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
           result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
         }
 
+        "passed a request with invalid fromDate" in {
+          val invalidFromDate     = "20224-01-011"
+          val requestWithoutDates = fullRequestJson.as[JsObject] - "fromDate"
+          val invalidFromDateJson = requestWithoutDates + ("fromDate" -> JsString(invalidFromDate))
+
+          validator(validNino, validTaxYear, validBusinessId, invalidFromDateJson).validateAndWrapResult() shouldBe
+            Left(ErrorWrapper(correlationId, FromDateFormatError))
+        }
+
+        "passed a request with invalid toDate" in {
+          val invalidToDate       = "2022-01-011"
+          val requestWithoutDates = fullRequestJson.as[JsObject] - "toDate"
+          val invalidToDateJson   = requestWithoutDates + ("toDate" -> JsString(invalidToDate))
+
+          validator(validNino, validTaxYear, validBusinessId, invalidToDateJson).validateAndWrapResult() shouldBe
+            Left(ErrorWrapper(correlationId, ToDateFormatError))
+        }
+
+        "passed a request with toDate before fromDate" in {
+          val fromDate              = "2025-01-31"
+          val toDate                = "2025-01-01"
+          val requestWithoutDates   = fullRequestJson.as[JsObject] - "toDate" - "fromDate"
+          val invalidFromToDateJson = requestWithoutDates + ("toDate" -> JsString(toDate)) + ("fromDate" -> JsString(fromDate))
+
+          validator(validNino, validTaxYear, validBusinessId, invalidFromToDateJson).validateAndWrapResult() shouldBe
+            Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
+        }
+
         "passed an empty body" in {
           val invalidBody = JsObject.empty
           val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =

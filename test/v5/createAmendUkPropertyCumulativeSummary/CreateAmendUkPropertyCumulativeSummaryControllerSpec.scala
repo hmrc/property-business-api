@@ -108,7 +108,7 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
         auditType = "CreateAmendUkPropertyCumulativeSummary",
         transactionName = "create-amend-uk-property-cumulative-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = apiVersion.name,
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),

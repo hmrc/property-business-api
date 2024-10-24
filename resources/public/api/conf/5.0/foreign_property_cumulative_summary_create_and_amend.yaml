@@ -1,12 +1,13 @@
-summary: Create and Amend a Foreign Property Period Summary
 description: |
   This endpoint enables you to submit the periodic income and expenses for a foreign property business that occurred between two dates. 
   A National Insurance number, tax year and business ID are required. 
   
+  <strong>Please note that this endpoint is only available for tax years starting from 2025-26</strong>.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Tax Year        | Header Value (Gov_test-Scenario)            | Scenario                                                                 |
+  | Tax Years       | Header Value (Gov_test-Scenario)            | Scenario                                                                 |
   |-----------------|---------------------------------------------|--------------------------------------------------------------------------|
   | 2025-26 onwards | N/A - DEFAULT                               | Simulates success response.                                              |
   | 2025-26 onwards | NOT_FOUND                                   | Simulates the scenario where no data is found.                           |
@@ -19,7 +20,7 @@ description: |
   | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
 
 tags:
-  - Foreign Property Cumulative Submission
+  - Foreign Property Cumulative Period Summary
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
@@ -37,21 +38,18 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/foreign_property_create_or_amend_cumulative/def1/request.json'
+        $ref: './schemas/foreign_property_cumulative_summary_create_and_amend/def1/request.json'
       examples:
-        full-expenses-request:
-          description: Full Expenses request for TY 2025-26
+        Full expenses request for TY 2025-26 and after:
           value:
-            $ref: './examples/foreign_property_create_or_amend_cumulative/def1/request.json'
-        consolidated-expenses-request:
-          description: Consolidated Expenses request for TY 2025-26
+            $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def1/request.json'
+        Consolidated expenses request for TY 2025-26 and after:
           value:
-            $ref: './examples/foreign_property_create_or_amend_cumulative/def1/consolidated_request.json'
-
+            $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def1/consolidated_request.json'
 
 responses:
-  "201":
-    description: Success
+  "204":
+    description: Success(No Content)
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
@@ -96,6 +94,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
           RULE_DUPLICATE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCode'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
           RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE:
             $ref: './common/errors.yaml#/components/examples/ruleAdvanceSubmissionRequiresPeriodEndDate'
           RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS:
@@ -114,8 +114,6 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow'
           RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED:
             $ref: './common/errors.yaml#/components/examples/ruleEarlyDataSubmissionNotAccepted'
-          RULE_INCORRECT_GOV_TEST_SCENARIO:
-            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
   "403":
     description: Forbidden
@@ -136,5 +134,3 @@ responses:
         examples:
           MATCHING_RESOURCE_NOT_FOUND:
             $ref: './common/errors.yaml#/components/examples/notFound'
-
-

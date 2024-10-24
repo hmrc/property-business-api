@@ -1,6 +1,0 @@
-put:
-  $ref: "./foreign_property_cumulative_create_and_amend.yaml"
-  summary:  Create and Amend a Cumulative Foreign Property Period Summary
-  security:
-    - User-Restricted:
-        - write:self-assessment

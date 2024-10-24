@@ -6,15 +6,18 @@
     "fromDate": {
       "type": "string",
       "description": "The first day that the income and expenses period summary covers. Format: YYYY-MM-DD",
-      "example": "2025-04-06"
+      "example": "2025-04-06",
+      "format": "date"
     },
     "toDate": {
       "type": "string",
       "description": "The last day that the income and expenses period summary covers. Format: YYYY-MM-DD",
-      "example": "2025-07-05"
+      "example": "2025-07-05",
+      "format": "date"
     },
     "foreignProperty": {
       "type": "array",
+      "title": "foreignPropertyEntry",
       "description": "Array holding the income and expenses of the user's foreign property business for the period.",
       "items": {
         "type": "object",

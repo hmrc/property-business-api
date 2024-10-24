@@ -15,7 +15,7 @@ components:
       name: "Authorization"
       in: header
       description: |
-        An OAuth 3.0 Bearer Token with the *read:self-assessment* scope.
+        An OAuth 2.0 Bearer Token with the *read:self-assessment* scope.
       schema:
         type: string
         example: Bearer bb7fed3fe10dd235a2ccda3d50fb
@@ -25,7 +25,7 @@ components:
       name: "Authorization"
       in: header
       description: |
-        An OAuth 3.0 Bearer Token with the *write:self-assessment* scope.
+        An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
       schema:
         type: string
         example: Bearer bb7fed3fe10dd235a2ccda3d50fb
@@ -67,7 +67,7 @@ components:
         name: "Link"
         in: header
         description: |
-          See the API documentation:
+          See the API documentation.
         schema:
           type: string
           example: "https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/property-business-api"

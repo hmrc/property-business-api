@@ -17,7 +17,7 @@
 package api.controllers.validators.resolvers
 
 import api.models.domain.DateRange
-import api.models.errors.{FromDateFormatError, MtdError, RuleToDateBeforeFromDateError, ToDateFormatError}
+import api.models.errors._
 import cats.data.Validated
 
 object ResolveFromAndToDates extends ResolverSupport {
@@ -34,4 +34,5 @@ object ResolveFromAndToDates extends ResolverSupport {
   val resolver: Resolver[(String, String), DateRange] = resolveDateRange.withYearsLimitedTo(minimumYear, maximumYear)
 
   def apply(value: (String, String)): Validated[Seq[MtdError], DateRange] = resolver(value)
+
 }

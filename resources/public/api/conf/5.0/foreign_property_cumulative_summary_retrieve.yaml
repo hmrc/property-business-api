@@ -6,7 +6,7 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Tax Year        | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
+  | Tax Years       | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
   |-----------------|----------------------------------|--------------------------------------------------------------------------|
   | 2025-26 onwards | N/A - DEFAULT                    | Simulates success response with Foreign Property.                        |
   | 2025-26 onwards | NOT_FOUND                        | Simulates the scenario where no data is found.                           |

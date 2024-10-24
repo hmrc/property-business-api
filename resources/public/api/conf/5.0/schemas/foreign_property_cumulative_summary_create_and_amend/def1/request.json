@@ -15,6 +15,7 @@
     },
     "foreignProperty": {
       "type": "array",
+      "title": "foreignPropertyEntry",
       "description": "Array holding the income and expenses of the user's foreign property business for the period.",
       "items": {
         "type": "object",

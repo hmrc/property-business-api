@@ -2,6 +2,8 @@ description: |
   This endpoint enables you to submit the periodic income and expenses for a foreign property business that occurred between two dates. 
   A National Insurance number, tax year and business ID are required. 
   
+  <strong>Please note that this endpoint is only available for tax years starting from 2025-26</strong>.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
@@ -47,7 +49,7 @@ requestBody:
 
 responses:
   "204":
-    description: Success
+    description: Success(No Content)
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'

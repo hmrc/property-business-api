@@ -1,19 +1,19 @@
 description: |
-  This endpoint enables you to retrieve the cumulative period income and expenses for a foreign property business. A National Insurance number, business ID, and tax year are required. Please note that this endpoint is only available for tax years starting from 2025-26.
+  This endpoint enables you to retrieve the cumulative period income and expenses for a foreign property business. A National Insurance number, business ID, and tax year are required.
 
-  Note: This endpoint only supports submissions for tax year 2025-26 onwards.
+  <strong>Please note that this endpoint is only available for tax years starting from 2025-26</strong>.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
-  |----------------------------------|--------------------------------------------------------------------------|
-  | N/A - DEFAULT                    | Simulates success response with Foreign Property.                        |
-  | NOT_FOUND                        | Simulates the scenario where no data is found.                           |
-  | FOREIGN_PROPERTY_FULL_EXPENSES   | Simulates success response of a Foreign property with full expenses.     |
-  | FOREIGN_PROPERTY_CONSOLIDATED    | Simulates the scenario of a Foreign property with consolidated expenses. |
-  | UK_PROPERTY                      | Simulates the scenario where the type of business is incorrect.          |
-  | STATEFUL                         | Performs a stateful retrieve.                                            |
+  | Tax Year        | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
+  |-----------------|----------------------------------|--------------------------------------------------------------------------|
+  | 2025-26 onwards | N/A - DEFAULT                    | Simulates success response with Foreign Property.                        |
+  | 2025-26 onwards | NOT_FOUND                        | Simulates the scenario where no data is found.                           |
+  | 2025-26 onwards | FOREIGN_PROPERTY_FULL_EXPENSES   | Simulates success response of a Foreign property with full expenses.     |
+  | 2025-26 onwards | FOREIGN_PROPERTY_CONSOLIDATED    | Simulates the scenario of a Foreign property with consolidated expenses. |
+  | 2025-26 onwards | UK_PROPERTY                      | Simulates the scenario where the type of business is incorrect.          |
+  | 2025-26 onwards | STATEFUL                         | Performs a stateful retrieve.                                            |
 
 
 tags:
@@ -23,7 +23,6 @@ parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
   - $ref: './common/pathParameters.yaml#/components/parameters/taxYearFrom2025'
-  - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'

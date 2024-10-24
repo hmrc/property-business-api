@@ -67,7 +67,7 @@ components:
       name: "Link"
       in: header
       description: |
-        See the API documentation:
+        See the API documentation.
       schema:
         type: string
         example: "https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/property-business-api"

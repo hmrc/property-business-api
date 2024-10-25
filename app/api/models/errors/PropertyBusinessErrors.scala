@@ -80,3 +80,12 @@ object RuleMissingSubmissionDatesError
       "Submission start/end date not provided",
       BAD_REQUEST
     )
+
+object RuleAdvanceSubmissionRequiresPeriodEndDate
+    extends MtdError(
+      "RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE",
+      "For advance submission end date must be the end of the period.",
+      BAD_REQUEST)
+
+object RuleDuplicateCountryCode
+    extends MtdError("RULE_DUPLICATE_COUNTRY_CODE", "You cannot supply the same country code for multiple properties", BAD_REQUEST)

@@ -37,4 +37,4 @@ GET        /uk/period/non-furnished-holiday-lettings/:nino/:periodId  v4.histori
 GET        /uk/period/non-furnished-holiday-lettings/:nino            v4.historicNonFhlUkPropertyPeriodSummary.list.ListHistoricNonFhlUkPropertyPeriodSummariesController.handleRequest(nino: String)
 
 GET        /uk/:nino/:businessId/cumulative/:taxYear                  v5.retrieveUkPropertyCumulativeSummary.RetrieveUkPropertyCumulativeSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
-
+PUT       /uk/:nino/:businessId/cumulative/:taxYear                  v5.createAmendUkPropertyCumulativeSummary.CreateAmendUkPropertyCumulativeSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)

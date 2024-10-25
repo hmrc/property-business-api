@@ -5,13 +5,13 @@
   "properties": {
     "fromDate": {
       "type": "string",
-      "description": "The first day that the income and expenses period summary covers. Must conform to the format: YYYY-MM-DD.\n\nFor users with ITSA status of 'annual' or a latent income source, these dates are not required. Endpoint will default the start and end dates to the tax year start and end dates. Default value: 06/04/TY -> 05/05/TY+1",
+      "description": "The first day that the income and expenses period summary covers. Must conform to the format: YYYY-MM-DD.\n\nFor users with ITSA status of 'annual' or a latent income source, these dates are not required. Endpoint will default the start and end dates to the tax year start and end dates. Default value: 06/04/TY -> 05/04/TY+1",
       "example": "2025-04-06",
       "format": "date"
     },
     "toDate": {
       "type": "string",
-      "description": "The last day that the income and expenses period summary covers. Must conform to the format: YYYY-MM-DD.\n\nFor users with ITSA status of 'annual' or a latent income source, these dates are not required. Endpoint will default the start and end dates to the tax year start and end dates. Default value: 06/04/TY -> 05/05/TY+1",
+      "description": "The last day that the income and expenses period summary covers. Must conform to the format: YYYY-MM-DD.\n\nFor users with ITSA status of 'annual' or a latent income source, these dates are not required. Endpoint will default the start and end dates to the tax year start and end dates. Default value: 06/04/TY -> 05/04/TY+1",
       "example": "2025-07-05",
       "format": "date"
     },

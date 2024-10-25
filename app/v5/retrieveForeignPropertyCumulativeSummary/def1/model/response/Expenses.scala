@@ -28,7 +28,7 @@ case class Expenses(premisesRunningCosts: Option[BigDecimal],
                     residentialFinancialCost: Option[BigDecimal],
                     broughtFwdResidentialFinancialCost: Option[BigDecimal],
                     other: Option[BigDecimal],
-                    consolidatedExpenses: Option[BigDecimal]) {}
+                    consolidatedExpenses: Option[BigDecimal])
 
 object Expenses {
   implicit val writes: OWrites[Expenses] = Json.writes[Expenses]

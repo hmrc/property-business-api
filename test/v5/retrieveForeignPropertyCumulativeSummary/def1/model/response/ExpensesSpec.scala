@@ -22,43 +22,27 @@ import v5.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForei
 
 class ExpensesSpec extends UnitSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 
-  "Expenses" when {
-    // Note that downstream field names differ between the 'consolidated' and the 'all other' expenses branches so
-    // we must check separately...
-    "consolidated" must {
-      val downstreamJson: JsValue = ((consolidatedDownstreamJson \ "foreignProperty")(0) \ "expenses").get
-      val mtdJson: JsValue        = ((consolidatedMtdJson \ "foreignProperty")(0) \ "expenses").get
+  private def extractExpensesJson(json: JsValue): JsValue = ((json \ "foreignProperty")(0) \ "expenses").get
 
-      "read from valid JSON" should {
-        "return the parsed object" in {
-          downstreamJson.as[Expenses] shouldBe expensesConsolidated
+  "Expenses" which {
+    Seq(
+      ("consolidated", consolidatedDownstreamJson, consolidatedMtdJson, expensesConsolidated),
+      ("not consolidated", fullDownstreamJson, fullMtdJson, expenses)
+    ).foreach { case (scenario, downstreamJson, mtdJson, expenses) =>
+      s"is $scenario" when {
+        "read from valid JSON" should {
+          "return the parsed object" in {
+            extractExpensesJson(downstreamJson).as[Expenses] shouldBe expenses
+          }
         }
-      }
 
-      "written JSON" should {
-        "return the expected JSON" in {
-          Json.toJson(expensesConsolidated) shouldBe mtdJson
-        }
-      }
-    }
-
-    "not consolidated" must {
-      val downstreamJson: JsValue = ((fullDownstreamJson \ "foreignProperty")(0) \ "expenses").get
-      val mtdJson: JsValue        = ((fullMtdJson \ "foreignProperty")(0) \ "expenses").get
-
-      "read from valid JSON" should {
-        "return the parsed object" in {
-          downstreamJson.as[Expenses] shouldBe expenses
-        }
-      }
-
-      "written JSON" should {
-        "return the expected JSON" in {
-          Json.toJson(expenses) shouldBe mtdJson
+        "written to JSON" should {
+          "return the expected JSON" in {
+            Json.toJson(expenses) shouldBe extractExpensesJson(mtdJson)
+          }
         }
       }
     }
-
   }
 
 }

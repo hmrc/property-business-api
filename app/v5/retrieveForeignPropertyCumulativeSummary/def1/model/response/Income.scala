@@ -20,7 +20,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Income(rentIncome: Option[RentIncome],
-                  foreignTaxCreditRelief: Boolean,
+                  foreignTaxCreditRelief: Option[Boolean],
                   premiumsOfLeaseGrant: Option[BigDecimal],
                   otherPropertyIncome: Option[BigDecimal],
                   foreignTaxPaidOrDeducted: Option[BigDecimal],
@@ -31,7 +31,7 @@ object Income {
 
   implicit val reads: Reads[Income] = (
     (JsPath \ "rentIncome").readNullable[RentIncome] and
-      (JsPath \ "foreignTaxCreditRelief").read[Boolean] and
+      (JsPath \ "foreignTaxCreditRelief").readNullable[Boolean] and
       (JsPath \ "premiumsOfLeaseGrantAmount").readNullable[BigDecimal] and
       (JsPath \ "otherPropertyIncomeAmount").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and

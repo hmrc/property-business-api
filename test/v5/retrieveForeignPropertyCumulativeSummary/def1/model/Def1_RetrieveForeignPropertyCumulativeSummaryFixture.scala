@@ -160,7 +160,7 @@ trait Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 
   val income: Income = Income(
     rentIncome = Some(rentIncome),
-    foreignTaxCreditRelief = false,
+    foreignTaxCreditRelief = Some(false),
     premiumsOfLeaseGrant = Some(950.48),
     otherPropertyIncome = Some(802.49),
     foreignTaxPaidOrDeducted = Some(734.18),

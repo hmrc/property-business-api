@@ -45,7 +45,7 @@ components:
       in: path
       description: |
         The tax year to which the data applies. The start year and end year must not span two tax years.
-        The minimum tax year is 2025-26. No gaps are allowed, for example, 2024-27 is not valid.
+        The minimum tax year is 2025-26. No gaps are allowed, for example, 2025-27 is not valid.
       schema:
         type: string
         example: 2025-26

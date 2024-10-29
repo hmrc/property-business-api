@@ -59,8 +59,8 @@ tags:
     description: Resources relating to an individual's UK Property Business Annual Submission
   - name: UK Property Income & Expenses Period Summary
     description: Resources relating to an individual's UK Property Income & Expenses Period Summary
-  - name: UK Property Cumulative Summary
-    description: Resources relating to an individual's UK Property Cumulative Summary
+  - name: UK Property Cumulative Period Summary
+    description: Resources relating to an individual's UK Property Cumulative Period Summary
   - name: Historic FHL UK Property Business Annual Submission
     description: Resources relating to an individual's historic FHL UK Property Business Annual Submission
   - name: Historic non-FHL UK Property Business Annual Submission
@@ -105,7 +105,7 @@ paths:
     $ref: "./foreign_property_period_summary_create.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/period/{taxYear}/{submissionId}:
     $ref: "./foreign_property_period_summary.yaml"
-  /individuals/business/property/foreign/{nino}/{businessId}/cumulative/{taxYearFrom2025}:
+  /individuals/business/property/foreign/{nino}/{businessId}/cumulative/{taxYear}:
     $ref: "./foreign_property_cumulative_summary.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/annual/{taxYear}:
     $ref: "./foreign_property_annual_submission.yaml"

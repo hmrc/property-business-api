@@ -17,17 +17,6 @@ components:
         type: string
         example: 2022-23
       required: true
-    cumulativeTaxYear:
-      name: taxYear
-      in: path
-      description: |
-        The tax year to which the data applies. For example: 2025-26. The start year and end year must not span two tax years.
-        The minimum tax year is 2022-23. No gaps are allowed, for example, 2025-27 is not valid.
-        (The minimum tax year in Sandbox is 2025-26.)
-      schema:
-        type: string
-        example: 2025-26
-      required: true
     taxYearTo2025:
       name: taxYear
       in: path

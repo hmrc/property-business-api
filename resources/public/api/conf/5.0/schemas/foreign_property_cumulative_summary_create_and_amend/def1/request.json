@@ -92,7 +92,7 @@
             "properties": {
               "premisesRunningCosts": {
                 "type": "number",
-                "description": "Rent, rates, insurance, ground rents and other costs. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Rent, rates, insurance, ground rents and other costs. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -100,7 +100,7 @@
               },
               "repairsAndMaintenance": {
                 "type": "number",
-                "description": "Property repairs and maintenance. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Property repairs and maintenance. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -108,7 +108,7 @@
               },
               "financialCosts": {
                 "type": "number",
-                "description": "Loan interest and other financial costs. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Loan interest and other financial costs. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -116,7 +116,7 @@
               },
               "professionalFees": {
                 "type": "number",
-                "description": "Legal, management and other professional fees. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Legal, management and other professional fees. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -124,7 +124,7 @@
               },
               "travelCosts": {
                 "type": "number",
-                "description": "Car, van and travel costs incurred in running a property business. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Car, van and travel costs incurred in running a property business. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -132,7 +132,7 @@
               },
               "costOfServices": {
                 "type": "number",
-                "description": "Cost of services provided, including wages. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Cost of services provided, including wages. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -140,7 +140,7 @@
               },
               "other": {
                 "type": "number",
-                "description": "Other allowable property expenses. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "Other allowable property expenses. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,
@@ -164,7 +164,7 @@
               },
               "consolidatedExpenses": {
                 "type": "number",
-                "description": "The sum of all allowable expenses for the specified period. The value must be between -99,999,999,999.99 and 99999999999.99 up to 2 decimal places.",
+                "description": "The sum of all allowable expenses for the specified period. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
                 "multipleOf": 0.01,
                 "minimum": -99999999999.99,
                 "maximum": 99999999999.99,

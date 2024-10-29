@@ -7,17 +7,17 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Tax Years       | Header Value (Gov_test-Scenario)            | Scenario                                                                 |
-  |-----------------|---------------------------------------------|--------------------------------------------------------------------------|
-  | 2025-26 onwards | N/A - DEFAULT                               | Simulates success response.                                              |
-  | 2025-26 onwards | NOT_FOUND                                   | Simulates the scenario where no data is found.                           |
-  | 2025-26 onwards | STATEFUL                                    | Performs a stateful create.                                              |
-  | 2025-26 onwards | START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE | Simulates the scenario where the Start date does not align to the commencement date. |
-  | 2025-26 onwards | END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE    | Simulates the scenario where the End date does not align to the reporting type.      |
-  | 2025-26 onwards | MISSING_SUBMISSION_DATES                    | Simulates the scenario where the Submission start/end date not provided. |
-  | 2025-26 onwards | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the Start/End Date not accepted for annual/latent submission. |
-  | 2025-26 onwards | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of Period. |
-  | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
+  | Tax Years       | Header Value (Gov_test-Scenario)            | Scenario                                                                                            |
+  |-----------------|---------------------------------------------|-----------------------------------------------------------------------------------------------------|
+  | 2025-26 onwards | N/A - DEFAULT                               | Simulates success response.                                                                         |
+  | 2025-26 onwards | NOT_FOUND                                   | Simulates the scenario where no data is found.                                                      |
+  | 2025-26 onwards | STATEFUL                                    | Performs a stateful create.                                                                         |
+  | 2025-26 onwards | START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE | Simulates the scenario where the start date does not align to the commencement date.                |
+  | 2025-26 onwards | END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE    | Simulates the scenario where the end date does not align to the reporting type.                     |
+  | 2025-26 onwards | MISSING_SUBMISSION_DATES                    | Simulates the scenario where the submission start/end date not provided.                            |
+  | 2025-26 onwards | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the start/end date not accepted for annual/latent submission.          |
+  | 2025-26 onwards | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of period. |
+  | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window.     |
 
 tags:
   - Foreign Property Cumulative Period Summary
@@ -59,6 +59,7 @@ responses:
         $ref: './common/headers.yaml#/components/parameters/sunsetHeader'
       Link:
         $ref: './common/headers.yaml#/components/parameters/linkHeader'
+
   "400":
     description: Bad request
     content:
@@ -99,11 +100,11 @@ responses:
           RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE:
             $ref: './common/errors.yaml#/components/examples/ruleAdvanceSubmissionRequiresPeriodEndDate'
           RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS:
-            $ref: './common/errors.yaml#/components/examples/ruleSubmissionDateCannotMoveBackwards'
+            $ref: './common/errors.yaml#/components/examples/ruleSubmissionEndDateCannotMoveBackwards'
           RULE_START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE:
             $ref: './common/errors.yaml#/components/examples/ruleStartDateNotAlignedWithReportingType'
           RULE_START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE:
-            $ref: './common/errors.yaml#/components/examples/ruleStartDateNotAlignedWithCommencementDate'
+            $ref: './common/errors.yaml#/components/examples/ruleStartDateNotAlignedToCommencementDate'
           RULE_END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE:
             $ref: './common/errors.yaml#/components/examples/ruleEndDateNotAlignedWithReportingType'
           RULE_MISSING_SUBMISSION_DATES:

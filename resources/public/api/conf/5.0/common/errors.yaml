@@ -35,7 +35,7 @@ components:
         message: Tax year range invalid. A tax year range of one year is required
 
     ruleTypeOfBusinessIncorrectUk:
-      description: The supplied Business ID does not represent a UK property.
+      description: The supplied Business ID does not represent a UK property business.
       value:
         code: RULE_TYPE_OF_BUSINESS_INCORRECT
         message: The businessId is for a different type of business
@@ -233,7 +233,7 @@ components:
         code: RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE
         message: For advance submission, end date must be the end of the period
 
-    ruleSubmissionDateCannotMoveBackwards:
+    ruleSubmissionEndDateCannotMoveBackwards:
       description: Submission end date cannot be earlier than existing submission.
       value:
         code: RULE_SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS
@@ -246,7 +246,7 @@ components:
         code: RULE_START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE
         message: Start date does not align with the reporting type
 
-    ruleStartDateNotAlignedWithCommencementDate:
+    ruleStartDateNotAlignedToCommencementDate:
       description: Start date does not align with the commencement date.
       value:
         code: RULE_START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE

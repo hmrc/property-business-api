@@ -26,7 +26,6 @@ case class RetrieveUkPropertyAllowances(
     otherCapitalAllowance: Option[BigDecimal],
     costOfReplacingDomesticGoods: Option[BigDecimal],
     propertyIncomeAllowance: Option[BigDecimal],
-    electricChargePointAllowance: Option[BigDecimal],
     structuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
     enhancedStructuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
     zeroEmissionsCarAllowance: Option[BigDecimal]
@@ -43,7 +42,6 @@ object RetrieveUkPropertyAllowances {
       ((JsPath \ "costOfReplacingDomesticItems").read[BigDecimal].map(Option(_)) orElse (JsPath \ "costOfReplacingDomesticGoods")
         .readNullable[BigDecimal]) and // orElse implemented due to downstream bug specified here - MTDSA-22775
       (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
-      (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[RetrieveUkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[RetrieveUkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]

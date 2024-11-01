@@ -37,7 +37,6 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
           Some(100.25),
           Some(100.25),
           Some(100.25),
-          Some(100.25),
           Some(
             List(
               Def2_Retrieve_StructuredBuildingAllowance(
@@ -83,7 +82,6 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
       |        "costOfReplacingDomesticItems": 100.25,
       |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |        "otherCapitalAllowance": 100.25,
-      |        "electricChargePointAllowance": 100.25,
       |        "zeroEmissionsCarAllowance": 100.25,
       |        "propertyIncomeAllowance": 100.25,
       |        "structuredBuildingAllowance": [
@@ -122,7 +120,6 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
       |          "costOfReplacingDomesticItems": 100.25,
       |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |          "otherCapitalAllowance": 100.25,
-      |          "electricChargePointAllowance": 100.25,
       |          "zeroEmissionsCarAllowance": 100.25,
       |          "propertyAllowance": 100.25,
       |          "structuredBuildingAllowance": [

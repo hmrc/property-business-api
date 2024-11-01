@@ -23,7 +23,6 @@ case class Def2_Retrieve_ForeignPropertyAllowances(annualInvestmentAllowance: Op
                                                    costOfReplacingDomesticItems: Option[BigDecimal],
                                                    zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                                    otherCapitalAllowance: Option[BigDecimal],
-                                                   electricChargePointAllowance: Option[BigDecimal],
                                                    zeroEmissionsCarAllowance: Option[BigDecimal],
                                                    propertyIncomeAllowance: Option[BigDecimal],
                                                    structuredBuildingAllowance: Option[Seq[Def2_Retrieve_StructuredBuildingAllowance]])
@@ -36,7 +35,6 @@ object Def2_Retrieve_ForeignPropertyAllowances {
       (JsPath \ "costOfReplacingDomesticItems").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
-      (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").readNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[Def2_Retrieve_StructuredBuildingAllowance]]

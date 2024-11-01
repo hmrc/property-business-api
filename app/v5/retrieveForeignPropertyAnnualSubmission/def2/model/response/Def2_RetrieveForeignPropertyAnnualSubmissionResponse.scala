@@ -19,15 +19,17 @@ package v5.retrieveForeignPropertyAnnualSubmission.def2.model.response
 import api.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v5.retrieveForeignPropertyAnnualSubmission.def2.model.response.def2_foreignProperty.Def2_Retrieve_ForeignPropertyEntry
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
+// Note: foreignProperty is effectively mandatory.
+// It will only not be present in a successful response from downstream if a businessId
+// corresponds to a UK property is used and in this case we send back an error.
 case class Def2_RetrieveForeignPropertyAnnualSubmissionResponse(
     submittedOn: Timestamp,
-    foreignProperty: Option[Seq[Def2_Retrieve_ForeignPropertyEntry]]
+    foreignProperty: Option[Seq[RetrieveForeignPropertyEntry]]
 ) extends RetrieveForeignPropertyAnnualSubmissionResponse {
 
-  override def isForeignResult: Boolean = foreignProperty.nonEmpty
+  override def hasForeignData: Boolean = foreignProperty.isDefined
 }
 
 object Def2_RetrieveForeignPropertyAnnualSubmissionResponse {
@@ -37,7 +39,7 @@ object Def2_RetrieveForeignPropertyAnnualSubmissionResponse {
 
   implicit val reads: Reads[Def2_RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[Timestamp] and
-      (JsPath \ "foreignProperty").readNullable[Seq[Def2_Retrieve_ForeignPropertyEntry]]
+      (JsPath \ "foreignProperty").readNullable[Seq[RetrieveForeignPropertyEntry]]
   )(Def2_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
 
 }

@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.Def1_Retrieve_ForeignFhlEeaEntry
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty.Def1_Retrieve_ForeignPropertyEntry
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.RetrieveForeignFhlEeaEntry
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.RetrieveForeignPropertyEntry
 import v5.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
@@ -38,11 +38,11 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
   private val countryCode = "FRA"
 
-  private val foreignFhlEea         = Def1_Retrieve_ForeignFhlEeaEntry(None, None)
-  private val foreignNonFhlProperty = Def1_Retrieve_ForeignPropertyEntry(countryCode, None, None)
+  private val foreignFhlEea         = RetrieveForeignFhlEeaEntry(None, None)
+  private val foreignNonFhlProperty = RetrieveForeignPropertyEntry(countryCode, None, None)
 
-  def responseWith(foreignFhlEea: Option[Def1_Retrieve_ForeignFhlEeaEntry],
-                   foreignNonFhlProperty: Option[Seq[Def1_Retrieve_ForeignPropertyEntry]]): Def1_RetrieveForeignPropertyAnnualSubmissionResponse =
+  def responseWith(foreignFhlEea: Option[RetrieveForeignFhlEeaEntry],
+                   foreignNonFhlProperty: Option[Seq[RetrieveForeignPropertyEntry]]): Def1_RetrieveForeignPropertyAnnualSubmissionResponse =
     Def1_RetrieveForeignPropertyAnnualSubmissionResponse(Timestamp("2020-06-17T10:53:38Z"), foreignFhlEea, foreignNonFhlProperty)
 
   "connector" when {

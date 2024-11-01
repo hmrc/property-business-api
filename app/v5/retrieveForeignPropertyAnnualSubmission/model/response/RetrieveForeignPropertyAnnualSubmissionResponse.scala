@@ -22,7 +22,7 @@ import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_Retri
 import v5.retrieveForeignPropertyAnnualSubmission.def2.model.response.Def2_RetrieveForeignPropertyAnnualSubmissionResponse
 
 trait RetrieveForeignPropertyAnnualSubmissionResponse {
-  def isForeignResult: Boolean
+  def hasForeignData: Boolean
 }
 
 object RetrieveForeignPropertyAnnualSubmissionResponse {

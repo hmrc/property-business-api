@@ -19,17 +19,17 @@ package v5.retrieveForeignPropertyAnnualSubmission.def1.model.response
 import api.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.Def1_Retrieve_ForeignFhlEeaEntry
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty.Def1_Retrieve_ForeignPropertyEntry
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.RetrieveForeignFhlEeaEntry
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.RetrieveForeignPropertyEntry
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
 case class Def1_RetrieveForeignPropertyAnnualSubmissionResponse(
     submittedOn: Timestamp,
-    foreignFhlEea: Option[Def1_Retrieve_ForeignFhlEeaEntry],
-    foreignProperty: Option[Seq[Def1_Retrieve_ForeignPropertyEntry]]
+    foreignFhlEea: Option[RetrieveForeignFhlEeaEntry],
+    foreignProperty: Option[Seq[RetrieveForeignPropertyEntry]]
 ) extends RetrieveForeignPropertyAnnualSubmissionResponse {
 
-  override def isForeignResult: Boolean = foreignFhlEea.nonEmpty || foreignProperty.nonEmpty
+  override def hasForeignData: Boolean = foreignFhlEea.isDefined || foreignProperty.isDefined
 }
 
 object Def1_RetrieveForeignPropertyAnnualSubmissionResponse {
@@ -39,8 +39,8 @@ object Def1_RetrieveForeignPropertyAnnualSubmissionResponse {
 
   implicit val reads: Reads[Def1_RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[Timestamp] and
-      (JsPath \ "foreignFhlEea").readNullable[Def1_Retrieve_ForeignFhlEeaEntry] and
-      (JsPath \ "foreignProperty").readNullable[Seq[Def1_Retrieve_ForeignPropertyEntry]]
+      (JsPath \ "foreignFhlEea").readNullable[RetrieveForeignFhlEeaEntry] and
+      (JsPath \ "foreignProperty").readNullable[Seq[RetrieveForeignPropertyEntry]]
   )(Def1_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
 
 }

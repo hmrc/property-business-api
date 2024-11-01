@@ -24,7 +24,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
-import v5.retrieveUkPropertyAnnualSubmission.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

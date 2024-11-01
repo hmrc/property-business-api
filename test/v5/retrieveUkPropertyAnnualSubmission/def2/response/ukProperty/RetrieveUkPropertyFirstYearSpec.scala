@@ -18,7 +18,7 @@ package v5.retrieveUkPropertyAnnualSubmission.def2.response.ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty.RetrieveUkPropertyFirstYear
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.RetrieveUkPropertyFirstYear
 
 class RetrieveUkPropertyFirstYearSpec extends UnitSpec {
 

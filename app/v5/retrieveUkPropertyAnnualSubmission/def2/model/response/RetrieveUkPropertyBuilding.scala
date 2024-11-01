@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty
+package v5.retrieveUkPropertyAnnualSubmission.def2.model.response
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
-case class RetrieveUkPropertyStructuredBuildingAllowance(amount: BigDecimal,
-                                                         firstYear: Option[RetrieveUkPropertyFirstYear],
-                                                         building: RetrieveUkPropertyBuilding)
+case class RetrieveUkPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
 
-object RetrieveUkPropertyStructuredBuildingAllowance {
+object RetrieveUkPropertyBuilding {
+  implicit val writes: OWrites[RetrieveUkPropertyBuilding] = Json.writes[RetrieveUkPropertyBuilding]
 
-  implicit val format: OFormat[RetrieveUkPropertyStructuredBuildingAllowance] =
-    Json.format[RetrieveUkPropertyStructuredBuildingAllowance]
+  implicit val reads: Reads[RetrieveUkPropertyBuilding] = (
+    (__ \ "name").readNullable[String] and
+      (__ \ "number").readNullable[String] and
+      (__ \ "postCode").read[String]
+  )(RetrieveUkPropertyBuilding.apply _)
 
 }

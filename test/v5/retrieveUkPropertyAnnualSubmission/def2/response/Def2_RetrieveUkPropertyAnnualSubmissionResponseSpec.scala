@@ -20,8 +20,7 @@ import api.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty._
-import v5.retrieveUkPropertyAnnualSubmission.model.response._
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
 
 class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 

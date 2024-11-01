@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty
+package v5.retrieveUkPropertyAnnualSubmission.def2.model.response
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class RetrieveUkPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
+case class RetrieveUkProperty(adjustments: Option[RetrieveUkPropertyAdjustments], allowances: Option[RetrieveUkPropertyAllowances])
 
-object RetrieveUkPropertyBuilding {
-  implicit val writes: OWrites[RetrieveUkPropertyBuilding] = Json.writes[RetrieveUkPropertyBuilding]
+object RetrieveUkProperty {
+  implicit val writes: OWrites[RetrieveUkProperty] = Json.writes[RetrieveUkProperty]
 
-  implicit val reads: Reads[RetrieveUkPropertyBuilding] = (
-    (__ \ "name").readNullable[String] and
-      (__ \ "number").readNullable[String] and
-      (__ \ "postCode").read[String]
-  )(RetrieveUkPropertyBuilding.apply _)
+  implicit val reads: Reads[RetrieveUkProperty] = (
+    (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[RetrieveUkPropertyAdjustments] and
+      (__ \ "ukOtherPropertyAnnualAllowances").readNullable[RetrieveUkPropertyAllowances]
+  )(RetrieveUkProperty.apply _)
 
 }

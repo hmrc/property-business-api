@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty
+package v5.retrieveUkPropertyAnnualSubmission.def2.model.response
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json._

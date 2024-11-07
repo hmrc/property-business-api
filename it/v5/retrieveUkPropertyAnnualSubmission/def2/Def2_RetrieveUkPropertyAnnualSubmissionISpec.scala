@@ -129,8 +129,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
             |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
             |        "propertyAllowance": 100.25,
             |        "otherCapitalAllowance": 100.25,
-            |        "structureAndBuildingAllowance": 100.25,
-            |        "electricChargePointAllowance": 100.25
+            |        "structureAndBuildingAllowance": 100.25
             |      }
             |    }
             |  ]
@@ -165,7 +164,6 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
          |      "otherCapitalAllowance": 452.34,
          |      "costOfReplacingDomesticGoods": 567.34,
          |      "propertyIncomeAllowance": 342.34,
-         |      "electricChargePointAllowance": 454.34,
          |      "structuredBuildingAllowance": [
          |        {
          |          "amount": 234.34,
@@ -222,7 +220,6 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
         |         "otherCapitalAllowance":452.34,
         |         "costOfReplacingDomesticItems":567.34,
         |         "propertyIncomeAllowance":342.34,
-        |         "electricChargePointAllowance":454.34,
         |         "structuredBuildingAllowance":[
         |            {
         |               "amount":234.34,

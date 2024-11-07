@@ -22,7 +22,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri
 import api.models.outcomes.ResponseWrapper
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{UkResult, NonUkResult, Result}
+import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, Result, UkResult}
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
 
@@ -60,9 +60,9 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
     val response = get(downstreamUri, queryParams)
 
     response.map {
-      case Right(ResponseWrapper(corId, resp)) if resp.isUkResult => Right(ResponseWrapper(corId, UkResult(resp)))
-      case Right(ResponseWrapper(corId, _))                       => Right(ResponseWrapper(corId, NonUkResult))
-      case Left(e)                                                => Left(e)
+      case Right(ResponseWrapper(corId, resp)) if resp.hasUkData => Right(ResponseWrapper(corId, UkResult(resp)))
+      case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
+      case Left(e)                                               => Left(e)
     }
 
   }

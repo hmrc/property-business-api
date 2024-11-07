@@ -60,9 +60,9 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
     val response = get(downstreamUri, queryParams)
 
     response.map {
-      case Right(ResponseWrapper(corId, resp)) if resp.isForeignResult => Right(ResponseWrapper(corId, ForeignResult(resp)))
-      case Right(ResponseWrapper(corId, _))                            => Right(ResponseWrapper(corId, NonForeignResult))
-      case Left(e)                                                     => Left(e)
+      case Right(ResponseWrapper(corId, resp)) if resp.hasForeignData => Right(ResponseWrapper(corId, ForeignResult(resp)))
+      case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
+      case Left(e)                                                    => Left(e)
     }
 
   }

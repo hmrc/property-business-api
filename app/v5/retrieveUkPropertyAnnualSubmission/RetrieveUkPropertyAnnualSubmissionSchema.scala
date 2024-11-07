@@ -23,6 +23,8 @@ import cats.data.Validated
 import cats.data.Validated.Valid
 import play.api.libs.json.Reads
 import schema.DownstreamReadable
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 import scala.math.Ordered.orderingToOrdered
@@ -41,16 +43,14 @@ object RetrieveUkPropertyAnnualSubmissionSchema {
     val connectorReads: Reads[DownstreamResp] = Def2_RetrieveUkPropertyAnnualSubmissionResponse.reads
   }
 
-  private val preTysSchema = Def1
-
   def schemaFor(maybeTaxYear: Option[String]): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] =
     maybeTaxYear match {
       case Some(taxYearString) => ResolveTaxYear(taxYearString) andThen schemaFor
-      case None                => Valid(preTysSchema)
+      case None                => Valid(Def1)
     }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] = {
-    if (taxYear >= TaxYear.starting(2025)) Valid(Def2)
+    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2)
     else Valid(Def1)
   }
 

@@ -20,18 +20,16 @@ import api.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v5.retrieveForeignPropertyAnnualSubmission.def2.model.response.def2_foreignProperty._
 
 class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBody = Def2_RetrieveForeignPropertyAnnualSubmissionResponse(
     Timestamp("2020-07-07T10:59:47.544Z"),
     Some(
-      List(Def2_Retrieve_ForeignPropertyEntry(
+      List(RetrieveForeignPropertyEntry(
         "GER",
-        Some(Def2_Retrieve_ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
-        Some(Def2_Retrieve_ForeignPropertyAllowances(
-          Some(100.25),
+        Some(RetrieveForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(RetrieveForeignPropertyAllowances(
           Some(100.25),
           Some(100.25),
           Some(100.25),
@@ -40,13 +38,13 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
           Some(100.25),
           Some(
             List(
-              Def2_Retrieve_StructuredBuildingAllowance(
+              RetrieveStructuredBuildingAllowance(
                 100.25,
-                Some(Def2_Retrieve_FirstYear(
+                Some(RetrieveFirstYear(
                   "2020-03-29",
                   100.25
                 )),
-                Def2_Retrieve_Building(
+                RetrieveBuilding(
                   Some("Building Name"),
                   Some("12"),
                   "TF3 4GH"
@@ -60,7 +58,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
     Timestamp("2020-07-07T10:59:47.544Z"),
     Some(
       List(
-        Def2_Retrieve_ForeignPropertyEntry(
+        RetrieveForeignPropertyEntry(
           "GER",
           None,
           None
@@ -83,7 +81,6 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
       |        "costOfReplacingDomesticItems": 100.25,
       |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |        "otherCapitalAllowance": 100.25,
-      |        "electricChargePointAllowance": 100.25,
       |        "zeroEmissionsCarAllowance": 100.25,
       |        "propertyIncomeAllowance": 100.25,
       |        "structuredBuildingAllowance": [
@@ -122,7 +119,6 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
       |          "costOfReplacingDomesticItems": 100.25,
       |          "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |          "otherCapitalAllowance": 100.25,
-      |          "electricChargePointAllowance": 100.25,
       |          "zeroEmissionsCarAllowance": 100.25,
       |          "propertyAllowance": 100.25,
       |          "structuredBuildingAllowance": [

@@ -18,7 +18,7 @@ package v5.retrieveUkPropertyAnnualSubmission.def2.response.ukProperty
 
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.ukProperty._
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
 
 class RetrieveUkPropertySpec extends UnitSpec {
 
@@ -31,7 +31,6 @@ class RetrieveUkPropertySpec extends UnitSpec {
       |      "otherCapitalAllowance":452.34,
       |      "costOfReplacingDomesticGoods":567.34,
       |      "propertyIncomeAllowance":342.34,
-      |      "electricChargePointAllowance":454.34,
       |      "structuredBuildingAllowance":[
       |         {
       |            "amount":234.34,
@@ -95,7 +94,6 @@ class RetrieveUkPropertySpec extends UnitSpec {
         otherCapitalAllowance = Some(452.34),
         costOfReplacingDomesticGoods = Some(567.34),
         propertyIncomeAllowance = Some(342.34),
-        electricChargePointAllowance = Some(454.34),
         structuredBuildingAllowance = Some(
           List(
             RetrieveUkPropertyStructuredBuildingAllowance(
@@ -144,7 +142,6 @@ class RetrieveUkPropertySpec extends UnitSpec {
       |      "otherCapitalAllowance":452.34,
       |      "costOfReplacingDomesticGoods":567.34,
       |      "propertyIncomeAllowance":342.34,
-      |      "electricChargePointAllowance":454.34,
       |      "structuredBuildingAllowance":[
       |         {
       |            "amount":234.34,

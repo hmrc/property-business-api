@@ -20,23 +20,23 @@ import api.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea._
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty._
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea._
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty._
 
 class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBody = Def1_RetrieveForeignPropertyAnnualSubmissionResponse(
     Timestamp("2020-07-07T10:59:47.544Z"),
     Some(
-      Def1_Retrieve_ForeignFhlEeaEntry(
-        Some(Def1_Retrieve_ForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
-        Some(Def1_Retrieve_ForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
+      RetrieveForeignFhlEeaEntry(
+        Some(RetrieveForeignFhlEeaAdjustments(Some(100.25), Some(100.25), Some(true))),
+        Some(RetrieveForeignFhlEeaAllowances(Some(100.25), Some(100.25), Some(100.25), Some(100.25), Some(100.25)))
       )),
     Some(
-      List(Def1_Retrieve_ForeignPropertyEntry(
+      List(RetrieveForeignPropertyEntry(
         "GER",
-        Some(Def1_Retrieve_ForeignPropertyAdjustments(Some(100.25), Some(100.25))),
-        Some(Def1_Retrieve_ForeignPropertyAllowances(
+        Some(RetrieveForeignPropertyAdjustments(Some(100.25), Some(100.25))),
+        Some(RetrieveForeignPropertyAllowances(
           Some(100.25),
           Some(100.25),
           Some(100.25),
@@ -46,13 +46,13 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
           Some(100.25),
           Some(
             List(
-              Def1_Retrieve_StructuredBuildingAllowance(
+              RetrieveStructuredBuildingAllowance(
                 100.25,
-                Some(Def1_Retrieve_FirstYear(
+                Some(RetrieveFirstYear(
                   "2020-03-29",
                   100.25
                 )),
-                Def1_Retrieve_Building(
+                RetrieveBuilding(
                   Some("Building Name"),
                   Some("12"),
                   "TF3 4GH"
@@ -67,7 +67,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec 
     None,
     Some(
       List(
-        Def1_Retrieve_ForeignPropertyEntry(
+        RetrieveForeignPropertyEntry(
           "GER",
           None,
           None

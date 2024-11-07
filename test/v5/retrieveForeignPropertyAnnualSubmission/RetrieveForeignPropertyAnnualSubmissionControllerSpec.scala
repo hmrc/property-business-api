@@ -27,8 +27,8 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import utils.MockIdGenerator
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea._
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty._
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea._
+import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty._
 import v5.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.request._
 import v5.retrieveForeignPropertyAnnualSubmission.model.response._
@@ -105,15 +105,15 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequestData =
       Def1_RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
-    protected val foreignFhlEeaEntry: Def1_Retrieve_ForeignFhlEeaEntry = Def1_Retrieve_ForeignFhlEeaEntry(
+    protected val foreignFhlEeaEntry: RetrieveForeignFhlEeaEntry = RetrieveForeignFhlEeaEntry(
       Some(
-        Def1_Retrieve_ForeignFhlEeaAdjustments(
+        RetrieveForeignFhlEeaAdjustments(
           Some(5000.99),
           Some(5000.99),
           Some(true)
         )),
       Some(
-        Def1_Retrieve_ForeignFhlEeaAllowances(
+        RetrieveForeignFhlEeaAllowances(
           Some(5000.99),
           Some(5000.99),
           Some(5000.99),
@@ -122,15 +122,15 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
         ))
     )
 
-    protected val foreignPropertyEntry: Def1_Retrieve_ForeignPropertyEntry = Def1_Retrieve_ForeignPropertyEntry(
+    protected val foreignPropertyEntry: RetrieveForeignPropertyEntry = RetrieveForeignPropertyEntry(
       "FRA",
       Some(
-        Def1_Retrieve_ForeignPropertyAdjustments(
+        RetrieveForeignPropertyAdjustments(
           Some(5000.99),
           Some(5000.99)
         )),
       Some(
-        Def1_Retrieve_ForeignPropertyAllowances(
+        RetrieveForeignPropertyAllowances(
           Some(100.25),
           Some(100.25),
           Some(100.25),
@@ -140,13 +140,13 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
           Some(100.25),
           Some(
             List(
-              Def1_Retrieve_StructuredBuildingAllowance(
+              RetrieveStructuredBuildingAllowance(
                 3545.12,
-                Some(Def1_Retrieve_FirstYear(
+                Some(RetrieveFirstYear(
                   "2020-03-29",
                   3453.34
                 )),
-                Def1_Retrieve_Building(
+                RetrieveBuilding(
                   Some("Building Name"),
                   Some("12"),
                   "TF3 4GH"

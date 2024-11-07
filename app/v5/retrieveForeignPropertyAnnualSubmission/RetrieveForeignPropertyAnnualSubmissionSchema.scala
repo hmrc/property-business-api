@@ -43,17 +43,15 @@ object RetrieveForeignPropertyAnnualSubmissionSchema {
     val connectorReads: Reads[DownstreamResp] = Def2_RetrieveForeignPropertyAnnualSubmissionResponse.reads
   }
 
-  private val preTysSchema = Def1
-
   def schemaFor(maybeTaxYear: Option[String]): Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionSchema] =
     maybeTaxYear match {
       case Some(taxYearString) => ResolveTaxYear(taxYearString) andThen schemaFor
-      case None                => Valid(preTysSchema)
+      case None                => Valid(Def1)
     }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionSchema] = {
-    if (taxYear < TaxYear.starting(2025)) Valid(Def1)
-    else Valid(Def2)
+    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2)
+    else Valid(Def1)
   }
 
 }

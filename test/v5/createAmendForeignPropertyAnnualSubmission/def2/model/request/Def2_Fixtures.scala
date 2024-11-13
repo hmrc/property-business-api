@@ -46,7 +46,6 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
       costOfReplacingDomesticItems = Some(2.25),
       zeroEmissionsGoodsVehicleAllowance = Some(3.25),
       otherCapitalAllowance = Some(4.25),
-      electricChargePointAllowance = Some(5.25),
       zeroEmissionsCarAllowance = Some(6.25),
       propertyIncomeAllowance = Some(7.25),
       structuredBuildingAllowance = Some(List(structuredBuildingAllowance))
@@ -58,7 +57,6 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
       |    "costOfReplacingDomesticItems":2.25,
       |    "zeroEmissionsGoodsVehicleAllowance":3.25,
       |    "otherCapitalAllowance":4.25,
-      |    "electricChargePointAllowance":5.25,
       |    "zeroEmissionsCarAllowance":6.25,
       |    "propertyIncomeAllowance":7.25,
       |    "structuredBuildingAllowance": [$structuredBuildingAllowanceMtdJson]
@@ -71,7 +69,6 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
       |    "costOfReplacingDomesticItems":2.25,
       |    "zeroEmissionsGoodsVehicleAllowance":3.25,
       |    "otherCapitalAllowance":4.25,
-      |    "electricChargePointAllowance":5.25,
       |    "zeroEmissionsCarAllowance":6.25,
       |    "propertyAllowance":7.25,
       |    "structuredBuildingAllowance": [$structuredBuildingAllowanceDownstreamJson]

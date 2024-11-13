@@ -23,7 +23,6 @@ case class Def2_Create_Amend_ForeignAllowances(annualInvestmentAllowance: Option
                                                costOfReplacingDomesticItems: Option[BigDecimal],
                                                zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                                otherCapitalAllowance: Option[BigDecimal],
-                                               electricChargePointAllowance: Option[BigDecimal],
                                                zeroEmissionsCarAllowance: Option[BigDecimal],
                                                propertyIncomeAllowance: Option[BigDecimal],
                                                structuredBuildingAllowance: Option[Seq[Def2_Create_Amend_StructuredBuildingAllowance]])
@@ -36,7 +35,6 @@ object Def2_Create_Amend_ForeignAllowances {
       (JsPath \ "costOfReplacingDomesticItems").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsGoodsVehicleAllowance").writeNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "electricChargePointAllowance").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[Def2_Create_Amend_StructuredBuildingAllowance]]

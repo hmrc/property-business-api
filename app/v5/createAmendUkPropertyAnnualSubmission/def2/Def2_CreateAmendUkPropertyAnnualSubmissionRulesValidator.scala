@@ -64,7 +64,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
       (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
       (allowances.flatMap(_.costOfReplacingDomesticGoods), "/ukProperty/allowances/costOfReplacingDomesticGoods"),
-      (allowances.flatMap(_.electricChargePointAllowance), "/ukProperty/allowances/electricChargePointAllowance"),
       (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance")
     )
 
@@ -104,7 +103,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       case None => valid
       case Some(_) =>
         allowances match {
-          case Allowances(None, None, None, None, None, None, None, Some(_), None, None) => valid
+          case Allowances(None, None, None, None, None, None, Some(_), None, None) => valid
           case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukProperty/allowances")))
         }
     }

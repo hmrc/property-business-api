@@ -28,7 +28,6 @@ class AllowancesSpec extends UnitSpec {
       Some(2000.70),
       Some(2000.80),
       Some(2000.90),
-      Some(3000.10),
       Some(3000.20),
       None,
       Some(
@@ -70,7 +69,6 @@ class AllowancesSpec extends UnitSpec {
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,
-      |      "electricChargePointAllowance": 3000.10,
       |      "structuredBuildingAllowance": [
       |        {
       |          "amount": 3000.30,
@@ -108,7 +106,6 @@ class AllowancesSpec extends UnitSpec {
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,
-      |      "electricChargePointAllowance": 3000.10,
       |      "structuredBuildingAllowance": [
       |        {
       |          "amount": 3000.30,

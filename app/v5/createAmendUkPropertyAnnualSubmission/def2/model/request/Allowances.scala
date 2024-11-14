@@ -24,7 +24,6 @@ case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
                       businessPremisesRenovationAllowance: Option[BigDecimal],
                       otherCapitalAllowance: Option[BigDecimal],
                       costOfReplacingDomesticGoods: Option[BigDecimal],
-                      electricChargePointAllowance: Option[BigDecimal],
                       zeroEmissionsCarAllowance: Option[BigDecimal],
                       propertyIncomeAllowance: Option[BigDecimal],
                       structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
@@ -39,7 +38,6 @@ object Allowances {
       (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomesticGoods").writeNullable[BigDecimal] and
-      (JsPath \ "electricChargePointAllowance").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
       (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]] and

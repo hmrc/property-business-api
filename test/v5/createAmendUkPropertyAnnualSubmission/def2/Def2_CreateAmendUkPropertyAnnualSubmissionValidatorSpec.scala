@@ -105,7 +105,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
     Some(452.34),
     Some(567.34),
     Some(454.34),
-    Some(454.34),
     None,
     Some(List(StructuredBuildingAllowance(234.34, Some(FirstYear("2020-03-29", 3434.45)), Building(Some("Plaza"), Some("1"), "TF3 4EH")))),
     Some(List(StructuredBuildingAllowance(234.45, Some(FirstYear("2020-05-29", 453.34)), Building(Some("Plaza 2"), Some("2"), "TF3 4ER"))))
@@ -322,7 +321,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           "/ukProperty/allowances/businessPremisesRenovationAllowance",
           "/ukProperty/allowances/otherCapitalAllowance",
           "/ukProperty/allowances/costOfReplacingDomesticGoods",
-          "/ukProperty/allowances/electricChargePointAllowance",
           "/ukProperty/allowances/zeroEmissionsCarAllowance",
           "/ukProperty/adjustments/balancingCharge",
           "/ukProperty/adjustments/privateUseAdjustment",

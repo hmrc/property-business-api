@@ -112,10 +112,10 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
   private val parsedUkProperty = UkProperty(Some(parsedUkPropertyAdjustments), Some(parsedUkPropertyAllowances))
 
-  private val parsedBody = Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(Some(parsedUkProperty))
+  private val parsedBody = Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(parsedUkProperty)
 
   val submissionRequestBody: Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody = Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-    ukProperty = Some(parsedUkProperty)
+    ukProperty = parsedUkProperty
   )
 
   private def validator(nino: String, taxYear: String, businessId: String, body: JsValue): Def2_CreateAmendUkPropertyAnnualSubmissionValidator = {

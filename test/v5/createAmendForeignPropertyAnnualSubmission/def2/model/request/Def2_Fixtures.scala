@@ -100,7 +100,7 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
 
   val def2_createAmendForeignPropertyAnnualSubmissionRequestBody: Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-      foreignProperty = Some(List(foreignEntry))
+      foreignProperty = List(foreignEntry)
     )
 
   val def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson: JsValue = Json.parse(s"""

@@ -52,7 +52,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
       : Validated[Seq[MtdError], Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
     import parsed.body._
     combine(
-      foreignProperty.map(validateForeignEntries).getOrElse(valid)
+      validateForeignEntries(foreignProperty)
     ).onSuccess(parsed)
   }
 

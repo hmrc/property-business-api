@@ -46,7 +46,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       : Validated[Seq[MtdError], Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
     import parsed.body._
     combine(
-      ukProperty.map(validateUkProperty).getOrElse(valid)
+      validateUkProperty(ukProperty)
     ).onSuccess(parsed)
   }
 

@@ -23,17 +23,17 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
 
   val requestBody: Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody =
     Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-      Some(
-        UkProperty(
-          Some(
-            Adjustments(
-              Some(2000.20),
-              Some(2000.30),
-              Some(2000.40),
-              true,
-              Some(RentARoom(true))
-            )),
-          Some(Allowances(
+      UkProperty(
+        Some(
+          Adjustments(
+            Some(2000.20),
+            Some(2000.30),
+            Some(2000.40),
+            true,
+            Some(RentARoom(true))
+          )),
+        Some(
+          Allowances(
             Some(2000.50),
             Some(2000.60),
             Some(2000.70),
@@ -70,7 +70,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
                   )
                 )))
           ))
-        ))
+      )
     )
 
   val validMtdJson: JsValue = Json.parse("""

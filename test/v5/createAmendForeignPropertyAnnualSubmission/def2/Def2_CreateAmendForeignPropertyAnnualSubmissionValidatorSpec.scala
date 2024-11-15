@@ -142,7 +142,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
   )
 
   private val parsedBody = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(List(parsedForeignEntry))
+    List(parsedForeignEntry)
   )
 
   private val parsedForeignEntryPropertyIncomeAllowance = Def2_Create_Amend_ForeignEntry(
@@ -161,41 +161,37 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
   )
 
   private val parsedBodyWithPropertyIncomeAllowance = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(List(parsedForeignEntryPropertyIncomeAllowance))
+    List(parsedForeignEntryPropertyIncomeAllowance)
   )
 
   private val parsedBodyWithMinimalforeignProperty = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(
-      List(
-        Def2_Create_Amend_ForeignEntry(
-          "LBN",
-          Some(
-            Def2_Create_Amend_ForeignAdjustments(
-              None,
-              Some(12.34)
-            )),
-          None
-        )
+    List(
+      Def2_Create_Amend_ForeignEntry(
+        "LBN",
+        Some(
+          Def2_Create_Amend_ForeignAdjustments(
+            None,
+            Some(12.34)
+          )),
+        None
       )
     )
   )
 
   private val parsedBodyWithMinimalForeignOnlyAllowances = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(
-      List(
-        Def2_Create_Amend_ForeignEntry(
-          "LBN",
-          None,
-          Some(
-            Def2_Create_Amend_ForeignAllowances(
-              Some(38330.95),
-              None,
-              None,
-              None,
-              None,
-              None,
-              None
-            )
+    List(
+      Def2_Create_Amend_ForeignEntry(
+        "LBN",
+        None,
+        Some(
+          Def2_Create_Amend_ForeignAllowances(
+            Some(38330.95),
+            None,
+            None,
+            None,
+            None,
+            None,
+            None
           )
         )
       )
@@ -204,9 +200,9 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
   private val parsedBodyWithUpdatedBuilding: Def2_Create_Amend_Building => Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     (building: Def2_Create_Amend_Building) =>
-      parsedBody.copy(foreignProperty = Some(
-        List(parsedForeignEntry.copy(allowances = Some(
-          parsedForeignAllowances.copy(structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance.copy(building = building)))))))))
+      parsedBody.copy(foreignProperty = List(
+        parsedForeignEntry.copy(allowances =
+          Some(parsedForeignAllowances.copy(structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance.copy(building = building))))))))
 
   private val parsedBodyWithoutBuildingNumber = parsedBodyWithUpdatedBuilding(parsedBuilding.copy(number = None))
 

@@ -19,14 +19,13 @@ package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestBody
 
-case class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(ukProperty: Option[UkProperty])
-    extends CreateAmendUkPropertyAnnualSubmissionRequestBody
+case class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(ukProperty: UkProperty) extends CreateAmendUkPropertyAnnualSubmissionRequestBody
 
 object Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody {
 
   implicit val reads: Reads[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody] = Json.reads[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody]
 
   implicit val writes: OWrites[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody] =
-    (JsPath \ "ukOtherProperty").writeNullable[UkProperty].contramap[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody](_.ukProperty)
+    (JsPath \ "ukOtherProperty").write[UkProperty].contramap[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody](_.ukProperty)
 
 }

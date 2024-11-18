@@ -20,7 +20,7 @@ import play.api.libs.json._
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.Def2_Create_Amend_ForeignEntry
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
-case class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignProperty: Option[Seq[Def2_Create_Amend_ForeignEntry]])
+case class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(foreignProperty: Seq[Def2_Create_Amend_ForeignEntry])
     extends CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
 object Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody {

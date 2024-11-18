@@ -23,23 +23,22 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
 
   val requestBody: Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody =
     Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-      Some(
-        UkProperty(
-          Some(
-            Adjustments(
-              Some(2000.20),
-              Some(2000.30),
-              Some(2000.40),
-              true,
-              Some(RentARoom(true))
-            )),
-          Some(Allowances(
+      UkProperty(
+        Some(
+          Adjustments(
+            Some(2000.20),
+            Some(2000.30),
+            Some(2000.40),
+            true,
+            Some(RentARoom(true))
+          )),
+        Some(
+          Allowances(
             Some(2000.50),
             Some(2000.60),
             Some(2000.70),
             Some(2000.80),
             Some(2000.90),
-            Some(3000.10),
             Some(3000.20),
             None,
             Some(
@@ -71,7 +70,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
                   )
                 )))
           ))
-        ))
+      )
     )
 
   val validMtdJson: JsValue = Json.parse("""
@@ -83,7 +82,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,
-      |      "electricChargePointAllowance": 3000.10,
       |      "structuredBuildingAllowance": [
       |        {
       |          "amount": 3000.30,
@@ -134,7 +132,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,
-      |      "electricChargePointAllowance": 3000.10,
       |      "structuredBuildingAllowance": [
       |        {
       |          "amount": 3000.30,

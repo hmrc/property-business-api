@@ -38,17 +38,17 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
   private val validStructuredBuildingAllowance =
     Json.parse("""{
-        |  "amount": 3545.12,
-        |  "firstYear": {
-        |    "qualifyingDate": "2020-03-29",
-        |    "qualifyingAmountExpenditure": 3453.34
-        |  },
-        |  "building": {
-        |    "name": "Building name",
-        |    "number": "12",
-        |    "postcode": "TF3 4GH"
-        |  }
-        |}""".stripMargin)
+                 |  "amount": 3545.12,
+                 |  "firstYear": {
+                 |    "qualifyingDate": "2020-03-29",
+                 |    "qualifyingAmountExpenditure": 3453.34
+                 |  },
+                 |  "building": {
+                 |    "name": "Building name",
+                 |    "number": "12",
+                 |    "postcode": "TF3 4GH"
+                 |  }
+                 |}""".stripMargin)
 
   private def entryWith(countryCode: String, structuredBuildingAllowance: JsValue*) =
     Json.parse(s"""
@@ -63,7 +63,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
                   |        "costOfReplacingDomesticItems": 41985.17,
                   |        "zeroEmissionsGoodsVehicleAllowance": 9769.19,
                   |        "otherCapitalAllowance": 1049.21,
-                  |        "electricChargePointAllowance": 3565.45,
                   |        "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowance)},
                   |        "zeroEmissionsCarAllowance": 3456.34
                   |      }
@@ -83,16 +82,16 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
   private val validBody = bodyWith(entry)
 
   private val entryPropertyIncomeAllowance = Json.parse("""
-      |    {
-      |      "countryCode": "LBN",
-      |      "adjustments": {
-      |        "balancingCharge": 3453.34
-      |      },
-      |      "allowances": {
-      |        "propertyIncomeAllowance": 100.95
-      |      }
-      |    }
-      |""".stripMargin)
+                                                          |    {
+                                                          |      "countryCode": "LBN",
+                                                          |      "adjustments": {
+                                                          |        "balancingCharge": 3453.34
+                                                          |      },
+                                                          |      "allowances": {
+                                                          |        "propertyIncomeAllowance": 100.95
+                                                          |      }
+                                                          |    }
+                                                          |""".stripMargin)
 
   private def propertyIncomeAllowanceBodyWith(nonFhlEntries: JsValue*) = Json.parse(
     s"""{
@@ -131,7 +130,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
     costOfReplacingDomesticItems = Some(41985.17),
     zeroEmissionsGoodsVehicleAllowance = Some(9769.19),
     otherCapitalAllowance = Some(1049.21),
-    electricChargePointAllowance = Some(3565.45),
     zeroEmissionsCarAllowance = Some(3456.34),
     propertyIncomeAllowance = None,
     structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance))
@@ -144,7 +142,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
   )
 
   private val parsedBody = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(List(parsedForeignEntry))
+    List(parsedForeignEntry)
   )
 
   private val parsedForeignEntryPropertyIncomeAllowance = Def2_Create_Amend_ForeignEntry(
@@ -157,49 +155,43 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         None,
         None,
         None,
-        None,
         Some(100.95),
         None
       ))
   )
 
   private val parsedBodyWithPropertyIncomeAllowance = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(List(parsedForeignEntryPropertyIncomeAllowance))
+    List(parsedForeignEntryPropertyIncomeAllowance)
   )
 
   private val parsedBodyWithMinimalforeignProperty = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(
-      List(
-        Def2_Create_Amend_ForeignEntry(
-          "LBN",
-          Some(
-            Def2_Create_Amend_ForeignAdjustments(
-              None,
-              Some(12.34)
-            )),
-          None
-        )
+    List(
+      Def2_Create_Amend_ForeignEntry(
+        "LBN",
+        Some(
+          Def2_Create_Amend_ForeignAdjustments(
+            None,
+            Some(12.34)
+          )),
+        None
       )
     )
   )
 
   private val parsedBodyWithMinimalForeignOnlyAllowances = Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-    Some(
-      List(
-        Def2_Create_Amend_ForeignEntry(
-          "LBN",
-          None,
-          Some(
-            Def2_Create_Amend_ForeignAllowances(
-              Some(38330.95),
-              None,
-              None,
-              None,
-              None,
-              None,
-              None,
-              None
-            )
+    List(
+      Def2_Create_Amend_ForeignEntry(
+        "LBN",
+        None,
+        Some(
+          Def2_Create_Amend_ForeignAllowances(
+            Some(38330.95),
+            None,
+            None,
+            None,
+            None,
+            None,
+            None
           )
         )
       )
@@ -208,9 +200,9 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
   private val parsedBodyWithUpdatedBuilding: Def2_Create_Amend_Building => Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     (building: Def2_Create_Amend_Building) =>
-      parsedBody.copy(foreignProperty = Some(
-        List(parsedForeignEntry.copy(allowances = Some(
-          parsedForeignAllowances.copy(structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance.copy(building = building)))))))))
+      parsedBody.copy(foreignProperty = List(
+        parsedForeignEntry.copy(allowances =
+          Some(parsedForeignAllowances.copy(structuredBuildingAllowance = Some(List(parsedStructuredBuildingAllowance.copy(building = building))))))))
 
   private val parsedBodyWithoutBuildingNumber = parsedBodyWithUpdatedBuilding(parsedBuilding.copy(number = None))
 
@@ -267,16 +259,16 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-                 |  "foreignProperty": [
-                 |    {
-                 |      "countryCode": "LBN",
-                 |      "adjustments": {
-                 |        "balancingCharge": 12.34
-                 |      }
-                 |    }
-                 |  ]
-                 |}
-                 |""".stripMargin)
+                         |  "foreignProperty": [
+                         |    {
+                         |      "countryCode": "LBN",
+                         |      "adjustments": {
+                         |        "balancingCharge": 12.34
+                         |      }
+                         |    }
+                         |  ]
+                         |}
+                         |""".stripMargin)
           ).validateAndWrapResult()
 
         result shouldBe Right(
@@ -294,16 +286,16 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             validBusinessId,
             validTaxYear,
             Json.parse("""{
-                 |  "foreignProperty": [
-                 |    {
-                 |      "countryCode": "LBN",
-                 |      "allowances": {
-                 |        "annualInvestmentAllowance": 38330.95
-                 |      }
-                 |    }
-                 |  ]
-                 |}
-                 |""".stripMargin)
+                         |  "foreignProperty": [
+                         |    {
+                         |      "countryCode": "LBN",
+                         |      "allowances": {
+                         |        "annualInvestmentAllowance": 38330.95
+                         |      }
+                         |    }
+                         |  ]
+                         |}
+                         |""".stripMargin)
           ).validateAndWrapResult()
 
         result shouldBe Right(
@@ -420,13 +412,13 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
 
       "passed a request body with empty fields except for additional (non-schema) properties" in {
         val invalidBody = Json.parse("""{
-            |  "foreignProperty": [
-            |    {
-            |      "unknownField": 999.99
-            |    }
-            |  ]
-            |}
-            |""".stripMargin)
+                                       |  "foreignProperty": [
+                                       |    {
+                                       |      "unknownField": 999.99
+                                       |    }
+                                       |  ]
+                                       |}
+                                       |""".stripMargin)
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -449,9 +441,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
               bodyWith(entry.update("/allowances/zeroEmissionsGoodsVehicleAllowance", badValue)),
               "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance"),
             (bodyWith(entry.update("/allowances/otherCapitalAllowance", badValue)), "/foreignProperty/0/allowances/otherCapitalAllowance"),
-            (
-              bodyWith(entry.update("/allowances/electricChargePointAllowance", badValue)),
-              "/foreignProperty/0/allowances/electricChargePointAllowance"),
             (bodyWith(entry.update("/allowances/zeroEmissionsCarAllowance", badValue)), "/foreignProperty/0/allowances/zeroEmissionsCarAllowance"),
             (
               bodyWith(entryWith("AFG", validStructuredBuildingAllowance.update("/amount", badValue))),

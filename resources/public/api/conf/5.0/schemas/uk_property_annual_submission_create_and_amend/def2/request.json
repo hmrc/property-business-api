@@ -278,5 +278,6 @@
       "additionalProperties": false
     }
   },
+  "required": ["ukProperty"],
   "additionalProperties": false
 }

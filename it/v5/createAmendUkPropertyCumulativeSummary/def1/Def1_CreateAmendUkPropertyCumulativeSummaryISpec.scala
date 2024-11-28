@@ -17,17 +17,18 @@
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
 import api.models.errors._
+import api.models.utils.JsonErrorValidators
 import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 
-class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec {
+class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   val validRequestBodyJson = Json.parse(
     """
@@ -222,41 +223,6 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
 
     "return an error according to spec" when {
 
-      val allInvalidDateFormatRequestBodyJson = Json.parse(
-        """
-          |{
-          |  "fromDate": "2034623-04-01",
-          |  "toDate": "2024-04-01",
-          |  "ukProperty": {
-          |    "income": {
-          |      "premiumsOfLeaseGrant": 42.12,
-          |      "reversePremiums": 84.31,
-          |      "periodAmount": 9884.93,
-          |      "taxDeducted": 842.99,
-          |      "otherIncome": 31.44,
-          |      "rentARoom": {
-          |        "rentsReceived": 947.66
-          |      }
-          |    },
-          |    "expenses": {
-          |      "premisesRunningCosts": 1500.50,
-          |      "repairsAndMaintenance": 1200.75,
-          |      "financialCosts": 2000.00,
-          |      "professionalFees": 500.00,
-          |      "costOfServices": 300.25,
-          |      "other": 100.50,
-          |      "residentialFinancialCost": 9000.10,
-          |      "travelCosts": 400.00,
-          |      "residentialFinancialCostsCarriedForward": 300.13,
-          |      "rentARoom": {
-          |        "amountClaimed": 860.88
-          |      }
-          |    }
-          |  }
-          |}
-        """.stripMargin
-      )
-
       val allInvalidStringRequestBodyJson = Json.parse(
         """
           |{
@@ -292,8 +258,6 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
         """.stripMargin
       )
 
-      val allInvalidDateFormatRequestError: MtdError = FromDateFormatError
-
       val allInvalidBody: MtdError = RuleIncorrectOrEmptyBodyError.copy(
         message = "An empty or non-matching body was submitted",
         paths = Some(
@@ -309,8 +273,9 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
                                 requestTaxYear: String,
                                 requestBody: JsValue,
                                 expectedStatus: Int,
-                                expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new TysIfsTest {
+                                expectedBody: MtdError,
+                                scenario: Option[String]): Unit = {
+          s"validation fails with ${expectedBody.code} error ${scenario.getOrElse("")}" in new TysIfsTest {
 
             override val nino: String             = requestNino
             override val businessId: String       = requestBusinessId
@@ -330,9 +295,57 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
         }
 
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2025-26", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-26", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
-          ("AA123456A", "XAIS12345678910", "2025-26", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidBody)
+          ("AA1123A", "XAIS12345678910", "2025-26", validRequestBodyJson, BAD_REQUEST, NinoFormatError, None),
+          ("AA123456A", "XA***IS1", "2025-26", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError, None),
+          ("AA123456A", "XAIS12345678910", "20256", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError, None),
+          ("AA123456A", "XAIS12345678910", "2025-27", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
+          ("AA123456A", "XAIS12345678910", "2024-25", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            validRequestBodyJson.update("/fromDate", JsString("XX")),
+            BAD_REQUEST,
+            FromDateFormatError,
+            None
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            validRequestBodyJson.update("/toDate", JsString("XX")),
+            BAD_REQUEST,
+            ToDateFormatError,
+            None
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            validRequestBodyJson.removeProperty("/fromDate"),
+            BAD_REQUEST,
+            RuleMissingSubmissionDatesError,
+            Some("for a missing fromDate")
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            validRequestBodyJson.removeProperty("/toDate"),
+            BAD_REQUEST,
+            RuleMissingSubmissionDatesError,
+            Some("for a missing toDate")
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            validRequestBodyJson.update("/toDate", JsString("1999-01-01")),
+            BAD_REQUEST,
+            RuleToDateBeforeFromDateError,
+            None
+          ),
+          ("AA123456A", "XAIS12345678910", "2025-26", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidBody, None)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))
@@ -367,7 +380,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           (UNPROCESSABLE_ENTITY, "INVALID_START_DATE", BAD_REQUEST, RuleStartDateNotAlignedWithReportingTypeError),
           (UNPROCESSABLE_ENTITY, "START_DATE_NOT_ALIGNED", BAD_REQUEST, RuleStartDateNotAlignedToCommencementDateError),
           (UNPROCESSABLE_ENTITY, "END_DATE_NOT_ALIGNED", BAD_REQUEST, RuleEndDateNotAlignedWithReportingTypeError),
-          (UNPROCESSABLE_ENTITY, "MISSING_SUBMISSION_DATES", BAD_REQUEST, RuleMissingSubmissionDatesError),
+          (UNPROCESSABLE_ENTITY, "MISSING_SUBMISSION_DATES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "START_END_DATE_NOT_ACCEPTED", BAD_REQUEST, RuleStartAndEndDateNotAllowedError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),

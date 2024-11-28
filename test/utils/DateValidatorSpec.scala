@@ -16,8 +16,8 @@
 
 package utils
 
-import api.models.errors.{FromDateFormatError, RuleToDateBeforeFromDateError, ToDateFormatError}
-import cats.data.Validated
+import api.models.errors.{FromDateFormatError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError, ToDateFormatError}
+import cats.data.Validated.{invalid, valid}
 import support.UnitSpec
 
 class DateValidatorSpec extends UnitSpec {
@@ -28,23 +28,46 @@ class DateValidatorSpec extends UnitSpec {
 
   "DateValidator.validateFromAndToDates" should {
     "return valid" when {
-      "given both dates in the correct format" in {
-        DateValidator.validateFromAndToDates(validFromDate, validToDate) shouldBe Validated.valid(())
+      "both dates are supplied in the correct format" in {
+        DateValidator.validateFromAndToDates(validFromDate, validToDate) shouldBe valid(())
       }
-      "given no dates" in {
-        DateValidator.validateFromAndToDates(None, None) shouldBe Validated.valid(())
+
+      "no dates are supplied" in {
+        DateValidator.validateFromAndToDates(None, None) shouldBe valid(())
       }
     }
-    "return an error" when {
-      "the 'from' date format is incorrect" in {
-        DateValidator.validateFromAndToDates(invalidFormatDate, None) shouldBe Validated.invalid(Seq(FromDateFormatError))
+
+    "return error(s)" when {
+      "a single date is provided" which {
+        "is a fromDate with an invalid format" in {
+          DateValidator.validateFromAndToDates(invalidFormatDate, None) shouldBe invalid(Seq(FromDateFormatError))
+        }
+        "is a toDate with an invalid format" in {
+          DateValidator.validateFromAndToDates(None, invalidFormatDate) shouldBe invalid(Seq(ToDateFormatError))
+        }
+        "is a fromDate with a valid format" in {
+          DateValidator.validateFromAndToDates(validFromDate, None) shouldBe invalid(Seq(RuleMissingSubmissionDatesError))
+        }
+        "is a toDate with a valid format" in {
+          DateValidator.validateFromAndToDates(None, validToDate) shouldBe invalid(Seq(RuleMissingSubmissionDatesError))
+        }
       }
-      "the 'to' date format is incorrect" in {
-        DateValidator.validateFromAndToDates(None, invalidFormatDate) shouldBe Validated.invalid(Seq(ToDateFormatError))
-      }
-      "the 'to' date is before the 'from' date" in {
-        DateValidator.validateFromAndToDates(fromDate = validToDate, toDate = validFromDate) shouldBe Validated.invalid(
-          Seq(RuleToDateBeforeFromDateError))
+
+      "both fromDate and toDate are provided" which {
+        "include an invalid fromDate format" in {
+          DateValidator.validateFromAndToDates(invalidFormatDate, validToDate) shouldBe invalid(Seq(FromDateFormatError))
+        }
+        "include an invalid toDate format" in {
+          DateValidator.validateFromAndToDates(validFromDate, invalidFormatDate) shouldBe invalid(Seq(ToDateFormatError))
+        }
+        "have invalid formats for both dates" in {
+          DateValidator.validateFromAndToDates(invalidFormatDate, invalidFormatDate) shouldBe invalid(
+            Seq(FromDateFormatError, ToDateFormatError)
+          )
+        }
+        "has toDate earlier than the fromDate" in {
+          DateValidator.validateFromAndToDates(validToDate, validFromDate) shouldBe invalid(Seq(RuleToDateBeforeFromDateError))
+        }
       }
     }
   }

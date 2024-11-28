@@ -102,8 +102,9 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
                                 requestTaxYear: String,
                                 requestBody: JsValue,
                                 expectedStatus: Int,
-                                expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+                                expectedBody: MtdError,
+                                scenario: Option[String]): Unit = {
+          s"validation fails with ${expectedBody.code} error ${scenario.getOrElse("")}" in new Test {
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
@@ -121,11 +122,11 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
           }
         }
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2025-26", requestBody, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XA***IS1", "2025-26", requestBody, BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "20256", requestBody, BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-27", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2024-25", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA1123A", "XAIS12345678910", "2025-26", requestBody, BAD_REQUEST, NinoFormatError, None),
+          ("AA123456A", "XA***IS1", "2025-26", requestBody, BAD_REQUEST, BusinessIdFormatError, None),
+          ("AA123456A", "XAIS12345678910", "20256", requestBody, BAD_REQUEST, TaxYearFormatError, None),
+          ("AA123456A", "XAIS12345678910", "2025-27", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
+          ("AA123456A", "XAIS12345678910", "2024-25", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError, None),
           (
             "AA123456A",
             "XAIS12345678910",
@@ -135,38 +136,67 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             ValueFormatError.forPathAndRange(
               path = "/foreignProperty/0/expenses/premisesRunningCosts",
               min = "-99999999999.99",
-              max = "99999999999.99")),
+              max = "99999999999.99"
+            ),
+            None
+          ),
           (
             "AA123456A",
             "XAIS12345678910",
             "2025-26",
             requestBodyWith(invalidEntryWithConsolidatedExpenses()),
             BAD_REQUEST,
-            RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignProperty/0/expenses")))),
-          ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-          ("AA123456A", "XAIS12345678910", "2025-26", requestBody.update("/fromDate", JsString("XX")), BAD_REQUEST, FromDateFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-26", requestBody.update("/toDate", JsString("XX")), BAD_REQUEST, ToDateFormatError),
+            RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignProperty/0/expenses"))),
+            None
+          ),
+          ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
+          ("AA123456A", "XAIS12345678910", "2025-26", requestBody.update("/fromDate", JsString("XX")), BAD_REQUEST, FromDateFormatError, None),
+          ("AA123456A", "XAIS12345678910", "2025-26", requestBody.update("/toDate", JsString("XX")), BAD_REQUEST, ToDateFormatError, None),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            requestBody.removeProperty("/fromDate"),
+            BAD_REQUEST,
+            RuleMissingSubmissionDatesError,
+            Some("for a missing fromDate")
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            requestBody.removeProperty("/toDate"),
+            BAD_REQUEST,
+            RuleMissingSubmissionDatesError,
+            Some("for a missing toDate")
+          ),
           (
             "AA123456A",
             "XAIS12345678910",
             "2025-26",
             requestBody.update("/toDate", JsString("1999-01-01")),
             BAD_REQUEST,
-            RuleToDateBeforeFromDateError),
+            RuleToDateBeforeFromDateError,
+            None
+          ),
           (
             "AA123456A",
             "XAIS12345678910",
             "2025-26",
             requestBodyWith(entryWith("France")),
             BAD_REQUEST,
-            CountryCodeFormatError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
+            CountryCodeFormatError.copy(paths = Some(List("/foreignProperty/0/countryCode"))),
+            None
+          ),
           (
             "AA123456A",
             "XAIS12345678910",
             "2025-26",
             requestBodyWith(entryWith("QQQ")),
             BAD_REQUEST,
-            RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode"))))
+            RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode"))),
+            None
+          )
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }
@@ -203,7 +233,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
           (UNPROCESSABLE_ENTITY, "INVALID_START_DATE", BAD_REQUEST, RuleStartDateNotAlignedWithReportingTypeError),
           (UNPROCESSABLE_ENTITY, "START_DATE_NOT_ALIGNED", BAD_REQUEST, RuleStartDateNotAlignedToCommencementDateError),
           (UNPROCESSABLE_ENTITY, "END_DATE_NOT_ALIGNED", BAD_REQUEST, RuleEndDateNotAlignedWithReportingTypeError),
-          (UNPROCESSABLE_ENTITY, "MISSING_SUBMISSION_DATES", BAD_REQUEST, RuleMissingSubmissionDatesError),
+          (UNPROCESSABLE_ENTITY, "MISSING_SUBMISSION_DATES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "START_END_DATE_NOT_ACCEPTED", BAD_REQUEST, RuleStartAndEndDateNotAllowedError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (UNPROCESSABLE_ENTITY, "EARLY_DATA_SUBMISSION_NOT_ACCEPTED", BAD_REQUEST, RuleEarlyDataSubmissionNotAcceptedError),

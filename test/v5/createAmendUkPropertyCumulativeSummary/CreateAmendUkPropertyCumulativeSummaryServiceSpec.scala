@@ -103,7 +103,7 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingTypeError,
           "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDateError,
           "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingTypeError,
-          "MISSING_SUBMISSION_DATES"           -> RuleMissingSubmissionDatesError,
+          "MISSING_SUBMISSION_DATES"           -> InternalError,
           "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowedError,
           "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
           "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,

@@ -16,10 +16,10 @@
 
 package utils
 
-import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveIsoDate}
-import api.models.errors.{FromDateFormatError, MtdError, ToDateFormatError}
+import api.controllers.validators.resolvers.ResolveFromAndToDates
+import api.models.errors.{MtdError, RuleMissingSubmissionDatesError}
 import cats.data.Validated
-import cats.data.Validated.valid
+import cats.data.Validated.{invalid, valid}
 
 object DateValidator {
 
@@ -27,11 +27,9 @@ object DateValidator {
     (fromDate, toDate) match {
       case (Some(from), Some(to)) => ResolveFromAndToDates((from, to)).andThen(_ => valid(()))
 
-      case (Some(from), None) => ResolveIsoDate(from, FromDateFormatError).andThen(_ => valid(()))
-
-      case (None, Some(to)) => ResolveIsoDate(to, ToDateFormatError).andThen(_ => valid(()))
-
       case (None, None) => valid(())
+
+      case (_, _) => invalid(Seq(RuleMissingSubmissionDatesError))
     }
 
 }

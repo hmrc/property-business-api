@@ -19,13 +19,12 @@ package v5.createAmendForeignPropertyCumulativePeriodSummary.def1
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import config.MockAppConfig
 import play.api.libs.json._
 import support.UnitSpec
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request._
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -400,6 +399,24 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
       }
 
+      "passed a body with a missing fromDate" in {
+        val requestWithoutFromDate = validBody.removeProperty("/fromDate")
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, requestWithoutFromDate).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleMissingSubmissionDatesError))
+      }
+
+      "passed a body with a missing toDate" in {
+        val requestWithoutToDate = validBody.removeProperty("/toDate")
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, requestWithoutToDate).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleMissingSubmissionDatesError))
+      }
+
       def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
         s"for $expectedPath" in {
 
@@ -547,7 +564,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           ))
 
       }
-
     }
 
     "return multiple errors" when {
@@ -563,6 +579,24 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
             Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
           )
         )
+      }
+
+      "passed a body with an invalidly formatted toDate and a missing fromDate" in {
+        val requestWithInvalidToDateAndMissingFromDate = validBody.update("/toDate", JsString("2024")).removeProperty("/fromDate")
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, requestWithInvalidToDateAndMissingFromDate).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(ToDateFormatError, RuleMissingSubmissionDatesError))))
+      }
+
+      "passed a body with an invalidly formatted fromDate and a missing toDate" in {
+        val requestWithInvalidFromDateAndMissingToDate = validBody.update("/fromDate", JsString("2024")).removeProperty("/toDate")
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, requestWithInvalidFromDateAndMissingToDate).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(FromDateFormatError, RuleMissingSubmissionDatesError))))
       }
     }
   }

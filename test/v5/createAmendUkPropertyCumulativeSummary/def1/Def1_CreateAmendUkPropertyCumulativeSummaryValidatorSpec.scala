@@ -17,33 +17,14 @@
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  BusinessIdFormatError,
-  ErrorWrapper,
-  FromDateFormatError,
-  MtdError,
-  NinoFormatError,
-  RuleBothExpensesSuppliedError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearRangeInvalidError,
-  RuleToDateBeforeFromDateError,
-  TaxYearFormatError,
-  ToDateFormatError,
-  ValueFormatError
-}
+import api.models.errors._
 import api.models.utils.JsonErrorValidators
-import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
 import support.UnitSpec
-import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
-  Def1_CreateAmendUkPropertyCumulativeSummaryRequestData,
-  _
-}
+import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
-class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 
@@ -217,231 +198,212 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
               fullRequestBody.copy(fromDate = None, toDate = None))
           )
       }
+    }
 
-      "passed a request with no 'from' date" in {
-        val requestWithoutDates = fullRequestJson.as[JsObject] - "fromDate"
+    "return a single error" when {
+      "passed an invalid nino" in {
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator("invalid", validTaxYear, validBusinessId, fullRequestJson).validateAndWrapResult()
 
-        validator(validNino, validTaxYear, validBusinessId, requestWithoutDates).validateAndWrapResult() shouldBe
-          Right(
-            Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, fullRequestBody.copy(fromDate = None))
+        result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
+      }
+
+      "passed an incorrectly formatted taxYear" in {
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, "202324", validBusinessId, fullRequestJson).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
+
+      }
+
+      "passed an incorrectly formatted businessId" in {
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, "invalid", fullRequestJson).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
+      }
+
+      "passed a taxYear spanning an invalid tax year range" in {
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, "2020-22", validBusinessId, fullRequestJson).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
+      }
+
+      "passed an empty body" in {
+        val invalidBody = JsObject.empty
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
+      }
+
+      def testWith(error: MtdError)(path: String, body: JsValue): Unit = {
+        s"for $path" in {
+          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+            validator(validNino, validTaxYear, validBusinessId, body).validateAndWrapResult()
+
+          result shouldBe Left(ErrorWrapper(correlationId, error.withPath(path)))
+        }
+      }
+
+      def testRuleIncorrectOrEmptyBodyErrorWith(path: String, body: JsValue): Unit = testWith(RuleIncorrectOrEmptyBodyError)(path, body)
+
+      def testValueFormatErrorWith(path: String, body: JsValue): Unit = testWith(ValueFormatError)(path, body)
+
+      def testNegativeValueFormatErrorWith(path: String, body: JsValue): Unit =
+        testWith(ValueFormatError.forPathAndRange(path, min = "-99999999999.99", max = "99999999999.99"))(path, body)
+
+      "passed a body with an empty object" when {
+        List(
+          "/ukProperty",
+          "/ukProperty/income",
+          "/ukProperty/expenses"
+        ).foreach(path => testRuleIncorrectOrEmptyBodyErrorWith(path, fullRequestJson.replaceWithEmptyObject(path)))
+      }
+
+      "passed a body with an empty object except for an additional (non-schema) property" in {
+        val invalidBody = fullRequestJson.replaceWithEmptyObject("/ukProperty").update("/ukProperty/badField", JsNumber(100))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukProperty")))
+      }
+
+      "passed a body with an invalidly formatted fromDate" in {
+        val invalidBody = fullRequestJson.update("/fromDate", JsString("invalid"))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
+      }
+
+      "passed a body with an invalidly formatted toDate" in {
+        val invalidBody = fullRequestJson.update("/toDate", JsString("invalid"))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
+      }
+
+      "passed a body with a fromDate that precedes the minimum" in {
+        val invalidBody = fullRequestJson.update("/fromDate", JsString("1569-10-01"))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
+      }
+
+      "passed a body with a toDate after maximum" in {
+        val invalidBody = fullRequestJson.update("/toDate", JsString("3490-10-01"))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
+      }
+
+      "passed a body with a toDate that precedes the fromDate" in {
+        val invalidBody = fullRequestJson.update("/fromDate", JsString("2090-10-01"))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
+      }
+
+      "passed a body with a missing fromDate" in {
+        val requestWithoutFromDate = fullRequestJson.removeProperty("/fromDate")
+
+        validator(validNino, validTaxYear, validBusinessId, requestWithoutFromDate).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleMissingSubmissionDatesError))
+      }
+
+      "passed a body with a missing toDate" in {
+        val requestWithoutToDate = fullRequestJson.removeProperty("/toDate")
+
+        validator(validNino, validTaxYear, validBusinessId, requestWithoutToDate).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, RuleMissingSubmissionDatesError))
+      }
+
+      "passed a body with a (non-consolidated expenses) field containing an invalid value" when {
+
+        List(
+          "/ukProperty/income/premiumsOfLeaseGrant",
+          "/ukProperty/income/reversePremiums",
+          "/ukProperty/income/periodAmount",
+          "/ukProperty/income/taxDeducted",
+          "/ukProperty/income/otherIncome",
+          "/ukProperty/income/rentARoom/rentsReceived",
+          "/ukProperty/expenses/rentARoom/amountClaimed",
+          "/ukProperty/expenses/residentialFinancialCost",
+          "/ukProperty/expenses/residentialFinancialCostsCarriedForward"
+        ).foreach(path => testValueFormatErrorWith(path, fullRequestJson.update(path, JsNumber(123.456))))
+
+        List(
+          "/ukProperty/expenses/premisesRunningCosts",
+          "/ukProperty/expenses/repairsAndMaintenance",
+          "/ukProperty/expenses/financialCosts",
+          "/ukProperty/expenses/professionalFees",
+          "/ukProperty/expenses/costOfServices",
+          "/ukProperty/expenses/other",
+          "/ukProperty/expenses/travelCosts"
+        ).foreach(path => testNegativeValueFormatErrorWith(path, fullRequestJson.update(path, JsNumber(123.456))))
+      }
+
+      "passed a body with multiple invalid fields" in {
+        val path0 = "/ukProperty/expenses/travelCosts"
+        val path1 = "/ukProperty/expenses/other"
+        val path2 = "/ukProperty/expenses/costOfServices"
+
+        val invalidBody = fullRequestJson
+          .update(path0, JsNumber(123.456))
+          .update(path1, JsNumber(123.456))
+          .update(path2, JsNumber(123.456))
+
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            ValueFormatError.forPathAndRange(path0, min = "-99999999999.99", max = "99999999999.99").withPaths(List(path2, path1, path0))))
+      }
+
+      "passed a body with both consolidated and separate expenses provided" in {
+        val invalidBody = fullRequestJson.update("ukProperty/expenses/consolidatedExpenses", JsNumber(123.45))
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/ukProperty/expenses")))
+      }
+    }
+
+    "return multiple errors" when {
+      "the request has multiple issues (path parameters)" in {
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
+          validator("invalid", "invalid", "invalid", fullRequestJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            BadRequestError,
+            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
           )
+        )
       }
 
-      "passed a request with no 'to' date" in {
-        val requestWithoutDates = fullRequestJson.as[JsObject] - "toDate"
+      "passed a body with an invalidly formatted toDate and a missing fromDate" in {
+        val requestWithInvalidToDateAndMissingFromDate = fullRequestJson.update("/toDate", JsString("2024")).removeProperty("/fromDate")
 
-        validator(validNino, validTaxYear, validBusinessId, requestWithoutDates).validateAndWrapResult() shouldBe
-          Right(
-            Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(parsedNino, parsedTaxYear, parsedBusinessId, fullRequestBody.copy(toDate = None))
-          )
+        validator(validNino, validTaxYear, validBusinessId, requestWithInvalidToDateAndMissingFromDate).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(List(ToDateFormatError, RuleMissingSubmissionDatesError))))
       }
 
-      "return a single error" when {
-        "passed an invalid nino" in {
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator("invalid", validTaxYear, validBusinessId, fullRequestJson).validateAndWrapResult()
+      "passed a body with an invalidly formatted fromDate and a missing toDate" in {
+        val requestWithInvalidFromDateAndMissingToDate = fullRequestJson.update("/fromDate", JsString("2024")).removeProperty("/toDate")
 
-          result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
-        }
-
-        "passed an incorrectly formatted taxYear" in {
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, "202324", validBusinessId, fullRequestJson).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-
-        }
-
-        "passed an incorrectly formatted businessId" in {
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, "invalid", fullRequestJson).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
-        }
-
-        "passed a taxYear spanning an invalid tax year range" in {
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, "2020-22", validBusinessId, fullRequestJson).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-        }
-
-        "passed a request with invalid fromDate" in {
-          val invalidFromDate     = "20224-01-011"
-          val requestWithoutDates = fullRequestJson.as[JsObject] - "fromDate"
-          val invalidFromDateJson = requestWithoutDates + ("fromDate" -> JsString(invalidFromDate))
-
-          validator(validNino, validTaxYear, validBusinessId, invalidFromDateJson).validateAndWrapResult() shouldBe
-            Left(ErrorWrapper(correlationId, FromDateFormatError))
-        }
-
-        "passed a request with invalid toDate" in {
-          val invalidToDate       = "2022-01-011"
-          val requestWithoutDates = fullRequestJson.as[JsObject] - "toDate"
-          val invalidToDateJson   = requestWithoutDates + ("toDate" -> JsString(invalidToDate))
-
-          validator(validNino, validTaxYear, validBusinessId, invalidToDateJson).validateAndWrapResult() shouldBe
-            Left(ErrorWrapper(correlationId, ToDateFormatError))
-        }
-
-        "passed a request with toDate before fromDate" in {
-          val fromDate              = "2025-01-31"
-          val toDate                = "2025-01-01"
-          val requestWithoutDates   = fullRequestJson.as[JsObject] - "toDate" - "fromDate"
-          val invalidFromToDateJson = requestWithoutDates + ("toDate" -> JsString(toDate)) + ("fromDate" -> JsString(fromDate))
-
-          validator(validNino, validTaxYear, validBusinessId, invalidFromToDateJson).validateAndWrapResult() shouldBe
-            Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
-        }
-
-        "passed an empty body" in {
-          val invalidBody = JsObject.empty
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
-        }
-
-        def testWith(error: MtdError)(path: String, body: JsValue): Unit = {
-          s"for $path" in {
-            val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-              validator(validNino, validTaxYear, validBusinessId, body).validateAndWrapResult()
-
-            result shouldBe Left(ErrorWrapper(correlationId, error.withPath(path)))
-          }
-        }
-
-        def testRuleIncorrectOrEmptyBodyErrorWith(path: String, body: JsValue): Unit = testWith(RuleIncorrectOrEmptyBodyError)(path, body)
-
-        def testValueFormatErrorWith(path: String, body: JsValue): Unit = testWith(ValueFormatError)(path, body)
-
-        def testNegativeValueFormatErrorWith(path: String, body: JsValue): Unit =
-          testWith(ValueFormatError.forPathAndRange(path, min = "-99999999999.99", max = "99999999999.99"))(path, body)
-
-        "passed a body with an empty object" when {
-          List(
-            "/ukProperty",
-            "/ukProperty/income",
-            "/ukProperty/expenses"
-          ).foreach(path => testRuleIncorrectOrEmptyBodyErrorWith(path, fullRequestJson.replaceWithEmptyObject(path)))
-        }
-
-        "passed a body with an empty object except for an additional (non-schema) property" in {
-          val invalidBody = fullRequestJson.replaceWithEmptyObject("/ukProperty").update("/ukProperty/badField", JsNumber(100))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukProperty")))
-        }
-
-        "passed a body with an invalidly formatted fromDate" in {
-          val invalidBody = fullRequestJson.update("/fromDate", JsString("invalid"))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
-        }
-
-        "passed a body with an invalidly formatted toDate" in {
-          val invalidBody = fullRequestJson.update("/toDate", JsString("invalid"))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
-        }
-
-        "passed a body with a fromDate that precedes the minimum" in {
-          val invalidBody = fullRequestJson.update("/fromDate", JsString("1569-10-01"))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
-        }
-
-        "passed a body with a toDate after maximum" in {
-          val invalidBody = fullRequestJson.update("/toDate", JsString("3490-10-01"))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
-        }
-
-        "passed a body with a toDate that precedes the fromDate" in {
-          val invalidBody = fullRequestJson.update("/fromDate", JsString("2090-10-01"))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
-        }
-
-        "passed a body with a (non-consolidated expenses) field containing an invalid value" when {
-
-          List(
-            "/ukProperty/income/premiumsOfLeaseGrant",
-            "/ukProperty/income/reversePremiums",
-            "/ukProperty/income/periodAmount",
-            "/ukProperty/income/taxDeducted",
-            "/ukProperty/income/otherIncome",
-            "/ukProperty/income/rentARoom/rentsReceived",
-            "/ukProperty/expenses/rentARoom/amountClaimed",
-            "/ukProperty/expenses/residentialFinancialCost",
-            "/ukProperty/expenses/residentialFinancialCostsCarriedForward"
-          ).foreach(path => testValueFormatErrorWith(path, fullRequestJson.update(path, JsNumber(123.456))))
-
-          List(
-            "/ukProperty/expenses/premisesRunningCosts",
-            "/ukProperty/expenses/repairsAndMaintenance",
-            "/ukProperty/expenses/financialCosts",
-            "/ukProperty/expenses/professionalFees",
-            "/ukProperty/expenses/costOfServices",
-            "/ukProperty/expenses/other",
-            "/ukProperty/expenses/travelCosts"
-          ).foreach(path => testNegativeValueFormatErrorWith(path, fullRequestJson.update(path, JsNumber(123.456))))
-        }
-
-        "passed a body with multiple invalid fields" in {
-          val path0 = "/ukProperty/expenses/travelCosts"
-          val path1 = "/ukProperty/expenses/other"
-          val path2 = "/ukProperty/expenses/costOfServices"
-
-          val invalidBody = fullRequestJson
-            .update(path0, JsNumber(123.456))
-            .update(path1, JsNumber(123.456))
-            .update(path2, JsNumber(123.456))
-
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(
-            ErrorWrapper(
-              correlationId,
-              ValueFormatError.forPathAndRange(path0, min = "-99999999999.99", max = "99999999999.99").withPaths(List(path2, path1, path0))))
-        }
-
-        "passed a body with both consolidated and separate expenses provided" in {
-          val invalidBody = fullRequestJson.update("ukProperty/expenses/consolidatedExpenses", JsNumber(123.45))
-          val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-            validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-          result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/ukProperty/expenses")))
-        }
-
-        "return multiple errors" when {
-          "the request has multiple issues (path parameters)" in {
-            val result: Either[ErrorWrapper, CreateAmendUkPropertyCumulativeSummaryRequestData] =
-              validator("invalid", "invalid", "invalid", fullRequestJson).validateAndWrapResult()
-
-            result shouldBe Left(
-              ErrorWrapper(
-                correlationId,
-                BadRequestError,
-                Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
-              )
-            )
-          }
-        }
+        validator(validNino, validTaxYear, validBusinessId, requestWithInvalidFromDateAndMissingToDate).validateAndWrapResult() shouldBe
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(List(FromDateFormatError, RuleMissingSubmissionDatesError))))
       }
-
     }
   }
 

@@ -4,6 +4,18 @@ info:
   version: "5.0"
   title: Property Business (MTD)
   description: |
+    
+    The following groups of endpoints are stateful in the Sandbox:
+    
+    -  [UK Property Business Annual Submission](#tag/UK-Property-Business-Annual-Submission)
+    -  [UK Property Income and Expenses Period Summary](#tag/UK-Property-Income-and-Expenses-Period-Summary)
+    -  [Historic FHL UK Property Business Annual Submission](#tag/Historic-FHL-UK-Property-Business-Annual-Submission)
+    -  [Historic non-FHL UK Property Business Annual Submission](#tag/Historic-non-FHL-UK-Property-Business-Annual-Submission)
+    -  [Historic FHL UK Property Income and Expenses Period Summary](#tag/Historic-FHL-UK-Property-Income-and-Expenses-Period-Summary)
+    -  [Historic non-FHL UK Property Income and Expenses Period Summary](#tag/Historic-non-FHL-UK-Property-Income-and-Expenses-Period-Summary)
+    -  [Foreign Property Income and Expenses Period Summary](#tag/Foreign-Property-Income-and-Expenses-Period-Summary)
+    -  [Foreign Property Annual Submission](#tag/Foreign-Property-Annual-Submission)
+    
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
 

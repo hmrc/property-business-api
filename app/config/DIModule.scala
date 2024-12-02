@@ -26,8 +26,8 @@ class DIModule(env: Environment, conf: Configuration) extends AbstractModule {
   override def configure(): Unit = {
     bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()
 
-    val isPropRenamed = conf.get[Boolean]("feature-switches.rename")
-    val propName = if (isPropRenamed) "newName" else "oldName"
+    val isPropRenamed = conf.get[Boolean]("feature-switches.renameCostOfReplacingDomesticItems.enabled")
+    val propName = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
     bind(classOf[OWrites[RetrieveUkPropertyAllowances]]) toInstance RetrieveUkPropertyAllowances.writes(propName)
   }
 }

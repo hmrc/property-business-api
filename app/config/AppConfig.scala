@@ -67,6 +67,8 @@ trait AppConfig {
   def maximumTaxYearHistoric: TaxYear
 
   def endpointAllowsSupportingAgents(endpointName: String): Boolean
+
+  implicit def costOfReplacingDomesticItemsKey: String
 }
 
 @Singleton
@@ -194,6 +196,11 @@ class AppConfigImpl @Inject() (config: ServicesConfig, val configuration: Config
     configuration
       .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
       .getOrElse(Map.empty)
+
+  override implicit def costOfReplacingDomesticItemsKey: String = {
+    val isPropRenamed = configuration.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
+    if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+  }
 
 }
 

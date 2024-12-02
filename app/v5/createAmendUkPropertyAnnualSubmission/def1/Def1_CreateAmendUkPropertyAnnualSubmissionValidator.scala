@@ -22,7 +22,8 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import config.AppConfig
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Reads}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkPropertyAllowances
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
@@ -33,7 +34,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(
-    appConfig: AppConfig)
+    appConfig: AppConfig)(implicit r: Reads[CreateAmendUkPropertyAllowances], costOfReplacingDomesticGoodsKey: String)
     extends Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk

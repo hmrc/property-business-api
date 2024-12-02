@@ -22,19 +22,21 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc.Result
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
+import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveUkPropertyAnnualSubmissionControllerSpec
+class RetrieveUkPropertyAnnualSubmissionControllerSpec(implicit
+    w1: OWrites[RetrieveUkPropertyAllowances],
+    w2: OWrites[v5.retrieveUkPropertyAnnualSubmission.def2.model.response.RetrieveUkPropertyAllowances])
     extends ControllerBaseSpec
     with MockAppConfig
     with ControllerTestRunner

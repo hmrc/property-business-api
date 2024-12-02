@@ -29,7 +29,8 @@ import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{
   UkProperty
 }
 
-class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] {
+class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator(implicit costOfReplacingDomesticItemsKey: String)
+    extends RulesValidator[Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
   private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
@@ -63,7 +64,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       (allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance), "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance"),
       (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
       (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
-      (allowances.flatMap(_.costOfReplacingDomesticGoods), "/ukProperty/allowances/costOfReplacingDomesticGoods"),
+      (allowances.flatMap(_.costOfReplacingDomesticItems), s"/ukProperty/allowances/$costOfReplacingDomesticItemsKey"),
       (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance")
     )
 

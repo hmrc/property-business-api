@@ -16,20 +16,62 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.model.response
 
+import api.models.domain.Timestamp
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json._
 import utils.JsonWritesUtil.writesFrom
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty.RetrieveUkFhlProperty
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.{RetrieveUkProperty => Def1_RetrieveUkProperty}
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.{RetrieveUkProperty => Def2_RetrieveUkProperty}
 
-trait RetrieveUkPropertyAnnualSubmissionResponse {
+sealed abstract class RetrieveUkPropertyAnnualSubmissionResponse {
   def hasUkData: Boolean
 }
 
 object RetrieveUkPropertyAnnualSubmissionResponse {
 
-  implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = writesFrom {
-    case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def1)
-    case def2: Def2_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def2)
+  case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
+      submittedOn: Timestamp,
+      ukFhlProperty: Option[RetrieveUkFhlProperty],
+      ukProperty: Option[Def1_RetrieveUkProperty]
+  ) extends RetrieveUkPropertyAnnualSubmissionResponse {
+    override def hasUkData: Boolean = ukFhlProperty.isDefined || ukProperty.isDefined
   }
+
+  object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
+
+    implicit val reads: Reads[Def1_RetrieveUkPropertyAnnualSubmissionResponse] = (
+      (__ \ "submittedOn").read[Timestamp] ~
+        (__ \ "ukFhlProperty").readNullable[RetrieveUkFhlProperty] ~
+        (__ \ "ukOtherProperty").readNullable[Def1_RetrieveUkProperty]
+    )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
+
+  }
+
+  // Note: ukProperty is effectively mandatory.
+  // It will only not be present in a successful response from downstream if a businessId
+  // corresponds to a non-UK property is used and in this case we send back an error.
+  case class Def2_RetrieveUkPropertyAnnualSubmissionResponse(submittedOn: Timestamp, ukProperty: Option[Def2_RetrieveUkProperty])
+      extends RetrieveUkPropertyAnnualSubmissionResponse {
+    override def hasUkData: Boolean = ukProperty.isDefined
+  }
+
+  object Def2_RetrieveUkPropertyAnnualSubmissionResponse {
+
+    implicit val reads: Reads[Def2_RetrieveUkPropertyAnnualSubmissionResponse] = (
+      (__ \ "submittedOn").read[Timestamp] ~
+        (__ \ "ukOtherProperty").readNullable[Def2_RetrieveUkProperty]
+    )(Def2_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
+
+  }
+
+  implicit def writes(implicit
+      w1: OWrites[Def1_RetrieveUkProperty],
+      w2: OWrites[Def2_RetrieveUkProperty]
+  ): OWrites[RetrieveUkPropertyAnnualSubmissionResponse] =
+    writesFrom {
+      case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => Json.writes[Def1_RetrieveUkPropertyAnnualSubmissionResponse].writes(def1)
+      case def2: Def2_RetrieveUkPropertyAnnualSubmissionResponse => Json.writes[Def2_RetrieveUkPropertyAnnualSubmissionResponse].writes(def2)
+    }
 
 }

@@ -18,11 +18,13 @@ package v5.retrieveUkPropertyAnnualSubmission.def2.response
 
 import api.models.domain.Timestamp
 import config.MockAppConfig
+import mocks.MockJsonReadsWrites
 import play.api.libs.json.Json
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
+import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse.Def2_RetrieveUkPropertyAnnualSubmissionResponse
 
-class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig with MockJsonReadsWrites {
 
   private val tysDownstreamJson = Json.parse("""
       |{
@@ -152,7 +154,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
       |         "zeroEmissionsGoodsVehicleAllowance":456.34,
       |         "businessPremisesRenovationAllowance":573.45,
       |         "otherCapitalAllowance":452.34,
-      |         "costOfReplacingDomesticGoods":567.34,
+      |         "costOfReplacingDomesticItems":567.34,
       |         "propertyIncomeAllowance":342.34,
       |         "structuredBuildingAllowance":[
       |            {

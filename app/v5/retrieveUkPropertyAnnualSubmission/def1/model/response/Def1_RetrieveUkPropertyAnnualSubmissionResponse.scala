@@ -15,31 +15,3 @@
  */
 
 package v5.retrieveUkPropertyAnnualSubmission.def1.model.response
-
-import api.models.domain.Timestamp
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{Json, OWrites, Reads, __}
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty.RetrieveUkFhlProperty
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.RetrieveUkProperty
-import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
-
-case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
-    submittedOn: Timestamp,
-    ukFhlProperty: Option[RetrieveUkFhlProperty],
-    ukProperty: Option[RetrieveUkProperty]
-) extends RetrieveUkPropertyAnnualSubmissionResponse {
-  override def hasUkData: Boolean = ukFhlProperty.isDefined || ukProperty.isDefined
-}
-
-object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
-
-  implicit val writes: OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse] =
-    Json.writes[Def1_RetrieveUkPropertyAnnualSubmissionResponse]
-
-  implicit val reads: Reads[Def1_RetrieveUkPropertyAnnualSubmissionResponse] = (
-    (__ \ "submittedOn").read[Timestamp] and
-      (__ \ "ukFhlProperty").readNullable[RetrieveUkFhlProperty] and
-      (__ \ "ukOtherProperty").readNullable[RetrieveUkProperty]
-  )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
-
-}

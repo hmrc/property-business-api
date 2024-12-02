@@ -22,7 +22,7 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 case class CreateAmendUkProperty(adjustments: Option[CreateAmendUkPropertyAdjustments], allowances: Option[CreateAmendUkPropertyAllowances])
 
 object CreateAmendUkProperty {
-  implicit val reads: Reads[CreateAmendUkProperty] = Json.reads[CreateAmendUkProperty]
+  implicit def reads(implicit w: Reads[CreateAmendUkPropertyAllowances]): Reads[CreateAmendUkProperty] = Json.reads[CreateAmendUkProperty]
 
   implicit val writes: Writes[CreateAmendUkProperty] = (
     (JsPath \ "ukOtherPropertyAnnualAdjustments").writeNullable[CreateAmendUkPropertyAdjustments] and

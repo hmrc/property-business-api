@@ -21,8 +21,9 @@ import api.controllers.validators.resolvers._
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{
+  Allowances,
   Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def2_CreateAmendUkPropertyAnnualSubmissionRequestData
 }
@@ -31,7 +32,9 @@ import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPrope
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def2_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def2_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(implicit
+    r: Reads[Allowances],
+    costOfReplacingDomesticGoodsKey: String)
     extends Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody]()

@@ -20,11 +20,12 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
+import mocks.MockJsonReadsWrites
 import play.api.libs.json._
 import support.UnitSpec
 import v5.createAmendUkPropertyAnnualSubmission.def2.model.request._
 
-class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators with MockJsonReadsWrites {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -68,7 +69,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
        |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
        |      "businessPremisesRenovationAllowance": 573.45,
        |      "otherCapitalAllowance": 452.34,
-       |      "costOfReplacingDomesticGoods": 567.34,
+       |      "costOfReplacingDomesticItems": 567.34,
        |      "electricChargePointAllowance": 454.34,
        |      "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowanceEntries)},
        |      "enhancedStructuredBuildingAllowance": ${JsArray(enhancedStructuredBuildingAllowance)},
@@ -309,8 +310,11 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
           setupMocks()
+          val value1 = validBody.update(path, JsNumber(123.456))
+          print("foo")
+          print(value1.toString())
           val result =
-            validator(validNino, validTaxYear, validBusinessId, validBody.update(path, JsNumber(123.456))).validateAndWrapResult()
+            validator(validNino, validTaxYear, validBusinessId, value1).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPath(path)))
         }
@@ -320,7 +324,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
           "/ukProperty/allowances/businessPremisesRenovationAllowance",
           "/ukProperty/allowances/otherCapitalAllowance",
-          "/ukProperty/allowances/costOfReplacingDomesticGoods",
+          "/ukProperty/allowances/costOfReplacingDomesticItems",
           "/ukProperty/allowances/zeroEmissionsCarAllowance",
           "/ukProperty/adjustments/balancingCharge",
           "/ukProperty/adjustments/privateUseAdjustment",

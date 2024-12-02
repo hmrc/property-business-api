@@ -16,11 +16,13 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.def2.response.ukProperty
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, OWrites}
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
 
-class RetrieveUkPropertyAllowancesSpec extends UnitSpec {
+import javax.inject.Inject
+
+class RetrieveUkPropertyAllowancesSpec @Inject() (implicit w: OWrites[RetrieveUkPropertyAllowances]) extends UnitSpec {
 
   val downstreamJson: JsValue = Json.parse("""
       |{

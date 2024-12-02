@@ -19,8 +19,10 @@ package v5.retrieveUkPropertyAnnualSubmission
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
+import play.api.libs.json.OWrites
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
+import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.RetrieveUkPropertyAllowances
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +33,8 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
                                                               validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
                                                               service: RetrieveUkPropertyAnnualSubmissionService,
                                                               cc: ControllerComponents,
-                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                              idGenerator: IdGenerator
+                                                             )(implicit ec: ExecutionContext, appConfig: AppConfig, oWritesAllowances: OWrites[RetrieveUkPropertyAllowances])
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-uk-property-annual-submission"

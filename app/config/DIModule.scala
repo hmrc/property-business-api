@@ -16,12 +16,18 @@
 
 package config
 
-import com.google.inject.AbstractModule
+import com.google.inject.{AbstractModule, Provides, Singleton}
+import play.api.{Configuration, Environment}
+import play.api.libs.json.OWrites
+import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.RetrieveUkPropertyAllowances
 
-class DIModule extends AbstractModule {
+class DIModule(env: Environment, conf: Configuration) extends AbstractModule {
 
   override def configure(): Unit = {
     bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()
-  }
 
+    val isPropRenamed = conf.get[Boolean]("feature-switches.rename")
+    val propName = if (isPropRenamed) "newName" else "oldName"
+    bind(classOf[OWrites[RetrieveUkPropertyAllowances]]) toInstance RetrieveUkPropertyAllowances.writes(propName)
+  }
 }

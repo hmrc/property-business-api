@@ -16,10 +16,12 @@
 
 package config
 
-import com.google.inject.{AbstractModule, Provides, Singleton}
+import com.google.inject.AbstractModule
 import play.api.{Configuration, Environment}
-import play.api.libs.json.OWrites
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.RetrieveUkPropertyAllowances
+import play.api.libs.json.{OWrites, Reads}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkPropertyAllowances
+import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.Allowances
+import v5.retrieveUkPropertyAnnualSubmission._
 
 class DIModule(env: Environment, conf: Configuration) extends AbstractModule {
 
@@ -27,7 +29,14 @@ class DIModule(env: Environment, conf: Configuration) extends AbstractModule {
     bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()
 
     val isPropRenamed = conf.get[Boolean]("feature-switches.renameCostOfReplacingDomesticItems.enabled")
-    val propName = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
-    bind(classOf[OWrites[RetrieveUkPropertyAllowances]]) toInstance RetrieveUkPropertyAllowances.writes(propName)
+    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+    bind(classOf[OWrites[def1.model.response.ukProperty.RetrieveUkPropertyAllowances]]) toInstance
+      def1.model.response.ukProperty.RetrieveUkPropertyAllowances.writes(propName)
+    bind(classOf[OWrites[def2.model.response.RetrieveUkPropertyAllowances]]) toInstance def2.model.response.RetrieveUkPropertyAllowances
+      .writes(propName)
+    bind(classOf[Reads[CreateAmendUkPropertyAllowances]]) toInstance CreateAmendUkPropertyAllowances.reads(propName)
+    bind(classOf[Reads[Allowances]]) toInstance Allowances.reads(propName)
+
   }
+
 }

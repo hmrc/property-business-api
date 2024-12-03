@@ -18,6 +18,7 @@ package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkPropertyAllowances
 
 case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
                       zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
@@ -30,7 +31,18 @@ case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
                       enhancedStructuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]])
 
 object Allowances {
-  implicit val reads: Reads[Allowances] = Json.reads[Allowances]
+
+  def reads(costOfReplacingKey: String): Reads[Allowances] = (
+    (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
+      (JsPath \ costOfReplacingKey).readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").readNullable[Seq[StructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[StructuredBuildingAllowance]]
+  )(Allowances.apply _)
 
   implicit val writes: Writes[Allowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and

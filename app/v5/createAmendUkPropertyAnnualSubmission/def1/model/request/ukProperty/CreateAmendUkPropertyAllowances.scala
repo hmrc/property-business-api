@@ -31,7 +31,19 @@ case class CreateAmendUkPropertyAllowances(annualInvestmentAllowance: Option[Big
                                            enhancedStructuredBuildingAllowance: Option[Seq[CreateAmendStructuredBuildingAllowance]])
 
 object CreateAmendUkPropertyAllowances {
-  implicit val reads: Reads[CreateAmendUkPropertyAllowances] = Json.reads[CreateAmendUkPropertyAllowances]
+
+  def reads(costOfReplacingKey: String): Reads[CreateAmendUkPropertyAllowances] = (
+    (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
+      (JsPath \ costOfReplacingKey).readNullable[BigDecimal] and
+      (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").readNullable[Seq[CreateAmendStructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[CreateAmendStructuredBuildingAllowance]]
+  )(CreateAmendUkPropertyAllowances.apply _)
 
   implicit val writes: Writes[CreateAmendUkPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and

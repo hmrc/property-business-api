@@ -32,6 +32,7 @@ case class RetrieveUkPropertyAllowances(
 )
 
 object RetrieveUkPropertyAllowances {
+
   def writes(costOfReplacingKey: String): OWrites[RetrieveUkPropertyAllowances] =
     Json.writes.transform { json =>
       val costOfReplacingValue = (json \ "costOfReplacingDomesticGoods").asOpt[BigDecimal]

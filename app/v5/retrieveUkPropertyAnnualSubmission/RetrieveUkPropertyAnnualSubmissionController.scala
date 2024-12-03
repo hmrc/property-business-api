@@ -28,13 +28,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                              val lookupService: MtdIdLookupService,
-                                                              validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
-                                                              service: RetrieveUkPropertyAnnualSubmissionService,
-                                                              cc: ControllerComponents,
-                                                              idGenerator: IdGenerator
-                                                             )(implicit ec: ExecutionContext, appConfig: AppConfig, oWritesAllowances: OWrites[RetrieveUkPropertyAllowances])
+class RetrieveUkPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
+    service: RetrieveUkPropertyAnnualSubmissionService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig, oWritesAllowances: OWrites[RetrieveUkPropertyAllowances])
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-uk-property-annual-submission"

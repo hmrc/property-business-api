@@ -27,7 +27,9 @@ case class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(ukFhlProperty: 
     extends CreateAmendUkPropertyAnnualSubmissionRequestBody
 
 object Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody {
-  implicit val reads: Reads[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] = Json.reads[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody]
+
+  implicit def reads(implicit r: Reads[CreateAmendUkProperty]): Reads[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] =
+    Json.reads[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody]
 
   implicit val writes: OWrites[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "ukFhlProperty").writeNullable[CreateAmendUkFhlProperty] and

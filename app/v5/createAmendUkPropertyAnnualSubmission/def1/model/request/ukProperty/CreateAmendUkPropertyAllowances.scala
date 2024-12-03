@@ -17,7 +17,7 @@
 package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Reads, Writes}
 
 case class CreateAmendUkPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                            zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],

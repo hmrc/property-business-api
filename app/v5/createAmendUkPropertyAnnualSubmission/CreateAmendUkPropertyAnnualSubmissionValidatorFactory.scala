@@ -19,16 +19,20 @@ package v5.createAmendUkPropertyAnnualSubmission
 import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import config.AppConfig
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v5.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkPropertyAllowances
 import v5.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
+import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.Allowances
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig)(implicit
+    readsDef1: Reads[Allowances],
+    readsDef2: Reads[CreateAmendUkPropertyAllowances]) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] = {
 

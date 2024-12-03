@@ -27,9 +27,13 @@ trait RetrieveUkPropertyAnnualSubmissionResponse {
 
 object RetrieveUkPropertyAnnualSubmissionResponse {
 
-  implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = writesFrom {
-    case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def1)
-    case def2: Def2_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def2)
-  }
+  implicit def writes(implicit
+      w1: OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse],
+      w2: OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse]
+  ): OWrites[RetrieveUkPropertyAnnualSubmissionResponse] =
+    writesFrom {
+      case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def1)
+      case def2: Def2_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def2)
+    }
 
 }

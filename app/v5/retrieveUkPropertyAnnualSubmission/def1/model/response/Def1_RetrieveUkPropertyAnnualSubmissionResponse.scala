@@ -33,7 +33,7 @@ case class Def1_RetrieveUkPropertyAnnualSubmissionResponse(
 
 object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
 
-  implicit val writes: OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse] =
+  implicit def writes(implicit w: OWrites[RetrieveUkProperty]): OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse] =
     Json.writes[Def1_RetrieveUkPropertyAnnualSubmissionResponse]
 
   implicit val reads: Reads[Def1_RetrieveUkPropertyAnnualSubmissionResponse] = (

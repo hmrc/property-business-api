@@ -30,7 +30,7 @@ case class Def2_RetrieveUkPropertyAnnualSubmissionResponse(submittedOn: Timestam
 }
 
 object Def2_RetrieveUkPropertyAnnualSubmissionResponse {
-  implicit val writes: OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse] = Json.writes[Def2_RetrieveUkPropertyAnnualSubmissionResponse]
+  implicit def writes(implicit writesProperty: OWrites[RetrieveUkProperty]): OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse] = Json.writes
 
   implicit val reads: Reads[Def2_RetrieveUkPropertyAnnualSubmissionResponse] = (
     (__ \ "submittedOn").read[Timestamp] and

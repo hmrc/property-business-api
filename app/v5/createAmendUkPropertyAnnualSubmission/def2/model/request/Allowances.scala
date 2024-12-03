@@ -17,8 +17,7 @@
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkPropertyAllowances
+import play.api.libs.json.{JsPath, Reads, Writes}
 
 case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
                       zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
@@ -32,7 +31,7 @@ case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
 
 object Allowances {
 
-  def reads(costOfReplacingKey: String): Reads[Allowances] = (
+  implicit def reads(implicit costOfReplacingKey: String): Reads[Allowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and

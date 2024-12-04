@@ -26,37 +26,28 @@ import v5.retrieveUkPropertyAnnualSubmission._
 
 class DIModule(env: Environment, conf: Configuration) extends AbstractModule {
 
+  private val propName = {
+    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
+    if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+  }
+
   @Provides
   @Named("w1")
-  def def1RetrieveAllowancesProvider: OWrites[def1.model.response.ukProperty.RetrieveUkPropertyAllowances] = {
-    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
-    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+  def def1RetrieveAllowancesProvider: OWrites[def1.model.response.ukProperty.RetrieveUkPropertyAllowances] =
     def1.model.response.ukProperty.RetrieveUkPropertyAllowances.writes(propName)
-  }
 
   @Provides
   @Named("w2")
-  def def2RetrieveAllowances: OWrites[def2.model.response.RetrieveUkPropertyAllowances] = {
-    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
-    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+  def def2RetrieveAllowances: OWrites[def2.model.response.RetrieveUkPropertyAllowances] =
     def2.model.response.RetrieveUkPropertyAllowances.writes(propName)
-  }
 
   @Provides
   @Named("r1")
-  def def1CreateAllowances: Reads[CreateAmendUkPropertyAllowances] = {
-    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
-    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
-    CreateAmendUkPropertyAllowances.reads(propName)
-  }
+  def def1CreateAllowances: Reads[CreateAmendUkPropertyAllowances] = CreateAmendUkPropertyAllowances.reads(propName)
 
   @Provides
   @Named("r2")
-  def def2CreateAllowances: Reads[Allowances] = {
-    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
-    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
-    Allowances.reads(propName)
-  }
+  def def2CreateAllowances: Reads[Allowances] = Allowances.reads(propName)
 
   override def configure(): Unit = {
     bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()

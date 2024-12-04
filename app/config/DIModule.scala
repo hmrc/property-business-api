@@ -16,7 +16,8 @@
 
 package config
 
-import com.google.inject.AbstractModule
+import com.google.inject.name.Named
+import com.google.inject.{AbstractModule, Provides}
 import play.api.{Configuration, Environment}
 import play.api.libs.json.{OWrites, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkPropertyAllowances
@@ -25,18 +26,40 @@ import v5.retrieveUkPropertyAnnualSubmission._
 
 class DIModule(env: Environment, conf: Configuration) extends AbstractModule {
 
-  override def configure(): Unit = {
-    bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()
-
+  @Provides
+  @Named("w1")
+  def def1RetrieveAllowancesProvider: OWrites[def1.model.response.ukProperty.RetrieveUkPropertyAllowances] = {
     val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
     val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
-    bind(classOf[OWrites[def1.model.response.ukProperty.RetrieveUkPropertyAllowances]]) toInstance
-      def1.model.response.ukProperty.RetrieveUkPropertyAllowances.writes(propName)
-    bind(classOf[OWrites[def2.model.response.RetrieveUkPropertyAllowances]]) toInstance def2.model.response.RetrieveUkPropertyAllowances
-      .writes(propName)
-    bind(classOf[Reads[CreateAmendUkPropertyAllowances]]) toInstance CreateAmendUkPropertyAllowances.reads(propName)
-    bind(classOf[Reads[Allowances]]) toInstance Allowances.reads(propName)
+    def1.model.response.ukProperty.RetrieveUkPropertyAllowances.writes(propName)
+  }
 
+  @Provides
+  @Named("w2")
+  def def2RetrieveAllowances: OWrites[def2.model.response.RetrieveUkPropertyAllowances] = {
+    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
+    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+    def2.model.response.RetrieveUkPropertyAllowances.writes(propName)
+  }
+
+  @Provides
+  @Named("r1")
+  def def1CreateAllowances: Reads[CreateAmendUkPropertyAllowances] = {
+    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
+    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+    CreateAmendUkPropertyAllowances.reads(propName)
+  }
+
+  @Provides
+  @Named("r2")
+  def def2CreateAllowances: Reads[Allowances] = {
+    val isPropRenamed = conf.get[Boolean]("feature-switch.renameCostOfReplacingDomesticItems.enabled")
+    val propName      = if (isPropRenamed) "costOfReplacingDomesticItems" else "costOfReplacingDomesticGoods"
+    Allowances.reads(propName)
+  }
+
+  override def configure(): Unit = {
+    bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()
   }
 
 }

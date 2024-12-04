@@ -18,27 +18,29 @@ package v5.retrieveUkPropertyAnnualSubmission
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import com.google.inject.name.Named
 import config.AppConfig
 import play.api.libs.json.OWrites
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.RetrieveUkPropertyAllowances
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                              val lookupService: MtdIdLookupService,
-                                                              validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
-                                                              service: RetrieveUkPropertyAnnualSubmissionService,
-                                                              cc: ControllerComponents,
-                                                              idGenerator: IdGenerator)(implicit
+class RetrieveUkPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: RetrieveUkPropertyAnnualSubmissionValidatorFactory,
+    service: RetrieveUkPropertyAnnualSubmissionService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator
+)(implicit
     ec: ExecutionContext,
     appConfig: AppConfig,
-    oWritesAllowances1: OWrites[RetrieveUkPropertyAllowances],
-    oWritesAllowances2: OWrites[v5.retrieveUkPropertyAnnualSubmission.def2.model.response.RetrieveUkPropertyAllowances])
-    extends AuthorisedController(cc) {
+    @Named("w1") w1: OWrites[def1.model.response.ukProperty.RetrieveUkPropertyAllowances],
+    @Named("w2") w2: OWrites[def2.model.response.RetrieveUkPropertyAllowances]
+) extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-uk-property-annual-submission"
 

@@ -16,6 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
+import com.google.inject.{AbstractModule, Provides}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Reads, Writes}
 
@@ -29,8 +30,9 @@ case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
                       structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
                       enhancedStructuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]])
 
-object Allowances {
+object Allowances extends AbstractModule {
 
+  @Provides
   implicit def reads(implicit costOfReplacingKey: String): Reads[Allowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and

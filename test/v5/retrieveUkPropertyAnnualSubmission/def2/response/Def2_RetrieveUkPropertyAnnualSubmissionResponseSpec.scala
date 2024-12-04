@@ -18,11 +18,15 @@ package v5.retrieveUkPropertyAnnualSubmission.def2.response
 
 import api.models.domain.Timestamp
 import config.MockAppConfig
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OWrites}
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
 
-class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+import javax.inject.Inject
+
+class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec @Inject() (implicit w: OWrites[RetrieveUkPropertyAllowances])
+    extends UnitSpec
+    with MockAppConfig {
 
   private val tysDownstreamJson = Json.parse("""
       |{

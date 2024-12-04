@@ -19,6 +19,8 @@ package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
+import javax.inject.Inject
+
 class Def2_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
 
   val requestBody: Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody =

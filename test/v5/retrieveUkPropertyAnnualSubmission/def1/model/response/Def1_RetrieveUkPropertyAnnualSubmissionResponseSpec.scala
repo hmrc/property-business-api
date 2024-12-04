@@ -18,13 +18,17 @@ package v5.retrieveUkPropertyAnnualSubmission.def1.model.response
 
 import api.models.domain.Timestamp
 import config.MockAppConfig
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OWrites}
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
-class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+import javax.inject.Inject
+
+class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec @Inject() (implicit w: OWrites[RetrieveUkPropertyAllowances])
+    extends UnitSpec
+    with MockAppConfig {
 
   private val preTysDownstreamJson = Json.parse("""
       |{

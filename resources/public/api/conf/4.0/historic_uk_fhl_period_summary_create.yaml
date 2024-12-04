@@ -37,8 +37,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
-          - $ref: './schemas/historic_uk_fhl_period_summary_create/def1/request.json'
+        $ref: './schemas/historic_uk_fhl_period_summary_create/def1/request.json'
       examples:
         full-expense-request:
           description: Full Expenses request given any tax year

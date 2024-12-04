@@ -40,8 +40,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
-            - $ref: './schemas/historic_uk_fhl_period_summary_list/def1/response.json'
+          $ref: './schemas/historic_uk_fhl_period_summary_list/def1/response.json'
         examples:
           example-1:
             description: Default Example given any tax year

@@ -43,8 +43,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
-            - $ref: './schemas/historic_uk_non_fhl_period_summary_retrieve/def1/response.json'
+          $ref: './schemas/historic_uk_non_fhl_period_summary_retrieve/def1/response.json'
         examples:
           full-response:
             description: Example response given any tax year

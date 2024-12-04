@@ -52,8 +52,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
-            - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
+          $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
         examples:
           all-other-allowances-response:
             description: All Other Allowances Response

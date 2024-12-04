@@ -30,8 +30,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
-          - $ref: './schemas/historic_uk_non_fhl_annual_submission_create_and_amend/def1/request.json'
+        $ref: './schemas/historic_uk_non_fhl_annual_submission_create_and_amend/def1/request.json'
       examples:
         property-allowance-request:
           description: Property Allowance request given any tax year

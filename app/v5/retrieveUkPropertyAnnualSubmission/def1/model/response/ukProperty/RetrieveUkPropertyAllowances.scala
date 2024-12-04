@@ -20,26 +20,28 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class RetrieveUkPropertyAllowances(
-    annualInvestmentAllowance: Option[BigDecimal],
-    zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
-    businessPremisesRenovationAllowance: Option[BigDecimal],
-    otherCapitalAllowance: Option[BigDecimal],
-    costOfReplacingDomesticGoods: Option[BigDecimal],
-    propertyIncomeAllowance: Option[BigDecimal],
-    electricChargePointAllowance: Option[BigDecimal],
-    structuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
-    enhancedStructuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
-    zeroEmissionsCarAllowance: Option[BigDecimal]
-)
+                                         annualInvestmentAllowance: Option[BigDecimal],
+                                         zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
+                                         businessPremisesRenovationAllowance: Option[BigDecimal],
+                                         otherCapitalAllowance: Option[BigDecimal],
+                                         costOfReplacingDomesticGoods: Option[BigDecimal],
+                                         propertyIncomeAllowance: Option[BigDecimal],
+                                         electricChargePointAllowance: Option[BigDecimal],
+                                         structuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
+                                         enhancedStructuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
+                                         zeroEmissionsCarAllowance: Option[BigDecimal]
+                                       )
 
 object RetrieveUkPropertyAllowances {
 
   def writes(costOfReplacingKey: String): OWrites[RetrieveUkPropertyAllowances] =
     Json.writes.transform { json =>
       val costOfReplacingValue = (json \ "costOfReplacingDomesticGoods").asOpt[BigDecimal]
-      json - "costOfReplacingDomesticGoods" ++ Json.obj(
-        costOfReplacingKey -> costOfReplacingValue
-      )
+      if (costOfReplacingValue.isDefined)
+        json - "costOfReplacingDomesticGoods" ++ Json.obj(
+          costOfReplacingKey -> costOfReplacingValue
+        )
+      else json
     }
 
   implicit val reads: Reads[RetrieveUkPropertyAllowances] = (
@@ -54,6 +56,6 @@ object RetrieveUkPropertyAllowances {
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[RetrieveUkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[RetrieveUkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
-  )(RetrieveUkPropertyAllowances.apply _)
+    )(RetrieveUkPropertyAllowances.apply _)
 
 }

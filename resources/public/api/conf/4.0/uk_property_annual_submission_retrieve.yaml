@@ -50,8 +50,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
-            - $ref: './schemas/uk_property_annual_submission_retrieve/def1/response.json'
+          $ref: './schemas/uk_property_annual_submission_retrieve/def1/response.json'
         examples:
           property-allowance-any-TY:
             description: Property Allowance - any tax year

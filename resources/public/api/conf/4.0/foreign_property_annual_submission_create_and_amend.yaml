@@ -41,8 +41,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
-          - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
+        $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
       examples:
         all-other-allowances-request:
           description: All Other Allowances request

@@ -39,8 +39,7 @@ get:
       content:
         application/json:
           schema:
-            oneOf:
-              - $ref: './schemas/property_period_summaries_list/def1/response.json'
+            $ref: './schemas/property_period_summaries_list/def1/response.json'
           examples:
             example-response:
               description: Default Example given any tax year

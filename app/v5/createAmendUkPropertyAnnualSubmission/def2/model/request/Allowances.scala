@@ -17,20 +17,31 @@
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Reads, Writes}
 
 case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
                       zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                       businessPremisesRenovationAllowance: Option[BigDecimal],
                       otherCapitalAllowance: Option[BigDecimal],
-                      costOfReplacingDomesticGoods: Option[BigDecimal],
+                      costOfReplacingDomesticItems: Option[BigDecimal],
                       zeroEmissionsCarAllowance: Option[BigDecimal],
                       propertyIncomeAllowance: Option[BigDecimal],
                       structuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]],
                       enhancedStructuredBuildingAllowance: Option[Seq[StructuredBuildingAllowance]])
 
 object Allowances {
-  implicit val reads: Reads[Allowances] = Json.reads[Allowances]
+
+  implicit def reads(implicit costOfReplacingKey: String): Reads[Allowances] = (
+    (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
+      (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
+      (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
+      (JsPath \ costOfReplacingKey).readNullable[BigDecimal] and
+      (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
+      (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal] and
+      (JsPath \ "structuredBuildingAllowance").readNullable[Seq[StructuredBuildingAllowance]] and
+      (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[StructuredBuildingAllowance]]
+  )(Allowances.apply _)
 
   implicit val writes: Writes[Allowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and

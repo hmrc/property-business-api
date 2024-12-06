@@ -22,7 +22,7 @@ import play.api.libs.json._
 case class RetrieveUkProperty(adjustments: Option[RetrieveUkPropertyAdjustments], allowances: Option[RetrieveUkPropertyAllowances])
 
 object RetrieveUkProperty {
-  implicit val writes: OWrites[RetrieveUkProperty] = Json.writes[RetrieveUkProperty]
+  implicit def writes(implicit writesAllowances: OWrites[RetrieveUkPropertyAllowances]): OWrites[RetrieveUkProperty] = Json.writes
 
   implicit val reads: Reads[RetrieveUkProperty] = (
     (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[RetrieveUkPropertyAdjustments] and

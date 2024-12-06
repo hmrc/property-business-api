@@ -32,7 +32,16 @@ case class RetrieveUkPropertyAllowances(
 )
 
 object RetrieveUkPropertyAllowances {
-  implicit val writes: OWrites[RetrieveUkPropertyAllowances] = Json.writes[RetrieveUkPropertyAllowances]
+
+  def writes(costOfReplacingKey: String): OWrites[RetrieveUkPropertyAllowances] =
+    Json.writes.transform { json =>
+      val costOfReplacingValue = (json \ "costOfReplacingDomesticGoods").asOpt[BigDecimal]
+      if (costOfReplacingValue.isDefined)
+        json - "costOfReplacingDomesticGoods" ++ Json.obj(
+          costOfReplacingKey -> costOfReplacingValue
+        )
+      else json
+    }
 
   implicit val reads: Reads[RetrieveUkPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and

@@ -219,7 +219,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
             |      "zeroEmissionsGoodsVehicleAllowance": 2000.6567890,
             |      "businessPremisesRenovationAllowance": 2000.75678900,
             |      "otherCapitalAllowance": 2000.56789080,
-            |      "costOfReplacingDomesticGoods": 2000.95678900,
+            |      "costOfReplacingDomesticItems": 2000.95678900,
             |      "electricChargePointAllowance": 3000.1567890,
             |      "structuredBuildingAllowance": [
             |        {
@@ -423,7 +423,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |      "zeroEmissionsGoodsVehicleAllowance": 2000.6235450,
           |      "businessPremisesRenovationAllowance": 2000.745360,
           |      "otherCapitalAllowance": 2000.8243520,
-          |      "costOfReplacingDomesticGoods": 2000.9064532,
+          |      "costOfReplacingDomesticItems": 2000.9064532,
           |      "electricChargePointAllowance": 3000.1234520,
           |      "structuredBuildingAllowance": [
           |        {

@@ -23,8 +23,10 @@ import cats.data.Validated
 import cats.data.Validated.Valid
 import play.api.libs.json.Reads
 import schema.DownstreamReadable
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
-import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
+import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse.{
+  Def1_RetrieveUkPropertyAnnualSubmissionResponse,
+  Def2_RetrieveUkPropertyAnnualSubmissionResponse
+}
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
 import scala.math.Ordered.orderingToOrdered

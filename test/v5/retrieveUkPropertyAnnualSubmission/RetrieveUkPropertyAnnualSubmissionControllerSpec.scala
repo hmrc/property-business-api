@@ -25,11 +25,11 @@ import play.api.Configuration
 import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc.Result
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
-import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty._
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
+import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

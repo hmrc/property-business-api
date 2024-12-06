@@ -16,13 +16,14 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1.model.request
 
+import mocks.MockJsonReadsWrites
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 
-class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {
+class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with MockJsonReadsWrites {
 
   val requestBody: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody =
     Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
@@ -125,7 +126,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
-      |      "costOfReplacingDomesticGoods": 2000.90,
+      |      "costOfReplacingDomesticItems": 2000.90,
       |      "electricChargePointAllowance": 3000.10,
       |      "structuredBuildingAllowance": [
       |        {

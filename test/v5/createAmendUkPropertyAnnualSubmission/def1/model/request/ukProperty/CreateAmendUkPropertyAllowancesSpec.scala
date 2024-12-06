@@ -16,10 +16,11 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty
 
+import mocks.MockJsonReadsWrites
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 
-class CreateAmendUkPropertyAllowancesSpec extends UnitSpec {
+class CreateAmendUkPropertyAllowancesSpec extends UnitSpec with MockJsonReadsWrites {
 
   val requestBody: CreateAmendUkPropertyAllowances =
     CreateAmendUkPropertyAllowances(
@@ -69,7 +70,7 @@ class CreateAmendUkPropertyAllowancesSpec extends UnitSpec {
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
-      |      "costOfReplacingDomesticGoods": 2000.90,
+      |      "costOfReplacingDomesticItems": 2000.90,
       |      "electricChargePointAllowance": 3000.10,
       |      "structuredBuildingAllowance": [
       |        {

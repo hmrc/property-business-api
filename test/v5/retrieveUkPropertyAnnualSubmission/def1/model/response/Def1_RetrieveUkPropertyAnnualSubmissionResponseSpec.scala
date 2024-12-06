@@ -18,17 +18,15 @@ package v5.retrieveUkPropertyAnnualSubmission.def1.model.response
 
 import api.models.domain.Timestamp
 import config.MockAppConfig
-import play.api.libs.json.{Json, OWrites}
+import mocks.MockJsonReadsWrites
+import play.api.libs.json.Json
 import support.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty._
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty._
+import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.model.response._
 
-import javax.inject.Inject
-
-class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec @Inject() (implicit w: OWrites[RetrieveUkPropertyAllowances])
-    extends UnitSpec
-    with MockAppConfig {
+class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig with MockJsonReadsWrites {
 
   private val preTysDownstreamJson = Json.parse("""
       |{
@@ -59,7 +57,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec @Inject() (implicit w:
       |         "zeroEmissionGoodsVehicleAllowance":456.34,
       |         "businessPremisesRenovationAllowance":573.45,
       |         "otherCapitalAllowance":452.34,
-      |         "costOfReplacingDomesticGoods":567.34,
+      |         "costOfReplacingDomesticItems":567.34,
       |         "propertyIncomeAllowance":342.34,
       |         "electricChargePointAllowance":454.34,
       |         "structuredBuildingAllowance":[
@@ -302,7 +300,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec @Inject() (implicit w:
       |         "zeroEmissionsGoodsVehicleAllowance":456.34,
       |         "businessPremisesRenovationAllowance":573.45,
       |         "otherCapitalAllowance":452.34,
-      |         "costOfReplacingDomesticGoods":567.34,
+      |         "costOfReplacingDomesticItems":567.34,
       |         "propertyIncomeAllowance":342.34,
       |         "electricChargePointAllowance":454.34,
       |         "structuredBuildingAllowance":[

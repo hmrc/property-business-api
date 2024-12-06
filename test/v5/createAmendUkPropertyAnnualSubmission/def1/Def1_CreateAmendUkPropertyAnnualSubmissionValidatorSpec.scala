@@ -20,6 +20,7 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors._
 import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
+import mocks.MockJsonReadsWrites
 import play.api.libs.json._
 import support.UnitSpec
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.{
@@ -41,7 +42,7 @@ import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 }
 
-class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators with MockJsonReadsWrites {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -118,7 +119,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
        |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
        |      "businessPremisesRenovationAllowance": 573.45,
        |      "otherCapitalAllowance": 452.34,
-       |      "costOfReplacingDomesticGoods": 567.34,
+       |      "costOfReplacingDomesticItems": 567.34,
        |      "electricChargePointAllowance": 454.34,
        |      "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowanceEntries)},
        |      "enhancedStructuredBuildingAllowance": ${JsArray(enhancedStructuredBuildingAllowance)},
@@ -492,7 +493,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
           "/ukProperty/allowances/businessPremisesRenovationAllowance",
           "/ukProperty/allowances/otherCapitalAllowance",
-          "/ukProperty/allowances/costOfReplacingDomesticGoods",
+          "/ukProperty/allowances/costOfReplacingDomesticItems",
           "/ukProperty/allowances/electricChargePointAllowance",
           "/ukProperty/allowances/zeroEmissionsCarAllowance",
           "/ukProperty/adjustments/balancingCharge",

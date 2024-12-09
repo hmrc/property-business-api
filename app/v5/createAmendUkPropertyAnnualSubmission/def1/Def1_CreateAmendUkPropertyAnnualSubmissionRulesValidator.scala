@@ -102,7 +102,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       (allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance), "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance"),
       (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
       (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
-      (allowances.flatMap(_.costOfReplacingDomesticGoods), "/ukProperty/allowances/costOfReplacingDomesticGoods"),
+      (allowances.flatMap(_.costOfReplacingDomesticItems), "/ukProperty/allowances/costOfReplacingDomesticItems"),
       (allowances.flatMap(_.electricChargePointAllowance), "/ukProperty/allowances/electricChargePointAllowance"),
       (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance")
     )

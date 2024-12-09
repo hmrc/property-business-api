@@ -24,7 +24,7 @@ case class RetrieveUkPropertyAllowances(
     zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
     businessPremisesRenovationAllowance: Option[BigDecimal],
     otherCapitalAllowance: Option[BigDecimal],
-    costOfReplacingDomesticGoods: Option[BigDecimal],
+    costOfReplacingDomesticItems: Option[BigDecimal],
     propertyIncomeAllowance: Option[BigDecimal],
     electricChargePointAllowance: Option[BigDecimal],
     structuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
@@ -33,7 +33,8 @@ case class RetrieveUkPropertyAllowances(
 )
 
 object RetrieveUkPropertyAllowances {
-  implicit val writes: OWrites[RetrieveUkPropertyAllowances] = Json.writes[RetrieveUkPropertyAllowances]
+
+  implicit val writes: OWrites[RetrieveUkPropertyAllowances] = Json.writes
 
   implicit val reads: Reads[RetrieveUkPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and

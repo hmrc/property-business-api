@@ -81,7 +81,7 @@
               "description": "All other capital allowances. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
-            "costOfReplacingDomesticGoods": {
+            "costOfReplacingDomesticItems": {
               "type": "number",
               "description": "Cost of Replacing Domestic Items - formerly Wear and Tear allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"

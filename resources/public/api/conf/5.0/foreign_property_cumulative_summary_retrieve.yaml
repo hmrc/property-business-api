@@ -6,14 +6,15 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Tax Years       | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
-  |-----------------|----------------------------------|--------------------------------------------------------------------------|
-  | 2025-26 onwards | N/A - DEFAULT                    | Simulates success response with Foreign Property.                        |
-  | 2025-26 onwards | NOT_FOUND                        | Simulates the scenario where no data is found.                           |
-  | 2025-26 onwards | FOREIGN_PROPERTY_FULL_EXPENSES   | Simulates success response of a Foreign property with full expenses.     |
-  | 2025-26 onwards | FOREIGN_PROPERTY_CONSOLIDATED    | Simulates the scenario of a Foreign property with consolidated expenses. |
-  | 2025-26 onwards | UK_PROPERTY                      | Simulates the scenario where the type of business is incorrect.          |
-  | 2025-26 onwards | STATEFUL                         | Performs a stateful retrieve.                                            |
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
+  |----------------------------------|--------------------------------------------------------------------------|
+  | N/A - DEFAULT                    | Simulates success response with Foreign Property.                        |
+  | NOT_FOUND                        | Simulates the scenario where no data is found.                           |
+  | TAX_YEAR_NOT_SUPPORTED           | Simulates the scenario where the tax year is not supported.              |
+  | FOREIGN_PROPERTY_FULL_EXPENSES   | Simulates success response of a Foreign property with full expenses.     |
+  | FOREIGN_PROPERTY_CONSOLIDATED    | Simulates the scenario of a Foreign property with consolidated expenses. |
+  | UK_PROPERTY                      | Simulates the scenario where the type of business is incorrect.          |
+  | STATEFUL                         | Performs a stateful retrieve.                                            |
 
 tags:
   - Foreign Property Cumulative Period Summary

@@ -1,23 +1,23 @@
 {
-  "fromDate":"2024-03-09",
-  "toDate":"2024-03-29",
-  "foreignProperty":[
+  "fromDate": "2025-04-06",
+  "toDate": "2025-07-05",
+  "foreignProperty": [
     {
-      "countryCode":"FRA",
-      "income":{
-        "rentIncome":{
-          "rentAmount":4882.23
+      "countryCode": "FRA",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 4882.23
         },
-        "foreignTaxCreditRelief":false,
-        "premiumsOfLeaseGrant":884.72,
-        "otherPropertyIncome":7713.09,
-        "foreignTaxPaidOrDeducted":884.12,
-        "specialWithholdingTaxOrUkTaxPaid":847.72
+        "foreignTaxCreditRelief": false,
+        "premiumsOfLeaseGrant": 884.72,
+        "otherPropertyIncome": 7713.09,
+        "foreignTaxPaidOrDeducted": 884.12,
+        "specialWithholdingTaxOrUkTaxPaid": 847.72
       },
-      "expenses":{
+      "expenses": {
         "consolidatedExpenses": 3992.93,
-        "residentialFinancialCost":879.28,
-        "broughtFwdResidentialFinancialCost":846.13
+        "residentialFinancialCost": 879.28,
+        "broughtFwdResidentialFinancialCost": 846.13
       }
     }
   ]

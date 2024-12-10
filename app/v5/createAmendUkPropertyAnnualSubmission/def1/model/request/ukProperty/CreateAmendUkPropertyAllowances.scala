@@ -23,7 +23,7 @@ case class CreateAmendUkPropertyAllowances(annualInvestmentAllowance: Option[Big
                                            zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                            businessPremisesRenovationAllowance: Option[BigDecimal],
                                            otherCapitalAllowance: Option[BigDecimal],
-                                           costOfReplacingDomesticGoods: Option[BigDecimal],
+                                           costOfReplacingDomesticItems: Option[BigDecimal],
                                            electricChargePointAllowance: Option[BigDecimal],
                                            zeroEmissionsCarAllowance: Option[BigDecimal],
                                            propertyIncomeAllowance: Option[BigDecimal],

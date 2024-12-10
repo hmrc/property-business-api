@@ -68,7 +68,7 @@ class AllowancesSpec extends UnitSpec {
       |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
-      |      "costOfReplacingDomesticGoods": 2000.90,
+      |      "costOfReplacingDomesticItems": 2000.90,
       |      "structuredBuildingAllowance": [
       |        {
       |          "amount": 3000.30,

@@ -6,20 +6,22 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Tax Years       | Header Value (Gov_test-Scenario)            | Scenario                                                                                            |
-  |-----------------|---------------------------------------------|-----------------------------------------------------------------------------------------------------|
-  | 2025-26 onwards | N/A - DEFAULT                               | Simulates success response.                                                                         |
-  | 2025-26 onwards | NOT_FOUND                                   | Simulates the scenario where no data is found.                                                      |
-  | 2025-26 onwards | STATEFUL                                    | Performs a stateful create.                                                                         |
-  | 2025-26 onwards | START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE | Simulates the scenario where the start date does not align to the commencement date.                |
-  | 2025-26 onwards | END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE    | Simulates the scenario where the end date does not align to the reporting type.                     |
-  | 2025-26 onwards | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the start/end date not accepted for annual/latent submission.          |
-  | 2025-26 onwards | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of period. |
-  | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window.     |
-  | 2025-26 onwards | DUPLICATE_COUNTRY_CODE                      | Simulates the scenario where the same country code has been submitted more twice	                |
-  | 2025-26 onwards | ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE | Simulates the scenario for advance submission where the end date must be the end of the period      |
-  | 2025-26 onwards | SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS   | Simulates the scenario where the submission end date cannot be earlier than existing submission     |
-  | 2025-26 onwards | START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE  | Simulates the scenario where the start date does not align with the reporting type                  |
+  | Header Value (Gov_test-Scenario)            | Scenario                                                                                            |
+  |---------------------------------------------|-----------------------------------------------------------------------------------------------------|
+  | N/A - DEFAULT                               | Simulates success response.                                                                         |
+  | NOT_FOUND                                   | Simulates the scenario where no data is found.                                                      |
+  | TAX_YEAR_NOT_SUPPORTED                      | Simulates the scenario where the tax year is not supported.                                         |
+  | STATEFUL                                    | Performs a stateful create or update.                                                               |
+  | START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE | Simulates the scenario where the start date does not align to the commencement date.                |
+  | END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE    | Simulates the scenario where the end date does not align to the reporting type.                     |
+  | MISSING_SUBMISSION_DATES                    | Simulates the scenario where the submission start/end date not provided.	                          |
+  | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the start/end date not accepted for annual/latent submission.          |
+  | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of period. |
+  | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window.     |
+  | DUPLICATE_COUNTRY_CODE                      | Simulates the scenario where the same country code has been submitted more twice.	                  |
+  | ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE | Simulates the scenario for advance submission where the end date must be the end of the period.     |
+  | SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS   | Simulates the scenario where the submission end date cannot be earlier than existing submission.    |
+  | START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE  | Simulates the scenario where the start date does not align with the reporting type.                 |
 
 tags:
   - UK Property Cumulative Period Summary

@@ -82,7 +82,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
         "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingTypeError,
         "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDateError,
         "END_DATE_NOT_ALIGNED"               -> RuleEndDateNotAlignedWithReportingTypeError,
-        "MISSING_SUBMISSION_DATES"           -> InternalError,
+        "MISSING_SUBMISSION_DATES"           -> RuleMissingSubmissionDatesError,
         "START_END_DATE_NOT_ACCEPTED"        -> RuleStartAndEndDateNotAllowedError,
         "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
         "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,

@@ -1,3 +1,4 @@
+summary: Retrieve a Foreign Property Cumulative Period Summary
 description: |
   This endpoint enables you to retrieve the cumulative period income and expenses for a foreign property business. A National Insurance number, business ID, and tax year are required.
 

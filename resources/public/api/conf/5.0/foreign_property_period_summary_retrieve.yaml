@@ -3,8 +3,8 @@ description: |
   This endpoint allows a developer to retrieve the income and expenses for a Foreign Property business, using the submission ID for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other Foreign Property submissions. 
   A National Insurance number, business ID, and tax year are required.
 
-  Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
-  are provided for tax year 2025-26 onwards.
+  <strong>Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+  are provided for tax year 2025-26 onwards</strong>.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -56,20 +56,16 @@ responses:
             - $ref: './schemas/foreign_property_period_summary_retrieve/def1/response.json'
             - $ref: './schemas/foreign_property_period_summary_retrieve/def2/response.json'
         examples:
-          full-expenses-response-for-TY-2023-24:
-            description: Full Expenses Response for TY 2023-24 and before
+          Full Expenses response for TY 2023-24 and before:
             value:
               $ref: './examples/foreign_property_period_summary_retrieve/def1/response.json'
-          consolidated-expenses-response-for-TY-2023-24:
-            description: Full Consolidated Expenses Response for TY 2023-24 and before
+          Consolidated Expenses response for TY 2023-24 and before:
             value:
               $ref: './examples/foreign_property_period_summary_retrieve/def1/consolidated_response.json'
-          full-expenses-response-for-TY-2024-25:
-            description: Full Expenses Response for TY 2024-25 and after
+          Full Expenses response for TY 2024-25:
             value:
               $ref: './examples/foreign_property_period_summary_retrieve/def2/response.json'
-          consolidated-expenses-response-for-TY-2024-25:
-            description: Full Consolidated Expenses Response for TY 2024-25 and after
+          Consolidated Expenses response for TY 2024-25:
             value:
               $ref: './examples/foreign_property_period_summary_retrieve/def2/consolidated_response.json'
 

@@ -2,6 +2,9 @@ summary: Retrieve a UK Property Income & Expenses Period Summary
 description: |
   This endpoint allows a developer to retrieve the income and expenses for a UK property business, that occurred between tax year. A National Insurance number, business ID, tax year and submission ID are required.
   
+  <strong>Note: This endpoint only supports submissions up to tax year 2024-25.
+    New endpoints which support cumulative submission are provided for tax year 2025-26 onwards</strong>.
+  
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
@@ -53,20 +56,16 @@ responses:
             - $ref: './schemas/uk_property_period_summary_retrieve/def1/response.json'
             - $ref: './schemas/uk_property_period_summary_retrieve/def2/response.json'
         examples:
-          full-expense-response-for-TY-2022-23:
-            description: Full Expenditure response for TY 2023-24 and before
+          Full Expenses response for TY 2023-24 and before:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def1/response.json'
-          consolidated-expense-response-for-TY-2022-23:
-            description: Consolidated Expenditure response for TY 2023-24 and before
+          Consolidated Expenses response for TY 2023-24 and before:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def1/consolidated_response.json'
-          full-expense-response-for-TY-2024-25:
-            description:  Full Expenditure response for TY 2024-25 and after
+          Full Expenses response for TY 2024-25:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/response.json'
-          consolidated-expense-response-for-TY-2024-25:
-            description: Consolidated Expenses request for TY 2024-25 and after
+          Consolidated Expenses response for TY 2024-25:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/consolidated_response.json'
 

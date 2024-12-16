@@ -1,6 +1,9 @@
 summary: Amend a UK Property Income & Expenses Period Summary
 description: |
   This endpoint allows a developer to re-submit the income and expenditure for a UK property business. This submission is for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance number, business ID, tax year and submission ID are required.
+  
+  <strong>Note: This endpoint only supports submissions up to tax year 2024-25.
+    New endpoints which support cumulative submission are provided for tax year 2025-26 onwards</strong>.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -38,20 +41,16 @@ requestBody:
           - $ref: './schemas/uk_property_period_summary_amend/def1/request.json'
           - $ref: './schemas/uk_property_period_summary_amend/def2/request.json'
       examples:
-        full-expenses-request:
-          description: Full Expenses request for TY 2023-24 and before
+        Full Expenses request for TY 2023-24 and before:
           value:
             $ref: './examples/uk_property_period_summary_amend/def1/request.json'
-        consolidated-expenses-request:
-          description: Consolidated Expenses request for TY 2023-24 and before
+        Consolidated Expenses request for TY 2023-24 and before:
           value:
             $ref: './examples/uk_property_period_summary_amend/def1/consolidated_request.json'
-        full-expenses-request-for-TY-2024-25:
-          description: Full Expenses request for TY 2024-25 and after
+        Full Expenses request for TY 2024-25:
           value:
             $ref: './examples/uk_property_period_summary_amend/def2/request.json'
-        consolidated-expenses-request-for-TY-2024-25:
-          description: Consolidated Expenses request for TY 2024-25 and after
+        Consolidated Expenses request for TY 2024-25:
           value:
             $ref: './examples/uk_property_period_summary_amend/def2/consolidated_request.json'
 

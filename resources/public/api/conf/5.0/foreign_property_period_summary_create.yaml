@@ -6,8 +6,8 @@ post:
     In the case of Non-FHL Foreign Property, if there are multiple properties per country, the income and expenses should be the total across all properties.
     A National Insurance number, tax year and business ID are required.
     
-    Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
-    are provided for tax year 2025-26 onwards.
+    <strong>Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+    are provided for tax year 2025-26 onwards</strong>.
     
     ### Test data
     Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -49,20 +49,16 @@ post:
             - $ref: './schemas/foreign_property_period_summary_create/def1/request.json'
             - $ref: './schemas/foreign_property_period_summary_create/def2/request.json'
         examples:
-          full-expenditure-request-for-TY-2023-24:
-            description: Full Expenditure request for TY 2023-24 and before
+          Full Expenses request for TY 2023-24 and before:
             value:
               $ref: './examples/foreign_property_period_summary_create/def1/request.json'
-          consolidated-expenditure-request-for-TY-2023-24:
-            description: Consolidated Expenditure request for TY 2023-24 and before
+          Consolidated Expenses request for TY 2023-24 and before:
             value:
               $ref: './examples/foreign_property_period_summary_create/def1/consolidated_request.json'
-          full-expenditure-request-for-TY-2024-25:
-            description: Full Expenditure request for TY 2024-25 and after
+          Full Expenses request for TY 2024-25:
             value:
               $ref: './examples/foreign_property_period_summary_create/def2/request.json'
-          consolidated-expenditure-request-for-TY-2024-25:
-            description: Consolidated Expenditure request for TY 2024-25 and after
+          Consolidated Expenses request for TY 2024-25:
             value:
               $ref: './examples/foreign_property_period_summary_create/def2/consolidated_request.json'
 

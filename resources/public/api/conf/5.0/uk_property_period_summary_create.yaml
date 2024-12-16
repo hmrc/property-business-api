@@ -4,6 +4,9 @@ post:
     This endpoint allows a developer to submit the income and expenses for a UK property business. This submission is 
     for either or both of Furnished Holiday Letting (FHL) and Non FHL UK property submissions. A National Insurance 
     number, business ID and tax year are required.
+    
+    <strong>Note: This endpoint only supports submissions up to tax year 2024-25.
+    New endpoints which support cumulative submission are provided for tax year 2025-26 onwards</strong>.
 
     ### Test data
     Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -44,20 +47,16 @@ post:
             - $ref: './schemas/uk_property_period_summary_create/def1/request.json'
             - $ref: './schemas/uk_property_period_summary_create/def2/request.json'
         examples:
-          full-expense-request-for-TY-2021-22:
-            description: Full Expenses request for TY 2023-24 and before
+          Full Expenses request for TY 2023-24 and before:
             value:
               $ref: './examples/uk_property_period_summary_create/def1/request.json'
-          consolidated-expense-request-for-TY-2021-22:
-            description: Consolidated Expenses request for TY 2023-24 and before
+          Consolidated Expenses request for TY 2023-24 and before:
             value:
               $ref: './examples/uk_property_period_summary_create/def1/consolidated_request.json'
-          full-expense-request-for-TY-2024-25:
-            description: Full Expenses request for TY 2024-25 and after
+          Full Expenses request for TY 2024-25:
             value:
               $ref: './examples/uk_property_period_summary_create/def2/request.json'
-          consolidated-expense-request-for-TY-2024-25:
-            description: Consolidated Expenses request for TY 2024-25 and after
+          Consolidated Expenses request for TY 2024-25:
             value:
               $ref: './examples/uk_property_period_summary_create/def2/consolidated_request.json'
 

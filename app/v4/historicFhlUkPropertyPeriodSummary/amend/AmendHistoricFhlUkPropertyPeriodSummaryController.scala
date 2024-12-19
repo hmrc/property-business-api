@@ -21,7 +21,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version4}
+import shared.routing.Version
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -60,7 +60,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
               auditService,
               auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
               transactionName = "amend-historic-fhl-property-income-expenses-period-summary",
-              apiVersion = Version.from(request, orElse = Version4),
+              apiVersion = Version(request),
               params = Map("nino" -> nino, "periodId" -> periodId),
               requestBody = Some(request.body)
             )

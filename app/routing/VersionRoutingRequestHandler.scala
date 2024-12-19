@@ -22,11 +22,12 @@ import play.api.http.{DefaultHttpRequestHandler, HttpConfiguration, HttpErrorHan
 import play.api.mvc.{DefaultActionBuilder, Handler, RequestHeader, Results}
 import play.api.routing.Router
 import play.core.DefaultWebCommands
+import shared.routing.{InvalidHeader, VersionNotFound, Versions}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingMap,
+class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingMapImpl,
                                               errorHandler: HttpErrorHandler,
                                               httpConfiguration: HttpConfiguration,
                                               config: AppConfig,

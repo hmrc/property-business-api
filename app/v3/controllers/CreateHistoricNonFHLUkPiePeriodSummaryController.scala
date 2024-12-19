@@ -23,7 +23,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
+import shared.routing.Version
 import utils.IdGenerator
 import v3.controllers.validators.CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory
 import v3.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
@@ -66,7 +66,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authServic
               "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
               "create-historic-non-fhl-property-income-expenses-period-summary",
               auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
-                Version.from(request, orElse = Version3),
+                Version(request),
                 Map("nino" -> nino)
               ),
               requestBody = Some(request.body),

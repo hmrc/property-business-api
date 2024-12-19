@@ -19,6 +19,7 @@ package routing
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.routing.Router
+import shared.routing.{Version3, Version4, Version5}
 import support.UnitSpec
 
 class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite with ScalaCheckPropertyChecks {

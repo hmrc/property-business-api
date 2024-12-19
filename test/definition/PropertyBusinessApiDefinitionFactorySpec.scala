@@ -17,17 +17,17 @@
 package definition
 
 import cats.implicits.catsSyntaxValidatedId
-import config.MockAppConfig
 import config.Deprecation.NotDeprecated
+import config.MockAppConfig
 import definition.APIStatus.{ALPHA, BETA}
-import mocks.{MockHttpClient}
-import routing._
+import mocks.MockHttpClient
+import shared.routing.{Version, Version3, Version4, Version5}
 import support.UnitSpec
 
-class ApiDefinitionFactorySpec extends UnitSpec {
+class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
-    val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
+    val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockAppConfig)
     MockedAppConfig.apiGatewayContext returns "individuals/business/property"
     def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
   }

@@ -22,7 +22,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
+import shared.routing.Version
 import utils.IdGenerator
 import v3.controllers.validators.CreateForeignPropertyPeriodSummaryValidatorFactory
 import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryHateoasData
@@ -64,7 +64,7 @@ class CreateForeignPropertyPeriodSummaryController @Inject() (val authService: E
               auditService,
               "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
               "create-foreign-property-income-and-expenses-period-summary",
-              Version.from(request, orElse = Version3),
+              Version(request),
               Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
               Some(request.body)
             )

@@ -22,7 +22,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
+import shared.routing.Version
 import utils.IdGenerator
 import v3.controllers.validators.AmendUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionHateoasData
@@ -62,7 +62,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
             auditService,
             "CreateAmendUKPropertyAnnualSubmission",
             "create-amend-uk-property-annual-submission",
-            Version.from(request, orElse = Version3),
+            Version(request),
             Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
             Some(request.body)
           )

@@ -24,10 +24,10 @@ import mocks.{MockHttpClient}
 import routing._
 import support.UnitSpec
 
-class ApiDefinitionFactorySpec extends UnitSpec {
+class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
-    val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
+    val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockAppConfig)
     MockedAppConfig.apiGatewayContext returns "individuals/business/property"
     def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
   }

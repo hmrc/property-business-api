@@ -31,7 +31,7 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
-import routing.Version
+import shared.routing.Version
 import utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -17,19 +17,21 @@
 package routing
 
 import api.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
-import config.AppConfig
 import play.api.http.{DefaultHttpRequestHandler, HttpConfiguration, HttpErrorHandler, HttpFilters}
 import play.api.mvc.{DefaultActionBuilder, Handler, RequestHeader, Results}
 import play.api.routing.Router
 import play.core.DefaultWebCommands
+import shared.config.SharedAppConfig
+import shared.routing.Versions
+import shared.routing.{InvalidHeader, VersionNotFound}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingMap,
+class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingMapImpl,
                                               errorHandler: HttpErrorHandler,
                                               httpConfiguration: HttpConfiguration,
-                                              config: AppConfig,
+                                              config: SharedAppConfig,
                                               filters: HttpFilters,
                                               action: DefaultActionBuilder)
     extends DefaultHttpRequestHandler(

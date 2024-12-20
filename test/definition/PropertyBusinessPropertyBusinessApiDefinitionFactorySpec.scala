@@ -20,8 +20,8 @@ import cats.implicits.catsSyntaxValidatedId
 import config.MockAppConfig
 import config.Deprecation.NotDeprecated
 import definition.APIStatus.{ALPHA, BETA}
-import mocks.{MockHttpClient}
-import routing._
+import mocks.MockHttpClient
+import shared.routing._
 import support.UnitSpec
 
 class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec {

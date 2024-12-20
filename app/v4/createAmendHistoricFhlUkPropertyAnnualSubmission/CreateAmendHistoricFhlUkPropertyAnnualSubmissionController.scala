@@ -21,7 +21,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version4}
+import shared.routing.Version
 import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
@@ -60,7 +60,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
               auditService,
               auditType = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
               transactionName = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
-              apiVersion = Version.from(request, orElse = Version4),
+              apiVersion = Version(request),
               params = Map("nino" -> nino, "taxYear" -> taxYear),
               requestBody = Some(request.body)
             )

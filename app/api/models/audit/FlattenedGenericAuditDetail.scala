@@ -21,7 +21,7 @@ import api.controllers.RequestContext
 import api.models.auth.UserDetails
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, JsValue, OWrites}
-import routing.Version
+import shared.routing.Version
 
 case class FlattenedGenericAuditDetail(versionNumber: Option[String],
                                        userType: String,

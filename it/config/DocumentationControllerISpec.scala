@@ -21,7 +21,7 @@ import play.api.http.Status
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import routing.{Version3, Version4, Version5}
+import shared.routing.{Version3, Version4, Version5}
 import support.IntegrationBaseSpec
 
 import scala.util.Try

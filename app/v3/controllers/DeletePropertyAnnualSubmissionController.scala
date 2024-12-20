@@ -20,7 +20,7 @@ import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version3}
+import shared.routing.Version
 import utils.IdGenerator
 import v3.controllers.validators.DeletePropertyAnnualSubmissionValidatorFactory
 import v3.services.DeletePropertyAnnualSubmissionService
@@ -57,7 +57,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
             auditService,
             auditType = "DeletePropertyAnnualSubmission",
             transactionName = "delete-property-annual-submission",
-            apiVersion = Version.from(request, orElse = Version3),
+            apiVersion = Version(request),
             params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear)
           )
         )

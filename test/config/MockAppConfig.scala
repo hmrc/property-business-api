@@ -21,7 +21,7 @@ import cats.data.Validated
 import org.scalamock.handlers.{CallHandler, CallHandler0}
 import org.scalamock.scalatest.MockFactory
 import play.api.Configuration
-import routing.Version
+import shared.routing.Version
 
 trait MockAppConfig extends MockFactory {
 

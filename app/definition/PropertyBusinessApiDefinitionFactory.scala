@@ -18,7 +18,7 @@ package definition
 
 import cats.data.Validated.Invalid
 import config.AppConfig
-import routing._
+import shared.routing._
 import utils.Logging
 
 import javax.inject.{Inject, Singleton}

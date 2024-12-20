@@ -29,7 +29,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, ResultExtractors}
-import routing.{Version, Version3}
+import shared.routing.{Version, Version3}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockIdGenerator

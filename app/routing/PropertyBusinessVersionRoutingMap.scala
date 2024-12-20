@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package config
+package routing
 
-import com.google.inject.AbstractModule
+import play.api.routing.Router
+import shared.routing._
 
-class DIModule extends AbstractModule {
+import javax.inject.Inject
 
-  override def configure(): Unit = {
-    bind(classOf[AppConfig]).to(classOf[AppConfigImpl]).asEagerSingleton()
-  }
+// Add routes corresponding to available versions...
+case class PropertyBusinessVersionRoutingMap @Inject() (defaultRouter: Router, v3Router: v3.Routes, v4Router: v4.Routes, v5Router: v5.Routes)
+    extends VersionRoutingMap {
+
+  val map: Map[Version, Router] = Map(
+    Version3 -> v3Router,
+    Version4 -> v4Router,
+    Version5 -> v5Router
+  )
 
 }

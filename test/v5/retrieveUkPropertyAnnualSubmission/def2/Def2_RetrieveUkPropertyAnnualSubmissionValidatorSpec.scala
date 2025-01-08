@@ -16,10 +16,10 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.def2
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
@@ -113,7 +113,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

@@ -16,16 +16,18 @@
 
 package v4.amendUkPropertyPeriodSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
+import common.models.domain.SubmissionId
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.FakeRequest
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
@@ -42,9 +44,10 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     with MockAmendUkPropertyPeriodSummaryValidatorFactory
     with MockAuditService {
 
-  private val businessId   = "XAIS12345678910"
-  private val taxYear      = "2020-21"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val businessId                         = "XAIS12345678910"
+  private val taxYear                            = "2020-21"
+  private val submissionId                       = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
@@ -56,7 +59,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         override def callController(): Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJsonConsolidatedExpense))
+          controller.handleRequest(validNino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
           expectedStatus = OK,
@@ -113,24 +116,24 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
-      controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
+      controller.handleRequest(validNino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-uk-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -323,7 +326,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
 
     protected val requestData: Def1_AmendUkPropertyPeriodSummaryRequestData =
       Def1_AmendUkPropertyPeriodSummaryRequestData(
-        Nino(nino),
+        Nino(validNino),
         TaxYear.fromMtd(taxYear),
         BusinessId(businessId),
         SubmissionId(submissionId),
@@ -331,7 +334,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
 
     protected val requestDataConsolidatedExpenses: Def1_AmendUkPropertyPeriodSummaryRequestData =
       Def1_AmendUkPropertyPeriodSummaryRequestData(
-        Nino(nino),
+        Nino(validNino),
         TaxYear.fromMtd(taxYear),
         BusinessId(businessId),
         SubmissionId(submissionId),

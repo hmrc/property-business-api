@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def2.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 

@@ -16,14 +16,14 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import api.controllers._
-import api.models.audit.FlattenedGenericAuditDetail
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import common.models.audit.FlattenedGenericAuditDetail
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
 import shared.routing.Version
-import utils.IdGenerator
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -37,7 +37,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
     auditService: AuditService,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext, appConfig: AppConfig)
+)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-historic-non-fhluk-property-period-summary"

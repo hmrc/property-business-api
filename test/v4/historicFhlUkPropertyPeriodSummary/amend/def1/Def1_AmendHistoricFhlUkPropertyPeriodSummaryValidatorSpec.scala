@@ -16,20 +16,22 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend.def1
 
-import api.models.domain.{Nino, PeriodId, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.domain.PeriodId
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request._
+import v4.historicFhlUkPropertyPeriodSummary.amend.AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
   AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 }
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request._
-import v4.historicFhlUkPropertyPeriodSummary.amend.AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 
 class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

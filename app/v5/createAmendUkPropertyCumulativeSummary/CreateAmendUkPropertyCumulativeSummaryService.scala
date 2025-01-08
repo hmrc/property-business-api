@@ -16,11 +16,24 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.{
+  RuleAdvanceSubmissionRequiresPeriodEndDate,
+  RuleDuplicateCountryCode,
+  RuleEarlyDataSubmissionNotAcceptedError,
+  RuleEndDateNotAlignedWithReportingTypeError,
+  RuleMissingSubmissionDatesError,
+  RuleOutsideAmendmentWindowError,
+  RuleStartAndEndDateNotAllowedError,
+  RuleStartDateNotAlignedToCommencementDateError,
+  RuleStartDateNotAlignedWithReportingTypeError,
+  RuleSubmissionEndDateCannotMoveBackwardsError
+}
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 

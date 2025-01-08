@@ -16,11 +16,11 @@
 
 package v3.models.response.retrieveForeignPropertyAnnualSubmission
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import api.models.domain.Timestamp
-import config.AppConfig
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
+import shared.models.domain.Timestamp
 import v3.hateoas.HateoasLinks
 import v3.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.ForeignFhlEeaEntry
 import v3.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty.ForeignPropertyEntry
@@ -41,7 +41,7 @@ object RetrieveForeignPropertyAnnualSubmissionResponse extends HateoasLinks {
   implicit object RetrieveAnnualSubmissionLinksFactory
       extends HateoasLinksFactory[RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrieveForeignPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       List(
         createAmendForeignPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),

@@ -18,7 +18,7 @@ package v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response
 
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {

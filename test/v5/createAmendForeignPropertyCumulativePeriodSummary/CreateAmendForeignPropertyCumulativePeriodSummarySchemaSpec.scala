@@ -16,11 +16,11 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
-import api.models.domain.TaxYear
-import api.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import support.UnitSpec
+import shared.models.domain.TaxYear
+import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import shared.utils.UnitSpec
 
 class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
 

@@ -16,10 +16,19 @@
 
 package v4.createForeignPropertyPeriodSummary
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.{
+  RuleDuplicateCountryCodeError,
+  RuleDuplicateSubmissionError,
+  RuleMisalignedPeriodError,
+  RuleNotContiguousPeriodError,
+  RuleOverlappingPeriodError,
+  RuleToDateBeforeFromDateError,
+  RuleTypeOfBusinessIncorrectError
+}
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 

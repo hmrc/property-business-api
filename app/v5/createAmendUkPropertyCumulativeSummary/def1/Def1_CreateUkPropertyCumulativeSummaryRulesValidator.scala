@@ -16,13 +16,14 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.ResolveParsedNumber
-import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import utils.DateValidator
+import common.models.errors.RuleBothExpensesSuppliedError
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.ResolveParsedNumber
+import shared.models.errors.MtdError
+import common.utils.DateValidator
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Def1_CreateAmendUkPropertyCumulativeSummaryRequestData, Expenses, UkProperty}
 
 class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyCumulativeSummaryRequestData] {

@@ -16,15 +16,15 @@
 
 package v3.models.response.amendForeignPropertyPeriodSummary
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 
 object AmendForeignPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit object AmendForeignPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendForeignPropertyPeriodSummaryHateoasData] {
 
-    override def links(appConfig: AppConfig, data: AmendForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: AmendForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       List(
         amendForeignPropertyPeriodSummary(appConfig, nino, businessId, taxYear, submissionId),

@@ -16,17 +16,18 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.hateoas.Method.GET
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory
 import v3.models.request.retrieveForeignPropertyAnnualSubmission._
 import v3.models.response.retrieveForeignPropertyAnnualSubmission._
@@ -49,8 +50,9 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2020-21"
+  private val businessId          = "XAIS12345678910"
+  private val taxYear             = "2020-21"
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   "RetrieveForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -62,7 +64,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBody))))
 
         MockHateoasFactory
-          .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear))
+          .wrap(responseBody, RetrieveForeignPropertyAnnualSubmissionHateoasData(validNino, businessId, taxYear))
           .returns(HateoasWrapper(responseBody, testHateoasLinks))
 
         runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(Json.toJson(HateoasWrapper(responseBody, testHateoasLinks))))
@@ -102,16 +104,16 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakeRequest)
 
     protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequestData =
-      RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
+      RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     protected val foreignFhlEeaEntry: ForeignFhlEeaEntry = ForeignFhlEeaEntry(
       Some(

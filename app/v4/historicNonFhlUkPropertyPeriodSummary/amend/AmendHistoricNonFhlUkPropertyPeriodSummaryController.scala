@@ -16,14 +16,14 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
-import api.controllers._
-import api.models.audit.FlattenedGenericAuditDetail
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
+import common.models.audit.FlattenedGenericAuditDetail
 import shared.routing.Version
-import utils.IdGenerator
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -36,7 +36,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
     auditService: AuditService,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext, appConfig: AppConfig)
+)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "amend-historic-non-fhluk-property-period-summary"

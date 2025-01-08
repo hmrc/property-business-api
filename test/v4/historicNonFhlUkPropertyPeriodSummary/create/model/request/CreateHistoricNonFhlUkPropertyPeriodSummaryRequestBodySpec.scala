@@ -17,7 +17,7 @@
 package v4.historicNonFhlUkPropertyPeriodSummary.create.model.request
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{
   UkNonFhlPropertyExpenses,
   UkNonFhlPropertyIncome,

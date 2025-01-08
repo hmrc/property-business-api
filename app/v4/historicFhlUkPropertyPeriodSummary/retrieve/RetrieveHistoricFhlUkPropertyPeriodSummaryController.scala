@@ -16,22 +16,23 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.retrieve
 
-import api.controllers._
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
-                                                                      val lookupService: MtdIdLookupService,
-                                                                      validatorFactory: RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
-                                                                      service: RetrieveHistoricFhlUkPropertyPeriodSummaryService,
-                                                                      cc: ControllerComponents,
-                                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class RetrieveHistoricFhlUkPropertyPeriodSummaryController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
+    service: RetrieveHistoricFhlUkPropertyPeriodSummaryService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-historic-fhluk-property-period-summary"

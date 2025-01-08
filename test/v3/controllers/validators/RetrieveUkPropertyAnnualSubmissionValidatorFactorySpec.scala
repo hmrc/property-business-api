@@ -16,10 +16,10 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequestData
 
 class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {
@@ -102,7 +102,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

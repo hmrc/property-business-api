@@ -16,13 +16,13 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.mvc.Result
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v5.retrieveUkPropertyCumulativeSummary.model.request._
@@ -84,16 +84,16 @@ class RetrieveUkPropertyCumulativeSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId.businessId, taxYear.asMtd)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId.businessId, taxYear.asMtd)(fakeGetRequest)
 
     protected val requestData: RetrieveUkPropertyCumulativeSummaryRequestData =
-      Def1_RetrieveUkPropertyCumulativeSummaryRequestData(Nino(nino), businessId, taxYear)
+      Def1_RetrieveUkPropertyCumulativeSummaryRequestData(Nino(validNino), businessId, taxYear)
 
   }
 

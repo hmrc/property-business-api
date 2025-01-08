@@ -16,15 +16,16 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import shared.hateoas.Method.GET
 import v3.controllers.validators.MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.request.retrieveUkPropertyAnnualSubmission._
 import v3.models.response.retrieveUkPropertyAnnualSubmission._
@@ -43,8 +44,16 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     with MockRetrieveUkPropertyAnnualSubmissionValidatorFactory
     with MockHateoasFactory {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2020-21"
+  private val businessId          = "XAIS12345678910"
+  private val taxYear             = "2020-21"
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "RetrieveUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -93,16 +102,16 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakeGetRequest)
 
     protected val requestData: RetrieveUkPropertyAnnualSubmissionRequestData =
-      RetrieveUkPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
+      RetrieveUkPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     private val ukFhlProperty = UkFhlProperty(
       adjustments = Some(
@@ -198,7 +207,7 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
     )
 
     protected val hateoasData: RetrieveUkPropertyAnnualSubmissionHateoasData =
-      RetrieveUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
+      RetrieveUkPropertyAnnualSubmissionHateoasData(validNino, businessId, taxYear)
 
     protected val responseBodyJson: JsValue = Json.parse(
       """

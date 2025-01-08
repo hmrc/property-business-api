@@ -16,18 +16,22 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleMisalignedPeriodError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.audit.FlattenedGenericAuditDetail
+import common.models.domain.PeriodId
+import common.models.errors.RuleMisalignedPeriodError
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.Nino
+import shared.models.errors.{ErrorWrapper, NinoFormatError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
@@ -49,8 +53,9 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2017-04-06_2017-07-04"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId                           = "2017-04-06_2017-07-04"
+  private val mtdId: String                      = "test-mtd-id"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "AmendHistoricNonFhlUkPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -99,13 +104,13 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, periodId)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
@@ -114,7 +119,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
-          params = Map("nino" -> nino, "periodId" -> periodId),
+          params = Map("nino" -> validNino, "periodId" -> periodId),
           request = Some(requestBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -127,7 +132,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody(None, None)
 
     protected val requestData: AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData =
-      Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), PeriodId(periodId), requestBody)
+      Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(validNino), PeriodId(periodId), requestBody)
 
   }
 

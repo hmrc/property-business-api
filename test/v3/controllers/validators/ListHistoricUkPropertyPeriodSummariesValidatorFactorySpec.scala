@@ -16,11 +16,11 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.models.domain.Nino
-import api.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.controllers.validators.Validator
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v3.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 
 class ListHistoricUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockAppConfig {

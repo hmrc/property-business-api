@@ -16,10 +16,11 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v3.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {

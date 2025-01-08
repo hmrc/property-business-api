@@ -16,11 +16,12 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import api.models.outcomes.ResponseWrapper
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import shared.models.domain.TaxYear
+import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
@@ -39,7 +40,8 @@ object RetrieveForeignPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
@@ -49,7 +51,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
     import schema._
 
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
-      case taxYear if taxYear.isTys =>
+      case taxYear if taxYear.year >= TaxYear.tysTaxYear.year =>
         (TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
       case _ =>
         (

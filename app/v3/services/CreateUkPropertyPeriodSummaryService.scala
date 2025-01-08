@@ -16,10 +16,11 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors._
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.CreateUkPropertyPeriodSummaryConnector
 import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse

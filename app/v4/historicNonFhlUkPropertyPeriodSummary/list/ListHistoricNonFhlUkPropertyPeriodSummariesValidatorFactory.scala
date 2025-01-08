@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.list
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import v4.historicNonFhlUkPropertyPeriodSummary.list.def1.Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator
 import v4.historicNonFhlUkPropertyPeriodSummary.list.model.request.ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
 

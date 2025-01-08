@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import v5.retrieveForeignPropertyCumulativeSummary.def1.Def1_RetrieveForeignPropertyCumulativeSummaryValidator
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData

@@ -16,8 +16,8 @@
 
 package v4.amendUkPropertyPeriodSummary
 
-import api.controllers.validators.Validator
-import api.models.domain.TaxYear
+import shared.controllers.validators.Validator
+import shared.models.domain.TaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart

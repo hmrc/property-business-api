@@ -16,10 +16,10 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
@@ -82,7 +82,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     val connector: DeletePropertyAnnualSubmissionConnector = new DeletePropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: DeletePropertyAnnualSubmissionRequestData =
@@ -90,8 +90,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
-        url = s"$baseUrl/income-tax/business/property/annual",
-        parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
+        url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=${nino.nino}&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}"
       ).returns(Future.successful(outcome))
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =

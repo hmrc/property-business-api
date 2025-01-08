@@ -16,10 +16,10 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def2.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
 

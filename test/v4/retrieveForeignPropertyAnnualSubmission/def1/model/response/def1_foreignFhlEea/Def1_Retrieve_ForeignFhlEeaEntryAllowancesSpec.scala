@@ -17,7 +17,7 @@
 package v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class Def1_Retrieve_ForeignFhlEeaEntryAllowancesSpec extends UnitSpec {
 

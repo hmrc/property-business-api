@@ -16,11 +16,13 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.domain.HistoricPropertyType
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
@@ -28,10 +30,10 @@ import scala.concurrent.Future
 
 class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
-  implicit private val correlationId: String = "X-123"
-  private val nino                           = Nino("AA123456A")
-  private val taxYear                        = TaxYear.fromMtd("2021-22")
-  private val propertyType                   = HistoricPropertyType.Fhl
+  implicit override val correlationId: String = "X-123"
+  private val nino                            = Nino("AA123456A")
+  private val taxYear                         = TaxYear.fromMtd("2021-22")
+  private val propertyType                    = HistoricPropertyType.Fhl
 
   "service" when {
     "service call successful" should {

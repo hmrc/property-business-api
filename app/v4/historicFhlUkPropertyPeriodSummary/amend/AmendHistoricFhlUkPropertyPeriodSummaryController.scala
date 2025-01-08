@@ -16,25 +16,26 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
 import shared.routing.Version
-import utils.IdGenerator
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
-                                                                   val lookupService: MtdIdLookupService,
-                                                                   validatorFactory: AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
-                                                                   service: AmendHistoricFhlUkPropertyPeriodSummaryService,
-                                                                   auditService: AuditService,
-                                                                   cc: ControllerComponents,
-                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory,
+    service: AmendHistoricFhlUkPropertyPeriodSummaryService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "amend-historic-fhluk-property-period-summary"

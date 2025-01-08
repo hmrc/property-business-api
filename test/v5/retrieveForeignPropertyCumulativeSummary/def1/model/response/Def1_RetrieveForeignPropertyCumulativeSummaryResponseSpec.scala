@@ -18,7 +18,7 @@ package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
 class Def1_RetrieveForeignPropertyCumulativeSummaryResponseSpec

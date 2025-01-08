@@ -16,11 +16,12 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.retrieve.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
+import common.controllers.validators.resolvers.ResolvePeriodId
 import config.AppConfig
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request._
 

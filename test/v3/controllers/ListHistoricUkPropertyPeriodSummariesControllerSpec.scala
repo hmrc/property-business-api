@@ -16,17 +16,19 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{HistoricPropertyType, Nino}
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.domain.HistoricPropertyType
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.GET
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.Nino
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockListHistoricUkPropertyPeriodSummariesValidatorFactory
 import v3.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v3.models.response.listHistoricUkPropertyPeriodSummaries._
@@ -46,6 +48,8 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
     with MockHateoasFactory
     with MockAuditService
     with MockIdGenerator {
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   "ListHistoricUkPropertyPeriodSummariesController" should {
     "return OK" when {
@@ -129,25 +133,26 @@ class ListHistoricUkPropertyPeriodSummariesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = propertyType match {
-      case HistoricPropertyType.Fhl    => controller.handleFhlRequest(nino)(fakeGetRequest)
-      case HistoricPropertyType.NonFhl => controller.handleNonFhlRequest(nino)(fakeGetRequest)
+      case HistoricPropertyType.Fhl    => controller.handleFhlRequest(validNino)(fakeGetRequest)
+      case HistoricPropertyType.NonFhl => controller.handleNonFhlRequest(validNino)(fakeGetRequest)
     }
 
-    protected val requestData: ListHistoricUkPropertyPeriodSummariesRequestData = ListHistoricUkPropertyPeriodSummariesRequestData(Nino(nino))
+    protected val requestData: ListHistoricUkPropertyPeriodSummariesRequestData = ListHistoricUkPropertyPeriodSummariesRequestData(Nino(validNino))
 
     protected val submissionPeriod: SubmissionPeriod = SubmissionPeriod("fromDate", "toDate")
 
     protected val responseData: ListHistoricUkPropertyPeriodSummariesResponse[SubmissionPeriod] =
       ListHistoricUkPropertyPeriodSummariesResponse(List(submissionPeriod))
 
-    protected val hateoasData: ListHistoricUkPropertyPeriodSummariesHateoasData = ListHistoricUkPropertyPeriodSummariesHateoasData(nino, propertyType)
+    protected val hateoasData: ListHistoricUkPropertyPeriodSummariesHateoasData =
+      ListHistoricUkPropertyPeriodSummariesHateoasData(validNino, propertyType)
 
     protected val responseDataWithHateoas: HateoasWrapper[ListHistoricUkPropertyPeriodSummariesResponse[HateoasWrapper[SubmissionPeriod]]] =
       HateoasWrapper(ListHistoricUkPropertyPeriodSummariesResponse(List(HateoasWrapper(submissionPeriod, testHateoasLinks))), testHateoasLinks)

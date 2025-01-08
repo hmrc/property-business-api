@@ -16,11 +16,12 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
-import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
-import support.UnitSpec
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
+import play.api.libs.json._
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
@@ -386,7 +387,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec 
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

@@ -16,12 +16,13 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v3.models.request.createUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v3.models.request.createUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
@@ -469,7 +470,7 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Mo
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

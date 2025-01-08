@@ -16,16 +16,16 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
@@ -53,7 +53,7 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         override def callController(): Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+          controller.handleRequest(validNino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
         runOkTestWithAudit(
           expectedStatus = NO_CONTENT,
@@ -95,13 +95,13 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
@@ -111,7 +111,7 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
           versionNumber = apiVersion.name,
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -187,7 +187,7 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
     )
 
     protected val requestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
-      Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
+      Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(Nino(validNino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
 
   }
 

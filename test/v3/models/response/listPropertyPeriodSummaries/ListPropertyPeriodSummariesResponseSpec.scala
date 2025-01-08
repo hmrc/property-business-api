@@ -16,12 +16,12 @@
 
 package v3.models.response.listPropertyPeriodSummaries
 
-import api.hateoas.{Link, Method}
-import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.{Link, Method}
+import shared.utils.UnitSpec
 
-class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
+class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "reads" should {
     "read from a single item array" in {
@@ -118,9 +118,9 @@ class ListPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfi
         val data: ListPropertyPeriodSummariesHateoasData =
           ListPropertyPeriodSummariesHateoasData("myNino", "myBusinessId", "myTaxYear")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        ListPropertyPeriodSummariesResponse.LinksFactory.links(mockAppConfig, data) shouldBe List(
+        ListPropertyPeriodSummariesResponse.LinksFactory.links(mockSharedAppConfig, data) shouldBe List(
           Link(href = s"/my/context/${data.nino}/${data.businessId}/period/${data.taxYear}", method = Method.GET, rel = "self")
         )
       }

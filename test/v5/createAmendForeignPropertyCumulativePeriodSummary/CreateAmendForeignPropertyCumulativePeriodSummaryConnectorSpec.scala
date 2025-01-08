@@ -16,9 +16,9 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
   Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,
@@ -61,7 +61,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
     protected val connector: CreateAmendForeignPropertyCumulativePeriodSummaryConnector =
       new CreateAmendForeignPropertyCumulativePeriodSummaryConnector(
         http = mockHttpClient,
-        appConfig = mockAppConfig
+        appConfig = mockSharedAppConfig
       )
 
     protected val requestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody = regularExpensesRequestBody

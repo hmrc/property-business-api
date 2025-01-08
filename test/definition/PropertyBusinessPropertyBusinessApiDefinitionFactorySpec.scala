@@ -22,7 +22,7 @@ import config.Deprecation.NotDeprecated
 import definition.APIStatus.{ALPHA, BETA}
 import mocks.MockHttpClient
 import shared.routing._
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
 

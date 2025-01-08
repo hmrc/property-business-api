@@ -17,7 +17,7 @@
 package v4.amendForeignPropertyPeriodSummary.model.request
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{
   AmendForeignNonFhlPropertyEntry,

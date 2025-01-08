@@ -16,15 +16,15 @@
 
 package v3.controllers
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.models.audit.FlattenedGenericAuditDetail
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import common.models.audit.FlattenedGenericAuditDetail
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
 import shared.routing.Version
-import utils.IdGenerator
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory
 import v3.models.response.createHistoricNonFhlUkPiePeriodSummary.CreateHistoricNonFhlUkPiePeriodSummaryHateoasData
 import v3.services.CreateHistoricNonFhlUkPropertyPeriodSummaryService
@@ -40,7 +40,7 @@ class CreateHistoricNonFHLUkPiePeriodSummaryController @Inject() (val authServic
                                                                   auditService: AuditService,
                                                                   hateoasFactory: HateoasFactory,
                                                                   cc: ControllerComponents,
-                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                                  idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-historic-non-fHluk-pie-period-summary"

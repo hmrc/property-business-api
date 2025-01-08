@@ -16,6 +16,7 @@
 
 package v3.models.request.retrieveHistoricNonFhlUkPiePeriodSummary
 
-import api.models.domain.{Nino, PeriodId}
+import common.models.domain.PeriodId
+import shared.models.domain.Nino
 
 case class RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData(nino: Nino, periodId: PeriodId)

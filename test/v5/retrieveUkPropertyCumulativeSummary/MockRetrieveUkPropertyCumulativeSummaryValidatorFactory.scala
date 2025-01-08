@@ -16,7 +16,7 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
-import api.controllers.validators.{MockValidatorFactory, Validator}
+import shared.controllers.validators.{MockValidatorFactory, Validator}
 import org.scalamock.handlers.CallHandler
 import v5.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 

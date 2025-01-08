@@ -16,11 +16,12 @@
 
 package v4.amendUkPropertyPeriodSummary
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.config.SharedAppConfig
 import play.api.http.Status.NO_CONTENT
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.amendUkPropertyPeriodSummary.model.request.{
   AmendUkPropertyPeriodSummaryRequestData,
@@ -33,7 +34,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -45,7 +46,7 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val
     request match {
       case def1: Def1_AmendUkPropertyPeriodSummaryRequestData =>
         import def1._
-        val downstreamUri = if (taxYear.isTys) {
+        val downstreamUri = if (taxYear.year >= TaxYear.tysTaxYear.year) {
           TaxYearSpecificIfsUri[Unit](
             s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         } else

@@ -16,9 +16,9 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary.def1
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 
 class Def1_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpec {
@@ -74,7 +74,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpe
             ErrorWrapper(
               correlationId,
               BadRequestError,
-              Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+              Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
             )
           )
       }

@@ -16,11 +16,11 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
 import play.api.http.Status
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
@@ -31,7 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
+class CreateHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   implicit val successCode: SuccessCode = SuccessCode(Status.OK)

@@ -17,7 +17,7 @@
 package v5.createAmendUkPropertyCumulativeSummary.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class ExpensesSpec extends UnitSpec {
 

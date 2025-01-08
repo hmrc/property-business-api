@@ -16,14 +16,14 @@
 
 package v3.controllers
 
-import api.controllers.ResultCreator.hateoasListWrapping
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.models.domain.HistoricPropertyType
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import common.models.domain.HistoricPropertyType
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers.ResultCreator.hateoasListWrapping
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.ListHistoricUkPropertyPeriodSummariesValidatorFactory
 import v3.models.response.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesHateoasData
 import v3.services.ListHistoricUkPropertyPeriodSummariesService
@@ -38,7 +38,7 @@ class ListHistoricUkPropertyPeriodSummariesController @Inject() (val authService
                                                                  validatorFactory: ListHistoricUkPropertyPeriodSummariesValidatorFactory,
                                                                  hateoasFactory: HateoasFactory,
                                                                  cc: ControllerComponents,
-                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "list-historic-uk-property-period-summaries"

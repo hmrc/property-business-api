@@ -16,12 +16,14 @@
 
 package v4.createUkPropertyPeriodSummary.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveParsedNumber}
-import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.ResolveParsedNumber
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
+import common.controllers.validators.resolvers.ResolveFromAndToDates
+import common.models.errors.RuleBothExpensesSuppliedError
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.createUkPropertyPeriodSummary.model.request.Def1_CreateUkPropertyPeriodSummaryRequestData

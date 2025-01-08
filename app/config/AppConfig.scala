@@ -16,7 +16,7 @@
 
 package config
 
-import api.models.domain.TaxYear
+import shared.models.domain.TaxYear
 import cats.data.Validated
 import cats.implicits.catsSyntaxValidatedId
 import com.typesafe.config.Config

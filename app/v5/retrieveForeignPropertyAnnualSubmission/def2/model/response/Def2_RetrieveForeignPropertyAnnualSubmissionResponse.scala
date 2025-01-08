@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def2.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse

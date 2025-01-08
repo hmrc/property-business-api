@@ -16,17 +16,18 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.def1
 
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
-import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.models.errors._
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.support.IntegrationBaseSpec
 
 class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
@@ -166,8 +167,21 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
         )
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
-          ToDateFormatError.copy(
-            message = "The provided To date is invalid"
+          FromDateFormatError,
+          ToDateFormatError,
+          ValueFormatError.copy(
+            message = "The value must be between -99999999999.99 and 99999999999.99",
+            paths = Some(
+              List(
+                "/ukProperty/expenses/premisesRunningCosts",
+                "/ukProperty/expenses/repairsAndMaintenance",
+                "/ukProperty/expenses/financialCosts",
+                "/ukProperty/expenses/professionalFees",
+                "/ukProperty/expenses/costOfServices",
+                "/ukProperty/expenses/other",
+                "/ukProperty/expenses/travelCosts"
+              )
+            )
           ),
           ValueFormatError.copy(
             message = "The value must be between 0 and 99999999999.99",
@@ -182,23 +196,6 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
                 "/ukProperty/expenses/residentialFinancialCost",
                 "/ukProperty/expenses/residentialFinancialCostsCarriedForward",
                 "/ukProperty/expenses/rentARoom/amountClaimed"
-              )
-            )
-          ),
-          FromDateFormatError.copy(
-            message = "The provided From date is invalid"
-          ),
-          ValueFormatError.copy(
-            message = "The value must be between -99999999999.99 and 99999999999.99",
-            paths = Some(
-              List(
-                "/ukProperty/expenses/premisesRunningCosts",
-                "/ukProperty/expenses/repairsAndMaintenance",
-                "/ukProperty/expenses/financialCosts",
-                "/ukProperty/expenses/professionalFees",
-                "/ukProperty/expenses/costOfServices",
-                "/ukProperty/expenses/other",
-                "/ukProperty/expenses/travelCosts"
               )
             )
           )

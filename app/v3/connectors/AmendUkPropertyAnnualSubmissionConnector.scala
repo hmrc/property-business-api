@@ -16,10 +16,11 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionRequestData
 
@@ -27,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def amendUkPropertyAnnualSubmission(request: AmendUkPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
@@ -37,7 +38,7 @@ class AmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, 
     import request._
 
     val downstreamUri =
-      if (taxYear.isTys) {
+      if (taxYear.year >= TaxYear.tysTaxYear.year) {
         TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
       } else {
         // Note that MTD tax year format is used

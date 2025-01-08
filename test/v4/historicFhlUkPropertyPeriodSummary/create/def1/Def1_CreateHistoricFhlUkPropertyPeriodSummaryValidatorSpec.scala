@@ -16,13 +16,14 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create.def1
 
-import api.controllers.validators.Validator
-import api.models.domain.Nino
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import shared.controllers.validators.Validator
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{

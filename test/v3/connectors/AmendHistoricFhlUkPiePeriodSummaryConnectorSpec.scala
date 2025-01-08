@@ -16,13 +16,14 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, PeriodId}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.amendHistoricFhlUkPiePeriodSummary.{
-  AmendHistoricFhlUkPiePeriodSummaryRequestData,
-  AmendHistoricFhlUkPiePeriodSummaryRequestBody
+  AmendHistoricFhlUkPiePeriodSummaryRequestBody,
+  AmendHistoricFhlUkPiePeriodSummaryRequestData
 }
 import v3.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPiePeriodSummaryResponse
 
@@ -54,7 +55,7 @@ class AmendHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val connector: AmendHistoricFhlUkPiePeriodSummaryConnector = new AmendHistoricFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     private val requestBody: AmendHistoricFhlUkPiePeriodSummaryRequestBody = AmendHistoricFhlUkPiePeriodSummaryRequestBody(None, None)

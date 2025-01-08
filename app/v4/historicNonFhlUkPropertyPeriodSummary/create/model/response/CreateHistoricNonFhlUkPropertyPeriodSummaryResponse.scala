@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create.model.response
 
-import api.models.domain.PeriodId
+import common.models.domain.PeriodId
 import play.api.libs.json.{Json, OWrites}
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryResponse(periodId: PeriodId)

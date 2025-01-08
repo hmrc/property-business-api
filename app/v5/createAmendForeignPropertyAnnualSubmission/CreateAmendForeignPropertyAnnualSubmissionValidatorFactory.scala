@@ -16,7 +16,7 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import config.AppConfig
 import play.api.libs.json.JsValue

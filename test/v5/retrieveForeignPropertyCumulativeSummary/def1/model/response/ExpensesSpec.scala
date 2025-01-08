@@ -17,7 +17,7 @@
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
 class ExpensesSpec extends UnitSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {

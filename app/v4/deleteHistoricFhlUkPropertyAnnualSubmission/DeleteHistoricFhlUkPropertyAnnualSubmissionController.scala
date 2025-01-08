@@ -16,26 +16,27 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers._
-import api.models.audit.FlattenedGenericAuditDetail
-import api.models.domain.HistoricPropertyType
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import common.models.domain.HistoricPropertyType
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
+import common.models.audit.FlattenedGenericAuditDetail
 import shared.routing.Version
-import utils.IdGenerator
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                                       val lookupService: MtdIdLookupService,
-                                                                       validatorFactory: DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
-                                                                       service: DeleteHistoricFhlUkPropertyAnnualSubmissionService,
-                                                                       auditService: AuditService,
-                                                                       cc: ControllerComponents,
-                                                                       idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
+    service: DeleteHistoricFhlUkPropertyAnnualSubmissionService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "delete-historic-fhluk-property-annual-submission"

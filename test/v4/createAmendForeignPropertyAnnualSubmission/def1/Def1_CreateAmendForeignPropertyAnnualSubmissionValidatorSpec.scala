@@ -16,12 +16,13 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission.def1
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
@@ -831,7 +832,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

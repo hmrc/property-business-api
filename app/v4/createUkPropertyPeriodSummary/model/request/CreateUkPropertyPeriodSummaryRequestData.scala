@@ -16,7 +16,7 @@
 
 package v4.createUkPropertyPeriodSummary.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.Def2_Create_UkNonFhlPropertySubmission
 
 sealed trait CreateUkPropertyPeriodSummaryRequestData {

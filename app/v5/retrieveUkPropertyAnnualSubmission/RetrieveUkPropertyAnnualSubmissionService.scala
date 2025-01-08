@@ -16,11 +16,12 @@
 
 package v5.retrieveUkPropertyAnnualSubmission
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, UkResult}
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse

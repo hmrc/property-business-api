@@ -16,11 +16,13 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.retrieve.def1
 
-import api.models.domain.{Nino, PeriodId, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.domain.PeriodId
+import common.models.errors.PeriodIdFormatError
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData

@@ -16,17 +16,18 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.hateoas.Method.GET
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission._
 import v3.models.response.retrieveHistoricFhlUkPropertyAnnualSubmission._
@@ -47,8 +48,16 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val mtdTaxYear = "2020-21"
-  private val taxYear    = TaxYear.fromMtd(mtdTaxYear)
+  private val mtdTaxYear          = "2020-21"
+  private val taxYear             = TaxYear.fromMtd(mtdTaxYear)
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "RetrieveHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return OK" when {
@@ -98,16 +107,16 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, mtdTaxYear)(fakeGetRequest)
 
     protected val requestData: RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(validNino), taxYear)
 
     private val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
       Some(BigDecimal("100.11")),
@@ -130,7 +139,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))
 
     protected val hateoasData: RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData =
-      RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(nino, mtdTaxYear)
+      RetrieveHistoricFhlUkPropertyAnnualSubmissionHateoasData(validNino, mtdTaxYear)
 
     private val responseBodyJson: JsValue = Json.parse("""
         |{

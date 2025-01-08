@@ -16,10 +16,11 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.retrieve
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.PeriodIdFormatError
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse
 

@@ -16,19 +16,22 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend.def1
 
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
+import play.api.libs.json.{Format, JsNumber, JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.services._
+import shared.support.IntegrationBaseSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody
-import api.services._
 
 class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
+
+  private def downstreamBody[A: Format](value: JsValue) = Json.toJson(value.as[A])
 
   val requestBodyJson: JsValue = Json.parse(
     """{

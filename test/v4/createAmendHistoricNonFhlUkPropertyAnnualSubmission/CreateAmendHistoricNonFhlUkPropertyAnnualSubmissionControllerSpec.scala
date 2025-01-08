@@ -16,18 +16,21 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.audit.FlattenedGenericAuditDetail
+import common.models.errors.RuleMisalignedPeriodError
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.utils.MockIdGenerator
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
@@ -49,9 +52,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
     with MockIdGenerator {
 
-  private val taxYear              = "2022-23"
-  private val transactionReference = Some("transaction reference")
-  private val mtdId: String        = "test-mtd-id"
+  private val taxYear                            = "2022-23"
+  private val transactionReference               = Some("transaction reference")
+  private val mtdId: String                      = "test-mtd-id"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return an OK response" when {
@@ -97,13 +101,13 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
@@ -112,7 +116,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           request = Some(validMtdJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -125,7 +129,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
     protected val requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
-      Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+      Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(validNino), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val responseData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse =
       CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference)

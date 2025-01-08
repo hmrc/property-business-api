@@ -19,7 +19,7 @@ package v3.models.request.createHistoricNonFhlUkPropertyPeriodSummary
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
-import utils.EmptinessChecker
+import shared.utils.EmptinessChecker
 
 case class CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(fromDate: String,
                                                                   toDate: String,

@@ -16,10 +16,10 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.def1.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea._
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty._
 import v4.retrieveForeignPropertyAnnualSubmission.model.response._

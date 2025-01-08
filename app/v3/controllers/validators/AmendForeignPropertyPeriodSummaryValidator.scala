@@ -16,12 +16,13 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.errors.{MtdError, RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.MtdError
 import v3.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequestData
 import v3.models.request.common.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
 import v3.models.request.common.foreignPropertyEntry.{AmendForeignNonFhlPropertyEntry, AmendForeignNonFhlPropertyExpenses}
@@ -101,7 +102,7 @@ object AmendForeignPropertyPeriodSummaryValidator extends RulesValidator[AmendFo
 
   private def validateForeignNonFhlProperty(foreignNonFhlPropertyEntry: AmendForeignNonFhlPropertyEntry,
                                             index: Int): Validated[Seq[MtdError], Unit] = {
-    import foreignNonFhlPropertyEntry.{countryCode, income => i, expenses => e}
+    import foreignNonFhlPropertyEntry.{countryCode, expenses => e, income => i}
 
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")
 

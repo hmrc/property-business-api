@@ -18,7 +18,7 @@ package v4.historicFhlUkPropertyPeriodSummary.list.model.response
 
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 
 class ListHistoricFhlUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {

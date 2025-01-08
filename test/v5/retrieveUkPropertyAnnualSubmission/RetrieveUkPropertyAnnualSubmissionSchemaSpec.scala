@@ -16,11 +16,11 @@
 
 package v5.retrieveUkPropertyAnnualSubmission
 
-import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import api.models.errors.{RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import support.UnitSpec
+import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import shared.models.errors.{RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import shared.utils.UnitSpec
 
 class RetrieveUkPropertyAnnualSubmissionSchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

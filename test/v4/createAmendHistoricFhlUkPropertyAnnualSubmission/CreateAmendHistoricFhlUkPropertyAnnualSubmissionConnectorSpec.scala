@@ -16,9 +16,9 @@
 
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
@@ -49,7 +49,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
 
     protected val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val requestBody: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody =

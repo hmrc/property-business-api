@@ -16,10 +16,10 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
-import api.models.domain.TaxYear
 import config.MockAppConfig
-import support.UnitSpec
+import shared.controllers.validators.Validator
+import shared.models.domain.TaxYear
+import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 

@@ -16,17 +16,19 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.GET
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v3.controllers.validators.MockCreateUkPropertyPeriodSummaryValidatorFactory
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v3.models.request.createUkPropertyPeriodSummary._
@@ -47,9 +49,20 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockAuditService {
 
-  private val taxYear      = "2020-21"
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear                                 = "2020-21"
+  private val businessId                              = "XAIS12345678910"
+  private val submissionId                            = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  def fakePutRequest[T](body: T): FakeRequest[T]      = fakeRequest.withBody(body)
+  def fakeRequestWithBody[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "CreateUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
@@ -65,7 +78,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .returns(HateoasWrapper(responseData, testHateoasLinks))
 
         override def callController(): Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
+          controller.handleRequest(validNino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
           expectedStatus = CREATED,
@@ -129,23 +142,23 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-uk-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -358,10 +371,10 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     )
 
     protected val requestData: CreateUkPropertyPeriodSummaryRequestData =
-      CreateUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
+      CreateUkPropertyPeriodSummaryRequestData(Nino(validNino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBody)
 
     protected val requestDataConsolidatedExpense: CreateUkPropertyPeriodSummaryRequestData =
-      CreateUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBodyWithConsolidatedExpense)
+      CreateUkPropertyPeriodSummaryRequestData(Nino(validNino), TaxYear.fromMtd(taxYear), BusinessId(businessId), requestBodyWithConsolidatedExpense)
 
     protected val responseBodyJson: JsValue = Json.parse(
       s"""
@@ -376,7 +389,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     )
 
     protected val hateoasData: CreateUkPropertyPeriodSummaryHateoasData =
-      CreateUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+      CreateUkPropertyPeriodSummaryHateoasData(validNino, businessId, taxYear, submissionId)
 
     protected val responseBodyJsonWithHateoas: JsObject = responseBodyJson.as[JsObject] ++ testHateoasLinksJson
 

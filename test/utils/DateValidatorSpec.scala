@@ -16,9 +16,10 @@
 
 package utils
 
-import api.models.errors.{FromDateFormatError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError, ToDateFormatError}
 import cats.data.Validated.{invalid, valid}
-import support.UnitSpec
+import common.models.errors.{RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
+import shared.models.errors.{FromDateFormatError, ToDateFormatError}
+import shared.utils.UnitSpec
 
 class DateValidatorSpec extends UnitSpec {
 

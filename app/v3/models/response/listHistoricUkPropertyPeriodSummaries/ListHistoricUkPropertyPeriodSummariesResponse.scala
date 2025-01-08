@@ -16,11 +16,11 @@
 
 package v3.models.response.listHistoricUkPropertyPeriodSummaries
 
-import api.hateoas.{HateoasData, HateoasListLinksFactory, Link}
-import api.models.domain.HistoricPropertyType
 import cats.Functor
-import config.AppConfig
+import common.models.domain.HistoricPropertyType
 import play.api.libs.json._
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasListLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 
 case class ListHistoricUkPropertyPeriodSummariesResponse[I](submissions: Seq[I])
@@ -38,7 +38,7 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
         SubmissionPeriod,
         ListHistoricUkPropertyPeriodSummariesHateoasData] {
 
-    override def itemLinks(appConfig: AppConfig, data: ListHistoricUkPropertyPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] = {
+    override def itemLinks(appConfig: SharedAppConfig, data: ListHistoricUkPropertyPeriodSummariesHateoasData, item: SubmissionPeriod): Seq[Link] = {
       import data._
 
       data.propertyType match {
@@ -55,7 +55,7 @@ object ListHistoricUkPropertyPeriodSummariesResponse extends HateoasLinks {
       }
     }
 
-    override def links(appConfig: AppConfig, data: ListHistoricUkPropertyPeriodSummariesHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: ListHistoricUkPropertyPeriodSummariesHateoasData): Seq[Link] = {
       import data._
 
       data.propertyType match {

@@ -16,10 +16,11 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryRequestData
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryResponse
@@ -28,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -37,7 +38,7 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, va
 
     import request._
 
-    val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.isTys) {
+    val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.year >= TaxYear.tysTaxYear.year) {
       TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=${businessId}")
     } else {
       // Note that MTD tax year format is used pre-TYS

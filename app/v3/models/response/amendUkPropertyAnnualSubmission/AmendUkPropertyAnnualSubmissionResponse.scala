@@ -16,15 +16,15 @@
 
 package v3.models.response.amendUkPropertyAnnualSubmission
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 
 object AmendUkPropertyAnnualSubmissionResponse extends HateoasLinks {
 
   implicit object AmendUkPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendUkPropertyAnnualSubmissionHateoasData] {
 
-    override def links(appConfig: AppConfig, data: AmendUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: AmendUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       List(
         createAmendUkPropertyAnnualSubmission(appConfig, nino, businessId, taxYear),

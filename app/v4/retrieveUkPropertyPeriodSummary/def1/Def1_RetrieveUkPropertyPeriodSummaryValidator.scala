@@ -16,11 +16,12 @@
 
 package v4.retrieveUkPropertyPeriodSummary.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYear}
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
+import common.controllers.validators.resolvers.ResolveSubmissionId
 import config.AppConfig
 import v4.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 

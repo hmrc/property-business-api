@@ -16,10 +16,11 @@
 
 package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,

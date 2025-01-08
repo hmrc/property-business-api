@@ -16,9 +16,9 @@
 
 package v4.createUkPropertyPeriodSummary
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v4.createUkPropertyPeriodSummary.model.request._
 import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
@@ -88,7 +88,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }

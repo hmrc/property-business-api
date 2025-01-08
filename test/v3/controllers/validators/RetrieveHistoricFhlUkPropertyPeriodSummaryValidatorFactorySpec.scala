@@ -16,10 +16,12 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{Nino, PeriodId, TaxYear}
-import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, PeriodIdFormatError}
+import common.models.domain.PeriodId
+import common.models.errors.PeriodIdFormatError
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError}
+import shared.utils.UnitSpec
 import v3.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequestData
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {

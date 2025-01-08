@@ -16,10 +16,10 @@
 
 package v4.retrieveForeignPropertyPeriodSummary
 
-import api.controllers.validators.Validator
-import api.models.domain.TaxYear
+import shared.controllers.validators.Validator
+import shared.models.domain.TaxYear
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
 

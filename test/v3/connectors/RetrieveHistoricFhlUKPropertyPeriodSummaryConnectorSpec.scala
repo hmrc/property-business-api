@@ -16,11 +16,12 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequestData
 import v3.models.response.retrieveHistoricFhlUkPiePeriodSummary.{PeriodExpenses, PeriodIncome, RetrieveHistoricFhlUkPiePeriodSummaryResponse}
 
@@ -62,7 +63,7 @@ class RetrieveHistoricFhlUKPropertyPeriodSummaryConnectorSpec extends ConnectorS
 
     protected val connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPiePeriodSummaryResponse])

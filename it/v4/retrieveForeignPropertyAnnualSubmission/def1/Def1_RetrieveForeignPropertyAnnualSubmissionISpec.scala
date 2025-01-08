@@ -16,14 +16,15 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.def1
 
-import api.models.errors._
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
-import api.services._
+import shared.models.errors._
+import shared.services._
+import shared.support.IntegrationBaseSpec
 
 class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 

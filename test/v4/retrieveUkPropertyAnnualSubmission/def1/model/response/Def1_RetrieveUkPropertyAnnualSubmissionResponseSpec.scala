@@ -16,10 +16,10 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.def1.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
 import v4.retrieveUkPropertyAnnualSubmission.model.response._

@@ -16,9 +16,9 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import mocks.MockFeatureSwitches
 import play.api.libs.json.JsObject
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
@@ -37,7 +37,6 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
     "send a request and return no content" when {
 
       "sending a non-FHL request" in new IfsTest with Test {
-        override lazy val requiredHeaders: scala.Seq[(String, String)] = super.requiredHeaders :+ ("intent" -> "DELETE")
 
         MockFeatureSwitches.isPassIntentEnabled.returns(true)
 
@@ -52,7 +51,6 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
       }
 
       "isPassIntentHeader feature switch is off" in new IfsTest with Test {
-        override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
 
         MockFeatureSwitches.isPassIntentEnabled returns false
 
@@ -71,7 +69,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
 
     val connector: DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData =

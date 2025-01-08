@@ -18,7 +18,7 @@ package v3.models.response.retrieveUkPropertyPeriodSummary
 
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class RentARoomExpensesSpec extends UnitSpec with ResponseModelsFixture {
 

@@ -16,12 +16,12 @@
 
 package v3.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.hateoas.HateoasFactory
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import shared.hateoas.HateoasFactory
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.RetrieveUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionHateoasData
 import v3.services.RetrieveUkPropertyAnnualSubmissionService
@@ -36,7 +36,7 @@ class RetrieveUkPropertyAnnualSubmissionController @Inject() (val authService: E
                                                               service: RetrieveUkPropertyAnnualSubmissionService,
                                                               hateoasFactory: HateoasFactory,
                                                               cc: ControllerComponents,
-                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                              idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-uk-property-annual-submission"

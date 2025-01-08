@@ -17,7 +17,7 @@
 package v4.propertyPeriodSummary.list
 
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.propertyPeriodSummary.list.def1.Def1_ListPropertyPeriodSummariesValidator
 
 class ListPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockAppConfig {

@@ -20,7 +20,7 @@ import config.MockAppConfig
 import config.rewriters.DocumentationRewriters.CheckRewrite
 import controllers.Rewriter
 import play.api.Configuration
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class OasFeatureRewriterSpec extends UnitSpec with MockAppConfig {
 

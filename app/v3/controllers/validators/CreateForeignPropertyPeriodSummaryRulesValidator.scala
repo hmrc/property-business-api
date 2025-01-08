@@ -16,12 +16,14 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
+import common.controllers.validators.resolvers.ResolveFromAndToDates
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors._
 import v3.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v3.models.request.createForeignPropertyPeriodSummary.foreignFhlEea.{CreateForeignFhlEea, CreateForeignFhlEeaExpenses}
 import v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.{

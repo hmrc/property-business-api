@@ -16,18 +16,20 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.hateoas.Method.GET
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory
 import v3.models.request.createAmendForeignPropertyAnnualSubmission._
 import v3.models.response.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionHateoasData
@@ -51,6 +53,17 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
 
   private val businessId = "XAIS12345678910"
   private val taxYear    = "2019-20"
+
+  def fakeRequestWithBody[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "CreateAmendForeignPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -103,13 +116,13 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeRequestWithBody(requestJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakeRequestWithBody(requestJson))
 
     protected val requestJson: JsValue = createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson
 
@@ -118,10 +131,10 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
         auditType = "CreateAmendForeignPropertyAnnualSubmission",
         transactionName = "create-amend-foreign-property-annual-submission",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -131,10 +144,10 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     private val requestBody: CreateAmendForeignPropertyAnnualSubmissionRequestBody = createAmendForeignPropertyAnnualSubmissionRequestBody
 
     protected val requestData: CreateAmendForeignPropertyAnnualSubmissionRequestData =
-      CreateAmendForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
+      CreateAmendForeignPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val hateoasData: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
-      CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
+      CreateAmendForeignPropertyAnnualSubmissionHateoasData(validNino, businessId, taxYear)
 
   }
 

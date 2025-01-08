@@ -16,7 +16,7 @@
 
 package v4.retrieveUkPropertyPeriodSummary.def1.model
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
 import v4.retrieveUkPropertyPeriodSummary.def1.model.response._
 import v4.retrieveUkPropertyPeriodSummary.model.response._

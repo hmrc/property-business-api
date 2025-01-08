@@ -16,18 +16,22 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.audit.FlattenedGenericAuditDetail
+import common.models.domain.PeriodId
+import common.models.errors.RuleMisalignedPeriodError
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
   CreateHistoricFhlUkPropertyPeriodSummaryRequestData,
   Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
@@ -49,10 +53,11 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val taxYear       = "2022-23"
-  private val fromDate      = "2021-01-01"
-  private val toDate        = "2021-01-02"
-  private val mtdId: String = "test-mtd-id"
+  private val taxYear                            = "2022-23"
+  private val fromDate                           = "2021-01-01"
+  private val toDate                             = "2021-01-02"
+  private val mtdId: String                      = "test-mtd-id"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "CreateCreateHistoricFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -97,13 +102,13 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
@@ -112,7 +117,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           request = Some(responseBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -136,7 +141,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
       Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody(fromDate, toDate, None, None)
 
     protected val requestData: CreateHistoricFhlUkPropertyPeriodSummaryRequestData =
-      Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
+      Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData(Nino(validNino), requestBody)
 
     protected val responseData: CreateHistoricFhlUkPropertyPeriodSummaryResponse =
       CreateHistoricFhlUkPropertyPeriodSummaryResponse(PeriodId(fromDate, toDate))

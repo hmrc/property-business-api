@@ -16,10 +16,11 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, PeriodId}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.outcomes.ResponseWrapper
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
@@ -56,7 +57,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
 
     protected val connector: AmendHistoricNonFhlUkPropertyPeriodSummaryConnector = new AmendHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     private val requestBody: Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody =

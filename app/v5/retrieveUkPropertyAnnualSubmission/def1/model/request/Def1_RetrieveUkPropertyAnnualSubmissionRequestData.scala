@@ -16,7 +16,7 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.def1.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 

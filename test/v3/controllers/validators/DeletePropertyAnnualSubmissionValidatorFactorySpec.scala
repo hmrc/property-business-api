@@ -16,10 +16,10 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v3.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 
 class DeletePropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {
@@ -100,7 +100,7 @@ class DeletePropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with M
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

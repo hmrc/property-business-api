@@ -16,12 +16,14 @@
 
 package v3.services
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import support.UnitSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.connectors.MockRetrieveUkPropertyPeriodSummaryConnector
 import v3.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}

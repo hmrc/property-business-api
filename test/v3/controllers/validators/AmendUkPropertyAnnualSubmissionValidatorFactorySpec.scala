@@ -16,12 +16,13 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsString, JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.amendUkPropertyAnnualSubmission._
 import v3.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty.{UkFhlProperty, UkFhlPropertyAdjustments, UkFhlPropertyAllowances}
 import v3.models.request.amendUkPropertyAnnualSubmission.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyAdjustments, UkNonFhlPropertyAllowances}
@@ -640,7 +641,7 @@ class AmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with 
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

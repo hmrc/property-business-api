@@ -16,15 +16,16 @@
 
 package v4.amendForeignPropertyPeriodSummary.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
+import common.controllers.validators.resolvers.{ResolveSubmissionId, ResolveTaxYear}
 import config.AppConfig
 import play.api.libs.json.JsValue
-import Def1_AmendForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import api.models.domain.TaxYear
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
+import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v4.amendForeignPropertyPeriodSummary.model.request.{
   AmendForeignPropertyPeriodSummaryRequestData,
   Def1_AmendForeignPropertyPeriodSummaryRequestBody,

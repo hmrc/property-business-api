@@ -18,7 +18,7 @@ package v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_fo
 
 import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
-import utils.EmptinessChecker
+import shared.utils.EmptinessChecker
 
 case class Def1_Create_Amend_ForeignNonFhlEntry(countryCode: String,
                                                 adjustments: Option[Def1_Create_Amend_ForeignNonFhlAdjustments],

@@ -16,9 +16,10 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, PeriodId}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.outcomes.ResponseWrapper
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
   AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
@@ -53,7 +54,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec
 
     protected val connector = new AmendHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val requestBody: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody =

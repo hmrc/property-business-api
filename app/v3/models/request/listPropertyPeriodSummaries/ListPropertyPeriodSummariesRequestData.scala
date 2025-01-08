@@ -16,6 +16,6 @@
 
 package v3.models.request.listPropertyPeriodSummaries
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 case class ListPropertyPeriodSummariesRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)

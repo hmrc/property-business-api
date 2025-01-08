@@ -16,10 +16,10 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.createAmendForeignPropertyAnnualSubmission._
 
 import scala.concurrent.Future
@@ -61,7 +61,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
 
     protected val connector = new CreateAmendForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     private val requestBody: CreateAmendForeignPropertyAnnualSubmissionRequestBody = CreateAmendForeignPropertyAnnualSubmissionRequestBody(None, None)

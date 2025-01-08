@@ -16,13 +16,15 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveFromAndToDates, ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import api.models.errors.{MtdError, RuleBothExpensesSuppliedError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
+import common.controllers.validators.resolvers.ResolveFromAndToDates
+import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
+import shared.models.errors.MtdError
 import v3.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v3.models.request.createHistoricFhlUkPiePeriodSummary.{
   CreateHistoricFhlUkPiePeriodSummaryRequestBody,

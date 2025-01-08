@@ -16,11 +16,12 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.retrieve
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
@@ -70,7 +71,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connect
 
     protected val connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse])

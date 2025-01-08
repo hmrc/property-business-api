@@ -16,15 +16,17 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import cats.implicits._
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v4.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 

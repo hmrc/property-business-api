@@ -16,11 +16,12 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import common.models.errors.{RuleDuplicateCountryCodeError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,

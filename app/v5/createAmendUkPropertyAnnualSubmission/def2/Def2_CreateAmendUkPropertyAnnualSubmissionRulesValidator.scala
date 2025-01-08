@@ -16,12 +16,13 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import api.models.errors._
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{
   Allowances,
   Def2_CreateAmendUkPropertyAnnualSubmissionRequestData,

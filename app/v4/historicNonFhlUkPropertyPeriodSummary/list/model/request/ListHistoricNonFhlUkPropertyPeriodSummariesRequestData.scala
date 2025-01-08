@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.list.model.request
 
-import api.models.domain.Nino
+import shared.models.domain.Nino
 
 sealed trait ListHistoricNonFhlUkPropertyPeriodSummariesRequestData {
   val nino: Nino

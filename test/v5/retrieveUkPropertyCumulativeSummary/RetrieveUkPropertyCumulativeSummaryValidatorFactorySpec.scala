@@ -16,9 +16,9 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
-import api.controllers.validators.AlwaysErrorsValidator
 import config.MockAppConfig
-import support.UnitSpec
+import shared.controllers.validators.AlwaysErrorsValidator
+import shared.utils.UnitSpec
 import v5.retrieveUkPropertyCumulativeSummary.def1.Def1_RetrieveUkPropertyCumulativeSummaryValidator
 
 class RetrieveUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {

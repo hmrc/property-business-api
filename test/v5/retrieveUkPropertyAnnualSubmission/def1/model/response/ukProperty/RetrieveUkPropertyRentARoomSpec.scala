@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class RetrieveUkPropertyRentARoomSpec extends UnitSpec {
 

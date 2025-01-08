@@ -16,10 +16,11 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import api.connectors.DownstreamUri.TaxYearSpecificIfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.{AppConfig, FeatureSwitches}
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector._
 import v5.retrieveForeignPropertyCumulativeSummary.model.request._
@@ -38,7 +39,9 @@ object RetrieveForeignPropertyCumulativeSummaryConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient, applicationAppConfig: AppConfig)(implicit
+    val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyCumulativeSummary(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -48,7 +51,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
     import request._
     import schema._
 
-    val maybeIntent = if (FeatureSwitches(appConfig).isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
+    val maybeIntent = if (FeatureSwitches(applicationAppConfig).isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
 
     val downstreamUri: DownstreamUri[DownstreamResp] = TaxYearSpecificIfsUri[DownstreamResp](
       s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")

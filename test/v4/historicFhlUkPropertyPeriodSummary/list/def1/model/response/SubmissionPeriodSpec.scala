@@ -17,7 +17,7 @@
 package v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class SubmissionPeriodSpec extends UnitSpec {
 

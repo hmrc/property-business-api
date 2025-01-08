@@ -17,7 +17,7 @@
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {

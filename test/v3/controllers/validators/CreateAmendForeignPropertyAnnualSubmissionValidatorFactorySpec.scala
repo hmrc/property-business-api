@@ -16,12 +16,13 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import config.MockAppConfig
-import play.api.libs.json.{JsArray, JsNumber, JsString, JsValue, Json}
-import support.UnitSpec
+import play.api.libs.json._
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v3.models.request.common.{Building, FirstYear, StructuredBuildingAllowance}
 import v3.models.request.createAmendForeignPropertyAnnualSubmission._
 import v3.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAdjustments, ForeignFhlEeaAllowances}
@@ -784,7 +785,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

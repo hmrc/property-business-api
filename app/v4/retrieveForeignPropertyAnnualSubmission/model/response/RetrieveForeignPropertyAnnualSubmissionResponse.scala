@@ -16,7 +16,7 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.Def1_Retrieve_ForeignFhlEeaEntry

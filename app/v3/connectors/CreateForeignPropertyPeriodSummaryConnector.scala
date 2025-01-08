@@ -16,11 +16,12 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
 import play.api.http.Status.OK
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryRequestData
 import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
@@ -29,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -40,7 +41,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
-    val downstreamUri = if (taxYear.isTys) {
+    val downstreamUri = if (taxYear.year >= TaxYear.tysTaxYear.year) {
       TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
         s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId"
       )

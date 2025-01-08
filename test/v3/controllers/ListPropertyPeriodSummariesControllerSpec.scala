@@ -16,15 +16,16 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
+import shared.hateoas.Method.GET
 import v3.controllers.validators.MockListPropertyPeriodSummariesValidatorFactory
 import v3.models.request.listPropertyPeriodSummaries.ListPropertyPeriodSummariesRequestData
 import v3.models.response.listPropertyPeriodSummaries.{ListPropertyPeriodSummariesHateoasData, ListPropertyPeriodSummariesResponse, SubmissionPeriod}
@@ -41,8 +42,9 @@ class ListPropertyPeriodSummariesControllerSpec
     with MockListPropertyPeriodSummariesValidatorFactory
     with MockHateoasFactory {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2020-21"
+  private val businessId          = "XAIS12345678910"
+  private val taxYear             = "2020-21"
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   "ListPropertyPeriodSummariesController" should {
     "return Ok" when {
@@ -93,21 +95,21 @@ class ListPropertyPeriodSummariesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakeGetRequest)
 
     protected val requestData: ListPropertyPeriodSummariesRequestData =
-      ListPropertyPeriodSummariesRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
+      ListPropertyPeriodSummariesRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     protected val responseData: ListPropertyPeriodSummariesResponse =
       ListPropertyPeriodSummariesResponse(List(SubmissionPeriod("someId", "fromDate", "toDate")))
 
-    protected val hateoasData: ListPropertyPeriodSummariesHateoasData = ListPropertyPeriodSummariesHateoasData(nino, businessId, taxYear)
+    protected val hateoasData: ListPropertyPeriodSummariesHateoasData = ListPropertyPeriodSummariesHateoasData(validNino, businessId, taxYear)
 
     protected val responseDataWithHateoas: HateoasWrapper[ListPropertyPeriodSummariesResponse] = HateoasWrapper(responseData, testHateoasLinks)
   }

@@ -16,10 +16,11 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import v3.connectors.AmendHistoricNonFhlUkPiePeriodSummaryConnector
 import v3.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPeriodSummaryRequestData
 

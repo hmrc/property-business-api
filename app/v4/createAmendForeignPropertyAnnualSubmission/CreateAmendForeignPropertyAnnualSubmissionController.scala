@@ -16,25 +16,26 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import shared.controllers._
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.config.SharedAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.routing.Version
-import utils.IdGenerator
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                                      val lookupService: MtdIdLookupService,
-                                                                      validatorFactory: CreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
-                                                                      service: CreateAmendForeignPropertyAnnualSubmissionService,
-                                                                      auditService: AuditService,
-                                                                      cc: ControllerComponents,
-                                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: CreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
+    service: CreateAmendForeignPropertyAnnualSubmissionService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-amend-foreign-property-annual-submission"

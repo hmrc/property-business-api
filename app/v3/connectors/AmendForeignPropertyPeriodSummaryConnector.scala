@@ -16,10 +16,11 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryRequestData
 
@@ -27,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def amendForeignPropertyPeriodSummary(request: AmendForeignPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -37,7 +38,7 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient
     import request._
 
     val downstreamUri =
-      if (taxYear.isTys) {
+      if (taxYear.year >= TaxYear.tysTaxYear.year) {
         TaxYearSpecificIfsUri[Unit](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?" +
             s"taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")

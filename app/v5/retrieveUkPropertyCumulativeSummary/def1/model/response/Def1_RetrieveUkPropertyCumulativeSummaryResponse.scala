@@ -16,7 +16,7 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Json, OWrites, Reads, __}
 import v5.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse

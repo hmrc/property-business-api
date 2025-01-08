@@ -16,13 +16,12 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import api.controllers.validators.Validator
-import api.models.domain.TaxYear
-import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
-import v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryValidatorFactory
+import shared.controllers.validators.Validator
+import shared.models.domain.TaxYear
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
 import v4.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 

@@ -16,11 +16,11 @@
 
 package v4.retrieveUkPropertyAnnualSubmission
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
@@ -124,7 +124,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     protected val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val taxYear: String

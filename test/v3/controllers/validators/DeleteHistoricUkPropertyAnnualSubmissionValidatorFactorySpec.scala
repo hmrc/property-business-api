@@ -16,10 +16,12 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
-import api.models.errors._
+import common.models.domain.HistoricPropertyType
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 
 class DeleteHistoricUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {

@@ -16,7 +16,7 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v5.retrieveUkPropertyCumulativeSummary.RetrieveUkPropertyCumulativeSummarySchema
 import v5.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 

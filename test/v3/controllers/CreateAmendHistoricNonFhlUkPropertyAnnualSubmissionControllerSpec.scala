@@ -16,19 +16,24 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.audit.FlattenedGenericAuditDetail
+import common.models.errors.RuleMisalignedPeriodError
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
+import play.api.http.HeaderNames
 import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.test.FakeRequest
+import shared.hateoas.Method.GET
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
 import v3.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission._
@@ -49,9 +54,23 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val taxYear              = "2022-23"
-  private val transactionReference = Some("transaction reference")
-  private val mtdId: String        = "test-mtd-id"
+  private val taxYear                            = "2022-23"
+  private val transactionReference               = Some("transaction reference")
+  private val mtdId: String                      = "test-mtd-id"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  lazy val fakeDeleteRequest: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withHeaders(
+    HeaderNames.AUTHORIZATION -> "Bearer Token"
+  )
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -101,13 +120,13 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
@@ -116,7 +135,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           request = Some(validMtdJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -129,10 +148,10 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody(None, None)
 
     protected val requestData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
-      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(validNino), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val hateoasData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData =
-      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(nino, taxYear)
+      CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData(validNino, taxYear)
 
     protected val responseData: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse =
       CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference)

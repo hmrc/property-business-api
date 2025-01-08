@@ -16,11 +16,11 @@
 
 package v4.propertyPeriodSummary.list
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData

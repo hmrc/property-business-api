@@ -16,9 +16,9 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import api.controllers.validators.resolvers.ResolveTaxYear
-import api.models.domain.TaxYear
-import api.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.models.domain.TaxYear
+import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.Reads

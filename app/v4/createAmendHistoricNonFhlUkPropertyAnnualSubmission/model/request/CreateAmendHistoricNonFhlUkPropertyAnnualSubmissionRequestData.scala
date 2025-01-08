@@ -16,7 +16,7 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 
 sealed trait CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData {
   val nino: Nino

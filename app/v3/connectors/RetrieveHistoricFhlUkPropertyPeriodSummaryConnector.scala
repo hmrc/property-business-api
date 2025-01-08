@@ -16,10 +16,10 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.DesUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.DesUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryRequestData
 import v3.models.response.retrieveHistoricFhlUkPiePeriodSummary.RetrieveHistoricFhlUkPiePeriodSummaryResponse
@@ -28,7 +28,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveHistoricFhlUkPiePeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,

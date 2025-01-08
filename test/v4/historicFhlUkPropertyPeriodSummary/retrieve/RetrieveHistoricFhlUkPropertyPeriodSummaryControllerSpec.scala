@@ -16,16 +16,17 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.retrieve
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.domain.PeriodId
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
@@ -96,16 +97,16 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, periodId)(fakeGetRequest)
 
     protected val requestData: RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData =
-      Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData(Nino(nino), PeriodId(periodId))
+      Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData(Nino(validNino), PeriodId(periodId))
 
     private val periodIncome: PeriodIncome =
       PeriodIncome(Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))

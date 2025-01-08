@@ -16,11 +16,12 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future
@@ -90,7 +91,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val connector: AmendUkPropertyPeriodSummaryConnector = new AmendUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     private val requestBody: AmendUkPropertyPeriodSummaryRequestBody = AmendUkPropertyPeriodSummaryRequestBody(None, None)

@@ -16,11 +16,11 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +31,7 @@ class RetrieveUkPropertyCumulativeSummaryController @Inject() (val authService: 
                                                                validatorFactory: RetrieveUkPropertyCumulativeSummaryValidatorFactory,
                                                                service: RetrieveUkPropertyCumulativeSummaryService,
                                                                cc: ControllerComponents,
-                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                               idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-uk-property-cumulative-summary"

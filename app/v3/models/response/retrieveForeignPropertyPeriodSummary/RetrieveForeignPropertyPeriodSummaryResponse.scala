@@ -16,11 +16,11 @@
 
 package v3.models.response.retrieveForeignPropertyPeriodSummary
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import api.models.domain.Timestamp
-import config.AppConfig
+import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 import v3.models.response.retrieveForeignPropertyPeriodSummary.foreignFhlEea.ForeignFhlEea
 import v3.models.response.retrieveForeignPropertyPeriodSummary.foreignNonFhlProperty.ForeignNonFhlProperty
@@ -45,7 +45,7 @@ object RetrieveForeignPropertyPeriodSummaryResponse extends HateoasLinks {
   implicit object RetrieveForeignPropertyLinksFactory
       extends HateoasLinksFactory[RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryHateoasData] {
 
-    override def links(appConfig: AppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: RetrieveForeignPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
 
       List(

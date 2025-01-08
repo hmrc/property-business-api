@@ -16,10 +16,11 @@
 
 package v4.createAmendUkPropertyAnnualSubmission.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import common.controllers.validators.resolvers.ResolveTaxYear
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import config.AppConfig

@@ -17,7 +17,7 @@
 package v4.historicNonFhlUkPropertyPeriodSummary.retrieve
 
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {

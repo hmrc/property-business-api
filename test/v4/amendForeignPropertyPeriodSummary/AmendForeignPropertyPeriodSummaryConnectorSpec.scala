@@ -16,11 +16,12 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v4.amendForeignPropertyPeriodSummary.model.request.{
   AmendForeignPropertyPeriodSummaryRequestData,
   Def1_AmendForeignPropertyPeriodSummaryRequestBody,
@@ -95,7 +96,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val connector: AmendForeignPropertyPeriodSummaryConnector = new AmendForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     private val requestBody: Def1_AmendForeignPropertyPeriodSummaryRequestBody = Def1_AmendForeignPropertyPeriodSummaryRequestBody(None, None)

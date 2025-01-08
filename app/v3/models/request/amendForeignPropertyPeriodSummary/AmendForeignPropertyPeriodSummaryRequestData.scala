@@ -16,7 +16,8 @@
 
 package v3.models.request.amendForeignPropertyPeriodSummary
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
+import common.models.domain.SubmissionId
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 case class AmendForeignPropertyPeriodSummaryRequestData(nino: Nino,
                                                         businessId: BusinessId,

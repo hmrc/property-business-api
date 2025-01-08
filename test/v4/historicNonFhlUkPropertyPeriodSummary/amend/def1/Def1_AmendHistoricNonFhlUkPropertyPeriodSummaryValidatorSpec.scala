@@ -16,12 +16,14 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend.def1
 
-import api.models.domain.{Nino, PeriodId, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.domain.PeriodId
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
-import support.UnitSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.Def1_Fixtures
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,

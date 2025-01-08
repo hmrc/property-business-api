@@ -16,11 +16,13 @@
 
 package v4.amendUkPropertyPeriodSummary
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.amendUkPropertyPeriodSummary.model.request._
 
@@ -33,7 +35,7 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
   private val businessId: String   = "XAIS12345678910"
   private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  implicit private val correlationId: String = "X-123"
+  implicit override val correlationId: String = "X-123"
 
   "service" when {
     "service call successful" should {

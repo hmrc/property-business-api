@@ -16,12 +16,13 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveSubmissionId, ResolveTaxYear}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
+import common.controllers.validators.resolvers.{ResolveSubmissionId, ResolveTaxYear}
 import config.AppConfig
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
 

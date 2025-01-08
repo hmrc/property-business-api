@@ -16,10 +16,12 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
+import common.models.domain.SubmissionId
+import common.models.errors.SubmissionIdFormatError
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 
 class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
@@ -110,7 +112,7 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, SubmissionIdFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError, TaxYearFormatError))
           )
         )
       }

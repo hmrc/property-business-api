@@ -16,12 +16,13 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.errors.{DateFormatError, MtdError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, StringFormatError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.{DateFormatError, MtdError, StringFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import v3.models.request.common.StructuredBuildingAllowance
 import v3.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v3.models.request.createAmendForeignPropertyAnnualSubmission.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaAllowances}

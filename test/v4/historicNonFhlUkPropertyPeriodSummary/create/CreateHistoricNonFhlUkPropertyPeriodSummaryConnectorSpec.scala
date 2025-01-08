@@ -16,9 +16,9 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.Nino
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.outcomes.ResponseWrapper
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
   Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
   Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
@@ -50,7 +50,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
 
     protected val connector: CreateHistoricNonFhlUkPropertyPeriodSummaryConnector = new CreateHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val requestBody: Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody =

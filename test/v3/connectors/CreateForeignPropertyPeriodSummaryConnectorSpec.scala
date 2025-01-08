@@ -16,9 +16,9 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v3.fixtures.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryFixtures
 import v3.models.request.createForeignPropertyPeriodSummary._
 import v3.models.response.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryResponse
@@ -70,7 +70,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
 
     protected val connector: CreateForeignPropertyPeriodSummaryConnector = new CreateForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val requestBody: CreateForeignPropertyPeriodSummaryRequestBody = regularExpensesRequestBody

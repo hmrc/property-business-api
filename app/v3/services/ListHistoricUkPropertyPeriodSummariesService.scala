@@ -16,11 +16,11 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.domain.HistoricPropertyType
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
+import common.models.domain.HistoricPropertyType
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.ListHistoricUkPropertyPeriodSummariesConnector
 import v3.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v3.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}

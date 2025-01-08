@@ -16,13 +16,14 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.controllers.validators.Validator
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom.UkPropertyAdjustmentsRentARoom
 import v3.models.request.createAmendHistoricNonFhlUkPropertyAnnualSubmission.{
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,

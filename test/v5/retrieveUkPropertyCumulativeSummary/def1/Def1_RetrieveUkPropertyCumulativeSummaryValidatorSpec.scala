@@ -16,9 +16,9 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 
 class Def1_RetrieveUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec {
@@ -74,7 +74,7 @@ class Def1_RetrieveUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec {
             ErrorWrapper(
               correlationId,
               BadRequestError,
-              Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+              Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
             )
           )
       }

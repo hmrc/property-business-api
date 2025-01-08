@@ -16,8 +16,8 @@
 
 package v3.models.response.amendUkPropertyPeriodSummary
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 
 case class AmendUkPropertyPeriodSummaryResponse(submissionId: String)
@@ -26,7 +26,7 @@ object AmendUkPropertyPeriodSummaryResponse extends HateoasLinks {
 
   implicit object AmendUkPropertyLinksFactory extends HateoasLinksFactory[Unit, AmendUkPropertyPeriodSummaryHateoasData] {
 
-    override def links(appConfig: AppConfig, data: AmendUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: AmendUkPropertyPeriodSummaryHateoasData): Seq[Link] = {
       import data._
       List(
         listPropertyPeriodSummaries(appConfig, nino, businessId, taxYear, self = false),

@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyAnnualSubmission.def2.response.ukProperty
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
 
 class RetrieveUkPropertyStructuredBuildingAllowanceSpec extends UnitSpec {

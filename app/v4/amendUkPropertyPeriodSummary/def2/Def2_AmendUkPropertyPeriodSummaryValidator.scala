@@ -16,13 +16,14 @@
 
 package v4.amendUkPropertyPeriodSummary.def2
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxTuple5Semigroupal
+import common.controllers.validators.resolvers.ResolveSubmissionId
 import play.api.libs.json.JsValue
 import v4.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator._
 import v4.amendUkPropertyPeriodSummary.model.request._

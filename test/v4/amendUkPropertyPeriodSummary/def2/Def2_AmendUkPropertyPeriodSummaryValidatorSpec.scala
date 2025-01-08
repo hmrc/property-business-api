@@ -16,12 +16,14 @@
 
 package v4.amendUkPropertyPeriodSummary.def2
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
@@ -454,7 +456,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonE
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, SubmissionIdFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError, TaxYearFormatError))
           )
         )
       }

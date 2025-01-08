@@ -16,8 +16,8 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
-import api.models.domain.HistoricPropertyType
+import shared.controllers.validators.Validator
+import common.models.domain.HistoricPropertyType
 import config.AppConfig
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData

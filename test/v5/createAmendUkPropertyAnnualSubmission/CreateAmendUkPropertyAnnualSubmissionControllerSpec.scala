@@ -16,16 +16,17 @@
 
 package v5.createAmendUkPropertyAnnualSubmission
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.FakeRequest
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
@@ -45,8 +46,9 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
     with MockCreateAmendUkPropertyAnnualSubmissionValidatorFactory
     with MockAuditService {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2022-23"
+  private val businessId                         = "XAIS12345678910"
+  private val taxYear                            = "2022-23"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "CreateAmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -97,23 +99,23 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakePutRequest(requestBodyJson))
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendUKPropertyAnnualSubmission",
         transactionName = "create-amend-uk-property-annual-submission",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -269,7 +271,7 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
     )
 
     protected val requestData: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =
-      Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), body)
+      Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), body)
 
   }
 

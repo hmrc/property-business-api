@@ -16,13 +16,13 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
 import shared.routing.Version
-import utils.IdGenerator
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -34,7 +34,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
                                                              service: AmendForeignPropertyPeriodSummaryService,
                                                              auditService: AuditService,
                                                              cc: ControllerComponents,
-                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "amend-foreign-property-period-summary"

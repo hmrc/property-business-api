@@ -16,7 +16,7 @@
 
 package config
 
-import api.controllers.ControllerBaseSpec
+import shared.controllers.ControllerBaseSpec
 import com.typesafe.config.ConfigFactory
 import config.rewriters._
 import controllers.{AssetsConfiguration, DefaultAssetsMetadata, RewriteableAssets}

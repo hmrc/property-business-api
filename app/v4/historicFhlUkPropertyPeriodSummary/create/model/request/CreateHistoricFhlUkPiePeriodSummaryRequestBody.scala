@@ -19,7 +19,7 @@ package v4.historicFhlUkPropertyPeriodSummary.create.model.request
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, OWrites, Reads, __}
 import shapeless.HNil
-import utils.EmptinessChecker
+import shared.utils.EmptinessChecker
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 
 sealed trait CreateHistoricFhlUkPiePeriodSummaryRequestBody {

@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 trait CreateAmendUkPropertyCumulativeSummaryRequestData {
   val nino: Nino

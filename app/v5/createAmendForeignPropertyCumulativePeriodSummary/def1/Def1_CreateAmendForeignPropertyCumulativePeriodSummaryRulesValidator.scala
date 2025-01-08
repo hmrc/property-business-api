@@ -16,13 +16,14 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.errors._
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import utils.DateValidator
+import common.models.errors.RuleBothExpensesSuppliedError
+import common.utils.DateValidator
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
   Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData,
   Expenses,

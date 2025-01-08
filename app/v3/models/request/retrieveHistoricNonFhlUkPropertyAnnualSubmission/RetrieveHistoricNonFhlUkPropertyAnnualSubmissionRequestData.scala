@@ -16,6 +16,6 @@
 
 package v3.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 
 case class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(nino: Nino, taxYear: TaxYear)

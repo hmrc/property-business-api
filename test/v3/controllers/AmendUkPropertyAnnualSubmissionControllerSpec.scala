@@ -16,17 +16,19 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.FakeRequest
+import shared.hateoas.Method.GET
 import v3.controllers.validators.MockAmendUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.request.amendUkPropertyAnnualSubmission._
 import v3.models.request.amendUkPropertyAnnualSubmission.ukFhlProperty._
@@ -48,8 +50,18 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService
     with MockHateoasFactory {
 
-  private val businessId = "XAIS12345678910"
-  private val taxYear    = "2022-23"
+  private val businessId                         = "XAIS12345678910"
+  private val taxYear                            = "2022-23"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "AmendUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 200 (OK)" when {
@@ -105,23 +117,23 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendUKPropertyAnnualSubmission",
         transactionName = "create-amend-uk-property-annual-submission",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -277,9 +289,9 @@ class AmendUkPropertyAnnualSubmissionControllerSpec
     )
 
     protected val requestData: AmendUkPropertyAnnualSubmissionRequestData =
-      AmendUkPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), body)
+      AmendUkPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), body)
 
-    protected val hateoasData: AmendUkPropertyAnnualSubmissionHateoasData = AmendUkPropertyAnnualSubmissionHateoasData(nino, businessId, taxYear)
+    protected val hateoasData: AmendUkPropertyAnnualSubmissionHateoasData = AmendUkPropertyAnnualSubmissionHateoasData(validNino, businessId, taxYear)
 
   }
 

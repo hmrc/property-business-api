@@ -16,15 +16,17 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import support.UnitSpec
-import v3.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v3.models.request.amendUkPropertyPeriodSummary.ukFhlProperty.{UkFhlProperty, UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v3.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty.{UkNonFhlProperty, UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
+import v3.models.request.amendUkPropertyPeriodSummary.{AmendUkPropertyPeriodSummaryRequestBody, AmendUkPropertyPeriodSummaryRequestData}
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 
 class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
@@ -445,7 +447,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Moc
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, SubmissionIdFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError, TaxYearFormatError))
           )
         )
       }

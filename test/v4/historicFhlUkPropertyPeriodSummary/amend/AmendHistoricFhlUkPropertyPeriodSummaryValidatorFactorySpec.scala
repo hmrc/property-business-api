@@ -16,11 +16,11 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend
 
-import api.controllers.validators.Validator
-import api.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.controllers.validators.Validator
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 

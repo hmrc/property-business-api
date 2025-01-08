@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 trait CreateAmendUkPropertyAnnualSubmissionRequestData {
   val nino: Nino

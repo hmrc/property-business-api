@@ -16,13 +16,14 @@
 
 package v4.retrieveUkPropertyPeriodSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.mvc.Result
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import v4.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v4.retrieveUkPropertyPeriodSummary.model.request._
 import v4.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
@@ -85,16 +86,16 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear, submissionId)(fakeGetRequest)
 
     protected val requestData: RetrieveUkPropertyPeriodSummaryRequestData =
-      Def1_RetrieveUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
+      Def1_RetrieveUkPropertyPeriodSummaryRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
     protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponse
   }

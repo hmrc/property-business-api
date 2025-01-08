@@ -16,11 +16,11 @@
 
 package v4.retrieveForeignPropertyPeriodSummary
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +31,7 @@ class RetrieveForeignPropertyPeriodSummaryController @Inject() (val authService:
                                                                 validatorFactory: RetrieveForeignPropertyPeriodSummaryValidatorFactory,
                                                                 service: RetrieveForeignPropertyPeriodSummaryService,
                                                                 cc: ControllerComponents,
-                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                                idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-foreign-property-period-summary"

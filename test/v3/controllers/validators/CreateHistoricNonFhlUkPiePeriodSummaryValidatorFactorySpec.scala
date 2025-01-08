@@ -16,12 +16,13 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.models.domain.Nino
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
 import play.api.libs.json._
-import support.UnitSpec
+import shared.controllers.validators.Validator
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v3.models.request.createHistoricNonFhlUkPropertyPeriodSummary.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,

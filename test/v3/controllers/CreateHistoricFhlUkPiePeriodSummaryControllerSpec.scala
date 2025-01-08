@@ -16,19 +16,25 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.audit.FlattenedGenericAuditDetail
+import common.models.domain.PeriodId
+import common.models.errors.RuleMisalignedPeriodError
 import config.MockAppConfig
 import play.api.Configuration
+import play.api.http.HeaderNames
 import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.GET
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockCreateHistoricFhlUkPiePeriodSummaryValidatorFactory
 import v3.models.request.createHistoricFhlUkPiePeriodSummary._
 import v3.models.response.createHistoricFhlUkPiePeriodSummary._
@@ -51,6 +57,23 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
 
   private val periodId      = "2021-01-01_2021-01-02"
   private val mtdId: String = "test-mtd-id"
+
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  lazy val fakeDeleteRequest: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withHeaders(
+    HeaderNames.AUTHORIZATION -> "Bearer Token"
+  )
+
+  def fakeRequestWithBody[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "CreateHistoricFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -101,13 +124,13 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
@@ -116,7 +139,7 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
-          params = Map("nino" -> nino),
+          params = Map("nino" -> validNino),
           request = Some(requestBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -142,10 +165,10 @@ class CreateHistoricFhlUkPiePeriodSummaryControllerSpec
       CreateHistoricFhlUkPiePeriodSummaryRequestBody("2021-01-01", "2021-01-02", None, None)
 
     protected val requestData: CreateHistoricFhlUkPiePeriodSummaryRequestData =
-      CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(nino), requestBody)
+      CreateHistoricFhlUkPiePeriodSummaryRequestData(Nino(validNino), requestBody)
 
     protected val hateoasData: CreateHistoricFhlUkPiePeriodSummaryHateoasData =
-      CreateHistoricFhlUkPiePeriodSummaryHateoasData(nino, PeriodId(periodId))
+      CreateHistoricFhlUkPiePeriodSummaryHateoasData(validNino, PeriodId(periodId))
 
     protected val responseData: CreateHistoricFhlUkPiePeriodSummaryResponse = CreateHistoricFhlUkPiePeriodSummaryResponse(PeriodId(periodId))
 

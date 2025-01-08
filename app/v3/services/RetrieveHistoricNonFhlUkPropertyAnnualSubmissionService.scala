@@ -16,10 +16,11 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector
 import v3.models.request.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v3.models.response.retrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse

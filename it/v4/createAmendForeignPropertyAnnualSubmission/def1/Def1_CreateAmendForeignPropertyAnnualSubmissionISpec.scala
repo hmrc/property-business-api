@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services._
 import shared.support.IntegrationBaseSpec
-import v3.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
+import v4.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 
 class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 

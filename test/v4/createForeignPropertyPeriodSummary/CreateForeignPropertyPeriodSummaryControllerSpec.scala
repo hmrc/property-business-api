@@ -112,7 +112,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
         auditType = "CreateForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-foreign-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "9.0",
+          versionNumber = "4.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear, "businessId" -> businessId),

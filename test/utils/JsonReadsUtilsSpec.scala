@@ -20,7 +20,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, JsSuccess, Json, Reads}
 import play.api.mvc.AnyContentAsJson
 import play.api.test.FakeRequest
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class JsonReadsUtilsSpec extends UnitSpec {
 

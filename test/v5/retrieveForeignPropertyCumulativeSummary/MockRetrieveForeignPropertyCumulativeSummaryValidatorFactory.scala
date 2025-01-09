@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import api.controllers.validators.{MockValidatorFactory, Validator}
+import shared.controllers.validators.{MockValidatorFactory, Validator}
 import org.scalamock.handlers.CallHandler
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 

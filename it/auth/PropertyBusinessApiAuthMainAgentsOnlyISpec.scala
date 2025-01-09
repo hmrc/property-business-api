@@ -16,7 +16,7 @@
 
 package auth
 
-import api.services.DownstreamStub
+import shared.services.DownstreamStub
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 

@@ -16,11 +16,19 @@
 
 package v4.createUkPropertyPeriodSummary
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.errors.{
+  RuleDuplicateSubmissionError,
+  RuleMisalignedPeriodError,
+  RuleNotContiguousPeriodError,
+  RuleOverlappingPeriodError,
+  RuleToDateBeforeFromDateError,
+  RuleTypeOfBusinessIncorrectError
+}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v4.createUkPropertyPeriodSummary.model.request.{Def1_CreateUkPropertyPeriodSummaryRequestBody, Def1_CreateUkPropertyPeriodSummaryRequestData}
 import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
@@ -28,8 +36,8 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockCreateUkPropertyPeriodSummaryConnector {
 
-  implicit private val correlationId: String            = "X-123"
-  implicit protected val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+  implicit override val correlationId: String          = "X-123"
+  implicit override val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
   private val nino       = Nino("AA123456A")
   private val taxYear    = TaxYear.fromMtd("2020-21")

@@ -16,10 +16,12 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
+import common.models.domain.SubmissionId
+import common.models.errors.SubmissionIdFormatError
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
 
 class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
@@ -133,7 +135,7 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec wi
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, SubmissionIdFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError, TaxYearFormatError))
           )
         )
       }

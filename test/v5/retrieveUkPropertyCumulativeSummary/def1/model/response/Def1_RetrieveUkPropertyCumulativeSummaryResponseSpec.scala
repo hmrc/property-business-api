@@ -18,7 +18,7 @@ package v5.retrieveUkPropertyCumulativeSummary.def1.model.response
 
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class Def1_RetrieveUkPropertyCumulativeSummaryResponseSpec extends UnitSpec with MockAppConfig with Def1_RetrieveUkPropertyCumulativeSummaryFixture {

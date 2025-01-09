@@ -16,15 +16,15 @@
 
 package v3.controllers
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.models.audit.FlattenedGenericAuditDetail
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import common.models.audit.FlattenedGenericAuditDetail
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.AmendHistoricFhlUkPeriodSummaryValidatorFactory
 import v3.models.response.amendHistoricFhlUkPiePeriodSummary.AmendHistoricFhlUkPropertyPeriodSummaryHateoasData
 import v3.services.AmendHistoricFhlUkPiePeriodSummaryService
@@ -33,14 +33,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authService: EnrolmentsAuthService,
-                                                                   val lookupService: MtdIdLookupService,
-                                                                   validatorFactory: AmendHistoricFhlUkPeriodSummaryValidatorFactory,
-                                                                   service: AmendHistoricFhlUkPiePeriodSummaryService,
-                                                                   hateoasFactory: HateoasFactory,
-                                                                   auditService: AuditService,
-                                                                   cc: ControllerComponents,
-                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: AmendHistoricFhlUkPeriodSummaryValidatorFactory,
+    service: AmendHistoricFhlUkPiePeriodSummaryService,
+    hateoasFactory: HateoasFactory,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "amend-historic-fhluk-property-period-summary"
@@ -66,7 +67,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryController @Inject() (val authServi
             auditType = "AmendHistoricFhlPropertyIncomeExpensesPeriodSummary",
             transactionName = "amend-historic-fhl-property-income-expenses-period-summary",
             auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
-              Version.from(request, orElse = Version3),
+              Version(request),
               Map("nino" -> nino, "periodId" -> periodId)
             ),
             requestBody = Some(request.body),

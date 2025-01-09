@@ -16,11 +16,11 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.errors.RuleTypeOfBusinessIncorrectError
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector._
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
@@ -30,8 +30,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyCumulativeSummaryServiceSpec extends ServiceSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 
-  implicit private val correlationId: String          = "X-123"
-  implicit private val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+  implicit override val correlationId: String = "X-123"
 
   "RetrieveForeignPropertyCumulativeSummaryService" when {
     "downstream call is successful" when {

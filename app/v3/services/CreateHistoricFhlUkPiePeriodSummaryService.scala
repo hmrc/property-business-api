@@ -16,12 +16,13 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.domain.PeriodId
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.domain.PeriodId
+import common.models.errors._
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.CreateHistoricFhlUkPiePeriodSummaryConnector
 import v3.models.request.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryRequestData
 import v3.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse

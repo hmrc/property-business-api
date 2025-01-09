@@ -16,17 +16,20 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
+import common.models.domain.SubmissionId
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.FakeRequest
+import shared.hateoas.Method.GET
 import v3.controllers.validators.MockAmendUkPropertyPeriodSummaryValidatorFactory
 import v3.models.request.amendUkPropertyPeriodSummary._
 import v3.models.request.amendUkPropertyPeriodSummary.ukFhlProperty._
@@ -51,6 +54,17 @@ class AmendUkPropertyPeriodSummaryControllerSpec
   private val taxYear      = "2020-21"
   private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
+
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
+
   "AmendUkPropertyPeriodSummaryController" should {
     "return a successful response from a consolidated request" when {
       "the request received is valid" in new Test {
@@ -65,7 +79,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .returns(HateoasWrapper((), testHateoasLinks))
 
         override def callController(): Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJsonConsolidatedExpense))
+          controller.handleRequest(validNino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
           expectedStatus = OK,
@@ -84,7 +98,7 @@ class AmendUkPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
         MockHateoasFactory
-          .wrap((), AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId))
+          .wrap((), AmendUkPropertyPeriodSummaryHateoasData(validNino, businessId, taxYear, submissionId))
           .returns(HateoasWrapper((), testHateoasLinks))
 
         runOkTestWithAudit(
@@ -127,24 +141,24 @@ class AmendUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
-      controller.handleRequest(nino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
+      controller.handleRequest(validNino, businessId, taxYear, submissionId)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "AmendUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-uk-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -349,18 +363,23 @@ class AmendUkPropertyPeriodSummaryControllerSpec
     )
 
     protected val requestData: AmendUkPropertyPeriodSummaryRequestData =
-      AmendUkPropertyPeriodSummaryRequestData(Nino(nino), TaxYear.fromMtd(taxYear), BusinessId(businessId), SubmissionId(submissionId), requestBody)
+      AmendUkPropertyPeriodSummaryRequestData(
+        Nino(validNino),
+        TaxYear.fromMtd(taxYear),
+        BusinessId(businessId),
+        SubmissionId(submissionId),
+        requestBody)
 
     protected val requestDataConsolidatedExpenses: AmendUkPropertyPeriodSummaryRequestData =
       AmendUkPropertyPeriodSummaryRequestData(
-        Nino(nino),
+        Nino(validNino),
         TaxYear.fromMtd(taxYear),
         BusinessId(businessId),
         SubmissionId(submissionId),
         requestBodyWithConsolidatedExpenses)
 
     protected val hateoasData: AmendUkPropertyPeriodSummaryHateoasData =
-      AmendUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+      AmendUkPropertyPeriodSummaryHateoasData(validNino, businessId, taxYear, submissionId)
 
   }
 

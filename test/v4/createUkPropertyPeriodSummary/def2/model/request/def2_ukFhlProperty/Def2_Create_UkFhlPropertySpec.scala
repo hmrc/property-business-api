@@ -17,7 +17,7 @@
 package v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
 

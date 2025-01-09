@@ -16,18 +16,19 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain._
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.domain.SubmissionId
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.GET
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain._
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockRetrieveForeignPropertyPeriodSummaryValidatorFactory
 import v3.models.request.retrieveForeignPropertyPeriodSummary._
 import v3.models.response.retrieveForeignPropertyPeriodSummary._
@@ -49,9 +50,10 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
     with MockHateoasFactory
     with MockIdGenerator {
 
-  private val businessId   = "XAIS12345678910"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val taxYear      = "2022-23"
+  private val businessId          = "XAIS12345678910"
+  private val submissionId        = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val taxYear             = "2022-23"
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
 
   "RetrieveForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -65,7 +67,11 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
         MockHateoasFactory
           .wrap(
             responseBody,
-            RetrieveForeignPropertyPeriodSummaryHateoasData(nino = nino, businessId = businessId, submissionId = submissionId, taxYear = taxYear))
+            RetrieveForeignPropertyPeriodSummaryHateoasData(
+              nino = validNino,
+              businessId = businessId,
+              submissionId = submissionId,
+              taxYear = taxYear))
           .returns(HateoasWrapper(responseBody, testHateoasLinks))
 
         val expectedResponseBody: JsValue = Json.toJson(HateoasWrapper(responseBody, testHateoasLinks))
@@ -103,20 +109,20 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
-      controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
+      controller.handleRequest(nino = validNino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
-      RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
+      RetrieveForeignPropertyPeriodSummaryRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
     protected val testHateoasLink: Link =
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
+      Link(href = s"/individuals/business/property/$validNino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
     protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = RetrieveForeignPropertyPeriodSummaryResponse(
       submittedOn = Timestamp("2022-06-17T10:53:38Z"),

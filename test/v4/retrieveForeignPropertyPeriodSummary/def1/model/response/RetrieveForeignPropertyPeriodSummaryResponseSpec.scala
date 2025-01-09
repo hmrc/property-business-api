@@ -16,10 +16,10 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1.model.response
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea._
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
 import v4.retrieveForeignPropertyPeriodSummary.model.response._

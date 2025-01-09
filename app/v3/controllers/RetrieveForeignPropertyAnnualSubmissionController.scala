@@ -16,12 +16,12 @@
 
 package v3.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.hateoas.HateoasFactory
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import shared.hateoas.HateoasFactory
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.RetrieveForeignPropertyAnnualSubmissionValidatorFactory
 import v3.models.response.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionHateoasData
 import v3.services.RetrieveForeignPropertyAnnualSubmissionService
@@ -30,13 +30,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                                   val lookupService: MtdIdLookupService,
-                                                                   validatorFactory: RetrieveForeignPropertyAnnualSubmissionValidatorFactory,
-                                                                   service: RetrieveForeignPropertyAnnualSubmissionService,
-                                                                   hateoasFactory: HateoasFactory,
-                                                                   cc: ControllerComponents,
-                                                                   idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class RetrieveForeignPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: RetrieveForeignPropertyAnnualSubmissionValidatorFactory,
+    service: RetrieveForeignPropertyAnnualSubmissionService,
+    hateoasFactory: HateoasFactory,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-foreign-property-annual-submission"

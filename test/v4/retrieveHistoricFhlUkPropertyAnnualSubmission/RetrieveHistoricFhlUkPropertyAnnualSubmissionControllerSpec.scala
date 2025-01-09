@@ -16,16 +16,16 @@
 
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.utils.MockIdGenerator
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
@@ -90,16 +90,16 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, mtdTaxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, mtdTaxYear)(fakeGetRequest)
 
     protected val requestData: Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =
-      Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
+      Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(Nino(validNino), taxYear)
 
     private val annualAdjustments: AnnualAdjustments = AnnualAdjustments(
       Some(BigDecimal("100.11")),

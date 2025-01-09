@@ -16,10 +16,11 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData

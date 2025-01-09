@@ -16,10 +16,10 @@
 
 package v4.retrieveUkPropertyAnnualSubmission
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
@@ -84,16 +84,16 @@ class RetrieveUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakeGetRequest)
 
     protected val requestData: RetrieveUkPropertyAnnualSubmissionRequestData =
-      Def1_RetrieveUkPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
+      Def1_RetrieveUkPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear))
 
     private val ukFhlProperty = Def1_Retrieve_UkFhlProperty(
       adjustments = Some(

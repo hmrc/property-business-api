@@ -16,12 +16,13 @@
 
 package v4.retrieveUkPropertyPeriodSummary
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import v4.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
 import v4.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
 

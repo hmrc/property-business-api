@@ -16,11 +16,13 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleDuplicateCountryCodeError, RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.amendForeignPropertyPeriodSummary.model.request.{
   AmendForeignPropertyPeriodSummaryRequestData,
@@ -37,7 +39,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
   private val taxYear      = TaxYear.fromMtd("2020-21")
   private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  implicit private val correlationId: String = "X-123"
+  implicit override val correlationId: String = "X-123"
 
   "service" when {
     "service call successful" should {

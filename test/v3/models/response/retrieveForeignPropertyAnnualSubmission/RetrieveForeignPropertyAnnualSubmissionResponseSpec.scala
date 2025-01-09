@@ -16,11 +16,11 @@
 
 package v3.models.response.retrieveForeignPropertyAnnualSubmission
 
-import api.hateoas.{Link, Method}
-import api.models.domain.Timestamp
-import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.{Link, Method}
+import shared.models.domain.Timestamp
+import shared.utils.UnitSpec
 import v3.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.{
   ForeignFhlEeaAdjustments,
   ForeignFhlEeaAllowances,
@@ -28,7 +28,7 @@ import v3.models.response.retrieveForeignPropertyAnnualSubmission.foreignFhlEea.
 }
 import v3.models.response.retrieveForeignPropertyAnnualSubmission.foreignProperty._
 
-class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBody = RetrieveForeignPropertyAnnualSubmissionResponse(
     Timestamp("2020-07-07T10:59:47.544Z"),
@@ -237,9 +237,9 @@ class RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with 
         val data: RetrieveForeignPropertyAnnualSubmissionHateoasData =
           RetrieveForeignPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
+        RetrieveForeignPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockSharedAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",
             method = Method.PUT,

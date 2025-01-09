@@ -16,25 +16,26 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
-                                                                      val lookupService: MtdIdLookupService,
-                                                                      validatorFactory: CreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
-                                                                      service: CreateAmendForeignPropertyAnnualSubmissionService,
-                                                                      auditService: AuditService,
-                                                                      cc: ControllerComponents,
-                                                                      idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (
+    val authService: EnrolmentsAuthService,
+    val lookupService: MtdIdLookupService,
+    validatorFactory: CreateAmendForeignPropertyAnnualSubmissionValidatorFactory,
+    service: CreateAmendForeignPropertyAnnualSubmissionService,
+    auditService: AuditService,
+    cc: ControllerComponents,
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-amend-foreign-property-annual-submission"
@@ -58,7 +59,7 @@ class CreateAmendForeignPropertyAnnualSubmissionController @Inject() (val authSe
             auditService,
             "CreateAmendForeignPropertyAnnualSubmission",
             "create-amend-foreign-property-annual-submission",
-            Version.from(request, orElse = Version3),
+            Version(request),
             params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
             requestBody = Some(request.body)
           )

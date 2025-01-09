@@ -16,13 +16,13 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.errors.MtdError
 import v3.controllers.validators.AmendUkPropertyAnnualSubmissionValidator.validateBusinessRules
 import v3.models.request.amendUkPropertyAnnualSubmission.{AmendUkPropertyAnnualSubmissionRequestBody, AmendUkPropertyAnnualSubmissionRequestData}
 

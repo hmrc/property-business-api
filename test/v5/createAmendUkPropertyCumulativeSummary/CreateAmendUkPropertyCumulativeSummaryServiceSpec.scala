@@ -16,11 +16,11 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.errors._
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
@@ -28,11 +28,10 @@ import scala.concurrent.Future
 
 class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with MockCreateAmendUkPropertyCumulativeSummaryConnector {
 
-  private val nino                                    = "AA123456A"
-  private val taxYear                                 = "2020-21"
-  private val businessId                              = "XAIS12345678910"
-  implicit private val correlationId: String          = "X-123"
-  implicit private val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+  private val nino                            = "AA123456A"
+  private val taxYear                         = "2020-21"
+  private val businessId                      = "XAIS12345678910"
+  implicit override val correlationId: String = "X-123"
 
   val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
     Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(

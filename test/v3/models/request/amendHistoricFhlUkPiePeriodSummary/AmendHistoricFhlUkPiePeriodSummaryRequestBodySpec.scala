@@ -17,7 +17,7 @@
 package v3.models.request.amendHistoricFhlUkPiePeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 

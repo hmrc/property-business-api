@@ -16,15 +16,15 @@
 
 package v3.models.response.retrieveUkPropertyAnnualSubmission
 
-import api.hateoas.{Link, Method}
-import api.models.domain.Timestamp
-import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.{Link, Method}
+import shared.models.domain.Timestamp
+import shared.utils.UnitSpec
 import v3.models.response.retrieveUkPropertyAnnualSubmission.ukFhlProperty._
 import v3.models.response.retrieveUkPropertyAnnualSubmission.ukNonFhlProperty._
 
-class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   val preTysdownstreamJson: JsValue = Json.parse("""
       |{
@@ -366,9 +366,9 @@ class RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockA
         val data: RetrieveUkPropertyAnnualSubmissionHateoasData =
           RetrieveUkPropertyAnnualSubmissionHateoasData("myNino", "myBusinessId", "mySubmissionId")
 
-        MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-        RetrieveUkPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockAppConfig, data) shouldBe List(
+        RetrieveUkPropertyAnnualSubmissionResponse.RetrieveAnnualSubmissionLinksFactory.links(mockSharedAppConfig, data) shouldBe List(
           Link(
             href = s"/my/context/uk/${data.nino}/${data.businessId}/annual/${data.taxYear}",
             method = Method.PUT,

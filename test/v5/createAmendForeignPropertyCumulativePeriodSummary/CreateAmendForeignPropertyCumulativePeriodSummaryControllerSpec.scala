@@ -16,16 +16,18 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.errors.RuleMisalignedPeriodError
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.JsObject
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
@@ -44,8 +46,9 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
     with MockIdGenerator
     with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
-  private val taxYear    = "2025-26"
-  private val businessId = "XAIS12345678910"
+  private val taxYear                            = "2025-26"
+  private val businessId                         = "XAIS12345678910"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "CreateAmendForeignPropertyCumulativePeriodSummaryController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
@@ -91,19 +94,19 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePutRequest(requestBody))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakePutRequest(requestBody))
 
     val requestBody: JsObject = JsObject.empty
 
     protected val requestData: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData =
       Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
-        nino = Nino(nino),
+        nino = Nino(validNino),
         businessId = BusinessId(businessId),
         taxYear = TaxYear.fromMtd(taxYear),
         body = regularExpensesRequestBody)

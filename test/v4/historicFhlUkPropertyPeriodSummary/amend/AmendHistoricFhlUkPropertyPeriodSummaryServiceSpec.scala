@@ -16,11 +16,13 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import common.models.domain.PeriodId
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,

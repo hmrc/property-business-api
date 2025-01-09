@@ -16,9 +16,10 @@
 
 package v4.amendUkPropertyPeriodSummary.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveSubmissionId, ResolveTaxYear}
-import api.models.errors.MtdError
+import common.controllers.validators.resolvers.ResolveSubmissionId
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple5Semigroupal
 import config.AppConfig

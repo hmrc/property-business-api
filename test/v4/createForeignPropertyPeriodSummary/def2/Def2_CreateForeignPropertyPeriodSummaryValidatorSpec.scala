@@ -16,12 +16,13 @@
 
 package v4.createForeignPropertyPeriodSummary.def2
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, RuleToDateBeforeFromDateError}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea._
 import v4.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignPropertyEntry._
 import v4.createForeignPropertyPeriodSummary.model.request._
@@ -690,7 +691,7 @@ class Def2_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

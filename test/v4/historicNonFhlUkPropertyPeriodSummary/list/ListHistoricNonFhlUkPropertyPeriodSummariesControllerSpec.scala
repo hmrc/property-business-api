@@ -16,16 +16,16 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.list
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.Nino
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.Nino
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v4.historicNonFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v4.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
   Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData,
@@ -92,16 +92,16 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino)(fakeGetRequest)
 
     protected val requestData: ListHistoricNonFhlUkPropertyPeriodSummariesRequestData =
-      Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData(Nino(nino))
+      Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData(Nino(validNino))
 
     protected val submissionPeriod: SubmissionPeriod = SubmissionPeriod("fromDate", "toDate")
 

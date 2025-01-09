@@ -16,14 +16,14 @@
 
 package v3.models.response.listHistoricUkPropertyPeriodSummaries
 
-import api.hateoas.Link
-import api.models.domain.{HistoricPropertyType, PeriodId}
-import api.hateoas.Method._
-import config.MockAppConfig
+import common.models.domain.{HistoricPropertyType, PeriodId}
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 
-class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockAppConfig {
+class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   private val model = ListHistoricUkPropertyPeriodSummariesResponse(
     List(
@@ -102,9 +102,9 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         ListHistoricUkPropertyPeriodSummariesHateoasData(nino, HistoricPropertyType.Fhl)
 
       "produce the correct links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
-        linksFactory.links(mockAppConfig, data) shouldBe
+        linksFactory.links(mockSharedAppConfig, data) shouldBe
           List(
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino", GET, "self"),
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino", POST, "create-uk-property-historic-fhl-period-summary")
@@ -112,11 +112,11 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
       }
 
       "produce the correct item links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         val item = SubmissionPeriod(from, to)
 
-        linksFactory.itemLinks(mockAppConfig, data, item) shouldBe
+        linksFactory.itemLinks(mockSharedAppConfig, data, item) shouldBe
           List(
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino/${periodId.value}", PUT, "amend-uk-property-historic-fhl-period-summary"),
             Link(s"/$context/uk/period/furnished-holiday-lettings/$nino/${periodId.value}", GET, "self")
@@ -129,9 +129,9 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
         ListHistoricUkPropertyPeriodSummariesHateoasData(nino, HistoricPropertyType.NonFhl)
 
       "produce the correct links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
-        linksFactory.links(mockAppConfig, data) shouldBe
+        linksFactory.links(mockSharedAppConfig, data) shouldBe
           List(
             Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino", GET, "self"),
             Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino", POST, "create-uk-property-historic-non-fhl-period-summary")
@@ -139,11 +139,11 @@ class ListHistoricUkPropertyPeriodSummariesResponseSpec extends UnitSpec with Mo
       }
 
       "produce the correct item links" in {
-        MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+        MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
         val item = SubmissionPeriod(from, to)
 
-        linksFactory.itemLinks(mockAppConfig, data, item) shouldBe
+        linksFactory.itemLinks(mockSharedAppConfig, data, item) shouldBe
           List(
             Link(
               s"/$context/uk/period/non-furnished-holiday-lettings/$nino/${periodId.value}",

@@ -16,9 +16,10 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{HistoricPropertyType, Nino}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.HistoricPropertyType
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData
 import v3.models.response.listHistoricUkPropertyPeriodSummaries.{ListHistoricUkPropertyPeriodSummariesResponse, SubmissionPeriod}
 
@@ -54,7 +55,7 @@ class ListHistoricUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
     protected val connector: ListHistoricUkPropertyPeriodSummariesConnector = new ListHistoricUkPropertyPeriodSummariesConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: ListHistoricUkPropertyPeriodSummariesRequestData =

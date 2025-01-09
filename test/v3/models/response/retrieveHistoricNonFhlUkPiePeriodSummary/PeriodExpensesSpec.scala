@@ -17,7 +17,7 @@
 package v3.models.response.retrieveHistoricNonFhlUkPiePeriodSummary
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class PeriodExpensesSpec extends UnitSpec {
 

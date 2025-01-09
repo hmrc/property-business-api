@@ -16,16 +16,16 @@
 
 package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.utils.MockIdGenerator
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.model.response.{AnnualAdjustments, AnnualAllowances, RentARoom}
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
@@ -95,13 +95,13 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear.asMtd)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear.asMtd)(fakeGetRequest)
 
     private val annualAdjustments = AnnualAdjustments(
       lossBroughtForward = Some(BigDecimal("200.00")),
@@ -122,7 +122,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     )
 
     protected val requestData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
-      Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
+      Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(validNino), taxYear)
 
     protected val responseData: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse =
       Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse(Some(annualAdjustments), Some(annualAllowances))

@@ -16,14 +16,14 @@
 
 package v3.controllers
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.response.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionHateoasData
 import v3.services.CreateAmendHistoricFhlUkPropertyAnnualSubmissionService
@@ -40,7 +40,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
     auditService: AuditService,
     hateoasFactory: HateoasFactory,
     cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-amend-historic-fhluk-property-annual-submission"
@@ -65,7 +65,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
               auditService,
               auditType = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
               transactionName = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
-              apiVersion = Version.from(request, orElse = Version3),
+              apiVersion = Version(request),
               params = Map("nino" -> nino, "taxYear" -> taxYear),
               requestBody = Some(request.body)
             )

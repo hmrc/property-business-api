@@ -16,10 +16,10 @@
 
 package v4.createAmendUkPropertyAnnualSubmission
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import v4.createAmendUkPropertyAnnualSubmission.model.request._
 
@@ -92,7 +92,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     protected val connector: CreateAmendUkPropertyAnnualSubmissionConnector = new CreateAmendUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     private val requestBody: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(None, None)

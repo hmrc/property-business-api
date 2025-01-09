@@ -16,10 +16,10 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import api.controllers.validators.AlwaysErrorsValidator
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.controllers.validators.AlwaysErrorsValidator
+import shared.utils.UnitSpec
 import v5.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator
 
 class CreateAmendUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {

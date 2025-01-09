@@ -16,11 +16,11 @@
 
 package v4.amendUkPropertyPeriodSummary
 
-import api.controllers.validators.Validator
-import api.models.domain.TaxYear
+import shared.controllers.validators.Validator
+import shared.models.domain.TaxYear
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
 import v4.amendUkPropertyPeriodSummary.model.request._
 

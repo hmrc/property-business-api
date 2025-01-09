@@ -16,10 +16,11 @@
 
 package v4.deletePropertyAnnualSubmission
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.config.SharedAppConfig
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
@@ -27,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
@@ -38,7 +39,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, v
       case def1: Def1_DeletePropertyAnnualSubmissionRequestData =>
         import def1._
         val (downstreamUri, queryParams) =
-          if (taxYear.isTys) {
+          if (taxYear.year >= TaxYear.tysTaxYear.year) {
             (
               TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
               Nil

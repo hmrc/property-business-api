@@ -17,7 +17,7 @@
 package definition
 
 import play.api.libs.json.{Format, Json, OFormat}
-import routing.Version
+import shared.routing.Version
 import utils.enums.Enums
 
 case class Parameter(name: String, required: Boolean = false)

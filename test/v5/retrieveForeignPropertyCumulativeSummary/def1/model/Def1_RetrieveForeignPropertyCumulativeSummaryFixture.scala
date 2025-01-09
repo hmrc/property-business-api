@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model
 
-import api.models.domain.Timestamp
+import shared.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.response._
 

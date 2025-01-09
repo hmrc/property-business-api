@@ -16,8 +16,9 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request
 
-import api.models.domain.HistoricPropertyType.NonFhl
-import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
+import common.models.domain.HistoricPropertyType
+import common.models.domain.HistoricPropertyType.NonFhl
+import shared.models.domain.{Nino, TaxYear}
 
 sealed trait DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData {
   val nino: Nino

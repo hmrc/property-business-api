@@ -16,14 +16,14 @@
 
 package v3.models.response.retrieveUkPropertyPeriodSummary
 
-import api.hateoas.{HateoasFactory, HateoasWrapper, Link}
-import api.hateoas.Method._
-import config.MockAppConfig
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Method._
+import shared.hateoas.{HateoasFactory, HateoasWrapper, Link}
+import shared.utils.UnitSpec
 
-class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig with ResponseModelsFixture {
+class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockSharedAppConfig with ResponseModelsFixture {
   val downstreamJson: JsValue                        = fullDownstreamJson
   val mtdJson: JsValue                               = fullMtdJson
   val model: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
@@ -52,8 +52,9 @@ class RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppC
   "hateoasLinksFactory" when {
     "wrap" should {
       "return the expected wrapped response with correct links" in {
-        MockedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
-        val wrappedResponse: HateoasWrapper[RetrieveUkPropertyPeriodSummaryResponse] = new HateoasFactory(mockAppConfig).wrap(model, hateoasData)
+        MockedSharedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+        val wrappedResponse: HateoasWrapper[RetrieveUkPropertyPeriodSummaryResponse] =
+          new HateoasFactory(mockSharedAppConfig).wrap(model, hateoasData)
 
         val baseUrl = "/individuals/business/property/uk/AA999999A/XAIS12345678910/period/2022-23"
 

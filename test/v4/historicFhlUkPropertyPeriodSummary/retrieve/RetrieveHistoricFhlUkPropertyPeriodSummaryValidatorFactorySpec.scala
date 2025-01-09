@@ -16,9 +16,9 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.retrieve
 
-import api.models.utils.JsonErrorValidators
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoricFhlUkPeriodSummaryValidator
 
 class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {

@@ -16,11 +16,12 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import support.UnitSpec
+import common.models.errors.{RuleDuplicateCountryCodeError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.createAmendForeignPropertyAnnualSubmission.model.request._
 
@@ -33,7 +34,7 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   private val businessId       = BusinessId("XAIS12345678910")
   private val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
 
-  implicit private val correlationId: String = "X-123"
+  implicit val correlationId: String = "X-123"
 
   "service" should {
     "service call successful" when {

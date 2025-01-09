@@ -19,7 +19,7 @@ package v3.models.request.createForeignPropertyPeriodSummary
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shapeless.HNil
-import utils.EmptinessChecker
+import shared.utils.EmptinessChecker
 import v3.models.request.createForeignPropertyPeriodSummary.foreignFhlEea.CreateForeignFhlEea
 import v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry.CreateForeignNonFhlPropertyEntry
 

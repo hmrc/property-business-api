@@ -16,17 +16,20 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.domain.SubmissionId
+import common.models.errors.RuleMisalignedPeriodError
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.utils.MockIdGenerator
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{
   AmendForeignNonFhlPropertyEntry,
@@ -54,9 +57,10 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val businessId   = "XAIS12345678910"
-  private val taxYear      = "2022-23"
-  private val submissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  private val businessId                         = "XAIS12345678910"
+  private val taxYear                            = "2022-23"
+  private val submissionId                       = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "AmendForeignPropertyPeriodSummaryController" should {
     "return a successful response with status 200 (OK)" when {
@@ -115,14 +119,15 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
-      controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakePutRequest(requestBodyJson))
+      controller.handleRequest(nino = validNino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(
+        fakePutRequest(requestBodyJson))
 
     protected val requestBody: Def1_AmendForeignPropertyPeriodSummaryRequestBody =
       Def1_AmendForeignPropertyPeriodSummaryRequestBody(
@@ -220,7 +225,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
     protected val requestData: AmendForeignPropertyPeriodSummaryRequestData =
       Def1_AmendForeignPropertyPeriodSummaryRequestData(
-        Nino(nino),
+        Nino(validNino),
         BusinessId(businessId),
         TaxYear.fromMtd(taxYear),
         SubmissionId(submissionId),
@@ -231,10 +236,10 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
         auditType = "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-foreign-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
           requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

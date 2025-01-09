@@ -17,7 +17,7 @@
 package config.rewriters
 
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class ApiVersionTitleRewriterSpec extends UnitSpec with MockAppConfig {
 

@@ -16,16 +16,17 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.Method.GET
-import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
 import config.MockAppConfig
 import fixtures.RetrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import play.api.Configuration
 import play.api.mvc.Result
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.GET
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
 import v3.controllers.validators.MockRetrieveUkPropertyPeriodSummaryValidatorFactory
 import v3.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData
 import v3.models.response.retrieveUkPropertyPeriodSummary.{RetrieveUkPropertyPeriodSummaryHateoasData, RetrieveUkPropertyPeriodSummaryResponse}
@@ -95,22 +96,22 @@ class RetrieveUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear, submissionId)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear, submissionId)(fakeGetRequest)
 
     protected val requestData: RetrieveUkPropertyPeriodSummaryRequestData =
-      RetrieveUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
+      RetrieveUkPropertyPeriodSummaryRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
 
     protected val testHateoasLink: Link =
-      Link(href = s"/individuals/business/property/$nino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
+      Link(href = s"/individuals/business/property/$validNino/$businessId/period/$taxYear/$submissionId", method = GET, rel = "self")
 
     protected val hateoasData: RetrieveUkPropertyPeriodSummaryHateoasData =
-      RetrieveUkPropertyPeriodSummaryHateoasData(nino, businessId, taxYear, submissionId)
+      RetrieveUkPropertyPeriodSummaryHateoasData(validNino, businessId, taxYear, submissionId)
 
     protected val responseData: RetrieveUkPropertyPeriodSummaryResponse = fullResponseModel
   }

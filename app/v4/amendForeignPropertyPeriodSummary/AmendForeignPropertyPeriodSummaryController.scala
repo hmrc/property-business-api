@@ -16,13 +16,13 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -34,7 +34,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
                                                              service: AmendForeignPropertyPeriodSummaryService,
                                                              auditService: AuditService,
                                                              cc: ControllerComponents,
-                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                             idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "amend-foreign-property-period-summary"
@@ -57,7 +57,7 @@ class AmendForeignPropertyPeriodSummaryController @Inject() (val authService: En
               auditService,
               "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
               "amend-foreign-property-income-and-expenses-period-summary",
-              Version.from(request, orElse = Version3),
+              Version(request),
               Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),
               Some(request.body)
             )

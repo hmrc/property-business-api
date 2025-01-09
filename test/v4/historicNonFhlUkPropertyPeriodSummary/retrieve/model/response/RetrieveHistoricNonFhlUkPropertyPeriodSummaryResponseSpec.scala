@@ -18,7 +18,7 @@ package v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response
 
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {

@@ -17,7 +17,7 @@
 package v4.historicFhlUkPropertyPeriodSummary.list
 
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.Def1_ListHistoricFhlUkPropertyPeriodSummariesValidator
 
 class ListHistoricFhlUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockAppConfig {

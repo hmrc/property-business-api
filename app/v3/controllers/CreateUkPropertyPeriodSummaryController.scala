@@ -16,14 +16,14 @@
 
 package v3.controllers
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.CreateUkPropertyPeriodSummaryValidatorFactory
 import v3.models.response.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryHateoasData
 import v3.services._
@@ -39,7 +39,7 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
                                                          auditService: AuditService,
                                                          hateoasFactory: HateoasFactory,
                                                          cc: ControllerComponents,
-                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                         idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-uk-property-period-summary"
@@ -61,7 +61,7 @@ class CreateUkPropertyPeriodSummaryController @Inject() (val authService: Enrolm
             auditService,
             "CreateUKPropertyIncomeAndExpensesPeriodSummary",
             "create-uk-property-income-and-expenses-period-summary",
-            Version.from(request, orElse = Version3),
+            Version(request),
             Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
             Some(request.body),
             includeResponse = true

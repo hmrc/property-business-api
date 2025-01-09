@@ -16,10 +16,10 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.list
 
-import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{
@@ -32,7 +32,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListHistoricFhlUkPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class ListHistoricFhlUkPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def listPeriodSummaries(
       request: ListHistoricFhlUkPropertyPeriodSummariesRequestData

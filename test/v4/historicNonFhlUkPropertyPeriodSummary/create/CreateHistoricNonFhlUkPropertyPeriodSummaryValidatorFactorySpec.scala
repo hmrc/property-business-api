@@ -16,9 +16,9 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import api.models.utils.JsonErrorValidators
 import play.api.libs.json._
-import support.UnitSpec
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {

@@ -16,11 +16,11 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import api.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import support.UnitSpec
+import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import shared.utils.UnitSpec
 
 class CreateAmendUkPropertyCumulativeSummarySchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

@@ -16,9 +16,9 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.Nino
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.Nino
+import shared.models.outcomes.ResponseWrapper
 import v3.models.request.createHistoricFhlUkPiePeriodSummary._
 
 import scala.concurrent.Future
@@ -47,7 +47,7 @@ class CreateHistoricFhlUkPiePeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val connector: CreateHistoricFhlUkPiePeriodSummaryConnector = new CreateHistoricFhlUkPiePeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val requestBody: CreateHistoricFhlUkPiePeriodSummaryRequestBody =

@@ -16,12 +16,13 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveHistoricTaxYear, ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
+import common.controllers.validators.resolvers.ResolveHistoricTaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}

@@ -16,12 +16,13 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import api.controllers.RequestContext
-import api.models.domain.PeriodId
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
+import common.models.domain.PeriodId
+import common.models.errors._
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricNonFhlUkPropertyPeriodSummaryResponse
 

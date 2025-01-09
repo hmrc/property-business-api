@@ -16,9 +16,9 @@
 
 package v3.models.response.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import config.AppConfig
 import play.api.libs.json.{Json, OWrites, Reads}
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 
 case class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(transactionReference: Option[String])
@@ -36,7 +36,7 @@ object CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse extends Hateo
         CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse,
         CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData] {
 
-    override def links(appConfig: AppConfig, data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionHateoasData): Seq[Link] = {
       import data._
       List(
         retrieveHistoricNonFhlUkPropertyAnnualSubmission(appConfig, nino, taxYear, self = true),

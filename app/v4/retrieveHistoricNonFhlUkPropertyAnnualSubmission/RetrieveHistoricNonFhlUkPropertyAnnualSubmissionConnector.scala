@@ -16,10 +16,10 @@
 
 package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
@@ -34,7 +34,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
+class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData)(implicit

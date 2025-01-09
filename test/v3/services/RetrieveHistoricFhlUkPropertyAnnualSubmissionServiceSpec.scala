@@ -16,12 +16,13 @@
 
 package v3.services
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceOutcome
-import support.UnitSpec
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceOutcome
+import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.connectors.MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector
 import v3.models.request.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData

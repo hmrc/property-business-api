@@ -16,7 +16,7 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 trait CreateAmendForeignPropertyCumulativePeriodSummaryRequestData {
   val nino: Nino

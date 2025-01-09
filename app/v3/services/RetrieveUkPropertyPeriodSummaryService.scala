@@ -16,11 +16,12 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.RetrieveUkPropertyPeriodSummaryConnector
 import v3.connectors.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import v3.models.request.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryRequestData

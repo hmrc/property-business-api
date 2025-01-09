@@ -16,25 +16,19 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
+import shared.utils.UnitSpec
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.{
   CreateAmendUkFhlProperty,
   CreateAmendUkFhlPropertyAdjustments,
   CreateAmendUkFhlPropertyAllowances
 }
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.{
-  CreateAmendBuilding,
-  CreateAmendFirstYear,
-  CreateAmendStructuredBuildingAllowance,
-  CreateAmendUkProperty,
-  CreateAmendUkPropertyAdjustments,
-  CreateAmendUkPropertyAllowances
-}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
@@ -693,7 +687,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

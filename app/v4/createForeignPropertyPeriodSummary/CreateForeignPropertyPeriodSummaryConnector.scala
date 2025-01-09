@@ -16,11 +16,12 @@
 
 package v4.createForeignPropertyPeriodSummary
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import play.api.http.Status.OK
+import shared.config.SharedAppConfig
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.createForeignPropertyPeriodSummary.model.request.{
   CreateForeignPropertyPeriodSummaryRequestData,
@@ -33,7 +34,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -46,7 +47,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
       case def1: Def1_CreateForeignPropertyPeriodSummaryRequestData =>
         import def1._
         val downstreamUri =
-          if (taxYear.isTys) {
+          if (taxYear.year >= TaxYear.tysTaxYear.year) {
             TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
               s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
           } else {

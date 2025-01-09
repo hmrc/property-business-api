@@ -16,11 +16,11 @@
 
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
 
@@ -62,7 +62,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
 
     protected val connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse])

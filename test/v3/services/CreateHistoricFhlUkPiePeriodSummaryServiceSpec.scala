@@ -16,18 +16,20 @@
 
 package v3.services
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors.{ErrorWrapper, _}
-import api.models.outcomes.ResponseWrapper
-import api.services.{ServiceOutcome, ServiceSpec}
+import common.models.domain.PeriodId
+import common.models.errors._
+import shared.controllers.EndpointLogContext
+import shared.models.domain.Nino
+import shared.models.errors.{ErrorWrapper, _}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.connectors.MockCreateHistoricFhlUkPiePeriodSummaryConnector
 import v3.models.request.common.ukFhlPieProperty.{UkFhlPieExpenses, UkFhlPieIncome}
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v3.models.request.createHistoricFhlUkPiePeriodSummary.{
-  CreateHistoricFhlUkPiePeriodSummaryRequestData,
-  CreateHistoricFhlUkPiePeriodSummaryRequestBody
+  CreateHistoricFhlUkPiePeriodSummaryRequestBody,
+  CreateHistoricFhlUkPiePeriodSummaryRequestData
 }
 import v3.models.response.createHistoricFhlUkPiePeriodSummary.CreateHistoricFhlUkPiePeriodSummaryResponse
 
@@ -40,7 +42,7 @@ class CreateHistoricFhlUkPiePeriodSummaryServiceSpec extends ServiceSpec {
   private val toDate   = "2021-02-06"
   private val periodId = "2021-01-06_2021-02-06"
 
-  implicit private val correlationId: String = "some-correlation-id"
+  implicit override val correlationId: String = "some-correlation-id"
 
   "service" when {
     "service call successful" should {

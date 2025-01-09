@@ -17,7 +17,7 @@
 package v4.retrieveUkPropertyPeriodSummary.def2.model.response
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
 
 class Def2_Retrieve_FhlPropertyIncomeSpec extends UnitSpec with Def2_RetrieveUkPropertyPeriodSummaryFixture {

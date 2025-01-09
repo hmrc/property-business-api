@@ -16,17 +16,19 @@
 
 package v3.controllers
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.{HateoasWrapper, MockHateoasFactory}
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.domain.PeriodId
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.hateoas.Method.GET
+import shared.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import shared.models.domain.Nino
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v3.controllers.validators.MockRetrieveHistoricNonFhlUkPiePeriodSummaryValidatorFactory
 import v3.models.request.retrieveHistoricNonFhlUkPiePeriodSummary._
 import v3.models.response.retrieveHistoricNonFhlUkPiePeriodSummary._
@@ -47,9 +49,17 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     with MockAuditService
     with MockIdGenerator {
 
-  private val from     = "2017-04-06"
-  private val to       = "2017-07-04"
-  private val periodId = s"${from}_$to"
+  private val from                = "2017-04-06"
+  private val to                  = "2017-07-04"
+  private val periodId            = s"${from}_$to"
+  val testHateoasLinks: Seq[Link] = List(Link(href = "/some/link", method = GET, rel = "someRel"))
+
+  val testHateoasLinksJson: JsObject = Json
+    .parse("""{
+        |  "links": [ { "href":"/some/link", "method":"GET", "rel":"someRel" } ]
+        |}
+        |""".stripMargin)
+    .as[JsObject]
 
   "RetrieveHistoricNonFhlUkPiePeriodSummaryController" should {
     "return OK" when {
@@ -99,16 +109,16 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, periodId)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, periodId)(fakeGetRequest)
 
     protected val requestData: RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData =
-      RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData(Nino(nino), PeriodId(periodId))
+      RetrieveHistoricNonFhlUkPiePeriodSummaryRequestData(Nino(validNino), PeriodId(periodId))
 
     private val periodIncome: PeriodIncome =
       PeriodIncome(Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(5000.99), Some(RentARoomIncome(Some(5000.99))))
@@ -128,7 +138,7 @@ class RetrieveHistoricNonFhlUkPiePeriodSummaryControllerSpec
     )
 
     protected val hateoasData: RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData =
-      RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData(nino, periodId)
+      RetrieveHistoricNonFhlUkPiePeriodSummaryHateoasData(validNino, periodId)
 
     private val responseBodyJson: JsValue = Json.parse("""
         |{

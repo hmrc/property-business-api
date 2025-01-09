@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model.request
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummarySchema
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 

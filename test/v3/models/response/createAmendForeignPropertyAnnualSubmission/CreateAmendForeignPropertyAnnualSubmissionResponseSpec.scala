@@ -16,12 +16,12 @@
 
 package v3.models.response.createAmendForeignPropertyAnnualSubmission
 
-import api.hateoas.Link
-import api.hateoas.Method.{DELETE, GET, PUT}
-import config.MockAppConfig
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method.{DELETE, GET, PUT}
+import shared.utils.UnitSpec
 
-class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockSharedAppConfig {
 
   "LinksFactory" should {
 
@@ -29,9 +29,9 @@ class CreateAmendForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec wi
       val data: CreateAmendForeignPropertyAnnualSubmissionHateoasData =
         CreateAmendForeignPropertyAnnualSubmissionHateoasData(nino = "myNino", businessId = "myBusinessId", taxYear = "mySubmissionId")
 
-      MockedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
+      MockedSharedAppConfig.apiGatewayContext.returns("my/context").anyNumberOfTimes()
 
-      CreateAmendForeignPropertyAnnualSubmissionResponse.LinksFactory.links(mockAppConfig, data) shouldBe
+      CreateAmendForeignPropertyAnnualSubmissionResponse.LinksFactory.links(mockSharedAppConfig, data) shouldBe
         List(
           Link(
             s"/my/context/foreign/${data.nino}/${data.businessId}/annual/${data.taxYear}",

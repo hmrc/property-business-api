@@ -16,15 +16,15 @@
 
 package v4.deletePropertyAnnualSubmission.def1
 
-import api.models.errors._
+import shared.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
-import api.services._
+import shared.support.IntegrationBaseSpec
+import shared.services._
 
 class Def1_DeletePropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 

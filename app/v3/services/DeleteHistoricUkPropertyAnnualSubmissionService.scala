@@ -16,10 +16,11 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.DeleteHistoricUkPropertyAnnualSubmissionConnector
 import v3.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 

@@ -16,9 +16,9 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import api.controllers.validators.AlwaysErrorsValidator
 import config.MockAppConfig
-import support.UnitSpec
+import shared.controllers.validators.AlwaysErrorsValidator
+import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyCumulativeSummary.def1.Def1_RetrieveForeignPropertyCumulativeSummaryValidator
 
 class RetrieveForeignPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {

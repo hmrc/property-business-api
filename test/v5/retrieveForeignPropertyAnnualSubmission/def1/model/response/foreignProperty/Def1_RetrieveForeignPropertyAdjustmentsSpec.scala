@@ -17,7 +17,7 @@
 package v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.RetrieveForeignPropertyAdjustments
 
 class Def1_RetrieveForeignPropertyAdjustmentsSpec extends UnitSpec {

@@ -17,7 +17,7 @@
 package v4.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class Def2_Create_CreateForeignFhlEeaExpensesSpec extends UnitSpec {
 

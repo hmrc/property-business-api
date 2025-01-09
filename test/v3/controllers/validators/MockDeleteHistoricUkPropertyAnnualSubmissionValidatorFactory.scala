@@ -16,9 +16,9 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.models.domain.HistoricPropertyType
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import common.models.domain.HistoricPropertyType
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler

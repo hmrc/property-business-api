@@ -16,12 +16,12 @@
 
 package v3.controllers
 
-import api.controllers._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.DeletePropertyAnnualSubmissionValidatorFactory
 import v3.services.DeletePropertyAnnualSubmissionService
 
@@ -35,7 +35,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
                                                           service: DeletePropertyAnnualSubmissionService,
                                                           auditService: AuditService,
                                                           cc: ControllerComponents,
-                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "delete-property-annual-submission"
@@ -57,7 +57,7 @@ class DeletePropertyAnnualSubmissionController @Inject() (val authService: Enrol
             auditService,
             auditType = "DeletePropertyAnnualSubmission",
             transactionName = "delete-property-annual-submission",
-            apiVersion = Version.from(request, orElse = Version3),
+            apiVersion = Version(request),
             params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear)
           )
         )

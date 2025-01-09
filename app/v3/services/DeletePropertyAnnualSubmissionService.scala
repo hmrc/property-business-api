@@ -16,10 +16,10 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import v3.connectors.DeletePropertyAnnualSubmissionConnector
 import v3.models.request.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionRequestData
 

@@ -16,12 +16,13 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.IfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.models.domain.HistoricPropertyType
-import config.{AppConfig, FeatureSwitches}
+import common.models.domain.HistoricPropertyType
+import config.FeatureSwitches
 import play.api.libs.json.JsObject
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.deleteHistoricUkPropertyAnnualSubmission.DeleteHistoricUkPropertyAnnualSubmissionRequestData
 
@@ -29,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit
+class DeleteHistoricUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)(implicit
     featureSwitches: FeatureSwitches)
     extends BaseDownstreamConnector {
 

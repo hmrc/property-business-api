@@ -16,10 +16,10 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.def1
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionValidatorFactory
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
   Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
@@ -127,7 +127,7 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

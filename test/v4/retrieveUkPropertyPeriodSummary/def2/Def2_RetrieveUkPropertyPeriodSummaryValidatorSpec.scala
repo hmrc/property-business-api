@@ -16,10 +16,12 @@
 
 package v4.retrieveUkPropertyPeriodSummary.def2
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
+import common.models.domain.SubmissionId
+import common.models.errors.SubmissionIdFormatError
 import config.MockAppConfig
-import support.UnitSpec
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.utils.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
 import v4.retrieveUkPropertyPeriodSummary.model.request.{
   Def1_RetrieveUkPropertyPeriodSummaryRequestData,
@@ -152,7 +154,7 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mo
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, SubmissionIdFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError, TaxYearFormatError))
           )
         )
       }

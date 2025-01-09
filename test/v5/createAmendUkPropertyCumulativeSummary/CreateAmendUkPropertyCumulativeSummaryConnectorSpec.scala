@@ -16,9 +16,9 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
@@ -85,7 +85,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
 
     protected val connector: CreateAmendUkPropertyCumulativeSummaryConnector = new CreateAmendUkPropertyCumulativeSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }

@@ -16,10 +16,11 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers.RequestContext
-import api.models.errors.{InternalError, NinoFormatError, NotFoundError, RuleHistoricTaxYearNotSupportedError, TaxYearFormatError}
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

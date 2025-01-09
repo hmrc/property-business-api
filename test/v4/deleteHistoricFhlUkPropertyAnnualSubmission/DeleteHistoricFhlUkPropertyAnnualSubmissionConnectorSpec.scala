@@ -16,11 +16,12 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{HistoricPropertyType, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.HistoricPropertyType
 import mocks.MockFeatureSwitches
 import play.api.libs.json.JsObject
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
@@ -33,8 +34,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
   "connector" must {
     "send a request and return no content" when {
       "using FHL data" in new IfsTest with Test {
-        lazy val propertyType: HistoricPropertyType                    = HistoricPropertyType.Fhl
-        override lazy val requiredHeaders: scala.Seq[(String, String)] = super.requiredHeaders :+ ("intent" -> "DELETE")
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
         MockFeatureSwitches.isPassIntentEnabled.returns(true)
 
@@ -49,8 +49,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       }
 
       "using non-FHL data" in new IfsTest with Test {
-        lazy val propertyType: HistoricPropertyType                    = HistoricPropertyType.NonFhl
-        override lazy val requiredHeaders: scala.Seq[(String, String)] = super.requiredHeaders :+ ("intent" -> "DELETE")
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
         MockFeatureSwitches.isPassIntentEnabled.returns(true)
 
@@ -65,8 +64,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       }
 
       "isPassIntentHeader feature switch is off" in new IfsTest with Test {
-        override lazy val excludedHeaders: scala.Seq[(String, String)] = super.excludedHeaders :+ ("intent" -> "DELETE")
-        lazy val propertyType: HistoricPropertyType                    = HistoricPropertyType.NonFhl
+        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
         MockFeatureSwitches.isPassIntentEnabled returns false
 
@@ -88,7 +86,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
 
     val connector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector = new DeleteHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =

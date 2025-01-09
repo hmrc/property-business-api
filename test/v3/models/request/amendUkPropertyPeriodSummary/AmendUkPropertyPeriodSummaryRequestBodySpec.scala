@@ -17,7 +17,7 @@
 package v3.models.request.amendUkPropertyPeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom._
 import v3.models.request.amendUkPropertyPeriodSummary.ukFhlProperty._
 import v3.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty._

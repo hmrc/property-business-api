@@ -16,12 +16,12 @@
 
 package v3.models.response.amendHistoricNonFhlUkPiePeriodSummary
 
-import api.hateoas.Link
-import api.hateoas.Method._
-import config.MockAppConfig
-import support.UnitSpec
+import shared.config.MockSharedAppConfig
+import shared.hateoas.Link
+import shared.hateoas.Method._
+import shared.utils.UnitSpec
 
-class AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec with MockAppConfig {
+class AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec with MockSharedAppConfig {
 
   "LinksFactory" should {
     "return the correct links" in {
@@ -29,10 +29,10 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasDataSpec extends UnitSpec
       val periodId = "somePeriodId"
       val context  = "some/context"
 
-      MockedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
+      MockedSharedAppConfig.apiGatewayContext.returns(context).anyNumberOfTimes()
 
       AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData.LinksFactory
-        .links(mockAppConfig, AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)) shouldBe
+        .links(mockSharedAppConfig, AmendHistoricNonFhlUkPropertyPeriodSummaryHateoasData(nino, periodId)) shouldBe
         List(
           Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino/$periodId", PUT, "amend-uk-property-historic-non-fhl-period-summary"),
           Link(s"/$context/uk/period/non-furnished-holiday-lettings/$nino/$periodId", GET, "self"),

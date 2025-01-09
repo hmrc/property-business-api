@@ -16,11 +16,12 @@
 
 package v5.createAmendUkPropertyAnnualSubmission
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
 import play.api.http.Status.NO_CONTENT
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
@@ -28,7 +29,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def createAmendUkPropertyAnnualSubmission(request: CreateAmendUkPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
@@ -40,7 +42,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
     import request._
 
     val downstreamUri = taxYear match {
-      case ty if ty.isTys =>
+      case ty if ty.year >= TaxYear.tysTaxYear.year =>
         TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
       case _ =>
         IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")

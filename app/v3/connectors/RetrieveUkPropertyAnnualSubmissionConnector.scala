@@ -16,11 +16,12 @@
 
 package v3.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import api.models.outcomes.ResponseWrapper
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.models.domain.TaxYear
+import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v3.models.request.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionRequestData
 import v3.models.response.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionResponse
@@ -40,7 +41,7 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 import v3.connectors.RetrieveUkPropertyAnnualSubmissionConnector._
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
       hc: HeaderCarrier,
@@ -49,7 +50,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
     import request._
 
-    val (downstreamUri, queryParams) = if (taxYear.isTys) {
+    val (downstreamUri, queryParams) = if (taxYear.year >= TaxYear.tysTaxYear.year) {
       (
         TaxYearSpecificIfsUri[RetrieveUkPropertyAnnualSubmissionResponse](
           s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),

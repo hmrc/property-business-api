@@ -16,9 +16,9 @@
 
 package v3.services
 
-import api.controllers.RequestContext
-import api.models.domain.HistoricPropertyType
-import api.services.ServiceOutcome
+import shared.controllers.RequestContext
+import common.models.domain.HistoricPropertyType
+import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v3.models.request.listHistoricUkPropertyPeriodSummaries.ListHistoricUkPropertyPeriodSummariesRequestData

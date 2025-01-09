@@ -16,12 +16,12 @@
 
 package v4.createUkPropertyPeriodSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
@@ -57,7 +57,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
         override def callController(): Future[Result] =
-          controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
+          controller.handleRequest(validNino, businessId, taxYear)(fakePostRequest(requestBodyJsonConsolidatedExpense))
 
         runOkTestWithAudit(
           expectedStatus = CREATED,
@@ -116,23 +116,23 @@ class CreateUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino, businessId, taxYear)(fakePostRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakePostRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateUKPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "create-uk-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "3.0",
+          versionNumber = "9.0",
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -345,10 +345,14 @@ class CreateUkPropertyPeriodSummaryControllerSpec
     )
 
     protected val requestData: CreateUkPropertyPeriodSummaryRequestData =
-      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
+      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBody)
 
     protected val requestDataConsolidatedExpense: Def1_CreateUkPropertyPeriodSummaryRequestData =
-      Def1_CreateUkPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), requestBodyWithConsolidatedExpense)
+      Def1_CreateUkPropertyPeriodSummaryRequestData(
+        Nino(validNino),
+        BusinessId(businessId),
+        TaxYear.fromMtd(taxYear),
+        requestBodyWithConsolidatedExpense)
 
     protected val responseBodyJson: JsValue = Json.parse(
       s"""

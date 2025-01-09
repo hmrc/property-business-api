@@ -16,10 +16,10 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
-import api.connectors.DownstreamUri.TaxYearSpecificIfsUri
-import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)
+class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit

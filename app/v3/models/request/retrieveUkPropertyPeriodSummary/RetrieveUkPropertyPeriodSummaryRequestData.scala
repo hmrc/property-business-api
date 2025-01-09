@@ -16,6 +16,7 @@
 
 package v3.models.request.retrieveUkPropertyPeriodSummary
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
+import common.models.domain.SubmissionId
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 case class RetrieveUkPropertyPeriodSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, submissionId: SubmissionId)

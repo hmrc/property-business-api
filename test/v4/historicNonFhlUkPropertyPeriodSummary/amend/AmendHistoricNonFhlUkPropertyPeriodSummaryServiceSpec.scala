@@ -16,11 +16,13 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{ServiceOutcome, ServiceSpec}
+import common.models.domain.PeriodId
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
@@ -35,7 +37,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec 
   private val nino     = Nino("AA123456A")
   private val periodId = PeriodId(from = "2017-04-06", to = "2017-07-04")
 
-  implicit private val correlationId: String = "X-123"
+  implicit override val correlationId: String = "X-123"
 
   "The service" when {
     "a downstream request is successful" should {

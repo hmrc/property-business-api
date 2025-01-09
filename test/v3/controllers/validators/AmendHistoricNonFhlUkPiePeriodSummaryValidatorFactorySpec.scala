@@ -16,20 +16,14 @@
 
 package v3.controllers.validators
 
-import api.models.domain.{Nino, PeriodId, TaxYear}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  NinoFormatError,
-  PeriodIdFormatError,
-  RuleBothExpensesSuppliedError,
-  RuleIncorrectOrEmptyBodyError,
-  ValueFormatError
-}
-import api.models.utils.JsonErrorValidators
+import common.models.domain.PeriodId
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, RuleIncorrectOrEmptyBodyError, ValueFormatError}
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.fixtures.AmendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPiePeriodSummaryFixtures
 import v3.models.request.amendHistoricNonFhlUkPiePeriodSummary.AmendHistoricNonFhlUkPeriodSummaryRequestData
 

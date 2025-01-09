@@ -16,16 +16,17 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission.def1
 
-import api.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.models.errors._
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
+import shared.models.errors._
+import shared.services._
+import shared.support.IntegrationBaseSpec
 import v3.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
-import api.services._
 
 class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with CreateAmendForeignPropertyAnnualSubmissionFixture {
 

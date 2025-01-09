@@ -16,9 +16,9 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData

@@ -16,10 +16,11 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}

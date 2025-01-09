@@ -16,11 +16,11 @@
 
 package v3.services
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.models.errors._
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v3.connectors.MockCreateForeignPropertyPeriodSummaryConnector
 import v3.fixtures.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryFixtures
 import v3.models.request.createForeignPropertyPeriodSummary._
@@ -33,8 +33,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec
     with MockCreateForeignPropertyPeriodSummaryConnector
     with CreateForeignPropertyPeriodSummaryFixtures {
 
-  implicit private val correlationId: String          = "X-123"
-  implicit private val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+  implicit override val correlationId: String = "X-123"
 
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")

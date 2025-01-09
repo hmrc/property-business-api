@@ -16,7 +16,7 @@
 
 package v4.propertyPeriodSummary.list
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import config.AppConfig
 import v4.propertyPeriodSummary.list.def1.Def1_ListPropertyPeriodSummariesValidator
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData

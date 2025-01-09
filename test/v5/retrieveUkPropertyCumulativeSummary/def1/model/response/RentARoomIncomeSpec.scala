@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class RentARoomIncomeSpec extends UnitSpec with Def1_RetrieveUkPropertyCumulativeSummaryFixture {

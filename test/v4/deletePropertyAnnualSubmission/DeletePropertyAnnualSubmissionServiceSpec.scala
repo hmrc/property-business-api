@@ -16,11 +16,11 @@
 
 package v4.deletePropertyAnnualSubmission
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
@@ -32,7 +32,7 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
   private val businessId = BusinessId("XAIS12345678910")
   private val taxYear    = TaxYear.fromMtd("2020-21")
 
-  implicit private val correlationId: String = "X-123"
+  implicit override val correlationId: String = "X-123"
 
   "service" when {
     "the downstream call is successful" should {

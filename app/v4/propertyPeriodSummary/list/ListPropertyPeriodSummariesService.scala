@@ -16,9 +16,9 @@
 
 package v4.propertyPeriodSummary.list
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
+import shared.controllers.RequestContext
+import shared.models.errors._
+import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 import v4.propertyPeriodSummary.list.model.response.ListPropertyPeriodSummariesResponse

@@ -16,7 +16,7 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import config.AppConfig
 import play.api.libs.json.JsValue
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator

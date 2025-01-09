@@ -16,16 +16,17 @@
 
 package v4.retrieveForeignPropertyPeriodSummary
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain._
-import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.domain.SubmissionId
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain._
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenses, ForeignFhlEeaIncome}
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
 import v4.retrieveForeignPropertyPeriodSummary.model.request.{
@@ -97,17 +98,21 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
-      controller.handleRequest(nino = nino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
+      controller.handleRequest(nino = validNino, businessId = businessId, taxYear = taxYear, submissionId = submissionId)(fakeGetRequest)
 
     protected val requestData: RetrieveForeignPropertyPeriodSummaryRequestData =
-      Def1_RetrieveForeignPropertyPeriodSummaryRequestData(Nino(nino), BusinessId(businessId), TaxYear.fromMtd(taxYear), SubmissionId(submissionId))
+      Def1_RetrieveForeignPropertyPeriodSummaryRequestData(
+        Nino(validNino),
+        BusinessId(businessId),
+        TaxYear.fromMtd(taxYear),
+        SubmissionId(submissionId))
 
     protected val responseBody: RetrieveForeignPropertyPeriodSummaryResponse = Def1_RetrieveForeignPropertyPeriodSummaryResponse(
       submittedOn = Timestamp("2022-06-17T10:53:38Z"),

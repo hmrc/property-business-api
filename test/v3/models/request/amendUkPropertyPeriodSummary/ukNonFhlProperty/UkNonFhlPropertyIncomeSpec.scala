@@ -17,7 +17,7 @@
 package v3.models.request.amendUkPropertyPeriodSummary.ukNonFhlProperty
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v3.models.request.common.ukPropertyRentARoom.UkPropertyIncomeRentARoom
 
 class UkNonFhlPropertyIncomeSpec extends UnitSpec {

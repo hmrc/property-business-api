@@ -16,14 +16,14 @@
 
 package v3.controllers
 
-import api.controllers._
-import api.hateoas.HateoasFactory
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version3}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.hateoas.HateoasFactory
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import v3.controllers.validators.AmendUkPropertyAnnualSubmissionValidatorFactory
 import v3.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionHateoasData
 import v3.models.response.amendUkPropertyAnnualSubmission.AmendUkPropertyAnnualSubmissionResponse.AmendUkPropertyLinksFactory
@@ -40,7 +40,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
                                                            auditService: AuditService,
                                                            hateoasFactory: HateoasFactory,
                                                            cc: ControllerComponents,
-                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "amend-uk-property-annual-submission"
@@ -62,7 +62,7 @@ class AmendUkPropertyAnnualSubmissionController @Inject() (val authService: Enro
             auditService,
             "CreateAmendUKPropertyAnnualSubmission",
             "create-amend-uk-property-annual-submission",
-            Version.from(request, orElse = Version3),
+            Version(request),
             Map("nino" -> nino, "businessId" -> businessId, "taxYear" -> taxYear),
             Some(request.body)
           )

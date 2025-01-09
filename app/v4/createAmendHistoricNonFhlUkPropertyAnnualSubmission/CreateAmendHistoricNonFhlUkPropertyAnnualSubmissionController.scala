@@ -16,14 +16,14 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.controllers._
-import api.models.audit.FlattenedGenericAuditDetail
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import routing.{Version, Version4}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers._
+import common.models.audit.FlattenedGenericAuditDetail
+import shared.routing.Version
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -36,7 +36,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
     service: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
     auditService: AuditService,
     cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-amend-historic-non-fhluk-property-annual-submission"
@@ -62,7 +62,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
               auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
               transactionName = "create-and-amend-historic-non-fhl-property-business-annual-submission",
               auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
-                Version.from(request, orElse = Version4),
+                Version(request),
                 Map("nino" -> nino, "taxYear" -> taxYear)
               ),
               requestBody = Some(request.body),

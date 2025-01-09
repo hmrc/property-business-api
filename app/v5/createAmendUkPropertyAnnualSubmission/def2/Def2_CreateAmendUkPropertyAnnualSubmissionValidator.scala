@@ -16,9 +16,9 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue

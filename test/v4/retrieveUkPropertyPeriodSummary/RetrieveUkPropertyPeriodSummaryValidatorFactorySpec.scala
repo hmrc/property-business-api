@@ -17,7 +17,7 @@
 package v4.retrieveUkPropertyPeriodSummary
 
 import config.MockAppConfig
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
 import v4.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator
 

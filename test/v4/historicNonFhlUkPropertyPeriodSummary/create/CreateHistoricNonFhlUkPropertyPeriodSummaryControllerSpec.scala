@@ -16,18 +16,22 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import common.models.audit.FlattenedGenericAuditDetail
+import common.models.domain.PeriodId
+import common.models.errors.RuleMisalignedPeriodError
 import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
@@ -49,8 +53,9 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     with MockIdGenerator
     with MockAuditService {
 
-  private val periodId      = "2021-01-01_2021-01-02"
-  private val mtdId: String = "test-mtd-id"
+  private val periodId                           = "2021-01-01_2021-01-02"
+  private val mtdId: String                      = "test-mtd-id"
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
   "CreateHistoricNonFhlUkPiePeriodSummaryController" should {
     "return a successful response with status 201 (CREATED)" when {
@@ -96,13 +101,13 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(nino)(fakePutRequest(requestBodyJson))
+    protected def callController(): Future[Result] = controller.handleRequest(validNino)(fakePutRequest(requestBodyJson))
 
     protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
       AuditEvent(
@@ -111,7 +116,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails(mtdId, "Individual", None),
-          params = Map("nino" -> nino),
+          params = Map("nino" -> validNino),
           request = Some(requestBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
@@ -135,7 +140,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
       Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody("2021-01-01", "2021-01-02", None, None)
 
     protected val requestData: CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData =
-      Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(nino), requestBody)
+      Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(Nino(validNino), requestBody)
 
     protected val responseData: CreateHistoricNonFhlUkPropertyPeriodSummaryResponse = CreateHistoricNonFhlUkPropertyPeriodSummaryResponse(
       PeriodId(periodId))

@@ -16,16 +16,25 @@
 
 package v3.endpoints
 
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.models.errors.{
+  RuleBothExpensesSuppliedError,
+  RuleDuplicateSubmissionError,
+  RuleHistoricTaxYearNotSupportedError,
+  RuleMisalignedPeriodError,
+  RuleNotContiguousPeriodError,
+  RuleOverlappingPeriodError,
+  RuleToDateBeforeFromDateError
+}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
-import api.services._
+import shared.support.IntegrationBaseSpec
+import shared.services._
 
 class CreateHistoricFhlUkPeriodSummaryControllerISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

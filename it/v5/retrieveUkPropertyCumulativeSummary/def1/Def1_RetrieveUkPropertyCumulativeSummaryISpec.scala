@@ -16,15 +16,16 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1
 
-import api.models.domain.TaxYear
-import api.models.errors._
-import api.services._
+import common.models.errors.RuleTypeOfBusinessIncorrectError
+import shared.models.domain.TaxYear
+import shared.models.errors._
+import shared.services._
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
+import shared.support.IntegrationBaseSpec
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveUkPropertyCumulativeSummaryFixture {

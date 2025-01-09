@@ -17,7 +17,7 @@
 package v5.createAmendForeignPropertyAnnualSubmission.def2.model.request
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with Def2_Fixtures {
 

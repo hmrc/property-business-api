@@ -16,10 +16,10 @@
 
 package v3.models.response.createHistoricNonFhlUkPiePeriodSummary
 
-import api.hateoas.{HateoasData, HateoasLinksFactory, Link}
-import api.models.domain.PeriodId
-import config.AppConfig
+import common.models.domain.PeriodId
 import play.api.libs.json.{Json, OWrites}
+import shared.config.SharedAppConfig
+import shared.hateoas.{HateoasData, HateoasLinksFactory, Link}
 import v3.hateoas.HateoasLinks
 
 case class CreateHistoricNonFhlUkPiePeriodSummaryResponse(periodId: PeriodId)
@@ -31,7 +31,7 @@ object CreateHistoricNonFhlUkPiePeriodSummaryResponse extends HateoasLinks {
   implicit object LinksFactory
       extends HateoasLinksFactory[CreateHistoricNonFhlUkPiePeriodSummaryResponse, CreateHistoricNonFhlUkPiePeriodSummaryHateoasData] {
 
-    override def links(appConfig: AppConfig, data: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
+    override def links(appConfig: SharedAppConfig, data: CreateHistoricNonFhlUkPiePeriodSummaryHateoasData): Seq[Link] = {
       import data._
       List(
         retrieveHistoricNonFhlUkPiePeriodSummary(appConfig, nino, periodId.value),

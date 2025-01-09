@@ -16,7 +16,7 @@
 
 package v3.models.response.listHistoricUkPropertyPeriodSummaries
 
-import api.models.domain.PeriodId
+import common.models.domain.PeriodId
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 

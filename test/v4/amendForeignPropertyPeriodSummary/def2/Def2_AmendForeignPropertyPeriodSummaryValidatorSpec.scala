@@ -16,12 +16,14 @@
 
 package v4.amendForeignPropertyPeriodSummary.def2
 
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, SubmissionIdFormatError}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.{
   Def2_AmendForeignFhlEea,
   Def2_AmendForeignFhlEeaExpenses,
@@ -622,7 +624,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, SubmissionIdFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, SubmissionIdFormatError, TaxYearFormatError))
           )
         )
       }

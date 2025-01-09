@@ -16,9 +16,9 @@
 
 package v4.propertyPeriodSummary.list
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v4.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 import v4.propertyPeriodSummary.list.model.response.ListPropertyPeriodSummariesResponse
@@ -68,7 +68,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
     protected val connector: ListPropertyPeriodSummariesConnector = new ListPropertyPeriodSummariesConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: ListPropertyPeriodSummariesRequestData = ListPropertyPeriodSummariesRequestData(nino, businessId, taxYear)

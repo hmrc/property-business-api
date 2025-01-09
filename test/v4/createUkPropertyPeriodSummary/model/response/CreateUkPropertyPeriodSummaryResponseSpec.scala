@@ -17,7 +17,7 @@
 package v4.createUkPropertyPeriodSummary.model.response
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class CreateUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
 

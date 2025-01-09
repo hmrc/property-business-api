@@ -16,13 +16,13 @@
 
 package config
 
-import api.models.domain.TaxYear
+import shared.models.domain.TaxYear
 import cats.data.Validated
 import cats.implicits.catsSyntaxValidatedId
 import com.typesafe.config.Config
 import config.Deprecation.{Deprecated, NotDeprecated}
 import play.api.{ConfigLoader, Configuration}
-import routing.Version
+import shared.routing.Version
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 

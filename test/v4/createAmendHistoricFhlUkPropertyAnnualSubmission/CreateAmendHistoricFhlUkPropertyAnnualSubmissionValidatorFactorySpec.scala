@@ -16,11 +16,11 @@
 
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
-import api.models.utils.JsonErrorValidators
+import shared.controllers.validators.Validator
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
 

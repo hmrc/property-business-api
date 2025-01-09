@@ -16,13 +16,13 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
-import api.models.domain.HistoricPropertyType
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
+import common.models.domain.HistoricPropertyType
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory extends MockFactory {

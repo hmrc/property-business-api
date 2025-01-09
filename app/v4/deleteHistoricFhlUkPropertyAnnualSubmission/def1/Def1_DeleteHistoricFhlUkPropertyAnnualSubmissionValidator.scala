@@ -16,13 +16,14 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveHistoricTaxYear, ResolveNino}
-import api.models.domain.HistoricPropertyType
-import api.models.errors.MtdError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.ResolveNino
+import common.models.domain.HistoricPropertyType
+import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated._
 import cats.implicits._
+import common.controllers.validators.resolvers.ResolveHistoricTaxYear
 import config.AppConfig
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
 

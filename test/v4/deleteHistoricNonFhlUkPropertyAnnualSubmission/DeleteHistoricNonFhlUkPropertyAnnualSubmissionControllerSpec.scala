@@ -16,17 +16,20 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
+import common.models.audit.FlattenedGenericAuditDetail
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.auth.UserDetails
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import config.MockAppConfig
 import play.api.Configuration
+import play.api.http.HeaderNames
 import play.api.libs.json.JsValue
-import play.api.mvc.Result
+import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.test.FakeRequest
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
@@ -44,6 +47,10 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     with MockAuditService {
 
   private val taxYear = TaxYear.fromMtd("2021-22")
+
+  lazy val fakeDeleteRequest: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withHeaders(
+    HeaderNames.AUTHORIZATION -> "Bearer Token"
+  )
 
   "DeleteHistoricUkPropertyAnnualSubmissionController" should {
     "return a successful response with status 204 (NO_CONTENT)" when {
@@ -100,17 +107,17 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected val requestData: DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData =
-      Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(nino), taxYear)
+      Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData(Nino(validNino), taxYear)
 
     protected def callController(): Future[Result] = {
-      val handler = controller.handleRequest(nino, taxYear.asMtd)
+      val handler = controller.handleRequest(validNino, taxYear.asMtd)
       handler(fakeDeleteRequest)
     }
 
@@ -121,7 +128,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
         detail = FlattenedGenericAuditDetail(
           versionNumber = Some(apiVersion.name),
           userDetails = UserDetails("some-mtdId", "Individual", None),
-          params = Map("nino" -> nino, "taxYear" -> taxYear.asMtd),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear.asMtd),
           request = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

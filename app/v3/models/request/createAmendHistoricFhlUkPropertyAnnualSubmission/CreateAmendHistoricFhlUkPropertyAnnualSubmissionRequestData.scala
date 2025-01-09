@@ -16,7 +16,7 @@
 
 package v3.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 
 case class CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData(nino: Nino,
                                                                        taxYear: TaxYear,

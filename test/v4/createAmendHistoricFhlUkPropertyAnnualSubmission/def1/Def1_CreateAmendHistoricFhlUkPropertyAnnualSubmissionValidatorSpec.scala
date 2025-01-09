@@ -16,12 +16,13 @@
 
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request._
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
 

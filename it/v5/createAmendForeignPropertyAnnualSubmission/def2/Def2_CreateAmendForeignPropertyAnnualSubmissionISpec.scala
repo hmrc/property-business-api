@@ -16,16 +16,23 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission.def2
 
-import api.models.errors._
+import shared.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.models.errors.{
+  RuleBothAllowancesSuppliedError,
+  RuleBuildingNameNumberError,
+  RuleDuplicateCountryCodeError,
+  RulePropertyIncomeAllowanceError,
+  RuleTypeOfBusinessIncorrectError
+}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import support.IntegrationBaseSpec
+import shared.support.IntegrationBaseSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
-import api.services._
+import shared.services._
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def2_Fixtures {
 

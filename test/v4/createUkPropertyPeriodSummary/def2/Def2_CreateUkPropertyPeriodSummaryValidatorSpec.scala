@@ -16,12 +16,13 @@
 
 package v4.createUkPropertyPeriodSummary.def2
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.errors._
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
@@ -469,7 +470,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, TaxYearFormatError, BusinessIdFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
           )
         )
       }

@@ -18,7 +18,7 @@ package v4.retrieveUkPropertyPeriodSummary.def2.model.response
 
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v4.retrieveUkPropertyPeriodSummary.model.response._
 

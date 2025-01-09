@@ -17,7 +17,7 @@
 package v3.models.request.createForeignPropertyPeriodSummary.foreignPropertyEntry
 
 import play.api.libs.json.Json
-import support.UnitSpec
+import shared.utils.UnitSpec
 
 class ForeignNonFhlPropertyRentIncomeSpec extends UnitSpec {
 

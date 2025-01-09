@@ -16,10 +16,10 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.models.utils.JsonErrorValidators
+import shared.models.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {

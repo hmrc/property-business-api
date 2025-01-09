@@ -16,7 +16,7 @@
 
 package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
+import shared.controllers.validators.Validator
 import config.AppConfig
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData

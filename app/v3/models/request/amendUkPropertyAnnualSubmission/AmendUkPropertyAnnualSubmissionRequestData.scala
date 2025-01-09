@@ -16,7 +16,7 @@
 
 package v3.models.request.amendUkPropertyAnnualSubmission
 
-import api.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 case class AmendUkPropertyAnnualSubmissionRequestData(nino: Nino,
                                                       businessId: BusinessId,

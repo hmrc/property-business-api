@@ -16,11 +16,11 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
-import api.models.domain.TaxYear
+import shared.controllers.validators.Validator
+import shared.models.domain.TaxYear
 import config.MockAppConfig
 import play.api.libs.json._
-import support.UnitSpec
+import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v4.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 

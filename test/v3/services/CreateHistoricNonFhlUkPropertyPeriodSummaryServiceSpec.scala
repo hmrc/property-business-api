@@ -16,11 +16,13 @@
 
 package v3.services
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, PeriodId}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{ServiceOutcome, ServiceSpec}
+import common.models.domain.PeriodId
+import common.models.errors._
+import shared.controllers.EndpointLogContext
+import shared.models.domain.Nino
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.connectors.MockCreateHistoricNonFhlUkPropertyPeriodSummaryConnector
 import v3.models.request.common.ukPropertyRentARoom.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
@@ -36,7 +38,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
   private val toDate   = "2021-02-06"
   private val periodId = "2021-01-06_2021-02-06"
 
-  implicit private val correlationId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
+  implicit override val correlationId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   "service" when {
     "service call successful" should {

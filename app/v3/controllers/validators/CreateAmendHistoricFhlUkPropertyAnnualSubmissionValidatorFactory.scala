@@ -16,14 +16,15 @@
 
 package v3.controllers.validators
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveHistoricTaxYear, ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits._
+import common.controllers.validators.resolvers.ResolveHistoricTaxYear
 import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
+import shared.models.errors.MtdError
 import v3.models.request.createAmendHistoricFhlUkPropertyAnnualSubmission._
 
 import javax.inject.{Inject, Singleton}

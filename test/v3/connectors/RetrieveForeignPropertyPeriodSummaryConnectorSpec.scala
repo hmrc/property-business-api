@@ -16,10 +16,11 @@
 
 package v3.connectors
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{BusinessId, Nino, SubmissionId, TaxYear, Timestamp}
-import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import shared.models.outcomes.ResponseWrapper
 import v3.connectors.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v3.models.request.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryRequestData
 import v3.models.response.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryResponse
@@ -187,7 +188,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val connector: RetrieveForeignPropertyPeriodSummaryConnector = new RetrieveForeignPropertyPeriodSummaryConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: RetrieveForeignPropertyPeriodSummaryRequestData =
@@ -198,8 +199,8 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         url = s"$baseUrl/income-tax/business/property/periodic",
         parameters = List(
           "taxableEntityId" -> nino.nino,
-          "incomeSourceId"  -> businessId.businessId,
           "taxYear"         -> taxYear.asMtd,
+          "incomeSourceId"  -> businessId.businessId,
           "submissionId"    -> submissionId.submissionId)
       ).returns(Future.successful(outcome))
 

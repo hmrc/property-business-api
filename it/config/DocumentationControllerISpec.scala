@@ -21,7 +21,7 @@ import play.api.http.Status
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import shared.routing.{Version3, Version4, Version5}
+import shared.routing.{Version4, Version5}
 import shared.support.IntegrationBaseSpec
 
 import scala.util.Try
@@ -39,11 +39,6 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
        |         "INCOME_TAX_MTD"
        |      ],
        |      "versions":[
-       |         {
-       |            "version":"3.0",
-       |            "status":"DEPRECATED",
-       |            "endpointsEnabled":true
-       |         },
        |         {
        |            "version":"4.0",
        |            "status":"BETA",
@@ -69,7 +64,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
   }
 
   "an OAS documentation request" must {
-    List(Version3, Version4, Version5).foreach { version =>
+    List(Version4, Version5).foreach { version =>
       s"return the documentation for $version" in {
         val response = get(s"/api/conf/${version.name}/application.yaml")
 

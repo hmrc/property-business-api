@@ -236,7 +236,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
         auditType = "AmendForeignPropertyIncomeAndExpensesPeriodSummary",
         transactionName = "amend-foreign-property-income-and-expenses-period-summary",
         detail = GenericAuditDetail(
-          versionNumber = "9.0",
+          versionNumber = "4.0",
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "businessId" -> businessId, "taxYear" -> taxYear, "submissionId" -> submissionId),

@@ -35,13 +35,10 @@ class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec 
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
-        MockedAppConfig.apiStatus(Version3) returns "BETA"
         MockedAppConfig.apiStatus(Version4) returns "BETA"
         MockedAppConfig.apiStatus(Version5) returns "BETA"
-        MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version5).returns(true).anyNumberOfTimes()
 
@@ -53,11 +50,6 @@ class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec 
               context = "individuals/business/property",
               categories = List("INCOME_TAX_MTD"),
               versions = List(
-                APIVersion(
-                  version = Version3,
-                  status = BETA,
-                  endpointsEnabled = true
-                ),
                 APIVersion(
                   version = Version4,
                   status = BETA,
@@ -79,7 +71,6 @@ class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec 
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
       List(
-        (Version3, BETA),
         (Version4, BETA),
         (Version5, BETA)
       ).foreach { case (version, status) =>
@@ -93,22 +84,22 @@ class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec 
 
     "the 'apiStatus' parameter is present and invalid" should {
       "default to alpha" in new Test {
-        MockedAppConfig.apiStatus(Version3) returns "ALPHO"
-        MockedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
-        apiDefinitionFactory.buildAPIStatus(version = Version3) shouldBe ALPHA
+        MockedAppConfig.apiStatus(Version4) returns "ALPHO"
+        MockedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
+        apiDefinitionFactory.buildAPIStatus(version = Version4) shouldBe ALPHA
       }
     }
 
     "the 'deprecatedOn' parameter is missing for a deprecated version" should {
       "throw exception" in new Test {
-        MockedAppConfig.apiStatus(Version3) returns "DEPRECATED"
+        MockedAppConfig.apiStatus(Version4) returns "DEPRECATED"
         MockedAppConfig
-          .deprecationFor(Version3)
+          .deprecationFor(Version4)
           .returns("deprecatedOn date is required for a deprecated version".invalid)
           .anyNumberOfTimes()
 
         val exception: Exception = intercept[Exception] {
-          checkBuildApiStatus(Version3)
+          checkBuildApiStatus(Version4)
         }
 
         val exceptionMessage: String = exception.getMessage

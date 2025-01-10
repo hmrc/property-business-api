@@ -40,24 +40,24 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSha
   import play.api.routing.sird._
 
   object DefaultHandler extends Handler
-  object V3Handler      extends Handler
   object V4Handler      extends Handler
+  object V5Handler      extends Handler
 
   private val defaultRouter = Router.from { case GET(p"") =>
     DefaultHandler
-  }
-
-  private val v3Router = Router.from { case GET(p"/v3") =>
-    V3Handler
   }
 
   private val v4Router = Router.from { case GET(p"/v4") =>
     V4Handler
   }
 
+  private val v5Router = Router.from { case GET(p"/v5") =>
+    V5Handler
+  }
+
   private val routingMap = new VersionRoutingMap {
     override val defaultRouter: Router     = test.defaultRouter
-    override val map: Map[Version, Router] = Map(Version3 -> v3Router, Version4 -> v4Router)
+    override val map: Map[Version, Router] = Map(Version4 -> v4Router, Version5 -> v5Router)
   }
 
   "Given a request that end with a trailing slash, and no version header" when {
@@ -67,7 +67,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSha
         val maybeAcceptHeader: Option[String] = None
 
         MockedSharedAppConfig
-          .endpointsEnabled(Version3)
+          .endpointsEnabled(Version4)
           .returns(true)
           .anyNumberOfTimes()
 
@@ -79,7 +79,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSha
     "the handler isn't found" should {
       "try without the trailing slash" in new Test {
         val maybeAcceptHeader: Option[String] = None
-        MockedSharedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
 
         val result: Option[Handler] = requestHandler.routeRequest(buildRequest(""))
         result shouldBe Some(DefaultHandler)
@@ -88,11 +88,11 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSha
   }
 
   "Routing request with a valid version header" should {
-    handleWithVersionRoutes("/v3", V3Handler, Version3)
+    handleWithVersionRoutes("/v4", V4Handler, Version4)
   }
 
   "Routing request with another valid version header" should {
-    handleWithVersionRoutes("/v4", V4Handler, Version4)
+    handleWithVersionRoutes("/v5", V5Handler, Version5)
   }
 
   private def handleWithVersionRoutes(path: String, handler: Handler, version: Version): Unit = {
@@ -136,7 +136,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSha
   "Routing requests with unsupported version" should {
 
     "return 404" in new Test {
-      val maybeAcceptHeader: Option[String] = Some("application/vnd.hmrc.5.0+json")
+      val maybeAcceptHeader: Option[String] = Some("application/vnd.hmrc.3.0+json")
 
       private val request = buildRequest("/v1")
 
@@ -152,7 +152,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSha
   "Routing requests with retired v2 version" when {
 
     "return 404 Not Found" in new Test {
-      val maybeAcceptHeader: Option[String] = Some("application/vnd.hmrc.5.0+json")
+      val maybeAcceptHeader: Option[String] = Some("application/vnd.hmrc.3.0+json")
 
       private val request = buildRequest("/v2")
       inside(requestHandler.routeRequest(request)) { case Some(a: EssentialAction) =>

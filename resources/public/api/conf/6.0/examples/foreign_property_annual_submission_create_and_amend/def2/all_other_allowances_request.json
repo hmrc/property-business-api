@@ -1,0 +1,32 @@
+{
+  "foreignProperty": [
+    {
+      "countryCode": "LBN",
+      "adjustments": {
+        "privateUseAdjustment": 4553.34,
+        "balancingCharge": 3453.34
+      },
+      "allowances": {
+        "annualInvestmentAllowance": 38330.95,
+        "costOfReplacingDomesticItems": 41985.17,
+        "zeroEmissionsGoodsVehicleAllowance": 9769.19,
+        "otherCapitalAllowance": 1049.21,
+        "zeroEmissionsCarAllowance": 1000.99,
+        "structuredBuildingAllowance": [
+          {
+            "amount": 3545.12,
+            "firstYear": {
+              "qualifyingDate": "2020-03-29",
+              "qualifyingAmountExpenditure": 3453.34
+            },
+            "building": {
+              "name": "Green Oaks",
+              "number": "12",
+              "postcode": "TF3 4GH"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

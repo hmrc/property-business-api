@@ -1,0 +1,25 @@
+{
+  "submittedOn": "2025-07-07T10:59:47.544Z",
+  "fromDate": "2025-04-06",
+  "toDate": "2025-07-05",
+  "ukProperty": {
+    "income": {
+      "premiumsOfLeaseGrant": 4889.23,
+      "reversePremiums": 847.35,
+      "periodAmount": 747.45,
+      "taxDeducted": 984.29,
+      "otherIncome": 954.32,
+      "rentARoom": {
+        "rentsReceived": 488.39
+      }
+    },
+    "expenses": {
+      "residentialFinancialCost": 2884.99,
+      "residentialFinancialCostsCarriedForward": 483.91,
+      "rentARoom": {
+        "amountClaimed": 88.55
+      },
+      "consolidatedExpenses": 998.18
+    }
+  }
+}

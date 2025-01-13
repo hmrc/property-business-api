@@ -1,0 +1,45 @@
+{
+  "submittedOn": "2021-06-17T10:59:47.544Z",
+  "fromDate": "2020-01-01",
+  "toDate": "2020-01-31",
+  "foreignFhlEea": {
+    "income": {
+      "rentAmount": 200.22
+    },
+    "expenses": {
+      "premisesRunningCosts": 100.25,
+      "repairsAndMaintenance": 100.25,
+      "financialCosts": 100.25,
+      "professionalFees": 100.25,
+      "costOfServices": 100.25,
+      "travelCosts": 100.25,
+      "other": 100.25
+    }
+  },
+  "foreignNonFhlProperty": [
+    {
+      "countryCode": "FRA",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 200.22
+        },
+        "foreignTaxCreditRelief": true,
+        "premiumsOfLeaseGrant": 100.25,
+        "otherPropertyIncome": 100.25,
+        "foreignTaxPaidOrDeducted": 44.21,
+        "specialWithholdingTaxOrUkTaxPaid": 23.78
+      },
+      "expenses": {
+        "premisesRunningCosts": -1200.25,
+        "repairsAndMaintenance": -1300.25,
+        "financialCosts": -200.25,
+        "professionalFees": 100.25,
+        "costOfServices": 100.25,
+        "travelCosts": 100.25,
+        "residentialFinancialCost": 100.25,
+        "broughtFwdResidentialFinancialCost": 100.25,
+        "other": 100.25
+      }
+    }
+  ]
+}

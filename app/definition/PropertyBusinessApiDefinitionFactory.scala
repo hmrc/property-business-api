@@ -43,6 +43,11 @@ class PropertyBusinessApiDefinitionFactory @Inject() (appConfig: AppConfig) exte
             version = Version5,
             status = buildAPIStatus(Version5),
             endpointsEnabled = appConfig.endpointsEnabled(Version5)
+          ),
+          APIVersion(
+            version = Version6,
+            status = buildAPIStatus(Version6),
+            endpointsEnabled = appConfig.endpointsEnabled(Version6)
           )
         ),
         requiresTrust = None

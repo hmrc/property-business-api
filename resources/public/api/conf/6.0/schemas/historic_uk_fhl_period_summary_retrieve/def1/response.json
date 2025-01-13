@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Given any tax year",
+  "type": "object",
+  "properties": {
+    "fromDate": {
+      "type": "string",
+      "description": "The first day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD",
+      "example": "2020-01-01"
+    },
+    "toDate": {
+      "type": "string",
+      "description": "The last day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD",
+      "example": "2020-01-31"
+    },
+    "income": {
+      "type": "object",
+      "properties": {
+        "periodAmount": {
+          "type": "number",
+          "description": "Total rents from property, ground rents and rent charges but not rent-a-room.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "5000.99"
+        },
+        "taxDeducted": {
+          "type": "number",
+          "description": "Tax already deducted from the rental income.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "5000.99"
+        },
+        "rentARoom": {
+          "type": "object",
+          "properties": {
+            "rentsReceived": {
+              "type": "number",
+              "description": "Total rents received from properties.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "examples": "5000.99"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "expenses": {
+      "type": "object",
+      "properties": {
+        "premisesRunningCosts": {
+          "type": "number",
+          "description": "Rent, rates, insurance, ground rents and other costs.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "5167.53"
+        },
+        "repairsAndMaintenance": {
+          "type": "number",
+          "description": "Property repairs and maintenance.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "424.65"
+        },
+        "financialCosts": {
+          "type": "number",
+          "description": "Loan interest and other financial costs.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "853.56"
+        },
+        "professionalFees": {
+          "type": "number",
+          "description": "Legal, management and other professional fees.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "835.78"
+        },
+        "costOfServices": {
+          "type": "number",
+          "description": "Cost of services provided, including wages.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "978.34"
+        },
+        "other": {
+          "type": "number",
+          "description": "Other allowable property expenses.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "382.34"
+        },
+        "consolidatedExpenses": {
+          "type": "number",
+          "description": "The sum of all allowable expenses for the specified period. If consolidatedExpenses is returned, values for individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, other, travelCosts, rentARoom) are not returned. \nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "5000.99"
+        },
+        "travelCosts": {
+          "type": "number",
+          "description": "Car, van and travel costs incurred in running a property business.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+          "examples": "135.78"
+        },
+        "rentARoom": {
+          "type": "object",
+          "description": "Object holding the amount claimed for the period",
+          "properties": {
+            "amountClaimed": {
+              "type": "number",
+              "description": "The amount of UK Furnished Holiday Lettings rent claimed.\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+              "examples": "945.9"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "fromDate",
+    "toDate"
+  ]
+}

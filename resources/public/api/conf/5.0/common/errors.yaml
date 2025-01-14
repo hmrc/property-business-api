@@ -7,13 +7,13 @@ components:
       description: The format of the supplied NINO field is not valid.
       value:
         code: FORMAT_NINO
-        message: The provided NINO is invalid
+        message: The NINO format is invalid
 
     formatTaxYear:
       description: The format of the supplied taxYear value is not valid.
       value:
         code: FORMAT_TAX_YEAR
-        message: The provided tax year is invalid
+        message: The taxYear format is invalid
 
     formatBusinessId:
       description: The format of the supplied Business ID field is not valid.
@@ -32,7 +32,7 @@ components:
       description: Tax year range invalid. A tax year range of one year is required.
       value:
         code: RULE_TAX_YEAR_RANGE_INVALID
-        message: Tax year range invalid. A tax year range of one year is required
+        message: A tax year range of one year is required
 
     ruleTypeOfBusinessIncorrectUk:
       description: The supplied Business ID does not represent a UK property business.
@@ -99,13 +99,13 @@ components:
       description: The format of the supplied From date field is not valid.
       value:
         code: FORMAT_FROM_DATE
-        message: The provided From date is invalid
+        message: The fromDate format is invalid
 
     formatToDate:
       description: The format of the supplied To date field is not valid.
       value:
         code: FORMAT_TO_DATE
-        message: The provided To date is invalid
+        message: The toDate format is invalid
 
     ruleToDateBeforeFromDate:
       description: The To date is earlier than the From date.
@@ -160,18 +160,6 @@ components:
       value:
         code: FORMAT_COUNTRY_CODE
         message: The provided Country code is invalid
-
-    missingFromDate:
-      description: The From date parameter is missing.
-      value:
-        code: MISSING_FROM_DATE
-        message: The From date parameter is missing
-
-    missingToDate:
-      description: The To date parameter is missing.
-      value:
-        code: MISSING_TO_DATE
-        message: The To date parameter is missing
 
     invalidSubmissionEndDate:
       description: The submitted end date must be the end of the quarter.
@@ -289,9 +277,7 @@ components:
         The client and/or agent is not authorised. This is normally because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
       value:
         code: CLIENT_OR_AGENT_NOT_AUTHORISED
-        message: The client and/or agent is not authorised
-
-
+        message: The client or agent is not authorised
 
     # 404
 

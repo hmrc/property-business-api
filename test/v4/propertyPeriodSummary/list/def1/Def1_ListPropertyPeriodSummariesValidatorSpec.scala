@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package v4.propertyPeriodSummary.list.def1
 
-import config.MockAppConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.utils.UnitSpec
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
-class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -36,14 +35,9 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
   private def validator(nino: String, businessId: String, taxYear: String) =
     new Def1_ListPropertyPeriodSummariesValidator(nino, businessId, taxYear)
 
-  private def setupMocks() = {
-    MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021))
-  }
-
   "validate()" should {
     "return the parsed domain object" when {
       "given a valid request" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
@@ -52,14 +46,12 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
 
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
           Right(ListPropertyPeriodSummariesRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString)))
       }
       "passed the maximum supported taxYear" in {
-        setupMocks()
 
         val taxYearString = "2024-25"
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
@@ -69,7 +61,6 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
 
     "return a single error" when {
       "given an invalid nino" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator("5555", validBusinessId, validTaxYear).validateAndWrapResult()
@@ -78,7 +69,6 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
       }
 
       "given an incorrectly formatted taxYear" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, "25667").validateAndWrapResult()
@@ -87,7 +77,6 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
       }
 
       "given an incorrectly formatted businessId" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, "5555", validTaxYear).validateAndWrapResult()
@@ -96,20 +85,17 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
       }
 
       "given a taxYear immediately before the minimum supported" in {
-        setupMocks()
 
         validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
       "given a taxYear immediately after max tax year" in {
-        setupMocks()
 
         validator(validNino, validBusinessId, "2025-26").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "given a taxYear spanning an invalid tax year range" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, "2020-22").validateAndWrapResult()
@@ -120,7 +106,6 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAp
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()

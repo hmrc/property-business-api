@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,12 +127,3 @@ object RuleEarlyDataSubmissionNotAcceptedError
       "Cannot submit data more than 10 days before end of period",
       BAD_REQUEST
     )
-
-object RuleAdvanceSubmissionRequiresPeriodEndDate
-    extends MtdError(
-      "RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE",
-      "For advance submission end date must be the end of the period.",
-      BAD_REQUEST)
-
-object RuleDuplicateCountryCode
-    extends MtdError("RULE_DUPLICATE_COUNTRY_CODE", "You cannot supply the same country code for multiple properties", BAD_REQUEST)

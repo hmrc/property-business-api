@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import shared.models.domain.TaxYear
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
@@ -58,7 +57,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
       case def1: Def1_RetrieveForeignPropertyAnnualSubmissionRequestData =>
         import def1._
 
-        val (downstreamUri, queryParams) = if (taxYear.year >= TaxYear.tysTaxYear.year) {
+        val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
           (
             TaxYearSpecificIfsUri[Def1_RetrieveForeignPropertyAnnualSubmissionResponse](
               s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),

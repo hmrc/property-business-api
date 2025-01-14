@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,24 @@
 
 package v5.createAmendUkPropertyAnnualSubmission
 
-import shared.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
 import v5.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v5.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v5.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendUkPropertyAnnualSubmissionValidatorFactory {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] = {
 
     val schema = CreateAmendUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear))
     schema match {
-      case Valid(Def1)     => new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(appConfig)
+      case Valid(Def1)     => new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Valid(Def2)     => new Def2_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Invalid(errors) => Validator.returningErrors(errors)
     }

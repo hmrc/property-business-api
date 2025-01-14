@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,23 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission
 
-import config.MockAppConfig
 import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
 import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2021-22"
   private val validTysTaxYear = "2023-24"
 
-  private val validatorFactory = new RetrieveForeignPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
+  private val validatorFactory = new RetrieveForeignPropertyAnnualSubmissionValidatorFactory
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
 
@@ -45,7 +40,6 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSp
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
         val result: Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear)
         result shouldBe a[Def1_RetrieveForeignPropertyAnnualSubmissionValidator]

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@
 
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import common.models.audit.FlattenedGenericAuditDetail
 import common.models.errors.RuleMisalignedPeriodError
-import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
@@ -39,7 +37,6 @@ import scala.concurrent.Future
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -84,7 +81,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -104,15 +101,15 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePutRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
         transactionName = "CreateAndAmendHistoricFhlPropertyBusinessAnnualSubmission",
-        detail = FlattenedGenericAuditDetail(
-          versionNumber = Some(apiVersion.name),
+        detail = GenericAuditDetail(
           userDetails = UserDetails(mtdId, "Individual", None),
+          apiVersion = apiVersion.name,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
-          request = Some(validMtdJson),
+          requestBody = Some(validMtdJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )

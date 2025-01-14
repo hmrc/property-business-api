@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,16 @@
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
-import config.MockAppConfig
-import play.api.libs.json._
 import shared.utils.UnitSpec
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{
-  HistoricNonFhlAnnualAdjustments,
-  HistoricNonFhlAnnualAllowances,
-  UkPropertyAdjustmentsRentARoom
-}
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
-}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request._
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 
@@ -91,15 +82,9 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
   private def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear, body)
 
-  private def setupMocks() = {
-    MockedAppConfig.minimumTaxYearHistoric.anyNumberOfTimes() returns TaxYear.starting(2017)
-    MockedAppConfig.maximumTaxYearHistoric.anyNumberOfTimes() returns TaxYear.starting(2021)
-  }
-
   "validate()" should {
     "return the parsed domain object" when {
       "given a valid request" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
@@ -110,7 +95,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given a valid request with only annualAdjustments" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBody.removeProperty("/annualAllowances")).validateAndWrapResult()
@@ -121,7 +105,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given a valid request with only annualAllowances" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBody.removeProperty("/annualAdjustments")).validateAndWrapResult()
@@ -135,7 +118,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       "given the maximum supported taxYear" in allowsTaxYear("2021-22")
 
       def allowsTaxYear(taxYearString: String): Unit = {
-        setupMocks()
 
         val result = validator(validNino, taxYearString, validBody).validateAndWrapResult()
         result shouldBe Right(
@@ -146,7 +128,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
 
     "return a single error" when {
       "given an invalid nino" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validTaxYear, validBody).validateAndWrapResult()
@@ -155,7 +136,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given an invalidly formatted taxYear" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid", validBody).validateAndWrapResult()
@@ -167,14 +147,12 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       "given a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
 
       def disallowsTaxYear(taxYearString: String): Unit = {
-        setupMocks()
 
         val result = validator(validNino, taxYearString, validBody).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
       }
 
       "given a taxYear with an invalid range" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2020-22", validBody).validateAndWrapResult()
@@ -187,7 +165,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
           val expected = Left(ErrorWrapper(correlationId, ValueFormatError.forPathAndRange(path, min.toString, max.toString)))
 
           "it is too small" in {
-            setupMocks()
 
             val invalidBody = validBody.update(path, JsNumber(min - 0.01))
             val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -197,7 +174,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
           }
 
           "it is too big" in {
-            setupMocks()
 
             val invalidBody = validBody.update(path, JsNumber(max + 0.01))
             val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -207,7 +183,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
           }
 
           "it is a bad value" in {
-            setupMocks()
 
             val invalidBody = validBody.update(path, JsNumber(123.456))
             val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -235,7 +210,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given an empty body" in {
-        setupMocks()
 
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -245,7 +219,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given a body with a missing mandatory field" in {
-        setupMocks()
 
         val invalidBody = validBody.removeProperty("/annualAdjustments/nonResidentLandlord")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -255,7 +228,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given a body with an annualAdjustments/nonResidentLandlord field containing an empty object" in {
-        setupMocks()
 
         val invalidBody = validBody.replaceWithEmptyObject("/annualAdjustments/nonResidentLandlord")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -265,7 +237,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given a body with an annualAdjustments field containing an empty object" in {
-        setupMocks()
 
         val invalidBody = validBody.replaceWithEmptyObject("/annualAdjustments")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -275,7 +246,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       }
 
       "given a body with an annualAllowances field containing an empty object" in {
-        setupMocks()
 
         val invalidBody = validBody.replaceWithEmptyObject("/annualAllowances")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -287,7 +257,6 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()

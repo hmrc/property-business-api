@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 
 package v4.amendForeignPropertyPeriodSummary.def2
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
-import common.controllers.validators.resolvers.ResolveTaxYear
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import common.controllers.validators.resolvers.ResolveSubmissionId
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.amendForeignPropertyPeriodSummary.model.request.{
   AmendForeignPropertyPeriodSummaryRequestData,
   Def2_AmendForeignPropertyPeriodSummaryRequestBody,
@@ -37,11 +35,10 @@ class Def2_AmendForeignPropertyPeriodSummaryValidator(nino: String,
                                                       taxYear: String,
                                                       maxTaxYear: TaxYear,
                                                       submissionId: String,
-                                                      body: JsValue,
-                                                      appConfig: AppConfig)
+                                                      body: JsValue)
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
-  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maxTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendForeignPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_AmendForeignPropertyPeriodSummaryRulesValidator()
@@ -50,7 +47,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidator(nino: String,
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear, minTaxYear, maxTaxYear),
+      resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
     ).mapN(Def2_AmendForeignPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules

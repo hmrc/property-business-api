@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import shared.controllers.validators.Validator
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit appConfig: AppConfig) {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear, body)

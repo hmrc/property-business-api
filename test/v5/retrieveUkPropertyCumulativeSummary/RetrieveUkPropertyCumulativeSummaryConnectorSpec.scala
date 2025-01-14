@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
-import config.MockAppConfig
 import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
@@ -27,7 +26,7 @@ import v5.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCu
 
 import scala.concurrent.Future
 
-class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec with MockAppConfig {
+class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
   private val nino       = "AA123456A"
   private val businessId = "someBusinessId"
@@ -36,7 +35,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec wit
     _: ConnectorTest =>
 
     val connector: RetrieveUkPropertyCumulativeSummaryConnector =
-      new RetrieveUkPropertyCumulativeSummaryConnector(http = mockHttpClient, appConfig = mockSharedAppConfig, applicationAppConfig = mockAppConfig)
+      new RetrieveUkPropertyCumulativeSummaryConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
 
     val requestData: RetrieveUkPropertyCumulativeSummaryRequestData =
       Def1_RetrieveUkPropertyCumulativeSummaryRequestData(Nino(nino), BusinessId(businessId), taxYear = TaxYear.fromMtd("2025-26"))
@@ -49,7 +48,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec wit
   "RetrieveUkPropertyCumulativeSummaryConnector" when {
     "the request is made and UK property data is returned" should {
       "return UkResult" in new TysIfsTest with Test {
-        MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
 
         private val response = responseWith(Some(UkProperty(None, None)))
 
@@ -63,7 +62,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec wit
 
     "the request is made and non-UK property data is returned (e.g. because the businessId is for a foreign property)" should {
       "return NonUkResult" in new TysIfsTest with Test {
-        MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
         private val response = responseWith(None)
 
         willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
@@ -76,7 +75,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec wit
 
     "isPassIntentHeader feature switch is on" must {
       "pass UK_PROPERTY intent" in new TysIfsTest with Test {
-        MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
         private val response = responseWith(None)
 
         willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns

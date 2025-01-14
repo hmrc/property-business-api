@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package v4.deletePropertyAnnualSubmission
+package config
 
-import shared.controllers.validators.Validator
-import v4.deletePropertyAnnualSubmission.def1.Def1_DeletePropertyAnnualSubmissionValidator
-import v4.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
+import play.api.Configuration
+import shared.config.{FeatureSwitches, SharedAppConfig}
 
-import javax.inject.Singleton
+case class PropertyBusinessFeatureSwitches private (protected val featureSwitchConfig: Configuration) extends FeatureSwitches {
 
-@Singleton
-class DeletePropertyAnnualSubmissionValidatorFactory {
+  val isPassIntentEnabled: Boolean = isEnabled("passIntentHeader")
 
-  def validator(nino: String, businessId: String, taxYear: String): Validator[DeletePropertyAnnualSubmissionRequestData] =
-    new Def1_DeletePropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+}
 
+object PropertyBusinessFeatureSwitches {
+  def apply()(implicit appConfig: SharedAppConfig): PropertyBusinessFeatureSwitches = PropertyBusinessFeatureSwitches(appConfig.featureSwitchConfig)
 }

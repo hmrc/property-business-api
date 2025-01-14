@@ -20,13 +20,14 @@ import cats.implicits.catsSyntaxValidatedId
 import shared.config.Deprecation.NotDeprecated
 import shared.config.MockSharedAppConfig
 import shared.definition.APIStatus.BETA
-import shared.definition.{APIDefinition, APIVersion, Definition}
+import shared.definition._
+import shared.mocks.MockHttpClient
 import shared.routing._
 import shared.utils.UnitSpec
 
-class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
+class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
 
-  class Test extends MockSharedAppConfig {
+  class Test extends MockHttpClient with MockSharedAppConfig {
     val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockSharedAppConfig)
     MockedSharedAppConfig.apiGatewayContext returns "individuals/business/property"
   }
@@ -34,10 +35,13 @@ class PropertyBusinessPropertyBusinessApiDefinitionFactorySpec extends UnitSpec 
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
+        MockedSharedAppConfig.deprecationFor(Version3).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedSharedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedSharedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version3) returns "BETA"
         MockedSharedAppConfig.apiStatus(Version4) returns "BETA"
         MockedSharedAppConfig.apiStatus(Version5) returns "BETA"
+        MockedSharedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version5).returns(true).anyNumberOfTimes()
 

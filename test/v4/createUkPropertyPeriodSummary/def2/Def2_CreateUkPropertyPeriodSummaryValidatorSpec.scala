@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,17 @@
 package v4.createUkPropertyPeriodSummary.def2
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import play.api.libs.json._
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
-import config.MockAppConfig
-import play.api.libs.json._
 import shared.utils.UnitSpec
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
 import v4.createUkPropertyPeriodSummary.model.request._
 
-class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 

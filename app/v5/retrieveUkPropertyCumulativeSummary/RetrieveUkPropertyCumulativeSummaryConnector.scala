@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
+import config.PropertyBusinessFeatureSwitches
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import config.{AppConfig, FeatureSwitches}
-import shared.config.SharedAppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v5.retrieveUkPropertyCumulativeSummary.RetrieveUkPropertyCumulativeSummaryConnector._
 import v5.retrieveUkPropertyCumulativeSummary.model.request._
@@ -39,8 +39,7 @@ object RetrieveUkPropertyCumulativeSummaryConnector {
 }
 
 @Singleton
-class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig, applicationAppConfig: AppConfig)
-    extends BaseDownstreamConnector {
+class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkPropertyCumulativeSummary(request: RetrieveUkPropertyCumulativeSummaryRequestData)(implicit
       hc: HeaderCarrier,
@@ -50,7 +49,7 @@ class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClie
     import request._
     import schema._
 
-    val maybeIntent = if (FeatureSwitches(applicationAppConfig).isPassIntentEnabled) Some("UK_PROPERTY") else None
+    val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("UK_PROPERTY") else None
 
     val downstreamUri: DownstreamUri[DownstreamResp] = TaxYearSpecificIfsUri[DownstreamResp](
       s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")

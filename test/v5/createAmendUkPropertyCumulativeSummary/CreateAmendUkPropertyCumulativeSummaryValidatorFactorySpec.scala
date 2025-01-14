@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import shared.controllers.validators.AlwaysErrorsValidator
 import shared.utils.UnitSpec
 import v5.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator
 
-class CreateAmendUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class CreateAmendUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec {
 
   private val consolidatedRequestBodyJson: JsValue = Json.parse(
     """

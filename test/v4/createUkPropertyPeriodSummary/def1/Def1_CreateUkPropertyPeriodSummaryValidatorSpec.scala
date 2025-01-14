@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,17 @@
 package v4.createUkPropertyPeriodSummary.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import play.api.libs.json._
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
-import config.MockAppConfig
-import play.api.libs.json.{JsNumber, JsObject, JsString, JsValue, Json}
 import shared.utils.UnitSpec
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
 import v4.createUkPropertyPeriodSummary.model.request._
 
-class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -36,58 +35,58 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val validBusinessId = "XAIS12345678901"
 
   private val validBody = Json.parse("""
-                                       |{
-                                       |    "fromDate": "2020-01-01",
-                                       |    "toDate": "2020-01-31",
-                                       |    "ukFhlProperty":{
-                                       |        "income": {
-                                       |            "periodAmount": 5000.99,
-                                       |            "taxDeducted": 3123.21,
-                                       |            "rentARoom": {
-                                       |                "rentsReceived": 532.12
-                                       |            }
-                                       |        },
-                                       |        "expenses": {
-                                       |            "premisesRunningCosts": 3123.21,
-                                       |            "repairsAndMaintenance": 928.42,
-                                       |            "financialCosts": 842.99,
-                                       |            "professionalFees": 8831.12,
-                                       |            "costOfServices": 484.12,
-                                       |            "other": 99282,
-                                       |            "travelCosts": 974.47,
-                                       |            "rentARoom": {
-                                       |                "amountClaimed": 8842.43
-                                       |            }
-                                       |        }
-                                       |    },
-                                       |    "ukNonFhlProperty": {
-                                       |        "income": {
-                                       |            "premiumsOfLeaseGrant": 42.12,
-                                       |            "reversePremiums": 84.31,
-                                       |            "periodAmount": 9884.93,
-                                       |            "taxDeducted": 842.99,
-                                       |            "otherIncome": 31.44,
-                                       |            "rentARoom": {
-                                       |                "rentsReceived": 947.66
-                                       |            }
-                                       |        },
-                                       |        "expenses": {
-                                       |            "premisesRunningCosts": 3123.21,
-                                       |            "repairsAndMaintenance": 928.42,
-                                       |            "financialCosts": 842.99,
-                                       |            "professionalFees": 8831.12,
-                                       |            "costOfServices": 484.12,
-                                       |            "other": 99282,
-                                       |            "residentialFinancialCost": 12.34,
-                                       |            "travelCosts": 974.47,
-                                       |            "residentialFinancialCostsCarriedForward": 12.34,
-                                       |            "rentARoom": {
-                                       |                "amountClaimed": 8842.43
-                                       |            }
-                                       |        }
-                                       |    }
-                                       |}
-                                       |""".stripMargin)
+      |{
+      |    "fromDate": "2020-01-01",
+      |    "toDate": "2020-01-31",
+      |    "ukFhlProperty":{
+      |        "income": {
+      |            "periodAmount": 5000.99,
+      |            "taxDeducted": 3123.21,
+      |            "rentARoom": {
+      |                "rentsReceived": 532.12
+      |            }
+      |        },
+      |        "expenses": {
+      |            "premisesRunningCosts": 3123.21,
+      |            "repairsAndMaintenance": 928.42,
+      |            "financialCosts": 842.99,
+      |            "professionalFees": 8831.12,
+      |            "costOfServices": 484.12,
+      |            "other": 99282,
+      |            "travelCosts": 974.47,
+      |            "rentARoom": {
+      |                "amountClaimed": 8842.43
+      |            }
+      |        }
+      |    },
+      |    "ukNonFhlProperty": {
+      |        "income": {
+      |            "premiumsOfLeaseGrant": 42.12,
+      |            "reversePremiums": 84.31,
+      |            "periodAmount": 9884.93,
+      |            "taxDeducted": 842.99,
+      |            "otherIncome": 31.44,
+      |            "rentARoom": {
+      |                "rentsReceived": 947.66
+      |            }
+      |        },
+      |        "expenses": {
+      |            "premisesRunningCosts": 3123.21,
+      |            "repairsAndMaintenance": 928.42,
+      |            "financialCosts": 842.99,
+      |            "professionalFees": 8831.12,
+      |            "costOfServices": 484.12,
+      |            "other": 99282,
+      |            "residentialFinancialCost": 12.34,
+      |            "travelCosts": 974.47,
+      |            "residentialFinancialCostsCarriedForward": 12.34,
+      |            "rentARoom": {
+      |                "amountClaimed": 8842.43
+      |            }
+      |        }
+      |    }
+      |}
+      |""".stripMargin)
 
   private val validBodyConsolidated = validBody
     .removeProperty("/ukFhlProperty/expenses")
@@ -101,12 +100,12 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
     .update(
       "/ukFhlProperty",
       Json.parse("""
-                   | {
-                   |   "income": {
-                   |     "periodAmount": 5000.99
-                   |   }
-                   | }
-                   |""".stripMargin)
+          | {
+          |   "income": {
+          |     "periodAmount": 5000.99
+          |   }
+          | }
+          |""".stripMargin)
     )
 
   private val validMinimalNonFhlBody = validBody
@@ -194,14 +193,11 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
   private val parsedBodyMinimalNonFhl = parsedBody.copy(ukFhlProperty = None, ukNonFhlProperty = Some(parsedUkNonFhlPropertyMinimal))
 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)(mockAppConfig)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022)).anyNumberOfTimes()
+    new Def1_CreateUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
@@ -209,7 +205,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a valid request with a consolidated body" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyConsolidated).validateAndWrapResult()
 
@@ -217,7 +212,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a valid request with a minimal fhl body" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validMinimalFhlBody).validateAndWrapResult()
 
@@ -225,7 +219,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a valid request with a minimal non-fhl body" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validMinimalNonFhlBody).validateAndWrapResult()
 
@@ -233,14 +226,12 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
         val taxYearString = "2022-23"
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
       }
 
       "passed the maximum supported taxYear" in {
-        setupMocks()
         val taxYearString = "2023-24"
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(Def1_CreateUkPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
@@ -249,7 +240,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator("invalid", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
@@ -257,7 +247,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed an incorrectly formatted taxYear" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "202324", validBody).validateAndWrapResult()
 
@@ -266,7 +255,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed an incorrectly formatted businessId" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
 
@@ -274,19 +262,16 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
         validator(validNino, validBusinessId, "2021-22", validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear immediately after the maximum supported" in {
-        setupMocks()
         validator(validNino, validBusinessId, "2025-26", validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2020-22", validBody).validateAndWrapResult()
 
@@ -294,7 +279,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed an invalid business id" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
 
@@ -302,7 +286,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed an empty body" in {
-        setupMocks()
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -311,7 +294,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body without ukFhlProperty or ukNonFhlProperty" in {
-        setupMocks()
         val invalidBody = validBody
           .removeProperty("/ukFhlProperty")
           .removeProperty("ukNonFhlProperty")
@@ -324,7 +306,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
       def testWith(error: MtdError)(path: String, body: JsValue): Unit = {
         s"for $path" in {
-          setupMocks()
           val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
             validator(validNino, validBusinessId, validTaxYear, body).validateAndWrapResult()
 
@@ -333,10 +314,10 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       def testRuleIncorrectOrEmptyBodyErrorWith(path: String, body: JsValue): Unit = testWith(RuleIncorrectOrEmptyBodyError)(path, body)
-      def testValueFormatErrorWith(path: String, body: JsValue): Unit              = testWith(ValueFormatError)(path, body)
+
+      def testValueFormatErrorWith(path: String, body: JsValue): Unit = testWith(ValueFormatError)(path, body)
 
       "passed a body with an empty object" when {
-        setupMocks()
         List(
           "/ukFhlProperty",
           "/ukFhlProperty/income",
@@ -352,7 +333,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with an empty object except for an additional (non-schema) property" in {
-        setupMocks()
         val invalidBody = validBody.replaceWithEmptyObject("/ukFhlProperty").update("/ukFhlProperty/badField", JsNumber(100))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -361,7 +341,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body missing the fromDate" in {
-        setupMocks()
         val invalidBody = validBody.removeProperty("/fromDate")
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -370,7 +349,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body missing the toDate" in {
-        setupMocks()
         val invalidBody = validBody.removeProperty("/toDate")
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -379,7 +357,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with an invalidly formatted fromDate" in {
-        setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -388,7 +365,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with an invalidly formatted toDate" in {
-        setupMocks()
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -397,7 +373,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with a fromDate that precedes the minimum" in {
-        setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("1569-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -406,7 +381,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with a toDate that proceeds the minimum" in {
-        setupMocks()
         val invalidBody = validBody.update("/toDate", JsString("3490-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -415,7 +389,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with a toDate that precedes the fromDate" in {
-        setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("2090-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -424,7 +397,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with a (non-consolidated expenses) field containing an invalid value" when {
-        setupMocks()
         List(
           "/ukFhlProperty/income/periodAmount",
           "/ukFhlProperty/income/taxDeducted",
@@ -457,7 +429,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with a (consolidated expenses) field containing an invalid value" when {
-        setupMocks()
         List(
           "/ukFhlProperty/expenses/consolidatedExpenses",
           "/ukNonFhlProperty/expenses/consolidatedExpenses"
@@ -465,7 +436,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with multiple invalid fields" in {
-        setupMocks()
         val path0 = "/ukFhlProperty/expenses/travelCosts"
         val path1 = "/ukNonFhlProperty/expenses/travelCosts"
         val path2 = "/ukNonFhlProperty/expenses/rentARoom/amountClaimed"
@@ -482,7 +452,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with both consolidated and separate expenses provided for fhl" in {
-        setupMocks()
         val invalidBody = validBody.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -491,7 +460,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
       }
 
       "passed a body with both consolidated and separate expenses provided for non-fhl" in {
-        setupMocks()
         val invalidBody = validBody.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
@@ -502,7 +470,6 @@ class Def1_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Mock
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

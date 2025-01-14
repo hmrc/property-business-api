@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import common.models.audit.FlattenedGenericAuditDetail
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
+import shared.models.audit.GenericAuditDetail
 import shared.routing.Version
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
@@ -63,7 +63,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
               auditService,
               "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
               "create-historic-non-fhl-property-income-expenses-period-summary",
-              auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
+              auditDetailCreator = GenericAuditDetail.auditDetailCreator(
                 Version(request),
                 Map("nino" -> nino)
               ),

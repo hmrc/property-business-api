@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,14 @@
 
 package definition
 
-import cats.data.Validated.Invalid
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.definition._
 import shared.routing._
-import utils.Logging
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PropertyBusinessApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
+class PropertyBusinessApiDefinitionFactory @Inject() (protected val appConfig: SharedAppConfig) extends ApiDefinitionFactory {
 
   lazy val definition: Definition =
     Definition(
@@ -32,7 +31,7 @@ class PropertyBusinessApiDefinitionFactory @Inject() (appConfig: AppConfig) exte
         name = "Property Business (MTD)",
         description = "An API for providing property business data",
         context = appConfig.apiGatewayContext,
-        categories = List("INCOME_TAX_MTD"),
+        categories = List(mtdCategory),
         versions = List(
           APIVersion(
             version = Version4,
@@ -48,21 +47,5 @@ class PropertyBusinessApiDefinitionFactory @Inject() (appConfig: AppConfig) exte
         requiresTrust = None
       )
     )
-
-  private[definition] def buildAPIStatus(version: Version): APIStatus = {
-    checkDeprecationConfigFor(version)
-
-    APIStatus.parser
-      .lift(appConfig.apiStatus(version))
-      .getOrElse {
-        logger.error(s"[ApiDefinition][buildApiStatus] no API Status found in config.  Reverting to Alpha")
-        APIStatus.ALPHA
-      }
-  }
-
-  private def checkDeprecationConfigFor(version: Version): Unit = appConfig.deprecationFor(version) match {
-    case Invalid(error) => throw new Exception(error)
-    case _              => ()
-  }
 
 }

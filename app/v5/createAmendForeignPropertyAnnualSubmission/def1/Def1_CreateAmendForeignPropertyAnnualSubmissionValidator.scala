@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import common.controllers.validators.resolvers.ResolveTaxYear
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
@@ -33,11 +32,10 @@ import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendFo
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(
-    appConfig: AppConfig)
+class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2021-22"))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody]
   private val rulesValidator = new Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator()
@@ -46,7 +44,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: 
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData) andThen rulesValidator.validateBusinessRules
 

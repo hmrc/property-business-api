@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create
 
-import config.MockAppConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -24,7 +23,7 @@ import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator
 import v4.historicFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricFhlUkPropertyPeriodSummaryRequestData
 
-class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
 
   private val validNino   = "AA123456A"
   private val invalidNino = "not-a-nino"
@@ -60,7 +59,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitS
       |""".stripMargin
   )
 
-  private val validatorFactory = new CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 
   "validator()" when {
     "given any valid request" should {

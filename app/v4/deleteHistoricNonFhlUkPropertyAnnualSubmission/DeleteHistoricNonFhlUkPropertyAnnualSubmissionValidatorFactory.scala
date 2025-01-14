@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
 import shared.controllers.validators.Validator
-import config.AppConfig
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit appConfig: AppConfig) {
+class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear)

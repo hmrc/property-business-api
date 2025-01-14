@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ package v4.amendForeignPropertyPeriodSummary.def1
 
 import cats.data.Validated
 import cats.implicits._
-import common.controllers.validators.resolvers.{ResolveSubmissionId, ResolveTaxYear}
-import config.AppConfig
+import common.controllers.validators.resolvers.ResolveSubmissionId
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
@@ -37,11 +36,10 @@ class Def1_AmendForeignPropertyPeriodSummaryValidator(nino: String,
                                                       taxYear: String,
                                                       maxTaxYear: TaxYear,
                                                       submissionId: String,
-                                                      body: JsValue,
-                                                      appConfig: AppConfig)
+                                                      body: JsValue)
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
-  private lazy val minTaxYear = appConfig.minimumTaxV2Foreign
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendForeignPropertyPeriodSummaryRequestBody]()
 
@@ -49,7 +47,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidator(nino: String,
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear, minTaxYear, maxTaxYear),
+      resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
     ).mapN(Def1_AmendForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,18 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission
 
-import config.MockAppConfig
 import play.api.libs.json._
 import shared.controllers.validators.AlwaysErrorsValidator
 import shared.utils.UnitSpec
 import v5.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v5.createAmendForeignPropertyAnnualSubmission.def2.Def2_CreateAmendForeignPropertyAnnualSubmissionValidator
 
-class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
 
-  private def validatorFor(taxYear: String) =
-    new CreateAmendForeignPropertyAnnualSubmissionValidatorFactory(mockAppConfig).validator(
-      nino = "ignoredNino",
-      businessId = "ignored",
-      taxYear = taxYear,
-      body = JsObject.empty)
+  private def validatorFor(taxYear: String) = {
+    val validatorFactory = new CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
+    validatorFactory.validator(nino = "ignoredNino", businessId = "ignored", taxYear = taxYear, body = JsObject.empty)
+  }
 
   "CreateAmendForeignPropertyAnnualSubmissionValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {

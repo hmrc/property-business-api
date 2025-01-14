@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import config.{AppConfig, FeatureSwitches}
+import config.PropertyBusinessFeatureSwitches
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
@@ -39,8 +39,7 @@ object RetrieveForeignPropertyCumulativeSummaryConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient, applicationAppConfig: AppConfig)(implicit
-    val appConfig: SharedAppConfig)
+class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient)(implicit val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyCumulativeSummary(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit
@@ -51,7 +50,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
     import request._
     import schema._
 
-    val maybeIntent = if (FeatureSwitches(applicationAppConfig).isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
+    val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
 
     val downstreamUri: DownstreamUri[DownstreamResp] = TaxYearSpecificIfsUri[DownstreamResp](
       s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")

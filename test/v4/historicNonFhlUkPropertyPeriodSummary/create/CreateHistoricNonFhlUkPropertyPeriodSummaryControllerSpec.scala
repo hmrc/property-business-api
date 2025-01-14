@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import common.models.audit.FlattenedGenericAuditDetail
 import common.models.domain.PeriodId
 import common.models.errors.RuleMisalignedPeriodError
-import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.domain.Nino
 import shared.models.errors._
@@ -44,7 +42,6 @@ import scala.concurrent.Future
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -89,7 +86,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller: CreateHistoricNonFhlUkPropertyPeriodSummaryController = new CreateHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -109,15 +106,15 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino)(fakePutRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateHistoricNonFhlPropertyIncomeExpensesPeriodSummary",
         transactionName = "create-historic-non-fhl-property-income-expenses-period-summary",
-        detail = FlattenedGenericAuditDetail(
-          versionNumber = Some(apiVersion.name),
+        detail = GenericAuditDetail(
           userDetails = UserDetails(mtdId, "Individual", None),
+          apiVersion = apiVersion.name,
           params = Map("nino" -> validNino),
-          request = Some(requestBodyJson),
+          requestBody = Some(requestBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )

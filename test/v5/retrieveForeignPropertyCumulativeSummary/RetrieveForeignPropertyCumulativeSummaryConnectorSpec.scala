@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import config.MockAppConfig
+import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
-import play.api.Configuration
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveForeignPropertyCumulativeSummaryResponse, ForeignPropertyEntry}
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
 import scala.concurrent.Future
 
-class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec with MockAppConfig {
+class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
   private val nino       = "AA123456A"
   private val businessId = "someBusinessId"
@@ -36,7 +35,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
     _: ConnectorTest =>
 
     val connector: RetrieveForeignPropertyCumulativeSummaryConnector =
-      new RetrieveForeignPropertyCumulativeSummaryConnector(http = mockHttpClient, applicationAppConfig = mockAppConfig)
+      new RetrieveForeignPropertyCumulativeSummaryConnector(http = mockHttpClient)
 
     val requestData: RetrieveForeignPropertyCumulativeSummaryRequestData =
       Def1_RetrieveForeignPropertyCumulativeSummaryRequestData(Nino(nino), BusinessId(businessId), taxYear = TaxYear.fromMtd("2025-26"))
@@ -49,7 +48,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
   "RetrieveForeignPropertyCumulativeSummaryConnector" when {
     "the request is made and FOREIGN property data is returned" should {
       "return ForeignResult" in new TysIfsTest with Test {
-        MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
 
         private val response = responseWith(Some(Seq(ForeignPropertyEntry("AFG", None, None))))
 
@@ -63,7 +62,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
 
     "the request is made and non-FOREIGN property data is returned (e.g. because the businessId is for a foreign property)" should {
       "return NonForeignResult" in new TysIfsTest with Test {
-        MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
         private val response = responseWith(None)
 
         willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
@@ -76,7 +75,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
 
     "isPassIntentHeader feature switch is on" must {
       "pass FOREIGN_PROPERTY intent" in new TysIfsTest with Test {
-        MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
         private val response = responseWith(None)
 
         willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns

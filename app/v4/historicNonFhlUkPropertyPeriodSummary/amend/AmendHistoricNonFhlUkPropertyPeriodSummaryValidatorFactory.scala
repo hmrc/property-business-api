@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
-import shared.controllers.validators.Validator
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (implicit appConfig: AppConfig) {
+class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory {
 
   def validator(nino: String, periodId: String, body: JsValue): Validator[AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
     new Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator(nino, periodId, body)

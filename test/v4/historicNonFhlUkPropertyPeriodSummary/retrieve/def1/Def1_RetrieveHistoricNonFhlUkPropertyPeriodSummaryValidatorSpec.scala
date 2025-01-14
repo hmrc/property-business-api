@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@ package v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 
 import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
-import shared.models.domain.{Nino, TaxYear}
+import shared.models.domain.Nino
 import shared.models.errors._
-import config.MockAppConfig
 import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec {
 
   private implicit val correlationId: String = "X-12345"
   private val validNino                      = "AA123456A"
@@ -36,17 +35,11 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
   private val parsedNino     = Nino("AA123456A")
   private val parsedPeriodId = PeriodId("2017-04-06_2017-07-04")
 
-  private def setupMocks() = {
-    MockedAppConfig.minimumTaxYearHistoric returns TaxYear.starting(2017)
-    MockedAppConfig.maximumTaxYearHistoric returns TaxYear.starting(2021)
-  }
-
   private def validator(nino: String, periodId: String) = new Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator(nino, periodId)
 
   "validate()" should {
     "return the parsed domain object" when {
       "given a valid request" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId).validateAndWrapResult()
@@ -57,7 +50,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
 
     "return a single error" when {
       "given an invalid nino" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", validPeriodId).validateAndWrapResult()
@@ -66,7 +58,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
       }
 
       "given an invalid periodId format is supplied" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06__2017-07-04").validateAndWrapResult()
@@ -75,7 +66,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
       }
 
       "given an invalid period id" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06__2017-07-04").validateAndWrapResult()
@@ -84,7 +74,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
       }
 
       "given a non-historic periodId" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2012-04-06_2012-07-04").validateAndWrapResult()
@@ -95,7 +84,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid").validateAndWrapResult()

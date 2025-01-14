@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,26 @@
 
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.ResolveNino
-import common.models.domain.HistoricPropertyType
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated._
 import cats.implicits._
-import common.controllers.validators.resolvers.ResolveHistoricTaxYear
-import config.AppConfig
+import common.models.domain.HistoricPropertyType
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator(nino: String,
-                                                                taxYear: String,
-                                                                propertyType: HistoricPropertyType,
-                                                                appConfig: AppConfig)
+class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String, propertyType: HistoricPropertyType)
     extends Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxHistoric = appConfig.minimumTaxYearHistoric
-  private lazy val maximumTaxHistoric = appConfig.maximumTaxYearHistoric
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22")), RuleHistoricTaxYearNotSupportedError)
 
   def validate: Validated[Seq[MtdError], DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear),
+      resolveTaxYear(taxYear),
       Valid(propertyType)
     ).mapN(Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData)
 

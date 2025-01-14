@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def1.model.response
 
-import shared.models.domain.Timestamp
-import config.MockAppConfig
 import play.api.libs.json.Json
+import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea._
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty._
 
-class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec {
 
   private val retrieveForeignPropertyAnnualSubmissionResponseBody = Def1_RetrieveForeignPropertyAnnualSubmissionResponse(
     Timestamp("2020-07-07T10:59:47.544Z"),

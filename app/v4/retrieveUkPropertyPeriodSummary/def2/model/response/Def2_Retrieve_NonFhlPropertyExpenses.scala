@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@
 package v4.retrieveUkPropertyPeriodSummary.def2.model.response
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import utils.JsonReadsUtils.readValidOption
+import play.api.libs.json._
 
 case class Def2_Retrieve_NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                                 repairsAndMaintenance: Option[BigDecimal],
@@ -42,14 +41,15 @@ object Def2_Retrieve_NonFhlPropertyExpenses {
       (JsPath \ "professionalFees").readNullable[BigDecimal] and
       (JsPath \ "costOfServices").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
-      readValidOption(
-        (JsPath \ "residentialFinancialCost").readNullable[BigDecimal],
-        (JsPath \ "residentialFinancialCostAmount").readNullable[BigDecimal]) and
+      (JsPath \ "residentialFinancialCost").readNullable[BigDecimal].flatMap {
+        case Some(value) => Reads.pure(Some(value): Option[BigDecimal])
+        case None        => (JsPath \ "residentialFinancialCostAmount").readNullable[BigDecimal]
+      } and
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
-      readValidOption(
-        (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal],
-        (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal]
-      ) and
+      (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal].flatMap {
+        case Some(value) => Reads.pure(Some(value): Option[BigDecimal])
+        case None        => (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal]
+      } and
       (JsPath \ "ukOtherRentARoom").readNullable[Def2_Retrieve_RentARoomExpenses] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
   )(Def2_Retrieve_NonFhlPropertyExpenses.apply _)

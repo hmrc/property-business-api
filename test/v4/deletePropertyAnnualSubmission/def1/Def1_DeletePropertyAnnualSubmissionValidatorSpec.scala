@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,11 @@ package v4.deletePropertyAnnualSubmission.def1
 
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
-import config.MockAppConfig
 import shared.utils.UnitSpec
 import v4.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionValidatorFactory
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
-class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -36,16 +35,13 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
   private val parsedTysTaxYear = TaxYear.fromMtd(validTysTaxYear)
 
-  private val validatorFactory = new DeletePropertyAnnualSubmissionValidatorFactory(mockAppConfig)
+  private val validatorFactory = new DeletePropertyAnnualSubmissionValidatorFactory
 
   private def validator(nino: String, businessId: String, taxYear: String) = validatorFactory.validator(nino, businessId, taxYear)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTysTaxYear).validateAndWrapResult()
 
@@ -53,7 +49,6 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
         validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult() shouldBe
           Right(Def1_DeletePropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
@@ -61,7 +56,6 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTysTaxYear).validateAndWrapResult()
 
@@ -69,7 +63,6 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
       }
 
       "passed an incorrectly formatted taxYear" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
 
@@ -78,7 +71,6 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
       }
 
       "passed an incorrectly formatted businessId" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTysTaxYear).validateAndWrapResult()
 
@@ -86,13 +78,11 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
       }
 
       "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
         validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-22").validateAndWrapResult()
 
@@ -102,7 +92,6 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with Moc
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()
 

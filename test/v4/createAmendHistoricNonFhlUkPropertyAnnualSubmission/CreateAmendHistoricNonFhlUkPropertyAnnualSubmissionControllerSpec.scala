@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,20 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import common.models.audit.FlattenedGenericAuditDetail
 import common.models.errors.RuleMisalignedPeriodError
+import play.api.Configuration
+import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.mvc.Result
+import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.MockAppConfig
-import play.api.Configuration
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.mvc.Result
-import play.api.test.FakeRequest
 import shared.utils.MockIdGenerator
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
-}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +37,6 @@ import scala.concurrent.Future
 
 class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockAuditService
     with MockEnrolmentsAuthService
@@ -89,7 +82,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -109,15 +102,15 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino, taxYear)(fakePutRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAndAmendHistoricNonFhlPropertyBusinessAnnualSubmission",
         transactionName = "create-and-amend-historic-non-fhl-property-business-annual-submission",
-        detail = FlattenedGenericAuditDetail(
-          versionNumber = Some(apiVersion.name),
+        detail = GenericAuditDetail(
           userDetails = UserDetails(mtdId, "Individual", None),
+          apiVersion = apiVersion.name,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
-          request = Some(validMtdJson),
+          requestBody = Some(validMtdJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )

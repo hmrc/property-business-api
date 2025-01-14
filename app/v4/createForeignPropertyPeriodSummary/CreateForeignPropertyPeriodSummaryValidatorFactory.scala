@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
 
 package v4.createForeignPropertyPeriodSummary
 
+import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
-import config.AppConfig
-import play.api.libs.json.JsValue
 import v4.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryValidatorFactory.{def2TaxYearStart, maximumTaxYear}
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateForeignPropertyPeriodSummaryValidatorFactory {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateForeignPropertyPeriodSummaryRequestData] = {
 
@@ -38,7 +37,7 @@ class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: A
         new Def2_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, body)
 
       case _ =>
-        new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, body, appConfig)
+        new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, body)
     }
   }
 

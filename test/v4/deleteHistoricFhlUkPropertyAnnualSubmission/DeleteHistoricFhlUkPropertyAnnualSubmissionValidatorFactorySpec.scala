@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,19 @@
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import common.models.domain.HistoricPropertyType
-import config.MockAppConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
 
   implicit val correlationId: String = "X-123"
   private val validNino              = "AA123456A"
   private val validTaxYear           = "2019-20"
   private val propertyType           = HistoricPropertyType.Fhl
 
-  private val validatorFactory = new DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
+  private val validatorFactory = new DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory
 
   "validator()" when {
 

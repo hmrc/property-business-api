@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package v4.historicNonFhlUkPropertyPeriodSummary.amend.def1
 
 import common.models.domain.PeriodId
 import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
-import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
-import shared.models.domain.{Nino, TaxYear}
+import shared.models.domain.Nino
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
@@ -30,7 +29,7 @@ import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators with Def1_Fixtures {
+class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with Def1_Fixtures {
   private implicit val correlationId: String = "1234"
 
   private val validNino     = "AA123456A"
@@ -42,16 +41,9 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
   private def validator(nino: String, periodId: String, body: JsValue) =
     new Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator(nino, periodId, body)
 
-  private def setupStubs() = {
-    MockedAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
-    MockedAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
-  }
-
   "validator" should {
     "return the parsed domain object" when {
       "given a valid request" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestFull).validateAndWrapResult()
 
@@ -59,8 +51,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a valid consolidated request" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestConsolidated).validateAndWrapResult()
 
@@ -70,8 +60,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
 
     "return a single error" when {
       "given an invalid nino" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", validPeriodId, mtdJsonRequestFull).validateAndWrapResult()
 
@@ -79,8 +67,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a body with multiple invalid numeric amounts" in {
-        setupStubs()
-
         val badNegativeValue = JsNumber(-4996.99)
         val badBigValue      = JsNumber(999999999999.99)
 
@@ -108,8 +94,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a body with both expenses supplied" in {
-        setupStubs()
-
         val invalidBody = mtdJsonRequestFull
           .update("/expenses/consolidatedExpenses", JsNumber(100.00))
 
@@ -122,8 +106,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given an empty body" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, JsObject.empty).validateAndWrapResult()
 
@@ -131,8 +113,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a body with empty income and expenses sub-objects" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestWithEmptySubObjects).validateAndWrapResult()
 
@@ -140,8 +120,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a body with empty rentARoom sub-object" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestWithEmptyRentARoom).validateAndWrapResult()
 
@@ -149,8 +127,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given an invalidly formatted periodId" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "20A7-04-06_2017-07-04", mtdJsonRequestFull).validateAndWrapResult()
 
@@ -158,8 +134,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a periodId with a non-historic year" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2012-04-06_2012-07-04", mtdJsonRequestFull).validateAndWrapResult()
 
@@ -167,8 +141,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
       }
 
       "given a periodId with a toDate before fromDate" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2019-07-04_2019-04-06", mtdJsonRequestFull).validateAndWrapResult()
 
@@ -179,8 +151,6 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupStubs()
-
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", mtdJsonRequestFull).validateAndWrapResult()
 

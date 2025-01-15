@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,16 @@
 package v4.createForeignPropertyPeriodSummary.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, RuleToDateBeforeFromDateError}
+import play.api.libs.json._
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
-import config.MockAppConfig
-import play.api.libs.json._
 import shared.utils.UnitSpec
 import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea._
 import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry._
-import v4.createForeignPropertyPeriodSummary.model.request.{
-  CreateForeignPropertyPeriodSummaryRequestData,
-  Def1_CreateForeignPropertyPeriodSummaryRequestBody,
-  Def1_CreateForeignPropertyPeriodSummaryRequestData
-}
+import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -245,14 +240,11 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
     )
 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue, maxTaxYear: TaxYear = maxTaxYear) =
-    new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maxTaxYear, body, mockAppConfig)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
+    new Def1_CreateForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maxTaxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
@@ -260,7 +252,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a valid request with consolidated expenses" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyConsolidated).validateAndWrapResult()
 
@@ -268,7 +259,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a valid request with minimal foreignFhlEea" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimalFhl).validateAndWrapResult()
 
@@ -277,7 +267,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a valid request with minimal foreignNonFhlProperty" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimalNonFhl).validateAndWrapResult()
 
@@ -286,7 +275,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(Def1_CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
@@ -295,7 +283,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
@@ -303,7 +290,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed an invalid business id" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
 
@@ -311,7 +297,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed an invalidly formatted tax year" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "invalid", validBody).validateAndWrapResult()
 
@@ -319,13 +304,11 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
         validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a tax year with an invalid range" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2021-23", validBody).validateAndWrapResult()
 
@@ -333,7 +316,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed tax year after max tax year" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2025-26", validBody).validateAndWrapResult()
 
@@ -341,7 +323,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with an empty foreignFhlEea" in {
-        setupMocks()
         val invalidBody = validBody.replaceWithEmptyObject("/foreignFhlEea")
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -351,7 +332,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with an empty foreignFhlEea/expenses" in {
-        setupMocks()
         val invalidBody = validBody.replaceWithEmptyObject("/foreignFhlEea/expenses")
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -361,7 +341,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with an empty foreignFhlEea/income" in {
-        setupMocks()
         val invalidBody = validBody.replaceWithEmptyObject("/foreignFhlEea/income")
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -371,7 +350,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with an empty foreignNonFhlProperty entry" in {
-        setupMocks()
         val invalidBody = bodyWith(JsObject.empty)
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -381,7 +359,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a foreignNonFhlProperty entry containing an empty expenses object" in {
-        setupMocks()
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/expenses"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -391,7 +368,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a foreignNonFhlProperty entry containing an empty income object" in {
-        setupMocks()
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/income"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -402,7 +378,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a foreignNonFhlProperty entry missing income and expenses" in {
-        setupMocks()
         val invalidBody = bodyWith(entry.removeProperty("/income").removeProperty("/expenses"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -412,7 +387,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a foreignNonFhlProperty entry containing an empty income/rentIncome object" in {
-        setupMocks()
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/income/rentIncome"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -422,7 +396,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with an invalidly formatted fromDate" in {
-        setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
         print(invalidBody)
 
@@ -433,7 +406,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a fromDate out of range" in {
-        setupMocks()
         val invalidBody = validBody.update("/fromDate", JsString("1782-09-04"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -443,7 +415,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with an invalidly formatted toDate" in {
-        setupMocks()
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
 
         print(invalidBody)
@@ -454,7 +425,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a toDate out of range" in {
-        setupMocks()
         val invalidBody = validBody.update("/toDate", JsString("3054-03-29"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -464,7 +434,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body where the toDate precedes fromDate" in {
-        setupMocks()
         val invalidBody = validBody
           .update("/fromDate", JsString("2021-01-01"))
           .update("/toDate", JsString("2020-01-01"))
@@ -476,7 +445,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with a duplicate country code" in {
-        setupMocks()
         val invalidBody = bodyWith(entry, entry)
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -493,7 +461,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with multiple duplicate country codes" in {
-        setupMocks()
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
         val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
@@ -520,7 +487,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
       def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
         s"for $expectedPath" in {
-          setupMocks()
           val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
             validator(validNino, validBusinessId, validTaxYear, body).validateAndWrapResult()
 
@@ -572,7 +538,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body with multiple fields containing invalid amounts" in {
-        setupMocks()
         val badValue = JsNumber(42.768)
         val invalidBody = bodyWith(
           entry
@@ -597,7 +562,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing an invalid country code" in {
-        setupMocks()
         val invalidBody = bodyWith(entryWith("JUY"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -607,7 +571,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing a multiple invalid country codes" in {
-        setupMocks()
         val invalidBody = bodyWith(entryWith("ABC"), entryWith("DEF"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -620,7 +583,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing an invalidly formatted country code" in {
-        setupMocks()
         val invalidBody = bodyWith(entryWith("12345678"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -631,7 +593,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing a multiple invalidly formatted country codes" in {
-        setupMocks()
         val invalidBody = bodyWith(entryWith("12345678"), entryWith("34567890"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -644,7 +605,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing both foreignFhlEea expenses" in {
-        setupMocks()
         val invalidBody = validBody.update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(100.00))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -654,7 +614,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing both foreignNonFhlProperty expenses" in {
-        setupMocks()
         val invalidBody = bodyWith(entry.update("/expenses/consolidatedExpenses", JsNumber(100.00)))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -664,7 +623,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       "passed a body containing multiple sub-objects with both expenses" in {
-        setupMocks()
         val entryWithBothExpenses0 = entryWith("AFG").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val entryWithBothExpenses1 = entryWith("ZWE").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val invalidBody =
@@ -690,7 +648,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
     "return multiple errors" when {
       "the path parameters have multiple issues" in {
-        setupMocks()
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

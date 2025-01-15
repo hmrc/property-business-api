@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,28 +21,23 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import common.controllers.validators.resolvers.ResolvePeriodId
 import common.models.errors.RuleBothExpensesSuppliedError
-import config.AppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
-import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
-  AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
-  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
-}
+import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request._
 
 class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator(
     nino: String,
     periodId: String,
     body: JsValue
-)(implicit appConfig: AppConfig)
-    extends Validator[AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] {
+) extends Validator[AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveParsedNumber  = ResolveParsedNumber()
-  private val resolveJson          = new ResolveNonEmptyJsonObject[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody]()
-  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
+  private val resolveParsedNumber = ResolveParsedNumber()
+  private val resolveJson         = new ResolveNonEmptyJsonObject[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody]()
+  private val resolvePeriodId     = new ResolvePeriodId(TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22"))
 
   private val valid = Valid(())
 

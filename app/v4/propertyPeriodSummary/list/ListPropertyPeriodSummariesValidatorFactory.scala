@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package v4.propertyPeriodSummary.list
 
 import shared.controllers.validators.Validator
-import config.AppConfig
 import v4.propertyPeriodSummary.list.def1.Def1_ListPropertyPeriodSummariesValidator
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class ListPropertyPeriodSummariesValidatorFactory @Inject() (implicit appConfig: AppConfig) {
+class ListPropertyPeriodSummariesValidatorFactory {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[ListPropertyPeriodSummariesRequestData] = {
 

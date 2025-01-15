@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,26 @@
 
 package v4.deletePropertyAnnualSubmission.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
 import javax.inject.Inject
 
-class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(appConfig: AppConfig)
+class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
     extends Validator[DeletePropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2021-22"))
 
   def validate: Validated[Seq[MtdError], DeletePropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(minimumTaxYear, taxYear)
+      resolveTaxYear(taxYear)
     ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData)
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,22 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission
 
-import shared.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
-import config.AppConfig
+import shared.controllers.validators.Validator
 import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v5.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v5.retrieveForeignPropertyAnnualSubmission.def2.Def2_RetrieveForeignPropertyAnnualSubmissionValidator
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveForeignPropertyAnnualSubmissionValidatorFactory {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] = {
 
     RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
-      case Valid(Def1)     => new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(appConfig)
+      case Valid(Def1)     => new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
       case Valid(Def2)     => new Def2_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
       case Invalid(errors) => Validator.returningErrors(errors)
     }

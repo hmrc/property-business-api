@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.createAmendUkPropertyAnnualSubmission.model.request.{
   CreateAmendUkPropertyAnnualSubmissionRequestData,
@@ -46,7 +45,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
       case def1: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =>
         import def1._
         val downstreamUri =
-          if (taxYear.year >= TaxYear.tysTaxYear.year) {
+          if (taxYear.useTaxYearSpecificApi) {
             TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
           } else {
             IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,10 @@ package v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
-import config.MockAppConfig
 import shared.utils.UnitSpec
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
 
   private val validNino    = "AA123456A"
@@ -32,17 +31,11 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Un
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private def validator(nino: String, taxYear: String) = new Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator(nino, taxYear, mockAppConfig)
-
-  private def setupMocks() = {
-    MockedAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
-    MockedAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
-  }
+  private def validator(nino: String, taxYear: String) = new Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator(nino, taxYear)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
@@ -53,7 +46,6 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Un
       "passed the maximum supported taxYear" in allowsTaxYear("2021-22")
 
       def allowsTaxYear(taxYearString: String): Unit = {
-        setupMocks()
         validator(validNino, taxYearString).validateAndWrapResult() shouldBe
           Right(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData(parsedNino, TaxYear.fromMtd(taxYearString)))
       }
@@ -61,7 +53,6 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Un
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validTaxYear).validateAndWrapResult()
 
@@ -69,7 +60,6 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Un
       }
 
       "passed an incorrectly formatted taxYear" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "202324").validateAndWrapResult()
 
@@ -81,13 +71,11 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Un
       "passed a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
 
       def disallowsTaxYear(taxYearString: String): Unit = {
-        setupMocks()
         validator(validNino, taxYearString).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2020-22").validateAndWrapResult()
 
@@ -97,7 +85,6 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Un
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid").validateAndWrapResult()
 

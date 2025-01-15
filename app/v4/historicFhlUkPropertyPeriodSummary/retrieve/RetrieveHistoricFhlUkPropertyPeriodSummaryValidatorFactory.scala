@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@
 package v4.historicFhlUkPropertyPeriodSummary.retrieve
 
 import shared.controllers.validators.Validator
-import config.AppConfig
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoricFhlUkPeriodSummaryValidator
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory {
 
   def validator(nino: String, periodId: String): Validator[RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] =
-    new Def1_RetrieveHistoricFhlUkPeriodSummaryValidator(nino, periodId, appConfig)
+    new Def1_RetrieveHistoricFhlUkPeriodSummaryValidator(nino, periodId)
 
 }

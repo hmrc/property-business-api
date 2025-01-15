@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package v4.retrieveUkPropertyPeriodSummary
 
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
-import config.AppConfig
 import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v4.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
 import v4.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator
@@ -28,15 +27,15 @@ import javax.inject.{Inject, Singleton}
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
-class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() {
 
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveUkPropertyPeriodSummaryRequestData] = {
     TaxYear.maybeFromMtd(taxYear) match {
       case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
-        new Def2_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)(appConfig)
+        new Def2_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)
 
       case _ =>
-        new Def1_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)(appConfig)
+        new Def1_RetrieveUkPropertyPeriodSummaryValidator(nino, businessId, taxYear, submissionId)
     }
   }
 

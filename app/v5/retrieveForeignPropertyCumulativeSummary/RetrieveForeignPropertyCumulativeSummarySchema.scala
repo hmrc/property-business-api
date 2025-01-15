@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import shared.controllers.validators.resolvers.ResolveTaxYear
-import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.Reads
-import schema.DownstreamReadable
+import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.models.domain.TaxYear
+import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import shared.schema.DownstreamReadable
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.response.Def1_RetrieveForeignPropertyCumulativeSummaryResponse
 import v5.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 

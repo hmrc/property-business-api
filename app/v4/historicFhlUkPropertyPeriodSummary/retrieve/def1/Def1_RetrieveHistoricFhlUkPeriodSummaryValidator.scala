@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.retrieve.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import common.controllers.validators.resolvers.ResolvePeriodId
-import config.AppConfig
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request._
 
-class Def1_RetrieveHistoricFhlUkPeriodSummaryValidator(nino: String, periodId: String, appConfig: AppConfig)
+class Def1_RetrieveHistoricFhlUkPeriodSummaryValidator(nino: String, periodId: String)
     extends Validator[RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] {
 
-  private lazy val resolvePeriodId = new ResolvePeriodId(appConfig.minimumTaxYearHistoric, appConfig.maximumTaxYearHistoric)
+  private lazy val resolvePeriodId = new ResolvePeriodId(TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22"))
 
   def validate: Validated[Seq[MtdError], RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] =
     (

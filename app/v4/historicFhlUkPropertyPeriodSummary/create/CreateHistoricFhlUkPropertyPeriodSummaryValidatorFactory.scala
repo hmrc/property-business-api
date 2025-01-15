@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create
 
-import shared.controllers.validators.Validator
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator
 import v4.historicFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricFhlUkPropertyPeriodSummaryRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory {
 
   def validator(nino: String, body: JsValue): Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
-    new Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino, body, appConfig)
+    new Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino, body)
 
 }

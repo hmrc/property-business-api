@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,13 @@ package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
-import config.MockAppConfig
 import shared.utils.UnitSpec
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 }
 
-class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
   implicit val correlationId: String = "X-123"
   private val validNino              = "AA123456A"
@@ -37,16 +36,9 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
 
   private def validator(nino: String, taxYear: String) = new Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear)
 
-  private def setupMocks() = {
-    MockedAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017))
-    MockedAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021))
-  }
-
   "validator" should {
     "return no errors" when {
       "a valid Fhl request is supplied" in {
-        setupMocks()
-
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
@@ -54,7 +46,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
       }
 
       "a valid non-Fhl request is supplied" in {
-        setupMocks()
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
@@ -65,7 +56,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
       "passed the maximum supported taxYear" in allowsTaxYear("2021-22")
 
       def allowsTaxYear(taxYearString: String): Unit = {
-        setupMocks()
 
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, taxYearString).validateAndWrapResult()
@@ -77,7 +67,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
 
     "return a single error" when {
       "an invalid nino is supplied" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator("ABC", validTaxYear).validateAndWrapResult()
@@ -86,7 +75,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
       }
 
       "an invalid tax year format is supplied" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "20-21").validateAndWrapResult()
@@ -98,7 +86,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
       "passed a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
 
       def disallowsTaxYear(taxYearString: String): Unit = {
-        setupMocks()
 
         val result = validator(validNino, taxYearString).validateAndWrapResult()
         result shouldBe
@@ -106,7 +93,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2020-22").validateAndWrapResult()
@@ -117,7 +103,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
 
         val result: Either[ErrorWrapper, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid").validateAndWrapResult()

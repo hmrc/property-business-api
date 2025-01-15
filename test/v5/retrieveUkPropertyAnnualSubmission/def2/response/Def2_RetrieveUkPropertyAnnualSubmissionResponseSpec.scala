@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.def2.response
 
-import shared.models.domain.Timestamp
-import config.MockAppConfig
 import play.api.libs.json.Json
+import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response._
 
-class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec with MockAppConfig {
+class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
 
   private val tysDownstreamJson = Json.parse("""
       |{

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,16 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
+import play.api.Configuration
+import play.api.libs.json.JsValue
+import play.api.mvc.Result
+import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.MockAppConfig
-import play.api.Configuration
-import play.api.libs.json.JsValue
-import play.api.mvc.Result
-import play.api.test.FakeRequest
 import shared.utils.MockIdGenerator
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 import v4.createAmendForeignPropertyAnnualSubmission.model.request._
@@ -36,7 +35,6 @@ import scala.concurrent.Future
 
 class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService

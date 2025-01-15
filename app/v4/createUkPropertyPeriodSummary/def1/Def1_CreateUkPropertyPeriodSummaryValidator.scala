@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,21 @@
 
 package v4.createUkPropertyPeriodSummary.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
-import common.controllers.validators.resolvers.ResolveTaxYear
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.createUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(appConfig: AppConfig)
+class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Uk
-  private lazy val maximumTaxYear = TaxYear.fromMtd("2023-24")
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2022-23"), TaxYear.fromMtd("2023-24")))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def1_CreateUkPropertyPeriodSummaryRulesValidator()
@@ -42,7 +39,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, busin
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear, minimumTaxYear, maximumTaxYear),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
 

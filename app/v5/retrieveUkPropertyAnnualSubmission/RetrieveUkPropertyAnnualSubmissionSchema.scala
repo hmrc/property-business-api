@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package v5.retrieveUkPropertyAnnualSubmission
 
-import shared.controllers.validators.resolvers.ResolveTaxYear
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import play.api.libs.json.Reads
-import schema.DownstreamReadable
+import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
+import shared.schema.DownstreamReadable
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.model.response._

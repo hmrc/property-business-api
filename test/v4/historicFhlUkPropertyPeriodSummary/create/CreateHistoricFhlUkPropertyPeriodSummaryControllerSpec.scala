@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,21 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create
 
-import common.models.audit.FlattenedGenericAuditDetail
 import common.models.domain.PeriodId
 import common.models.errors.RuleMisalignedPeriodError
-import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse}
+import shared.models.audit._
 import shared.models.auth.UserDetails
 import shared.models.domain.Nino
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
-  CreateHistoricFhlUkPropertyPeriodSummaryRequestData,
-  Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
-  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
-}
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request._
 import v4.historicFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +38,6 @@ import scala.concurrent.Future
 
 class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -90,7 +83,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller = new CreateHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
@@ -110,15 +103,15 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
     protected def callController(): Future[Result] = controller.handleRequest(validNino)(fakePutRequest(requestBodyJson))
 
-    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAndCreateHistoricFhlPropertyBusinessAnnualSubmission",
         transactionName = "CreateAndCreateHistoricFhlPropertyBusinessAnnualSubmission",
-        detail = FlattenedGenericAuditDetail(
-          versionNumber = Some(apiVersion.name),
+        detail = GenericAuditDetail(
           userDetails = UserDetails(mtdId, "Individual", None),
+          apiVersion = apiVersion.name,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
-          request = Some(responseBodyJson),
+          requestBody = Some(responseBodyJson),
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )

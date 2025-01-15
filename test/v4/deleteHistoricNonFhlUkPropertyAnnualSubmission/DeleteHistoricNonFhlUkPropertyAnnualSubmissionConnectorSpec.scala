@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
+import play.api.Configuration
+import play.api.libs.json.JsObject
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import mocks.MockFeatureSwitches
-import play.api.libs.json.JsObject
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
@@ -28,7 +28,7 @@ import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
 
 import scala.concurrent.Future
 
-class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with MockFeatureSwitches {
+class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   private val nino    = Nino("AA123456A")
   private val taxYear = TaxYear.fromMtd("2021-22")
@@ -38,7 +38,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
 
       "sending a non-FHL request" in new IfsTest with Test {
 
-        MockFeatureSwitches.isPassIntentEnabled.returns(true)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes().returns(Configuration("passIntentHeader.enabled" -> true))
 
         willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
@@ -52,7 +52,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
 
       "isPassIntentHeader feature switch is off" in new IfsTest with Test {
 
-        MockFeatureSwitches.isPassIntentEnabled returns false
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
 
         willPut(url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022", body = JsObject.empty)
           .returns(Future.successful(expectedOutcome))

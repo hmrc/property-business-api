@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package v4.retrieveUkPropertyPeriodSummary.def2
 
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple4Semigroupal
+import common.controllers.validators.resolvers.ResolveSubmissionId
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple4Semigroupal
-import common.controllers.validators.resolvers.ResolveSubmissionId
-import config.AppConfig
 import v4.retrieveUkPropertyPeriodSummary.model.request.{Def2_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
 import javax.inject.Inject
@@ -33,14 +32,9 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (
     businessId: String,
     taxYear: String,
     submissionId: String
-)(appConfig: AppConfig)
-    extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
+) extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
 
-  private lazy val resolveTaxYear = {
-    val minimumTaxYear = appConfig.minimumTaxV2Uk
-    val maxTaxYear     = TaxYear.fromMtd("2024-25")
-    ResolveTaxYearMinMax(minimumTaxYear -> maxTaxYear)
-  }
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2022-23"), TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyPeriodSummaryRequestData] =
     (

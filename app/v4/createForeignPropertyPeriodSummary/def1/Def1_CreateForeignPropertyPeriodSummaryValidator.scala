@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,20 @@
 
 package v4.createForeignPropertyPeriodSummary.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import common.controllers.validators.resolvers.ResolveTaxYear
-import config.AppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String,
-                                                       businessId: String,
-                                                       taxYear: String,
-                                                       maxTaxYear: TaxYear,
-                                                       body: JsValue,
-                                                       appConfig: AppConfig)
+class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, maxTaxYear: TaxYear, body: JsValue)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateForeignPropertyPeriodSummaryRequestBody]()
 
@@ -44,7 +37,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String,
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(value = taxYear, minimumTaxYear = minimumTaxYear, maximumTaxYear = maxTaxYear),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
 

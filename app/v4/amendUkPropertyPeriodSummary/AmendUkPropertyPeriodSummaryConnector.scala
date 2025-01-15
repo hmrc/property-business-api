@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,13 @@
 
 package v4.amendUkPropertyPeriodSummary
 
+import play.api.http.Status.NO_CONTENT
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import shared.config.SharedAppConfig
-import play.api.http.Status.NO_CONTENT
-import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v4.amendUkPropertyPeriodSummary.model.request.{
-  AmendUkPropertyPeriodSummaryRequestData,
-  Def1_AmendUkPropertyPeriodSummaryRequestData,
-  Def2_AmendUkPropertyPeriodSummaryRequestData,
-  Def2_AmendUkPropertyPeriodSummarySubmissionRequestData
-}
+import v4.amendUkPropertyPeriodSummary.model.request._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,7 +40,7 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClient, val
     request match {
       case def1: Def1_AmendUkPropertyPeriodSummaryRequestData =>
         import def1._
-        val downstreamUri = if (taxYear.year >= TaxYear.tysTaxYear.year) {
+        val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
           TaxYearSpecificIfsUri[Unit](
             s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         } else

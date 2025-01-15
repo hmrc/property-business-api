@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 package v5.createAmendForeignPropertyCumulativePeriodSummary.model.request
 
 import play.api.libs.json.OWrites
-import utils.JsonWritesUtil
+import shared.utils.JsonWritesUtil.writesFrom
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody
 
 trait CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody
 
-object CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody extends JsonWritesUtil {
+object CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody {
 
   implicit val writes: OWrites[CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody] = writesFrom {
     case def1: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =>

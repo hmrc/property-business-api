@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package v4.amendUkPropertyPeriodSummary.def2
 
 import common.models.domain.SubmissionId
 import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
-import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
@@ -29,7 +28,7 @@ import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
 import v4.amendUkPropertyPeriodSummary.model.request._
 
-class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 

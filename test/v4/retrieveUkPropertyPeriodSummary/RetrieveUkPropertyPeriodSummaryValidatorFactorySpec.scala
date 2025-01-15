@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,17 @@
 
 package v4.retrieveUkPropertyPeriodSummary
 
-import config.MockAppConfig
 import shared.utils.UnitSpec
 import v4.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
 import v4.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator
 
-class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class RetrieveUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  private val validatorFactory = new RetrieveUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new RetrieveUkPropertyPeriodSummaryValidatorFactory
 
   "validator()" when {
     "given a Def1 taxYear" should {

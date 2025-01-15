@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.list.def1
 
-import config.MockAppConfig
 import shared.controllers.validators.Validator
 import shared.models.domain.Nino
 import shared.models.errors._
@@ -26,7 +25,7 @@ import v4.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
   ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
 }
 
-class Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpec {
 
   private implicit val correlationId: String = "X-123"
   private val validNino                      = "AA123456A"

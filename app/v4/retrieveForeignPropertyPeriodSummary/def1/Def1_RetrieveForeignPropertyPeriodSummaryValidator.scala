@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,29 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
-import common.controllers.validators.resolvers.{ResolveSubmissionId, ResolveTaxYear}
-import config.AppConfig
+import common.controllers.validators.resolvers.ResolveSubmissionId
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
 
 class Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino: String,
                                                          businessId: String,
                                                          taxYear: String,
                                                          maximumTaxYear: TaxYear,
-                                                         submissionId: String,
-                                                         appConfig: AppConfig)
+                                                         submissionId: String)
     extends Validator[RetrieveForeignPropertyPeriodSummaryRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maximumTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyPeriodSummaryRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear, minimumTaxYear, maximumTaxYear),
+      resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId)
     ).mapN(Def1_RetrieveForeignPropertyPeriodSummaryRequestData)
 

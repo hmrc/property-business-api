@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,16 @@
 package v4.amendUkPropertyPeriodSummary
 
 import common.models.domain.SubmissionId
+import play.api.Configuration
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
+import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import config.MockAppConfig
-import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
-import play.api.test.FakeRequest
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
@@ -38,7 +37,6 @@ import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockAmendUkPropertyPeriodSummaryService
     with MockAmendUkPropertyPeriodSummaryValidatorFactory

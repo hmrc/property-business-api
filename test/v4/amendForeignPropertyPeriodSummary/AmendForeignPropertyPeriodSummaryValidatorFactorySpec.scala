@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
-import config.MockAppConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
 import v4.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 
-class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
@@ -39,12 +37,11 @@ class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wit
        |}
        |""".stripMargin)
 
-  private val validatorFactory = new AmendForeignPropertyPeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new AmendForeignPropertyPeriodSummaryValidatorFactory
 
   "validator()" when {
     "given a valid tax year" should {
       "return the Validator for schema definition 1" in {
-        MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
         val result: Validator[AmendForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBody)
         result shouldBe a[Def1_AmendForeignPropertyPeriodSummaryValidator]

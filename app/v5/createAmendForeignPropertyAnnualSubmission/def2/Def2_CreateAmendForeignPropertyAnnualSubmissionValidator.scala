@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,22 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission.def2
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import shared.models.errors.MtdError
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
   Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
 }
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody]

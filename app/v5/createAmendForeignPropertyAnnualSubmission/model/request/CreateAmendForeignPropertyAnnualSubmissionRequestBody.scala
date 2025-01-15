@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 package v5.createAmendForeignPropertyAnnualSubmission.model.request
 
 import play.api.libs.json._
-import utils.JsonWritesUtil
+import shared.utils.JsonWritesUtil.writesFrom
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
 trait CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
-object CreateAmendForeignPropertyAnnualSubmissionRequestBody extends JsonWritesUtil {
+object CreateAmendForeignPropertyAnnualSubmissionRequestBody {
 
   implicit val writes: OWrites[CreateAmendForeignPropertyAnnualSubmissionRequestBody] = writesFrom {
     case def1: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody =>

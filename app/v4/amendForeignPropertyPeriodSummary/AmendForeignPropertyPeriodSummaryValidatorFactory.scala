@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 
 package v4.amendForeignPropertyPeriodSummary
 
+import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
-import config.AppConfig
-import play.api.libs.json.JsValue
 import v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryValidatorFactory.{def2TaxYearStart, maximumTaxYear}
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
 import v4.amendForeignPropertyPeriodSummary.def2.Def2_AmendForeignPropertyPeriodSummaryValidator
@@ -29,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() {
 
   def validator(nino: String,
                 businessId: String,
@@ -39,10 +38,10 @@ class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: Ap
 
     TaxYear.maybeFromMtd(taxYear) match {
       case Some(parsedTY) if parsedTY >= def2TaxYearStart =>
-        new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body, appConfig)
+        new Def2_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body)
 
       case _ =>
-        new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body, appConfig)
+        new Def1_AmendForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, body)
     }
   }
 

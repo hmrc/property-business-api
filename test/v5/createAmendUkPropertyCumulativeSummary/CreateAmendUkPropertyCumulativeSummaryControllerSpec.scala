@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -34,7 +33,6 @@ import scala.concurrent.Future
 
 class CreateAmendUkPropertyCumulativeSummaryControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockCreateAmendUkPropertyCumulativeSummaryService
     with MockCreateAmendUkPropertyCumulativeSummaryValidatorFactory

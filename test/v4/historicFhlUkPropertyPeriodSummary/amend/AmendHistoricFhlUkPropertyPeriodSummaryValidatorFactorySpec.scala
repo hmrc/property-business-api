@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend
 
-import config.MockAppConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -24,7 +23,7 @@ import shared.utils.UnitSpec
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 
-class AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2019-20"
@@ -52,7 +51,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSp
       |""".stripMargin
   )
 
-  private val validatorFactory = new AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 
   "validator()" when {
     "given any tax year" should {

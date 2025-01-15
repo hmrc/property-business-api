@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,25 @@ package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import cats.data.Validated
 import cats.implicits._
-import common.controllers.validators.resolvers.ResolveHistoricTaxYear
-import config.AppConfig
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.ResolveNino
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 }
 
-class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String)(implicit appConfig: AppConfig)
+class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String)
     extends Validator[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxHistoric = appConfig.minimumTaxYearHistoric
-  private lazy val maximumTaxHistoric = appConfig.maximumTaxYearHistoric
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22")), RuleHistoricTaxYearNotSupportedError)
 
   def validate: Validated[Seq[MtdError], RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveHistoricTaxYear(minimumTaxHistoric, maximumTaxHistoric, taxYear)
+      resolveTaxYear(taxYear)
     ).mapN(Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
 
 }

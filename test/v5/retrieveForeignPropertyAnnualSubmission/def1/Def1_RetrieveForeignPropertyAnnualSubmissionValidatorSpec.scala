@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def1
 
-import config.MockAppConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -35,14 +34,11 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
   private def validator(nino: String, businessId: String, taxYear: String) =
-    new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)(mockAppConfig)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
+    new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
 
@@ -50,7 +46,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
           Right(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString)))
@@ -59,7 +54,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear).validateAndWrapResult()
 
@@ -67,7 +61,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
       }
 
       "passed an incorrectly formatted taxYear" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
 
@@ -76,7 +69,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
       }
 
       "passed an incorrectly formatted businessId" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTaxYear).validateAndWrapResult()
 
@@ -84,13 +76,11 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
       }
 
       "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
         validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-22").validateAndWrapResult()
 
@@ -101,7 +91,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
         val result: Either[ErrorWrapper, RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()
 

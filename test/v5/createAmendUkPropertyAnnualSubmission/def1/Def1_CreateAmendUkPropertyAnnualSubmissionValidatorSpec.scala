@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,12 @@
 package v5.createAmendUkPropertyAnnualSubmission.def1
 
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
-import config.MockAppConfig
 import play.api.libs.json._
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.{
-  CreateAmendUkFhlProperty,
-  CreateAmendUkFhlPropertyAdjustments,
-  CreateAmendUkFhlPropertyAllowances
-}
+import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
@@ -35,7 +30,7 @@ import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 }
 
-class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -197,15 +192,11 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
   )
 
   private def validator(nino: String, taxYear: String, businessId: String, body: JsValue) =
-    new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)(mockAppConfig)
-
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2021)).anyNumberOfTimes()
+    new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
-
         val result =
           validator(validNino, validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
@@ -213,8 +204,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a valid request with a minimal request body" in {
-        setupMocks()
-
         val result =
           validator(validNino, validTaxYear, validBusinessId, validBodyMinimal).validateAndWrapResult()
 
@@ -222,8 +211,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a valid request where only a ukFhlProperty is supplied" in {
-        setupMocks()
-
         val result =
           validator(validNino, validTaxYear, validBusinessId, validBodyFhlOnly).validateAndWrapResult()
 
@@ -232,7 +219,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a valid request where only a ukProperty is supplied" in {
-        setupMocks()
         val result =
           validator(validNino, validTaxYear, validBusinessId, validBodyUkPropertyOnly).validateAndWrapResult()
 
@@ -241,7 +227,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed the minimum supported taxYear" in {
-        setupMocks()
         val taxYearString = "2022-23"
         validator(validNino, taxYearString, validBusinessId, validBody).validateAndWrapResult() shouldBe
           Right(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
@@ -250,7 +235,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result =
           validator("invalid nino", validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
@@ -258,7 +242,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed an incorrectly formatted taxYear" in {
-        setupMocks()
         val result =
           validator(validNino, "202324", validBusinessId, validBody).validateAndWrapResult()
 
@@ -266,7 +249,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a taxYear spanning an invalid tax year range" in {
-        setupMocks()
         val result =
           validator(validNino, "2020-22", validBusinessId, validBody).validateAndWrapResult()
 
@@ -274,13 +256,11 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a taxYear immediately before the minimum supported" in {
-        setupMocks()
         validator(validNino, "2020-21", validBusinessId, validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed an incorrectly formatted businessId" in {
-        setupMocks()
         val result =
           validator(validNino, validTaxYear, "invalid business id", validBody).validateAndWrapResult()
 
@@ -288,7 +268,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed an empty body" in {
-        setupMocks()
         val result =
           validator(validNino, validTaxYear, validBusinessId, Json.parse("""{}""")).validateAndWrapResult()
 
@@ -298,7 +277,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       "passed a body with an empty object" should {
         def testEmpty(path: String): Unit =
           s"for $path" in {
-            setupMocks()
             val invalidBody: JsValue = validBody.removeProperty(path).replaceWithEmptyObject(path)
 
             val result =
@@ -318,7 +296,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an empty object except for an additional (non-schema) property" in {
-        setupMocks()
         val invalidBody: JsValue = Json.parse("""
             |{
             |    "ukFhlProperty":{
@@ -333,7 +310,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an empty ukFhlPropertyAdjustments object" in {
-        setupMocks()
         val invalidBody: JsValue = Json.parse("""
             |{
             |  "ukFhlProperty": {
@@ -354,7 +330,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with a ukFhlPropertyAdjustments containing an empty rentARoom object" in {
-        setupMocks()
         val invalidBody: JsValue = validBody.removeProperty("/ukFhlProperty/adjustments/rentARoom/jointlyLet")
 
         val result =
@@ -364,7 +339,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with ukProperty adjustments missing a required field object" in {
-        setupMocks()
         val invalidBody: JsValue = validBody.removeProperty("/ukProperty/adjustments/nonResidentLandlord")
 
         val result =
@@ -374,7 +348,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with ukProperty adjustments with an empty rentARoom object" in {
-        setupMocks()
         val invalidBody: JsValue = validBody.replaceWithEmptyObject("/ukProperty/adjustments/rentARoom/jointlyLet")
 
         val result =
@@ -384,7 +357,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid structuredBuildingAllowance/qualifyingDate" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -401,7 +373,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid enhancedStructuredBuildingAllowance/qualifyingDate" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -419,7 +390,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid structuredBuildingAllowance/building/name" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -434,7 +404,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid structuredBuildingAllowance/building/number" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -449,7 +418,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid structuredBuildingAllowance/building/postcode" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -466,7 +434,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       "passed a body with invalid numeric fields" should {
 
         def testValueFormatError(path: String): Unit = s"for $path" in {
-          setupMocks()
           val result =
             validator(validNino, validTaxYear, validBusinessId, validBody.update(path, JsNumber(123.456))).validateAndWrapResult()
 
@@ -496,7 +463,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with invalid structuredBuildingAllowance fields" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -521,7 +487,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with invalid enhancedStructuredBuildingAllowance fields" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -545,7 +510,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid ukFhlProperty propertyIncomeAllowance" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukFhlProperty/allowances")
@@ -562,7 +526,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with an invalid ukProperty propertyIncomeAllowance" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukProperty/allowances")
@@ -579,7 +542,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with ukFhlProperty propertyIncomeAllowance that is too big" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukFhlProperty/allowances")
@@ -596,7 +558,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with ukProperty propertyIncomeAllowance that is too big" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody
             .removeProperty("/ukProperty/allowances")
@@ -613,7 +574,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with both allowances and propertyIncomeAllowance supplied for fhl" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody
             .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
@@ -626,7 +586,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a body with both allowances and propertyIncomeAllowance supplied for non-fhl" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody
             .update("/ukProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
@@ -639,7 +598,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a both with structuredBuildingAllowance/building with no name or number" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -658,7 +616,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a both with enhancedStructuredBuildingAllowance/building with no name or number" in {
-        setupMocks()
         val invalidBody: JsValue =
           validBody.update(
             "/ukProperty",
@@ -679,7 +636,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
         val result =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

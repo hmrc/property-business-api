@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import common.models.domain.HistoricPropertyType
-import mocks.MockFeatureSwitches
+import play.api.Configuration
 import play.api.libs.json.JsObject
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
@@ -26,7 +26,7 @@ import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteH
 
 import scala.concurrent.Future
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with MockFeatureSwitches {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   private val nino    = Nino("AA123456A")
   private val taxYear = TaxYear.fromMtd("2021-22")
@@ -36,7 +36,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       "using FHL data" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
-        MockFeatureSwitches.isPassIntentEnabled.returns(true)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
         willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/2022",
@@ -51,7 +51,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       "using non-FHL data" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
-        MockFeatureSwitches.isPassIntentEnabled.returns(true)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
         willPut(
           url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022",
@@ -66,7 +66,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       "isPassIntentHeader feature switch is off" in new IfsTest with Test {
         lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
-        MockFeatureSwitches.isPassIntentEnabled returns false
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
         willPut(url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/2022", body = JsObject.empty)
           .returns(Future.successful(expectedOutcome))

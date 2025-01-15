@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,18 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import common.models.audit.FlattenedGenericAuditDetail
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse}
-import shared.models.auth.UserDetails
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.MockAuditService
-import config.MockAppConfig
 import play.api.Configuration
 import play.api.http.HeaderNames
 import play.api.libs.json.JsValue
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.auth.UserDetails
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
+import shared.models.outcomes.ResponseWrapper
+import shared.services.MockAuditService
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
   DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
@@ -40,7 +38,6 @@ import scala.concurrent.Future
 
 class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     extends ControllerBaseSpec
-    with MockAppConfig
     with ControllerTestRunner
     with MockDeleteHistoricNonFhlUkPropertyAnnualSubmissionService
     with MockDeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
@@ -95,7 +92,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[FlattenedGenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     protected val controller = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
@@ -121,15 +118,15 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
       handler(fakeDeleteRequest)
     }
 
-    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[FlattenedGenericAuditDetail] =
+    protected def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "DeleteHistoricNonFhlPropertyBusinessAnnualSubmission",
         transactionName = "delete-uk-property-historic-NonFhl-annual-submission",
-        detail = FlattenedGenericAuditDetail(
-          versionNumber = Some(apiVersion.name),
+        detail = GenericAuditDetail(
           userDetails = UserDetails("some-mtdId", "Individual", None),
+          apiVersion = apiVersion.name,
           params = Map("nino" -> validNino, "taxYear" -> taxYear.asMtd),
-          request = requestBody,
+          requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse
         )

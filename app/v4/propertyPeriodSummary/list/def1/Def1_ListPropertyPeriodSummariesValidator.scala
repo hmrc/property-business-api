@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,27 @@
 
 package v4.propertyPeriodSummary.list.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import common.controllers.validators.resolvers.ResolveTaxYear
-import config.AppConfig
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
 class Def1_ListPropertyPeriodSummariesValidator(
     nino: String,
     businessId: String,
     taxYear: String
-)(implicit
-    appConfig: AppConfig
 ) extends Validator[ListPropertyPeriodSummariesRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
-  private val maxTaxYear          = TaxYear.fromMtd("2024-25")
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], ListPropertyPeriodSummariesRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear, minimumTaxYear, maxTaxYear)
+      resolveTaxYear(taxYear)
     ).mapN(ListPropertyPeriodSummariesRequestData)
 
 }

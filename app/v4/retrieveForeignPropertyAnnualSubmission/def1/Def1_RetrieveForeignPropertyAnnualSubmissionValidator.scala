@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,8 @@ package v4.retrieveForeignPropertyAnnualSubmission.def1
 
 import cats.data.Validated
 import cats.implicits._
-import common.controllers.validators.resolvers.ResolveTaxYear
-import config.AppConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
@@ -29,19 +27,16 @@ import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
   RetrieveForeignPropertyAnnualSubmissionRequestData
 }
 
-import javax.inject.Inject
-
-class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(appConfig: AppConfig)
+class Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxV2Foreign
-  private lazy val maximumTaxYear = TaxYear.fromMtd("2024-25")
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear, minimumTaxYear, maximumTaxYear)
+      resolveTaxYear(taxYear)
     ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData)
 
 }

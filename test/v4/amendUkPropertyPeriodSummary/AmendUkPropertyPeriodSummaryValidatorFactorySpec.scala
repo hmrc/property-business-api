@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@
 
 package v4.amendUkPropertyPeriodSummary
 
-import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
-import config.MockAppConfig
 import play.api.libs.json.Json
+import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
 import v4.amendUkPropertyPeriodSummary.model.request._
 
-class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
@@ -84,13 +82,11 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Moc
       |""".stripMargin
   )
 
-  private def validatorFactory   = new AmendUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
-  private def setupMocks(): Unit = MockedAppConfig.minimumTaxV2Uk.returns(TaxYear.starting(2022))
+  private def validatorFactory = new AmendUkPropertyPeriodSummaryValidatorFactory
 
   "validator" when {
     "given a valid taxYear" should {
       "return the Validator for schema definition 1" in {
-        setupMocks()
         val result: Validator[AmendUkPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBody)
 

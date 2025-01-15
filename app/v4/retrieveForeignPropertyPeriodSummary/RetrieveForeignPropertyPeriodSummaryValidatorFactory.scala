@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,17 @@ package v4.retrieveForeignPropertyPeriodSummary
 
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
-import config.AppConfig
 import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveForeignPropertyPeriodSummaryValidatorFactory {
 
   private val maximumTaxYear = TaxYear.fromMtd("2024-25")
 
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveForeignPropertyPeriodSummaryRequestData] =
-    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId, appConfig)
+    new Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino, businessId, taxYear, maximumTaxYear, submissionId)
 
 }

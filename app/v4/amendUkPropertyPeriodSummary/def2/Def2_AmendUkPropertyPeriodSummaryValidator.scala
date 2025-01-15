@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v4.amendUkPropertyPeriodSummary.def2
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxTuple5Semigroupal
 import common.controllers.validators.resolvers.ResolveSubmissionId
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator._
 import v4.amendUkPropertyPeriodSummary.model.request._
 

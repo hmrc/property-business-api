@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package v4.historicFhlUkPropertyPeriodSummary.amend.def1
 
 import common.models.domain.PeriodId
 import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
-import config.MockAppConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import shared.models.domain.{Nino, TaxYear}
+import shared.models.domain.Nino
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
@@ -33,7 +32,7 @@ import v4.historicFhlUkPropertyPeriodSummary.amend.request.{
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino     = "AA123456A"
@@ -106,19 +105,13 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
 
   private val parsedBodyConsolidated = parsedBody.copy(expenses = Some(parsedUkFhlPieExpensesConsolidated))
 
-  private val validatorFactory = new AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 
   private def validator(nino: String, periodId: String, body: JsValue) = validatorFactory.validator(nino, periodId, body)
-
-  private def setupMocks(): Unit = {
-    MockedAppConfig.minimumTaxYearHistoric.returns(TaxYear.starting(2017)).anyNumberOfTimes()
-    MockedAppConfig.maximumTaxYearHistoric.returns(TaxYear.starting(2021)).anyNumberOfTimes()
-  }
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, validBody).validateAndWrapResult()
 
@@ -126,7 +119,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a valid consolidated request" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, validBodyConsolidated).validateAndWrapResult()
 
@@ -136,7 +128,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
 
     "return a single error" when {
       "passed an invalid nino" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validPeriodId, validBody).validateAndWrapResult()
 
@@ -144,7 +135,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed an invalidly formatted periodId start date" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "20A7-04-06_2017-07-04", validBody).validateAndWrapResult()
 
@@ -152,7 +142,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed an invalidly formatted periodId end date" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06_2017-A7-04", validBody).validateAndWrapResult()
 
@@ -160,7 +149,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed an invalidly formatted periodId" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06__2017-A7-04", validBody).validateAndWrapResult()
 
@@ -168,7 +156,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a periodId with a non-historic year" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2012-04-06_2012-07-04", validBody).validateAndWrapResult()
 
@@ -176,7 +163,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a periodId where the toDate precedes the fromDate" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2019-07-04_2019-04-06", validBody).validateAndWrapResult()
 
@@ -184,7 +170,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed an empty body" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, JsObject.empty).validateAndWrapResult()
 
@@ -192,7 +177,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a body with empty income and expenses sub-objects" in {
-        setupMocks()
         val invalidBody = Json.parse("""
             |{
             |   "income":{},
@@ -207,7 +191,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a body with an empty rentARoom sub-object" in {
-        setupMocks()
         val invalidBody = validBody.replaceWithEmptyObject("/income/rentARoom")
 
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -217,7 +200,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a body with multiple invalid numeric amounts" in {
-        setupMocks()
         val invalidBody = validBody
           .update("/income/taxDeducted", JsNumber(999999999990.99))
           .update("/income/rentARoom/rentsReceived", JsNumber(-1))
@@ -229,7 +211,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
       }
 
       "passed a body with both expenses supplied" in {
-        setupMocks()
         val invalidBody = validBody
           .update("/expenses/consolidatedExpenses", JsNumber(222))
 
@@ -242,7 +223,6 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in {
-        setupMocks()
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,11 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
-import config.MockAppConfig
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
-class Def1_RetrieveForeignPropertyCumulativeSummaryResponseSpec
-    extends UnitSpec
-    with MockAppConfig
-    with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
+class Def1_RetrieveForeignPropertyCumulativeSummaryResponseSpec extends UnitSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 
   "RetrieveForeignPropertyCumulativeSummaryResponse" when {
     "read from downstream JSON" should {

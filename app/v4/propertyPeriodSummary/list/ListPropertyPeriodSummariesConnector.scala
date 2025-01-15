@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import shared.models.domain.TaxYear
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 import v4.propertyPeriodSummary.list.model.response.ListPropertyPeriodSummariesResponse
@@ -41,7 +40,7 @@ class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClient, val 
 
     import request._
 
-    val (downstreamUri, queryParams) = if (taxYear.year >= TaxYear.tysTaxYear.year) {
+    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
       (
         TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](
           s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),

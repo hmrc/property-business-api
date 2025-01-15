@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
-import common.controllers.validators.resolvers.ResolveHistoricTaxYear
-import config.AppConfig
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYearMinMax}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
@@ -32,11 +32,10 @@ import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 }
 
-class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String, body: JsValue)(implicit appConfig: AppConfig)
+class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumTaxYearHistoric
-  private lazy val maximumTaxYear = appConfig.maximumTaxYearHistoric
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22")), RuleHistoricTaxYearNotSupportedError)
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody]()
 
@@ -48,7 +47,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: St
   def validate: Validated[Seq[MtdError], Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveHistoricTaxYear(minimumTaxYear, maximumTaxYear, taxYear),
+      resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
 

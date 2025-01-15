@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import common.models.domain.HistoricPropertyType
-import config.FeatureSwitches
+import config.PropertyBusinessFeatureSwitches
 import play.api.libs.json.JsObject
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
@@ -33,8 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)(implicit
-    featureSwitches: FeatureSwitches)
+class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData)(implicit
@@ -44,7 +43,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: 
 
     import request._
 
-    val intent = if (featureSwitches.isPassIntentEnabled) Some("DELETE") else None
+    val intent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("DELETE") else None
 
     val propertyTypeName = propertyType match {
       case HistoricPropertyType.Fhl    => "furnished-holiday-lettings"

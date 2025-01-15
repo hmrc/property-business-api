@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "INVALID_TAX_YEAR"                   -> InternalError,
           "INCOME_SOURCE_NOT_FOUND"            -> NotFoundError,
           "MISSING_EXPENSES"                   -> InternalError,
-          "INVALID_SUBMISSION_END_DATE"        -> RuleAdvanceSubmissionRequiresPeriodEndDate,
+          "INVALID_SUBMISSION_END_DATE"        -> RuleAdvanceSubmissionRequiresPeriodEndDateError,
           "SUBMISSION_END_DATE_VALUE"          -> RuleSubmissionEndDateCannotMoveBackwardsError,
           "INVALID_START_DATE"                 -> RuleStartDateNotAlignedWithReportingTypeError,
           "START_DATE_NOT_ALIGNED"             -> RuleStartDateNotAlignedToCommencementDateError,
@@ -108,7 +108,7 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
           "SUBMITTED_TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
           "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
-          "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCode,
+          "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
           "SERVER_ERROR"                       -> InternalError,
           "SERVICE_UNAVAILABLE"                -> InternalError
         )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import common.models.domain.HistoricPropertyType
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
-import common.models.audit.FlattenedGenericAuditDetail
+import shared.models.audit.GenericAuditDetail
 import shared.routing.Version
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
@@ -74,7 +74,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
           auditService,
           auditType = s"DeleteHistoric${propertyType}PropertyBusinessAnnualSubmission",
           transactionName = s"delete-uk-property-historic-$propertyType-annual-submission",
-          auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(
+          auditDetailCreator = GenericAuditDetail.auditDetailCreator(
             Version(request),
             Map("nino" -> nino, "taxYear" -> taxYear)
           ),

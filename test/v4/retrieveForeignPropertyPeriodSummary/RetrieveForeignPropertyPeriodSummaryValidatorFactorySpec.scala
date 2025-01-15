@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,27 +17,22 @@
 package v4.retrieveForeignPropertyPeriodSummary
 
 import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
-import config.MockAppConfig
 import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v4.retrieveForeignPropertyPeriodSummary.model.request._
 
-class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
   private val validTaxYear      = "2023-24"
   private val validSubmissionId = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
-  private val validatorFactory = new RetrieveForeignPropertyPeriodSummaryValidatorFactory(mockAppConfig)
+  private val validatorFactory = new RetrieveForeignPropertyPeriodSummaryValidatorFactory
 
   "validator()" when {
 
     "given any request with a valid tax year" should {
       "return the Validator for schema definition 1" in {
-
-        MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
-
         val result: Validator[RetrieveForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId)
 

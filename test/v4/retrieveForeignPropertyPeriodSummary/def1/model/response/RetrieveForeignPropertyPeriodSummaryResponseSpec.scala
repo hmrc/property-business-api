@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,14 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1.model.response
 
-import shared.models.domain.Timestamp
-import config.MockAppConfig
 import play.api.libs.json.Json
+import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea._
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
 import v4.retrieveForeignPropertyPeriodSummary.model.response._
 
-class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec with MockAppConfig {
+class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec {
 
   private val retrieveForeignPropertyResponseBody = Def1_RetrieveForeignPropertyPeriodSummaryResponse(
     Timestamp("2021-06-17T10:53:38Z"),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary
 
-import config.MockAppConfig
 import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -24,7 +23,7 @@ import shared.utils.UnitSpec
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
-class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig with JsonErrorValidators {
+class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -38,7 +37,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactorySpec exte
        |}
        |""".stripMargin)
 
-  private val validatorFactory = new CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory()
+  private val validatorFactory = new CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory
 
   "validator()" when {
     "given a valid tax year" should {

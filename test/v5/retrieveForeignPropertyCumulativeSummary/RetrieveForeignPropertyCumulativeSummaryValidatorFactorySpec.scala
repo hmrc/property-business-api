@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
-import config.MockAppConfig
 import shared.controllers.validators.AlwaysErrorsValidator
 import shared.utils.UnitSpec
 import v5.retrieveForeignPropertyCumulativeSummary.def1.Def1_RetrieveForeignPropertyCumulativeSummaryValidator
 
-class RetrieveForeignPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class RetrieveForeignPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec {
 
   private def validatorFor(taxYear: String) =
     new RetrieveForeignPropertyCumulativeSummaryValidatorFactory().validator(nino = "ignoredNino", businessId = "ignored", taxYear = taxYear)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
-import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
-import config.MockAppConfig
 import play.api.libs.json._
+import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v4.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
-class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -85,14 +83,11 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
 
   private val validBody = bodyWith(entryWith("AFG", validStructuredBuildingAllowance))
 
-  private val validatorFactory = new CreateAmendForeignPropertyAnnualSubmissionValidatorFactory(mockAppConfig)
-
-  private def setUpMocks(): Unit = MockedAppConfig.minimumTaxV2Foreign.returns(TaxYear.starting(2021)).anyNumberOfTimes()
+  private val validatorFactory = new CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-        setUpMocks()
         val result: Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validBody)
 

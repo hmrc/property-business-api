@@ -37,10 +37,13 @@ class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
       "return a valid Definition case class" in new Test {
         MockedSharedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedSharedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedSharedAppConfig.deprecationFor(Version6).returns(NotDeprecated.valid).anyNumberOfTimes()
         MockedSharedAppConfig.apiStatus(Version4) returns "BETA"
         MockedSharedAppConfig.apiStatus(Version5) returns "BETA"
+        MockedSharedAppConfig.apiStatus(Version6) returns "BETA"
         MockedSharedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version5).returns(true).anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version6).returns(true).anyNumberOfTimes()
 
         apiDefinitionFactory.definition shouldBe
           Definition(
@@ -57,6 +60,11 @@ class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
                 ),
                 APIVersion(
                   version = Version5,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = Version6,
                   status = BETA,
                   endpointsEnabled = true
                 )

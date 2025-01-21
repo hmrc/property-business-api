@@ -1,0 +1,108 @@
+summary: Retrieve a Foreign Property Income & Expenses Period Summary
+description: |
+  This endpoint allows a developer to retrieve the income and expenses for a Foreign Property business, using the submission ID for either or both of Furnished Holiday Lettings (FHL) in the European Economic Area (EEA) and all other Foreign Property submissions. 
+  A National Insurance number, business ID, and tax year are required.
+
+  <strong>Note: This endpoint only supports submissions up to tax year 2024-25. New endpoints which support cumulative submission
+  are provided for tax year 2025-26 onwards</strong>.
+
+  ### Test data
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                 |
+  |----------------------------------|--------------------------------------------------------------------------|
+  | N/A - DEFAULT                    | Simulates the scenario where no data is found.                           |
+  | FOREIGN_PROPERTY                 | Simulates success response with Foreign FHL and Non-FHL properties.      |
+  | FOREIGN_FHL_FULL_EXPENSES        | Simulates success response with Foreign FHL property.                    |
+  | FOREIGN_FHL_CONSOLIDATED         | Simulates the scenario of a FHL property with consolidated expenses.     |
+  | FOREIGN_NON_FHL_FULL_EXPENSES    | Simulates success response with Foreign Non-FHL property.                |
+  | FOREIGN_NON_FHL_CONSOLIDATED     | Simulates the scenario of a Non-FHL property with consolidated expenses. |
+  | UK_PROPERTY                      | Simulates the scenario where wrong business type is returned.            |
+  | STATEFUL                         | Performs a stateful retrieve.                                            |
+
+
+tags:
+  - Foreign Property Income & Expenses Period Summary
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearTo2025'
+  - $ref: './common/pathParameters.yaml#/components/parameters/submissionId'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - read:self-assessment
+
+responses:
+  "200":
+    description: Success
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+      Deprecation:
+        $ref: './common/headers.yaml#/components/parameters/deprecationHeader'
+      Sunset:
+        $ref: './common/headers.yaml#/components/parameters/sunsetHeader'
+      Link:
+        $ref: './common/headers.yaml#/components/parameters/linkHeader'
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - $ref: './schemas/foreign_property_period_summary_retrieve/def1/response.json'
+            - $ref: './schemas/foreign_property_period_summary_retrieve/def2/response.json'
+        examples:
+          Full Expenses response for TY 2023-24 and before:
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/def1/response.json'
+          Consolidated Expenses response for TY 2023-24 and before:
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/def1/consolidated_response.json'
+          Full Expenses response for TY 2024-25:
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/def2/response.json'
+          Consolidated Expenses response for TY 2024-25:
+            value:
+              $ref: './examples/foreign_property_period_summary_retrieve/def2/consolidated_response.json'
+
+  "400":
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_BUSINESS_ID:
+            $ref: './common/errors.yaml#/components/examples/formatBusinessId'
+          FORMAT_SUBMISSION_ID:
+            $ref: './common/errors.yaml#/components/examples/formatSubmissionId'
+          RULE_TYPE_OF_BUSINESS_INCORRECT:
+            $ref: './common/errors.yaml#/components/examples/ruleTypeOfBusinessIncorrectForeign'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+
+  "403":
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "404":
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          MATCHING_RESOURCE_NOT_FOUND:
+            $ref: './common/errors.yaml#/components/examples/notFound'

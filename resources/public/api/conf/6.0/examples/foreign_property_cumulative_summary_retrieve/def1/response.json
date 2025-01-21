@@ -1,0 +1,31 @@
+{
+  "submittedOn": "2025-07-07T10:59:47.544Z",
+  "fromDate": "2025-04-06",
+  "toDate": "2025-07-05",
+  "foreignProperty": [
+    {
+      "countryCode": "AFG",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 440.31
+        },
+        "foreignTaxCreditRelief": false,
+        "premiumsOfLeaseGrant": 950.48,
+        "otherPropertyIncome": 802.49,
+        "foreignTaxPaidOrDeducted": 734.18,
+        "specialWithholdingTaxOrUkTaxPaid": 85.47
+      },
+      "expenses": {
+        "premisesRunningCosts": -4929.50,
+        "repairsAndMaintenance": -54.30,
+        "financialCosts": 2090.35,
+        "professionalFees": -90.20,
+        "travelCosts": 560.99,
+        "costOfServices": -100.83,
+        "residentialFinancialCost": 857.78,
+        "broughtFwdResidentialFinancialCost": 600.10,
+        "other": 334.64
+      }
+    }
+  ]
+}

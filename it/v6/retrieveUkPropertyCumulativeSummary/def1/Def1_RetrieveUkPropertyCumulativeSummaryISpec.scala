@@ -26,7 +26,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.support.IntegrationBaseSpec
-import v5.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
+import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveUkPropertyCumulativeSummaryFixture {
 

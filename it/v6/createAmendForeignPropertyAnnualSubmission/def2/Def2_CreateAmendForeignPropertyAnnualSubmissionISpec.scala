@@ -31,7 +31,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.support.IntegrationBaseSpec
-import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
+import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
 import shared.services._
 
 class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def2_Fixtures {

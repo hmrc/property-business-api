@@ -26,7 +26,13 @@ import shared.models.errors.MtdError
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, maxTaxYear: TaxYear, body: JsValue)
+import javax.inject.Inject
+
+class Def2_CreateForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
+                                                                  businessId: String,
+                                                                  taxYear: String,
+                                                                  maxTaxYear: TaxYear,
+                                                                  body: JsValue)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
   private val resolveTaxYear = ResolveTaxYearMaximum(maxTaxYear)

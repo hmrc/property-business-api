@@ -16,6 +16,7 @@
 
 package v4.createUkPropertyPeriodSummary
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -24,7 +25,7 @@ import v4.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryV
 import v4.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator
 import v4.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
 
-class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino            = "AA123456A"
   private val validTysTaxYear      = "2023-24"
@@ -89,14 +90,14 @@ class CreateUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with Js
 
   "validator" when {
     "given a valid request" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTysTaxYear, validBody)
 
         result shouldBe a[Def1_CreateUkPropertyPeriodSummaryValidator]
       }
 
-      "return the Validator for schema definition 2" in {
+      "return the Validator for schema definition 2" in new SetupConfig {
         val result: Validator[CreateUkPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validSpecificTaxYear, validBody)
 

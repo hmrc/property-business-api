@@ -16,14 +16,15 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v4.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionValidatorFactory {
+class RetrieveForeignPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] = {
     new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)

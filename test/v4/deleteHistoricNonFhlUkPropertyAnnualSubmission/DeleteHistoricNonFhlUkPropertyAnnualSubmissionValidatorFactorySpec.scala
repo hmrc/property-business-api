@@ -16,10 +16,11 @@
 
 package v4.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import shared.utils.UnitSpec
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator
 
-class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   implicit val correlationId: String = "X-123"
   private val validNino              = "AA123456A"
@@ -33,12 +34,12 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends
   "validator" should {
     "return the Def1 validator" when {
 
-      "given any valid request" in {
+      "given any valid request" in new SetupConfig {
         val result = validatorFactory.validator(validNino, validTaxYear)
         result shouldBe a[Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator]
       }
 
-      "given any invalid request" in {
+      "given any invalid request" in new SetupConfig {
         val result = validatorFactory.validator(invalidNino, invalidTaxYear)
         result shouldBe a[Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator]
       }

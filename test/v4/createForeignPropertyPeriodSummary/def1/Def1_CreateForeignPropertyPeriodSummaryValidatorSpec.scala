@@ -17,6 +17,7 @@
 package v4.createForeignPropertyPeriodSummary.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, RuleToDateBeforeFromDateError}
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
@@ -26,7 +27,7 @@ import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlE
 import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry._
 import v4.createForeignPropertyPeriodSummary.model.request._
 
-class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -244,21 +245,21 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
-      "passed a valid request with consolidated expenses" in {
+      "passed a valid request with consolidated expenses" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyConsolidated).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
       }
 
-      "passed a valid request with minimal foreignFhlEea" in {
+      "passed a valid request with minimal foreignFhlEea" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimalFhl).validateAndWrapResult()
 
@@ -266,7 +267,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           Def1_CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeignFhl))
       }
 
-      "passed a valid request with minimal foreignNonFhlProperty" in {
+      "passed a valid request with minimal foreignNonFhlProperty" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimalNonFhl).validateAndWrapResult()
 
@@ -274,7 +275,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           Def1_CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeignNonFhl))
       }
 
-      "passed the minimum supported taxYear" in {
+      "passed the minimum supported taxYear" in new SetupConfig {
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(Def1_CreateForeignPropertyPeriodSummaryRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
@@ -282,47 +283,47 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
     }
 
     "return a single error" when {
-      "passed an invalid nino" in {
+      "passed an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an invalid business id" in {
+      "passed an invalid business id" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an invalidly formatted tax year" in {
+      "passed an invalidly formatted tax year" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "passed a taxYear immediately before the minimum supported" in {
+      "passed a taxYear immediately before the minimum supported" in new SetupConfig {
         validator(validNino, validBusinessId, "2020-21", validBody).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed a tax year with an invalid range" in {
+      "passed a tax year with an invalid range" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2021-23", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
-      "passed tax year after max tax year" in {
+      "passed tax year after max tax year" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator(validNino, validBusinessId, "2025-26", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed a body with an empty foreignFhlEea" in {
+      "passed a body with an empty foreignFhlEea" in new SetupConfig {
         val invalidBody = validBody.replaceWithEmptyObject("/foreignFhlEea")
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -331,7 +332,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignFhlEea")))
       }
 
-      "passed a body with an empty foreignFhlEea/expenses" in {
+      "passed a body with an empty foreignFhlEea/expenses" in new SetupConfig {
         val invalidBody = validBody.replaceWithEmptyObject("/foreignFhlEea/expenses")
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -340,7 +341,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignFhlEea/expenses")))
       }
 
-      "passed a body with an empty foreignFhlEea/income" in {
+      "passed a body with an empty foreignFhlEea/income" in new SetupConfig {
         val invalidBody = validBody.replaceWithEmptyObject("/foreignFhlEea/income")
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -349,7 +350,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignFhlEea/income")))
       }
 
-      "passed a body with an empty foreignNonFhlProperty entry" in {
+      "passed a body with an empty foreignNonFhlProperty entry" in new SetupConfig {
         val invalidBody = bodyWith(JsObject.empty)
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -358,7 +359,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignNonFhlProperty/0/countryCode")))
       }
 
-      "passed a body with a foreignNonFhlProperty entry containing an empty expenses object" in {
+      "passed a body with a foreignNonFhlProperty entry containing an empty expenses object" in new SetupConfig {
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/expenses"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -367,7 +368,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignNonFhlProperty/0/expenses")))
       }
 
-      "passed a body with a foreignNonFhlProperty entry containing an empty income object" in {
+      "passed a body with a foreignNonFhlProperty entry containing an empty income object" in new SetupConfig {
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/income"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -377,7 +378,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignNonFhlProperty/0/income/foreignTaxCreditRelief")))
       }
 
-      "passed a body with a foreignNonFhlProperty entry missing income and expenses" in {
+      "passed a body with a foreignNonFhlProperty entry missing income and expenses" in new SetupConfig {
         val invalidBody = bodyWith(entry.removeProperty("/income").removeProperty("/expenses"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -386,7 +387,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignNonFhlProperty/0")))
       }
 
-      "passed a body with a foreignNonFhlProperty entry containing an empty income/rentIncome object" in {
+      "passed a body with a foreignNonFhlProperty entry containing an empty income/rentIncome object" in new SetupConfig {
         val invalidBody = bodyWith(entry.replaceWithEmptyObject("/income/rentIncome"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -395,7 +396,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignNonFhlProperty/0/income/rentIncome")))
       }
 
-      "passed a body with an invalidly formatted fromDate" in {
+      "passed a body with an invalidly formatted fromDate" in new SetupConfig {
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
         print(invalidBody)
 
@@ -405,7 +406,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "passed a body with a fromDate out of range" in {
+      "passed a body with a fromDate out of range" in new SetupConfig {
         val invalidBody = validBody.update("/fromDate", JsString("1782-09-04"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -414,7 +415,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "passed a body with an invalidly formatted toDate" in {
+      "passed a body with an invalidly formatted toDate" in new SetupConfig {
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
 
         print(invalidBody)
@@ -424,7 +425,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "passed a body with a toDate out of range" in {
+      "passed a body with a toDate out of range" in new SetupConfig {
         val invalidBody = validBody.update("/toDate", JsString("3054-03-29"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -433,7 +434,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "passed a body where the toDate precedes fromDate" in {
+      "passed a body where the toDate precedes fromDate" in new SetupConfig {
         val invalidBody = validBody
           .update("/fromDate", JsString("2021-01-01"))
           .update("/toDate", JsString("2020-01-01"))
@@ -444,7 +445,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
       }
 
-      "passed a body with a duplicate country code" in {
+      "passed a body with a duplicate country code" in new SetupConfig {
         val invalidBody = bodyWith(entry, entry)
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -460,7 +461,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           ))
       }
 
-      "passed a body with multiple duplicate country codes" in {
+      "passed a body with multiple duplicate country codes" in new SetupConfig {
         val countryCode1 = "AFG"
         val countryCode2 = "ZWE"
         val invalidBody  = bodyWith(entryWith(countryCode1), entryWith(countryCode2), entryWith(countryCode1), entryWith(countryCode2))
@@ -486,7 +487,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
       }
 
       def testWith(error: MtdError)(body: JsValue, expectedPath: String): Unit =
-        s"for $expectedPath" in {
+        s"for $expectedPath" in new SetupConfig {
           val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
             validator(validNino, validBusinessId, validTaxYear, body).validateAndWrapResult()
 
@@ -537,7 +538,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           s"/foreignNonFhlProperty/0/expenses/consolidatedExpenses")
       }
 
-      "passed a body with multiple fields containing invalid amounts" in {
+      "passed a body with multiple fields containing invalid amounts" in new SetupConfig {
         val badValue = JsNumber(42.768)
         val invalidBody = bodyWith(
           entry
@@ -561,7 +562,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
           ))
       }
 
-      "passed a body containing an invalid country code" in {
+      "passed a body containing an invalid country code" in new SetupConfig {
         val invalidBody = bodyWith(entryWith("JUY"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -570,7 +571,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleCountryCodeError.withPath("/foreignNonFhlProperty/0/countryCode")))
       }
 
-      "passed a body containing a multiple invalid country codes" in {
+      "passed a body containing a multiple invalid country codes" in new SetupConfig {
         val invalidBody = bodyWith(entryWith("ABC"), entryWith("DEF"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -582,7 +583,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
             RuleCountryCodeError.withPaths(List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
 
-      "passed a body containing an invalidly formatted country code" in {
+      "passed a body containing an invalidly formatted country code" in new SetupConfig {
         val invalidBody = bodyWith(entryWith("12345678"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -592,7 +593,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
 
       }
 
-      "passed a body containing a multiple invalidly formatted country codes" in {
+      "passed a body containing a multiple invalidly formatted country codes" in new SetupConfig {
         val invalidBody = bodyWith(entryWith("12345678"), entryWith("34567890"))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -604,7 +605,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
             CountryCodeFormatError.withPaths(List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode"))))
       }
 
-      "passed a body containing both foreignFhlEea expenses" in {
+      "passed a body containing both foreignFhlEea expenses" in new SetupConfig {
         val invalidBody = validBody.update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(100.00))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -613,7 +614,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/foreignFhlEea/expenses")))
       }
 
-      "passed a body containing both foreignNonFhlProperty expenses" in {
+      "passed a body containing both foreignNonFhlProperty expenses" in new SetupConfig {
         val invalidBody = bodyWith(entry.update("/expenses/consolidatedExpenses", JsNumber(100.00)))
 
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
@@ -622,7 +623,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/foreignNonFhlProperty/0/expenses")))
       }
 
-      "passed a body containing multiple sub-objects with both expenses" in {
+      "passed a body containing multiple sub-objects with both expenses" in new SetupConfig {
         val entryWithBothExpenses0 = entryWith("AFG").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val entryWithBothExpenses1 = entryWith("ZWE").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val invalidBody =
@@ -647,7 +648,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with
     }
 
     "return multiple errors" when {
-      "the path parameters have multiple issues" in {
+      "the path parameters have multiple issues" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateForeignPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

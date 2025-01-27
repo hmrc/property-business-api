@@ -20,22 +20,25 @@ import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
-  CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
-}
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String, body: JsValue)
+import javax.inject.Inject
+
+class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (nino: String, taxYear: String, body: JsValue)(implicit
+    config: PropertyBusinessConfig)
     extends Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22")), RuleHistoricTaxYearNotSupportedError)
+  private val resolveTaxYear =
+    ResolveTaxYearMinMax(
+      (TaxYear.fromMtd(config.historicMinimumTaxYear), TaxYear.fromMtd(config.historicMaximumTaxYear)),
+      RuleHistoricTaxYearNotSupportedError)
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody]()
 

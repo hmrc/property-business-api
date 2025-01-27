@@ -16,13 +16,14 @@
 
 package v4.deletePropertyAnnualSubmission.def1
 
+import config.MockPropertyBusinessConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.utils.UnitSpec
 import v4.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionValidatorFactory
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
-class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -41,28 +42,28 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTysTaxYear).validateAndWrapResult()
 
         result shouldBe Right(Def1_DeletePropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTysTaxYear))
       }
 
-      "passed the minimum supported taxYear" in {
+      "passed the minimum supported taxYear" in new SetupConfig {
         validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult() shouldBe
           Right(Def1_DeletePropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
     }
 
     "return a single error" when {
-      "passed an invalid nino" in {
+      "passed an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTysTaxYear).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in {
+      "passed an incorrectly formatted taxYear" in new SetupConfig {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
 
@@ -70,19 +71,19 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
       }
 
-      "passed an incorrectly formatted businessId" in {
+      "passed an incorrectly formatted businessId" in new SetupConfig {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTysTaxYear).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed a taxYear immediately before the minimum supported" in {
+      "passed a taxYear immediately before the minimum supported" in new SetupConfig {
         validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in {
+      "passed a taxYear spanning an invalid tax year range" in new SetupConfig {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2020-22").validateAndWrapResult()
 
@@ -91,7 +92,7 @@ class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec {
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
         val result: Either[ErrorWrapper, DeletePropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()
 

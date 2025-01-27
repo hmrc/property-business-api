@@ -16,14 +16,15 @@
 
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory {
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator(nino, taxYear)

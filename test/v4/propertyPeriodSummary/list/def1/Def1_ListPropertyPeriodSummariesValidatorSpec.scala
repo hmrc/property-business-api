@@ -16,12 +16,13 @@
 
 package v4.propertyPeriodSummary.list.def1
 
+import config.MockPropertyBusinessConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.utils.UnitSpec
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
-class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
+class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
@@ -37,7 +38,7 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
 
   "validate()" should {
     "return the parsed domain object" when {
-      "given a valid request" in {
+      "given a valid request" in new SetupConfig {
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
@@ -45,13 +46,13 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
         result shouldBe Right(ListPropertyPeriodSummariesRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
 
-      "passed the minimum supported taxYear" in {
+      "passed the minimum supported taxYear" in new SetupConfig {
 
         val taxYearString = "2021-22"
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
           Right(ListPropertyPeriodSummariesRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString)))
       }
-      "passed the maximum supported taxYear" in {
+      "passed the maximum supported taxYear" in new SetupConfig {
 
         val taxYearString = "2024-25"
         validator(validNino, validBusinessId, taxYearString).validateAndWrapResult() shouldBe
@@ -60,7 +61,7 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
     }
 
     "return a single error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator("5555", validBusinessId, validTaxYear).validateAndWrapResult()
@@ -68,7 +69,7 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "given an incorrectly formatted taxYear" in {
+      "given an incorrectly formatted taxYear" in new SetupConfig {
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, "25667").validateAndWrapResult()
@@ -76,7 +77,7 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "given an incorrectly formatted businessId" in {
+      "given an incorrectly formatted businessId" in new SetupConfig {
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, "5555", validTaxYear).validateAndWrapResult()
@@ -84,18 +85,18 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "given a taxYear immediately before the minimum supported" in {
+      "given a taxYear immediately before the minimum supported" in new SetupConfig {
 
         validator(validNino, validBusinessId, "2020-21").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
-      "given a taxYear immediately after max tax year" in {
+      "given a taxYear immediately after max tax year" in new SetupConfig {
 
         validator(validNino, validBusinessId, "2025-26").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "given a taxYear spanning an invalid tax year range" in {
+      "given a taxYear spanning an invalid tax year range" in new SetupConfig {
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator(validNino, validBusinessId, "2020-22").validateAndWrapResult()
@@ -105,7 +106,7 @@ class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec {
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
 
         val result: Either[ErrorWrapper, ListPropertyPeriodSummariesRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()

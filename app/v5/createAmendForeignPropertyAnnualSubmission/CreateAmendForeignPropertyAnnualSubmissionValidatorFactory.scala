@@ -17,6 +17,7 @@
 package v5.createAmendForeignPropertyAnnualSubmission
 
 import cats.data.Validated.{Invalid, Valid}
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import v5.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionSchema.{Def1, Def2}
@@ -24,10 +25,10 @@ import v5.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeig
 import v5.createAmendForeignPropertyAnnualSubmission.def2.Def2_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v5.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory {
+class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String,
                 businessId: String,

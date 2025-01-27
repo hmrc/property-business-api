@@ -18,6 +18,7 @@ package v5.createForeignPropertyPeriodSummary.def1
 
 import cats.data.Validated
 import cats.implicits._
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
@@ -26,10 +27,16 @@ import shared.models.errors.MtdError
 import v5.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v5.createForeignPropertyPeriodSummary.model.request._
 
-class Def1_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, maxTaxYear: TaxYear, body: JsValue)
+import javax.inject.Inject
+
+class Def1_CreateForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
+                                                                  businessId: String,
+                                                                  taxYear: String,
+                                                                  maxTaxYear: TaxYear,
+                                                                  body: JsValue)(implicit config: PropertyBusinessConfig)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maxTaxYear))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateForeignPropertyPeriodSummaryRequestBody]()
 

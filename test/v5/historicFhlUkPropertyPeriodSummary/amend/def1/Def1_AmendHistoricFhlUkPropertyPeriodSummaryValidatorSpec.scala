@@ -18,6 +18,7 @@ package v5.historicFhlUkPropertyPeriodSummary.amend.def1
 
 import common.models.domain.PeriodId
 import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import shared.models.domain.Nino
 import shared.models.errors._
@@ -32,7 +33,7 @@ import v5.historicFhlUkPropertyPeriodSummary.amend.request.{
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino     = "AA123456A"
@@ -111,14 +112,14 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData(parsedNino, parsedPeriodId, parsedBody))
       }
 
-      "passed a valid consolidated request" in {
+      "passed a valid consolidated request" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, validBodyConsolidated).validateAndWrapResult()
 
@@ -127,56 +128,56 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
     }
 
     "return a single error" when {
-      "passed an invalid nino" in {
+      "passed an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validPeriodId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an invalidly formatted periodId start date" in {
+      "passed an invalidly formatted periodId start date" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "20A7-04-06_2017-07-04", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "passed an invalidly formatted periodId end date" in {
+      "passed an invalidly formatted periodId end date" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06_2017-A7-04", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "passed an invalidly formatted periodId" in {
+      "passed an invalidly formatted periodId" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06__2017-A7-04", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "passed a periodId with a non-historic year" in {
+      "passed a periodId with a non-historic year" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2012-04-06_2012-07-04", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "passed a periodId where the toDate precedes the fromDate" in {
+      "passed a periodId where the toDate precedes the fromDate" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2019-07-04_2019-04-06", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "passed an empty body" in {
+      "passed an empty body" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, JsObject.empty).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "passed a body with empty income and expenses sub-objects" in {
+      "passed a body with empty income and expenses sub-objects" in new SetupConfig {
         val invalidBody = Json.parse("""
             |{
             |   "income":{},
@@ -190,7 +191,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPaths(List("/income", "/expenses"))))
       }
 
-      "passed a body with an empty rentARoom sub-object" in {
+      "passed a body with an empty rentARoom sub-object" in new SetupConfig {
         val invalidBody = validBody.replaceWithEmptyObject("/income/rentARoom")
 
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -199,7 +200,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/income/rentARoom")))
       }
 
-      "passed a body with multiple invalid numeric amounts" in {
+      "passed a body with multiple invalid numeric amounts" in new SetupConfig {
         val invalidBody = validBody
           .update("/income/taxDeducted", JsNumber(999999999990.99))
           .update("/income/rentARoom/rentsReceived", JsNumber(-1))
@@ -210,7 +211,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
         result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPaths(List("/income/taxDeducted", "/income/rentARoom/rentsReceived"))))
       }
 
-      "passed a body with both expenses supplied" in {
+      "passed a body with both expenses supplied" in new SetupConfig {
         val invalidBody = validBody
           .update("/expenses/consolidatedExpenses", JsNumber(222))
 
@@ -222,7 +223,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()
 

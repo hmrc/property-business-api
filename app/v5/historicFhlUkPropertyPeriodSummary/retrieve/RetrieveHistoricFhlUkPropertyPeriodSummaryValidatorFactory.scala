@@ -16,14 +16,15 @@
 
 package v5.historicFhlUkPropertyPeriodSummary.retrieve
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v5.historicFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoricFhlUkPeriodSummaryValidator
 import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory {
+class RetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, periodId: String): Validator[RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData] =
     new Def1_RetrieveHistoricFhlUkPeriodSummaryValidator(nino, periodId)

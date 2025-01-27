@@ -17,16 +17,17 @@
 package v5.retrieveForeignPropertyAnnualSubmission
 
 import cats.data.Validated.{Invalid, Valid}
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v5.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v5.retrieveForeignPropertyAnnualSubmission.def2.Def2_RetrieveForeignPropertyAnnualSubmissionValidator
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionValidatorFactory {
+class RetrieveForeignPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] = {
 

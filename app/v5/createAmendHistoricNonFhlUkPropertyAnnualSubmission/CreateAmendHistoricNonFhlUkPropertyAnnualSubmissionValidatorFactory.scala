@@ -16,6 +16,7 @@
 
 package v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
@@ -24,7 +25,7 @@ import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.Crea
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear, body)

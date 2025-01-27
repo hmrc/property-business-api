@@ -16,6 +16,7 @@
 
 package v5.createUkPropertyPeriodSummary
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
@@ -24,9 +25,10 @@ import v5.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryV
 import v5.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator
 import v5.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
 
+import javax.inject.Inject
 import scala.math.Ordering.Implicits.infixOrderingOps
 
-class CreateUkPropertyPeriodSummaryValidatorFactory {
+class CreateUkPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateUkPropertyPeriodSummaryRequestData] = {
     TaxYear.maybeFromMtd(taxYear) match {

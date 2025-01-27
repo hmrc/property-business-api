@@ -16,15 +16,16 @@
 
 package v5.retrieveForeignPropertyPeriodSummary
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
 import v5.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v5.retrieveForeignPropertyPeriodSummary.model.request._
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryValidatorFactory {
+class RetrieveForeignPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   private val maximumTaxYear = TaxYear.fromMtd("2024-25")
 

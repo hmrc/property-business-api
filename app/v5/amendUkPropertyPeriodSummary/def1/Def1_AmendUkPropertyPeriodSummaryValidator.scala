@@ -19,19 +19,21 @@ package v5.amendUkPropertyPeriodSummary.def1
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple5Semigroupal
 import common.controllers.validators.resolvers.ResolveSubmissionId
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v5.amendUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-class Def1_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)
+class Def1_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, submissionId: String, body: JsValue)(
+    implicit config: PropertyBusinessConfig)
     extends Validator[AmendUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2022-23"))
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_AmendUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def1_AmendUkPropertyPeriodSummaryRulesValidator()

@@ -21,16 +21,22 @@ import cats.data.Validated._
 import cats.implicits._
 import common.models.domain.HistoricPropertyType
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator(nino: String, taxYear: String, propertyType: HistoricPropertyType)
+import javax.inject.Inject
+
+class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (nino: String, taxYear: String, propertyType: HistoricPropertyType)(implicit
+    config: PropertyBusinessConfig)
     extends Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22")), RuleHistoricTaxYearNotSupportedError)
+  private val resolveTaxYear = ResolveTaxYearMinMax(
+    (TaxYear.fromMtd(config.historicMinimumTaxYear), TaxYear.fromMtd(config.historicMaximumTaxYear)),
+    RuleHistoricTaxYearNotSupportedError)
 
   def validate: Validated[Seq[MtdError], DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
     (

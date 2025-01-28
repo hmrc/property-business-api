@@ -16,10 +16,11 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.list
 
+import config.MockPropertyBusinessConfig
 import shared.utils.UnitSpec
 import v6.historicNonFhlUkPropertyPeriodSummary.list.def1.Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator
 
-class ListHistoricNonFhlUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec {
+class ListHistoricNonFhlUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino   = "AA123456A"
   private val invalidNino = "not-a-nino"
@@ -29,12 +30,12 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesValidatorFactorySpec extends Un
   "validator()" should {
     "return the Def1 validator" when {
 
-      "given any valid request" in {
+      "given any valid request" in new SetupConfig {
         val result = validatorFactory.validator(validNino)
         result shouldBe a[Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator]
       }
 
-      "given any invalid request" in {
+      "given any invalid request" in new SetupConfig {
         val result = validatorFactory.validator(invalidNino)
         result shouldBe a[Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator]
       }

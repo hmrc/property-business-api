@@ -18,12 +18,13 @@ package v6.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
 import common.models.domain.HistoricPropertyType
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import config.MockPropertyBusinessConfig
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors._
 import shared.utils.UnitSpec
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 
   implicit val correlationId: String = "X-123"
   private val validNino              = "AA123456A"
@@ -38,22 +39,22 @@ class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
 
   "validator" should {
     "return no errors" when {
-      "a valid Fhl request is supplied" in {
+      "a valid Fhl request is supplied" in new SetupConfig {
         val result: Either[ErrorWrapper, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, HistoricPropertyType.Fhl).validateAndWrapResult()
 
         result shouldBe Right(Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(parsedNino, parsedTaxYear, HistoricPropertyType.Fhl))
       }
 
-      "a valid non-Fhl request is supplied" in {
+      "a valid non-Fhl request is supplied" in new SetupConfig {
         val result: Either[ErrorWrapper, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, HistoricPropertyType.NonFhl).validateAndWrapResult()
 
         result shouldBe Right(Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData(parsedNino, parsedTaxYear, HistoricPropertyType.NonFhl))
       }
 
-      "passed the minimum supported taxYear" in allowsTaxYear("2017-18")
-      "passed the maximum supported taxYear" in allowsTaxYear("2021-22")
+      "passed the minimum supported taxYear" in new SetupConfig { allowsTaxYear("2017-18") }
+      "passed the maximum supported taxYear" in new SetupConfig { allowsTaxYear("2021-22") }
 
       def allowsTaxYear(taxYearString: String): Unit = {
         validator(validNino, taxYearString, propertyType).validateAndWrapResult() shouldBe
@@ -62,29 +63,29 @@ class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
     }
 
     "return a single error" when {
-      "an invalid nino is supplied" in {
+      "an invalid nino is supplied" in new SetupConfig {
         val result: Either[ErrorWrapper, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator("ABC", validTaxYear, propertyType).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
-      "an invalid tax year format is supplied" in {
+      "an invalid tax year format is supplied" in new SetupConfig {
         val result: Either[ErrorWrapper, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "20-21", propertyType).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError, None))
       }
 
-      "passed a taxYear immediately before the minimum supported" in disallowsTaxYear("2016-17")
-      "passed a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
+      "passed a taxYear immediately before the minimum supported" in new SetupConfig { disallowsTaxYear("2016-17") }
+      "passed a taxYear immediately after the maximum supported" in new SetupConfig { disallowsTaxYear("2022-23") }
 
       def disallowsTaxYear(taxYearString: String): Unit = {
         validator(validNino, taxYearString, propertyType).validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in {
+      "passed a taxYear spanning an invalid tax year range" in new SetupConfig {
         val result: Either[ErrorWrapper, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2020-22", propertyType).validateAndWrapResult()
 
@@ -93,7 +94,7 @@ class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends Unit
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
         val result: Either[ErrorWrapper, DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", propertyType).validateAndWrapResult()
 

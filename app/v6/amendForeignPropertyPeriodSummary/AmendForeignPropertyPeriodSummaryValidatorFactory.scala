@@ -16,6 +16,7 @@
 
 package v6.amendForeignPropertyPeriodSummary
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
@@ -28,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
-class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() {
+class AmendForeignPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String,
                 businessId: String,

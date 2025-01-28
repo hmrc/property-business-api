@@ -17,25 +17,17 @@
 package v6.historicNonFhlUkPropertyPeriodSummary.create.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import config.MockPropertyBusinessConfig
+import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.domain.Nino
 import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
-import play.api.libs.json._
 import shared.utils.UnitSpec
-import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{
-  UkNonFhlPropertyExpenses,
-  UkNonFhlPropertyIncome,
-  UkPropertyExpensesRentARoom,
-  UkPropertyIncomeRentARoom
-}
-import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
-  CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
-  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
-}
+import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request._
+import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request._
 
-class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 
@@ -110,14 +102,14 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
 
   "validator" should {
     "return the parsed domain object" when {
-      "given a valid request" in {
+      "given a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData(parsedNino, parsedBody))
       }
 
-      "given a valid consolidated request" in {
+      "given a valid consolidated request" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBodyConsolidated).validateAndWrapResult()
 
@@ -126,14 +118,14 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
     }
 
     "return a single error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "given a body with a missing mandatory field" in {
+      "given a body with a missing mandatory field" in new SetupConfig {
         val invalidBody = validBody.removeProperty("/fromDate")
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -141,7 +133,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/fromDate")))
       }
 
-      "given a body containing only a fromDate and toDate" in {
+      "given a body containing only a fromDate and toDate" in new SetupConfig {
         val invalidBody = validBody.removeProperty("/income").removeProperty("/expenses")
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -149,7 +141,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "given an empty body" in {
+      "given an empty body" in new SetupConfig {
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -157,7 +149,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "given a body containing multiple fields with invalid numeric amounts" in {
+      "given a body containing multiple fields with invalid numeric amounts" in new SetupConfig {
         val invalidBody = validBodyConsolidated
           .update("/income/periodAmount", JsNumber(-1.00))
           .update("/income/premiumsOfLeaseGrant", JsNumber(999999999990.99))
@@ -172,7 +164,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
             ValueFormatError.withPaths(List("/income/periodAmount", "/income/premiumsOfLeaseGrant", "/expenses/consolidatedExpenses"))))
       }
 
-      "given a body with an invalidly formatted fromDate" in {
+      "given a body with an invalidly formatted fromDate" in new SetupConfig {
         val invalidBody = validBody.update("fromDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -180,7 +172,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "given a body with a fromDate that precedes the minimum" in {
+      "given a body with a fromDate that precedes the minimum" in new SetupConfig {
         val invalidBody = validBody.update("fromDate", JsString("1801-12-17"))
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -188,7 +180,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "given a body with an invalidly formatted toDate" in {
+      "given a body with an invalidly formatted toDate" in new SetupConfig {
         val invalidBody = validBody.update("toDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -196,7 +188,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "given a body with a toDate that proceeds the maximum" in {
+      "given a body with a toDate that proceeds the maximum" in new SetupConfig {
         val invalidBody = validBody.update("toDate", JsString("2104-01-31"))
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, invalidBody).validateAndWrapResult()
@@ -204,7 +196,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "given a body where the toDate precedes the fromDate" in {
+      "given a body where the toDate precedes the fromDate" in new SetupConfig {
         val invalidBody = validBody
           .update("fromDate", JsString("2020-04-23"))
           .update("toDate", JsString("2019-03-11"))
@@ -214,7 +206,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Unit
         result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
       }
 
-      "given a body containing both expenses" in {
+      "given a body containing both expenses" in new SetupConfig {
         val invalidBody = validBody.update("/expenses/consolidatedExpenses", JsNumber(121.11))
 
         val result: Either[ErrorWrapper, CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] =

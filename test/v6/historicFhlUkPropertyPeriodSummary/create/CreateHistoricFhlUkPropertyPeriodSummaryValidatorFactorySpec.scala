@@ -16,6 +16,7 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.create
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -23,7 +24,7 @@ import shared.utils.UnitSpec
 import v6.historicFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator
 import v6.historicFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricFhlUkPropertyPeriodSummaryRequestData
 
-class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino   = "AA123456A"
   private val invalidNino = "not-a-nino"
@@ -63,7 +64,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitS
 
   "validator()" when {
     "given any valid request" should {
-      "return the Def1 Validator" in {
+      "return the Def1 Validator" in new SetupConfig {
         val result: Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validRequestBody)
 
@@ -72,7 +73,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitS
     }
 
     "given any invalid request" should {
-      "return the Def1 Validator" in {
+      "return the Def1 Validator" in new SetupConfig {
         val result: Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(invalidNino, invalidRequestBody)
 

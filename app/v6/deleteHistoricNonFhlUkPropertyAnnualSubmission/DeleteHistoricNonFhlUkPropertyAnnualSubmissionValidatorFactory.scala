@@ -16,14 +16,15 @@
 
 package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory {
+class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, taxYear: String): Validator[DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear)

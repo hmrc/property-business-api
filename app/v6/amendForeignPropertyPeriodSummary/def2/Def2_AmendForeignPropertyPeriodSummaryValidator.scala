@@ -19,26 +19,25 @@ package v6.amendForeignPropertyPeriodSummary.def2
 import cats.data.Validated
 import cats.implicits._
 import common.controllers.validators.resolvers.ResolveSubmissionId
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.amendForeignPropertyPeriodSummary.model.request.{
-  AmendForeignPropertyPeriodSummaryRequestData,
-  Def2_AmendForeignPropertyPeriodSummaryRequestBody,
-  Def2_AmendForeignPropertyPeriodSummaryRequestData
-}
+import v6.amendForeignPropertyPeriodSummary.model.request._
 
-class Def2_AmendForeignPropertyPeriodSummaryValidator(nino: String,
-                                                      businessId: String,
-                                                      taxYear: String,
-                                                      maxTaxYear: TaxYear,
-                                                      submissionId: String,
-                                                      body: JsValue)
+import javax.inject.Inject
+
+class Def2_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
+                                                                 businessId: String,
+                                                                 taxYear: String,
+                                                                 maxTaxYear: TaxYear,
+                                                                 submissionId: String,
+                                                                 body: JsValue)(implicit config: PropertyBusinessConfig)
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maxTaxYear))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maxTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendForeignPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_AmendForeignPropertyPeriodSummaryRulesValidator()

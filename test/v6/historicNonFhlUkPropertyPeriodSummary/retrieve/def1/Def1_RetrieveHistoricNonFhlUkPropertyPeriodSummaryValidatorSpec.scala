@@ -18,6 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 
 import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
+import config.MockPropertyBusinessConfig
 import shared.models.domain.Nino
 import shared.models.errors._
 import shared.utils.UnitSpec
@@ -26,7 +27,7 @@ import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec {
+class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private implicit val correlationId: String = "X-12345"
   private val validNino                      = "AA123456A"
@@ -39,7 +40,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
 
   "validate()" should {
     "return the parsed domain object" when {
-      "given a valid request" in {
+      "given a valid request" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId).validateAndWrapResult()
@@ -49,7 +50,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
     }
 
     "return a single error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", validPeriodId).validateAndWrapResult()
@@ -57,7 +58,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "given an invalid periodId format is supplied" in {
+      "given an invalid periodId format is supplied" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06__2017-07-04").validateAndWrapResult()
@@ -65,7 +66,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "given an invalid period id" in {
+      "given an invalid period id" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2017-04-06__2017-07-04").validateAndWrapResult()
@@ -73,7 +74,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "given a non-historic periodId" in {
+      "given a non-historic periodId" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2012-04-06_2012-07-04").validateAndWrapResult()
@@ -83,7 +84,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends Un
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid").validateAndWrapResult()

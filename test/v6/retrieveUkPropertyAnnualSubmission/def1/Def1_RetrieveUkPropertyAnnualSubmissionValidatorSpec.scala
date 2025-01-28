@@ -16,6 +16,7 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def1
 
+import config.MockPropertyBusinessConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.utils.UnitSpec
@@ -23,7 +24,7 @@ import v6.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyA
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
-class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
+class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 
   implicit private val correlationId: String = "X-123"
   private val validNino                      = "AA123456B"
@@ -39,7 +40,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
   "validator" should {
     "return the parsed domain object" when {
-      "given a valid request" in {
+      "given a valid request" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
@@ -47,7 +48,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
         result shouldBe Right(Def1_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
 
-      "given the minimum supported taxYear" in {
+      "given the minimum supported taxYear" in new SetupConfig {
         val taxYearString = "2022-23"
 
         val result = validator(validNino, validBusinessId, taxYearString).validateAndWrapResult()
@@ -59,14 +60,14 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
     }
 
     "return a single validation error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validBusinessId, validTaxYear).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
-      "given an incorrectly formatted taxYear" in {
+      "given an incorrectly formatted taxYear" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "202324").validateAndWrapResult()
@@ -75,7 +76,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
 
       }
 
-      "given an incorrectly formatted businessId" in {
+      "given an incorrectly formatted businessId" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid business id", validTaxYear).validateAndWrapResult()
@@ -83,13 +84,13 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "given a taxYear immediately before the minimum supported" in {
+      "given a taxYear immediately before the minimum supported" in new SetupConfig {
 
         val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "given a taxYear spanning an invalid range" in {
+      "given a taxYear spanning an invalid range" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, "2021-23").validateAndWrapResult()
@@ -100,7 +101,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec {
     }
 
     "return multiple validation errors" when {
-      "given a request with multiple issues (path parameters)" in {
+      "given a request with multiple issues (path parameters)" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid").validateAndWrapResult()

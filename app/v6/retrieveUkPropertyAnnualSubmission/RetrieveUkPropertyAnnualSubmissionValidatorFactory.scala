@@ -17,6 +17,7 @@
 package v6.retrieveUkPropertyAnnualSubmission
 
 import cats.data.Validated._
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v6.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema.{Def1, Def2}
@@ -24,7 +25,10 @@ import v6.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyA
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
-class RetrieveUkPropertyAnnualSubmissionValidatorFactory {
+import javax.inject.{Inject, Singleton}
+
+@Singleton
+class RetrieveUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
     RetrieveUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {

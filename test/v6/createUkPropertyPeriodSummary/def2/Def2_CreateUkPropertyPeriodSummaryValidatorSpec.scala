@@ -17,6 +17,7 @@
 package v6.createUkPropertyPeriodSummary.def2
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
@@ -27,7 +28,7 @@ import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty
 import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
 import v6.createUkPropertyPeriodSummary.model.request._
 
-class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 
@@ -203,14 +204,14 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
-      "passed a valid request with a consolidated body for 2024-25" in {
+      "passed a valid request with a consolidated body for 2024-25" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBodyConsolidatedWithExtraFields).validateAndWrapResult()
 
@@ -218,7 +219,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
           Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
       }
 
-      "passed a valid request with a minimal fhl body" in {
+      "passed a valid request with a minimal fhl body" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validMinimalFhlBody).validateAndWrapResult()
 
@@ -226,7 +227,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
           Def2_CreateUkPropertyPeriodSummarySubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalFhl))
       }
 
-      "passed a valid request with a minimal non-fhl body" in {
+      "passed a valid request with a minimal non-fhl body" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validMinimalNonFhlBody).validateAndWrapResult()
 
@@ -236,14 +237,14 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
     }
 
     "return a single error" when {
-      "passed an invalid nino" in {
+      "passed an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator("invalid", validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in {
+      "passed an incorrectly formatted taxYear" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "202324", validBusinessId, validBody).validateAndWrapResult()
 
@@ -251,35 +252,35 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
 
       }
 
-      "passed an incorrectly formatted businessId" in {
+      "passed an incorrectly formatted businessId" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed a taxYear spanning an invalid tax year range" in {
+      "passed a taxYear spanning an invalid tax year range" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2020-22", validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
-      "passed a taxYear immediately after the maximum tax year" in {
+      "passed a taxYear immediately after the maximum tax year" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2025-26", validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
-      "passed an invalid business id" in {
+      "passed an invalid business id" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "passed an empty body" in {
+      "passed an empty body" in new SetupConfig {
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -287,7 +288,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "passed a body without ukFhlProperty or ukNonFhlProperty" in {
+      "passed a body without ukFhlProperty or ukNonFhlProperty" in new SetupConfig {
         val invalidBody = validBody
           .removeProperty("/ukFhlProperty")
           .removeProperty("ukNonFhlProperty")
@@ -299,7 +300,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
       }
 
       def testWith(error: MtdError)(path: String, body: JsValue): Unit = {
-        s"for $path" in {
+        s"for $path" in new SetupConfig {
           val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
             validator(validNino, validTaxYear, validBusinessId, body).validateAndWrapResult()
 
@@ -327,7 +328,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         ).foreach(path => testRuleIncorrectOrEmptyBodyErrorWith(path, validBody.replaceWithEmptyObject(path)))
       }
 
-      "passed a body with an empty object except for an additional (non-schema) property" in {
+      "passed a body with an empty object except for an additional (non-schema) property" in new SetupConfig {
         val invalidBody = validBody.replaceWithEmptyObject("/ukFhlProperty").update("/ukFhlProperty/badField", JsNumber(100))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -335,7 +336,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty")))
       }
 
-      "passed a body missing the fromDate" in {
+      "passed a body missing the fromDate" in new SetupConfig {
         val invalidBody = validBody.removeProperty("/fromDate")
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -343,7 +344,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/fromDate")))
       }
 
-      "passed a body missing the toDate" in {
+      "passed a body missing the toDate" in new SetupConfig {
         val invalidBody = validBody.removeProperty("/toDate")
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -351,7 +352,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/toDate")))
       }
 
-      "passed a body with an invalidly formatted fromDate" in {
+      "passed a body with an invalidly formatted fromDate" in new SetupConfig {
         val invalidBody = validBody.update("/fromDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -359,7 +360,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "passed a body with an invalidly formatted toDate" in {
+      "passed a body with an invalidly formatted toDate" in new SetupConfig {
         val invalidBody = validBody.update("/toDate", JsString("invalid"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -367,7 +368,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "passed a body with a fromDate that precedes the minimum" in {
+      "passed a body with a fromDate that precedes the minimum" in new SetupConfig {
         val invalidBody = validBody.update("/fromDate", JsString("1569-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -375,7 +376,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "passed a body with a toDate that proceeds the minimum" in {
+      "passed a body with a toDate that proceeds the minimum" in new SetupConfig {
         val invalidBody = validBody.update("/toDate", JsString("3490-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -383,7 +384,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "passed a body with a toDate that precedes the fromDate" in {
+      "passed a body with a toDate that precedes the fromDate" in new SetupConfig {
         val invalidBody = validBody.update("/fromDate", JsString("2090-10-01"))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -424,7 +425,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         ).foreach(path => testNegativeValueFormatErrorWith(path, validBodyConsolidatedWithExtraFields.update(path, JsNumber(123.456))))
       }
 
-      "passed a body with multiple invalid fields" in {
+      "passed a body with multiple invalid fields" in new SetupConfig {
         val path0 = "/ukFhlProperty/expenses/travelCosts"
         val path1 = "/ukNonFhlProperty/expenses/other"
         val path2 = "/ukNonFhlProperty/expenses/travelCosts"
@@ -443,7 +444,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
             ValueFormatError.forPathAndRange(path0, min = "-99999999999.99", max = "99999999999.99").withPaths(List(path0, path1, path2))))
       }
 
-      "passed a body with both consolidated and separate expenses provided for fhl" in {
+      "passed a body with both consolidated and separate expenses provided for fhl" in new SetupConfig {
         val invalidBody = validBody.update("ukFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -451,7 +452,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/ukFhlProperty/expenses")))
       }
 
-      "passed a body with both consolidated and separate expenses provided for non-fhl" in {
+      "passed a body with both consolidated and separate expenses provided for non-fhl" in new SetupConfig {
         val invalidBody = validBody.update("ukNonFhlProperty/expenses/consolidatedExpenses", JsNumber(123.45))
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
@@ -461,7 +462,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with Json
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 

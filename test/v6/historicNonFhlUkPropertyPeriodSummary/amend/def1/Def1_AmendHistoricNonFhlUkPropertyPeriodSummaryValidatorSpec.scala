@@ -18,6 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.amend.def1
 
 import common.models.domain.PeriodId
 import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
 import shared.models.domain.Nino
 import shared.models.errors._
@@ -29,7 +30,11 @@ import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators with Def1_Fixtures {
+class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec
+    extends UnitSpec
+    with MockPropertyBusinessConfig
+    with JsonErrorValidators
+    with Def1_Fixtures {
   private implicit val correlationId: String = "1234"
 
   private val validNino     = "AA123456A"
@@ -43,14 +48,14 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
 
   "validator" should {
     "return the parsed domain object" when {
-      "given a valid request" in {
+      "given a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestFull).validateAndWrapResult()
 
         result shouldBe Right(Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData(parsedNino, parsedPeriodId, requestBodyFull))
       }
 
-      "given a valid consolidated request" in {
+      "given a valid consolidated request" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestConsolidated).validateAndWrapResult()
 
@@ -59,14 +64,14 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
     }
 
     "return a single error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", validPeriodId, mtdJsonRequestFull).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "given a body with multiple invalid numeric amounts" in {
+      "given a body with multiple invalid numeric amounts" in new SetupConfig {
         val badNegativeValue = JsNumber(-4996.99)
         val badBigValue      = JsNumber(999999999999.99)
 
@@ -93,7 +98,7 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
           ))
       }
 
-      "given a body with both expenses supplied" in {
+      "given a body with both expenses supplied" in new SetupConfig {
         val invalidBody = mtdJsonRequestFull
           .update("/expenses/consolidatedExpenses", JsNumber(100.00))
 
@@ -105,42 +110,42 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
         )
       }
 
-      "given an empty body" in {
+      "given an empty body" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, JsObject.empty).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "given a body with empty income and expenses sub-objects" in {
+      "given a body with empty income and expenses sub-objects" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestWithEmptySubObjects).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPaths(List("/income", "/expenses"))))
       }
 
-      "given a body with empty rentARoom sub-object" in {
+      "given a body with empty rentARoom sub-object" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validPeriodId, mtdJsonRequestWithEmptyRentARoom).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/income/rentARoom")))
       }
 
-      "given an invalidly formatted periodId" in {
+      "given an invalidly formatted periodId" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "20A7-04-06_2017-07-04", mtdJsonRequestFull).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "given a periodId with a non-historic year" in {
+      "given a periodId with a non-historic year" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2012-04-06_2012-07-04", mtdJsonRequestFull).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PeriodIdFormatError))
       }
 
-      "given a periodId with a toDate before fromDate" in {
+      "given a periodId with a toDate before fromDate" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, "2019-07-04_2019-04-06", mtdJsonRequestFull).validateAndWrapResult()
 
@@ -150,7 +155,7 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorSpec extends UnitS
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
         val result: Either[ErrorWrapper, AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid", "invalid", mtdJsonRequestFull).validateAndWrapResult()
 

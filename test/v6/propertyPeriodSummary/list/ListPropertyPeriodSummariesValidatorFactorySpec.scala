@@ -16,10 +16,11 @@
 
 package v6.propertyPeriodSummary.list
 
+import config.MockPropertyBusinessConfig
 import shared.utils.UnitSpec
 import v6.propertyPeriodSummary.list.def1.Def1_ListPropertyPeriodSummariesValidator
 
-class ListPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec {
+class ListPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -33,12 +34,12 @@ class ListPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec {
 
   "validator()" should {
     "return the Def1 Validator" when {
-      "given any valid request" in {
+      "given any valid request" in new SetupConfig {
         val result = validatorFactory.validator(validNino, validBusinessId, validTaxYear)
         result shouldBe a[Def1_ListPropertyPeriodSummariesValidator]
       }
 
-      "given any invalid request" in {
+      "given any invalid request" in new SetupConfig {
         val result = validatorFactory.validator(invalidNino, invalidBusinessId, invalidTaxYear)
         result shouldBe a[Def1_ListPropertyPeriodSummariesValidator]
       }

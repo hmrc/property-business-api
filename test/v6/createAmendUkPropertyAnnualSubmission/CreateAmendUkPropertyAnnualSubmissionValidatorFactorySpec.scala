@@ -16,13 +16,14 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.controllers.validators.AlwaysErrorsValidator
 import shared.utils.UnitSpec
 import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
 
-class CreateAmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class CreateAmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private def validatorFor(taxYear: String) = {
     val validatorFactory = new CreateAmendUkPropertyAnnualSubmissionValidatorFactory
@@ -31,19 +32,19 @@ class CreateAmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec
 
   "CreateAmendUkPropertyAnnualSubmissionValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {
-      "return a Def1 validator" in {
+      "return a Def1 validator" in new SetupConfig {
         validatorFor("2024-25") shouldBe a[Def1_CreateAmendUkPropertyAnnualSubmissionValidator]
       }
     }
 
     "given a request corresponding to a Def2 schema" should {
-      "return a Def2 validator" in {
+      "return a Def2 validator" in new SetupConfig {
         validatorFor("2025-26") shouldBe a[Def2_CreateAmendUkPropertyAnnualSubmissionValidator]
       }
     }
 
     "given a request where no valid schema could be determined" should {
-      "return a validator returning the errors" in {
+      "return a validator returning the errors" in new SetupConfig {
         validatorFor("BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
       }
     }

@@ -16,12 +16,13 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v6.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -32,14 +33,14 @@ class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSp
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
 
         result shouldBe a[Def1_RetrieveForeignPropertyAnnualSubmissionValidator]
       }
 
-      "passed the minimum supported taxYear" in {
+      "passed the minimum supported taxYear" in new SetupConfig {
         val result: Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear)
         result shouldBe a[Def1_RetrieveForeignPropertyAnnualSubmissionValidator]

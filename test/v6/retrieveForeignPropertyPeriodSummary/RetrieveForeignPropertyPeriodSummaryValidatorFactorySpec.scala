@@ -16,12 +16,13 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
+import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v6.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v6.retrieveForeignPropertyPeriodSummary.model.request._
 
-class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
+class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
   private val validTaxYear      = "2023-24"
@@ -32,7 +33,7 @@ class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec 
   "validator()" when {
 
     "given any request with a valid tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[RetrieveForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId)
 

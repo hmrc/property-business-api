@@ -16,6 +16,7 @@
 
 package v6.amendForeignPropertyPeriodSummary
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -23,7 +24,7 @@ import shared.utils.UnitSpec
 import v6.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
 import v6.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 
-class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
@@ -41,7 +42,7 @@ class AmendForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wit
 
   "validator()" when {
     "given a valid tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[AmendForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBody)
         result shouldBe a[Def1_AmendForeignPropertyPeriodSummaryValidator]

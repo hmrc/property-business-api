@@ -16,14 +16,15 @@
 
 package v4.deletePropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v4.deletePropertyAnnualSubmission.def1.Def1_DeletePropertyAnnualSubmissionValidator
 import v4.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeletePropertyAnnualSubmissionValidatorFactory {
+class DeletePropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[DeletePropertyAnnualSubmissionRequestData] =
     new Def1_DeletePropertyAnnualSubmissionValidator(nino, businessId, taxYear)

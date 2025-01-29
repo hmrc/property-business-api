@@ -16,6 +16,7 @@
 
 package v5.amendUkPropertyPeriodSummary
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
@@ -24,10 +25,11 @@ import v5.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryVal
 import v5.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator
 import v5.amendUkPropertyPeriodSummary.model.request.AmendUkPropertyPeriodSummaryRequestData
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.math.Ordering.Implicits.infixOrderingOps
 
-class AmendUkPropertyPeriodSummaryValidatorFactory @Inject() {
+@Singleton
+class AmendUkPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(
       nino: String,

@@ -16,6 +16,7 @@
 
 package v5.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v5.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v5.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
@@ -23,7 +24,7 @@ import v5.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.Retriev
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() {
+class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
     new Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator(nino, taxYear)

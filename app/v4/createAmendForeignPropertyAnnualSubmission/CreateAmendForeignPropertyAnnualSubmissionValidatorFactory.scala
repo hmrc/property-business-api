@@ -16,12 +16,15 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import v4.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v4.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
-class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory {
+import javax.inject.Inject
+
+class CreateAmendForeignPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] =
     new Def1_CreateAmendForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)

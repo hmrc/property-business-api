@@ -21,6 +21,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import common.controllers.validators.resolvers.ResolvePeriodId
 import common.models.errors.RuleBothExpensesSuppliedError
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
@@ -29,15 +30,18 @@ import shared.models.errors.MtdError
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request._
 
-class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator(
+import javax.inject.Inject
+
+class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
     nino: String,
     periodId: String,
     body: JsValue
-) extends Validator[AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] {
+)(implicit config: PropertyBusinessConfig)
+    extends Validator[AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] {
 
   private val resolveParsedNumber = ResolveParsedNumber()
   private val resolveJson         = new ResolveNonEmptyJsonObject[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody]()
-  private val resolvePeriodId     = new ResolvePeriodId(TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22"))
+  private val resolvePeriodId = new ResolvePeriodId(TaxYear.fromMtd(config.historicMinimumTaxYear), TaxYear.fromMtd(config.historicMaximumTaxYear))
 
   private val valid = Valid(())
 

@@ -19,6 +19,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple2Semigroupal
 import common.controllers.validators.resolvers.ResolvePeriodId
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
@@ -28,12 +29,15 @@ import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
 
-class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator(
+import javax.inject.Inject
+
+class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
     nino: String,
     periodId: String
-) extends Validator[RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] {
+)(implicit config: PropertyBusinessConfig)
+    extends Validator[RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] {
 
-  private val resolvePeriodId = new ResolvePeriodId(TaxYear.fromMtd("2017-18"), TaxYear.fromMtd("2021-22"))
+  private val resolvePeriodId = new ResolvePeriodId(TaxYear.fromMtd(config.historicMinimumTaxYear), TaxYear.fromMtd(config.historicMaximumTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
     (

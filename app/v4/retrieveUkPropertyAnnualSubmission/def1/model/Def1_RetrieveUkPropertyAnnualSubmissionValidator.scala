@@ -18,16 +18,20 @@ package v4.retrieveUkPropertyAnnualSubmission.def1.model
 
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.retrieveUkPropertyAnnualSubmission.model.request._
 
-class Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino: String, businessId: String, taxYear: String)
+import javax.inject.Inject
+
+class Def1_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(implicit
+    config: PropertyBusinessConfig)
     extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2022-23"), TaxYear.fromMtd("2024-25")))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.ukMinimumTaxYear), TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionRequestData] =
     (

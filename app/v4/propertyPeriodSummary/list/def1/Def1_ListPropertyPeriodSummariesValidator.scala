@@ -18,19 +18,23 @@ package v4.propertyPeriodSummary.list.def1
 
 import cats.data.Validated
 import cats.implicits._
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
-class Def1_ListPropertyPeriodSummariesValidator(
+import javax.inject.Inject
+
+class Def1_ListPropertyPeriodSummariesValidator @Inject() (
     nino: String,
     businessId: String,
     taxYear: String
-) extends Validator[ListPropertyPeriodSummariesRequestData] {
+)(implicit config: PropertyBusinessConfig)
+    extends Validator[ListPropertyPeriodSummariesRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), TaxYear.fromMtd("2024-25")))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], ListPropertyPeriodSummariesRequestData] =
     (

@@ -16,13 +16,14 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v4.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
-class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -87,7 +88,7 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validBody)
 

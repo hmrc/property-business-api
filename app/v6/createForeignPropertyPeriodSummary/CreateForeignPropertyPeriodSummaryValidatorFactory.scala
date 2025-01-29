@@ -16,6 +16,7 @@
 
 package v6.createForeignPropertyPeriodSummary
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
@@ -24,11 +25,11 @@ import v6.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeri
 import v6.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v6.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryValidatorFactory {
+class CreateForeignPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateForeignPropertyPeriodSummaryRequestData] = {
 

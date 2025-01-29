@@ -16,12 +16,13 @@
 
 package v5.retrieveUkPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
-class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino       = "AA123456B"
   private val validBusinessId = "XAIS12345678901"
@@ -32,14 +33,14 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
 
   "validator" when {
     "given a valid taxYear" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
 
         result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
       }
 
-      "passed the minimum supported taxYear" in {
+      "passed the minimum supported taxYear" in new SetupConfig {
         val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] = validatorFactory.validator(validNino, validBusinessId, validTaxYear)
 
         result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]

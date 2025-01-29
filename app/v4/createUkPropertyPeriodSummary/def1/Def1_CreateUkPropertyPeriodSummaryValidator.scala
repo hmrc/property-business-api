@@ -18,6 +18,7 @@ package v4.createUkPropertyPeriodSummary.def1
 
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
@@ -27,20 +28,22 @@ import v4.createUkPropertyPeriodSummary.model.request._
 
 import javax.inject.Inject
 
-class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(implicit
+    config: PropertyBusinessConfig)
     extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2022-23"), TaxYear.fromMtd("2023-24")))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.ukMinimumTaxYear), TaxYear.fromMtd("2023-24")))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def1_CreateUkPropertyPeriodSummaryRulesValidator()
 
-  def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] =
+  def validate: Validated[Seq[MtdError], CreateUkPropertyPeriodSummaryRequestData] = {
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+  }
 
 }

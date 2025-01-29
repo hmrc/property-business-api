@@ -17,12 +17,13 @@
 package v5.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import common.models.domain.HistoricPropertyType
+import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v5.deleteHistoricFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
 import v5.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
-class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   implicit val correlationId: String = "X-123"
   private val validNino              = "AA123456A"
@@ -34,7 +35,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends Un
   "validator()" when {
 
     "given any request regardless of tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validTaxYear, propertyType)
 

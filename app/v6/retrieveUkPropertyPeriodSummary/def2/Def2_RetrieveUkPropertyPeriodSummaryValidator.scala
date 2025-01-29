@@ -19,6 +19,7 @@ package v6.retrieveUkPropertyPeriodSummary.def2
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import common.controllers.validators.resolvers.ResolveSubmissionId
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
@@ -32,9 +33,10 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (
     businessId: String,
     taxYear: String,
     submissionId: String
-) extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
+)(implicit config: PropertyBusinessConfig)
+    extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2022-23"), TaxYear.fromMtd("2024-25")))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.ukMinimumTaxYear), TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyPeriodSummaryRequestData] =
     (

@@ -16,6 +16,7 @@
 
 package v4.createForeignPropertyPeriodSummary
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -24,7 +25,7 @@ import v4.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeri
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v4.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 
-class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
@@ -50,14 +51,14 @@ class CreateForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec wi
 
   "validator()" when {
     "given a valid tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val requestBody = validBody(validFromDate, validToDate)
         val result: Validator[CreateForeignPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, requestBody)
 
         result shouldBe a[Def1_CreateForeignPropertyPeriodSummaryValidator]
       }
-      "return the Validator for schema definition 2" in {
+      "return the Validator for schema definition 2" in new SetupConfig {
 
         val requestBody = validBody(validFromDateTy, validToDateTy)
         val result: Validator[CreateForeignPropertyPeriodSummaryRequestData] =

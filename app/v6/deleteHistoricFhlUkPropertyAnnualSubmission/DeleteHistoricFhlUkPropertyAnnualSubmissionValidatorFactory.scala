@@ -17,6 +17,7 @@
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import common.models.domain.HistoricPropertyType
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
@@ -24,7 +25,7 @@ import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistor
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() {
+class DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String,
                 taxYear: String,

@@ -16,13 +16,14 @@
 
 package v5.amendUkPropertyPeriodSummary
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v5.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
 import v5.amendUkPropertyPeriodSummary.model.request._
 
-class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
+class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino         = "AA123456A"
   private val validBusinessId   = "XAIS12345678901"
@@ -86,7 +87,7 @@ class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
 
   "validator" when {
     "given a valid taxYear" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[AmendUkPropertyPeriodSummaryRequestData] =
           validatorFactory.validator(validNino, validBusinessId, validTaxYear, validSubmissionId, validBody)
 

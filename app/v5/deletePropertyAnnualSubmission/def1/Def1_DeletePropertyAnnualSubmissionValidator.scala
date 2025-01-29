@@ -18,6 +18,7 @@ package v5.deletePropertyAnnualSubmission.def1
 
 import cats.data.Validated
 import cats.implicits._
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinimum}
 import shared.models.domain.TaxYear
@@ -26,10 +27,11 @@ import v5.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnua
 
 import javax.inject.Inject
 
-class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
+class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(implicit
+    config: PropertyBusinessConfig)
     extends Validator[DeletePropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2021-22"))
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))
 
   def validate: Validated[Seq[MtdError], DeletePropertyAnnualSubmissionRequestData] =
     (

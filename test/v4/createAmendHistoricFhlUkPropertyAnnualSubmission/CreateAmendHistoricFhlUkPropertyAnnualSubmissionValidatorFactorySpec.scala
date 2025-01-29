@@ -16,6 +16,7 @@
 
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
@@ -23,7 +24,7 @@ import shared.utils.UnitSpec
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
 
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2019-20"
@@ -55,7 +56,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec exten
 
   "validator()" when {
     "given any tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val requestBody = validRequestBody
         val result: Validator[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validTaxYear, requestBody)

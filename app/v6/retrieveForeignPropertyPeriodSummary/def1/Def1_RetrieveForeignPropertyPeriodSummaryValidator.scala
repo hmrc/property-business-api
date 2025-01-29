@@ -19,20 +19,23 @@ package v6.retrieveForeignPropertyPeriodSummary.def1
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import common.controllers.validators.resolvers.ResolveSubmissionId
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.retrieveForeignPropertyPeriodSummary.model.request._
 
-class Def1_RetrieveForeignPropertyPeriodSummaryValidator(nino: String,
-                                                         businessId: String,
-                                                         taxYear: String,
-                                                         maximumTaxYear: TaxYear,
-                                                         submissionId: String)
+import javax.inject.Inject
+
+class Def1_RetrieveForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
+                                                                    businessId: String,
+                                                                    taxYear: String,
+                                                                    maximumTaxYear: TaxYear,
+                                                                    submissionId: String)(implicit config: PropertyBusinessConfig)
     extends Validator[RetrieveForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maximumTaxYear))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maximumTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyPeriodSummaryRequestData] =
     (

@@ -16,12 +16,13 @@
 
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 
-class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec {
+class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
   private val validNino    = "AA123456A"
   private val validTaxYear = "2019-20"
 
@@ -30,7 +31,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends 
   "validator()" when {
 
     "given any request regardless of tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema definition 1" in new SetupConfig {
         val result: Validator[RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData] =
           validatorFactory.validator(validNino, validTaxYear)
 

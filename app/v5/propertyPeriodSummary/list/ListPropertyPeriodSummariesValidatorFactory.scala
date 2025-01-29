@@ -16,14 +16,15 @@
 
 package v5.propertyPeriodSummary.list
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import v5.propertyPeriodSummary.list.def1.Def1_ListPropertyPeriodSummariesValidator
 import v5.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ListPropertyPeriodSummariesValidatorFactory {
+class ListPropertyPeriodSummariesValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String): Validator[ListPropertyPeriodSummariesRequestData] = {
 

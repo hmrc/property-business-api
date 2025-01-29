@@ -16,10 +16,11 @@
 
 package v5.historicNonFhlUkPropertyPeriodSummary.retrieve
 
+import config.MockPropertyBusinessConfig
 import shared.utils.UnitSpec
 import v5.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator
 
-class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec {
+class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private val validNino     = "AA123456A"
   private val validPeriodId = "2017-04-06_2017-07-04"
@@ -32,12 +33,12 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends 
   "validator()" should {
     "return the Def1 validator" when {
 
-      "given any valid request" in {
+      "given any valid request" in new SetupConfig {
         val result = validatorFactory.validator(validNino, validPeriodId)
         result shouldBe a[Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator]
       }
 
-      "given any invalid request" in {
+      "given any invalid request" in new SetupConfig {
         val result = validatorFactory.validator(invalidNino, invalidPeriodId)
         result shouldBe a[Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator]
       }

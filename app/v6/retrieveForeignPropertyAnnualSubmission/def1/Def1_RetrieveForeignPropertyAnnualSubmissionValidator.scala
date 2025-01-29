@@ -18,6 +18,7 @@ package v6.retrieveForeignPropertyAnnualSubmission.def1
 
 import cats.data.Validated
 import cats.implicits._
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
@@ -25,10 +26,13 @@ import shared.models.errors.MtdError
 import v6.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-class Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino: String, businessId: String, taxYear: String)
+import javax.inject.Inject
+
+class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(implicit
+    config: PropertyBusinessConfig)
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2021-22"))
+  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (

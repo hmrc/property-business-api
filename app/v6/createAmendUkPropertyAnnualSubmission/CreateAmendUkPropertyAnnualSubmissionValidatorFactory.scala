@@ -17,6 +17,7 @@
 package v6.createAmendUkPropertyAnnualSubmission
 
 import cats.data.Validated.{Invalid, Valid}
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import v6.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema.{Def1, Def2}
@@ -24,10 +25,10 @@ import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyA
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionValidatorFactory {
+class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, body: JsValue): Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] = {
 

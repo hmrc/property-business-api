@@ -19,27 +19,26 @@ package v5.amendForeignPropertyPeriodSummary.def1
 import cats.data.Validated
 import cats.implicits._
 import common.controllers.validators.resolvers.ResolveSubmissionId
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v5.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v5.amendForeignPropertyPeriodSummary.model.request.{
-  AmendForeignPropertyPeriodSummaryRequestData,
-  Def1_AmendForeignPropertyPeriodSummaryRequestBody,
-  Def1_AmendForeignPropertyPeriodSummaryRequestData
-}
+import v5.amendForeignPropertyPeriodSummary.model.request._
 
-class Def1_AmendForeignPropertyPeriodSummaryValidator(nino: String,
-                                                      businessId: String,
-                                                      taxYear: String,
-                                                      maxTaxYear: TaxYear,
-                                                      submissionId: String,
-                                                      body: JsValue)
+import javax.inject.Inject
+
+class Def1_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
+                                                                 businessId: String,
+                                                                 taxYear: String,
+                                                                 maxTaxYear: TaxYear,
+                                                                 submissionId: String,
+                                                                 body: JsValue)(implicit config: PropertyBusinessConfig)
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd("2021-22"), maxTaxYear))
+  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendForeignPropertyPeriodSummaryRequestBody]()
 

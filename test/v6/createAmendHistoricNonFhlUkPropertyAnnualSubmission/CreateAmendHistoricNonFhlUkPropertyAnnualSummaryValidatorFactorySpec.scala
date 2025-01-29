@@ -16,12 +16,13 @@
 
 package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 
-class CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2019-20"
@@ -31,7 +32,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorFactorySpec exten
 
   "validator" should {
     "return the Def1 validator" when {
-      "given any request" in {
+      "given any request" in new SetupConfig {
         val result = validatorFactory.validator(validNino, validTaxYear, JsObject.empty)
         result shouldBe a[Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator]
       }

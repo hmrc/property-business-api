@@ -17,6 +17,7 @@
 package v6.historicFhlUkPropertyPeriodSummary.create.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.domain.Nino
@@ -26,13 +27,9 @@ import shared.utils.UnitSpec
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v6.historicFhlUkPropertyPeriodSummary.create.CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 import v6.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v6.historicFhlUkPropertyPeriodSummary.create.model.request.{
-  CreateHistoricFhlUkPropertyPeriodSummaryRequestData,
-  Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
-  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
-}
+import v6.historicFhlUkPropertyPeriodSummary.create.model.request._
 
-class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 
@@ -100,14 +97,14 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
 
   "validator" should {
     "return the parsed domain object" when {
-      "passed a valid request" in {
+      "passed a valid request" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData(parsedNino, parsedBody))
       }
 
-      "passed a valid consolidated request" in {
+      "passed a valid consolidated request" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator(validNino, validBodyConsolidated).validateAndWrapResult()
 
@@ -116,14 +113,14 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
     }
 
     "return a single error" when {
-      "passed an invalid nino" in {
+      "passed an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
           validator("invalid nino", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed a body with a mandatory field missing" in {
+      "passed a body with a mandatory field missing" in new SetupConfig {
         val invalidBody = validBody.removeProperty("/fromDate")
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -132,7 +129,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/fromDate")))
       }
 
-      "passed a body containing only a fromDate and toDate" in {
+      "passed a body containing only a fromDate and toDate" in new SetupConfig {
         val invalidBody = validBody.removeProperty("/income").removeProperty("/expenses")
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -141,7 +138,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "passed a body containing multiple invalid numeric amounts" in {
+      "passed a body containing multiple invalid numeric amounts" in new SetupConfig {
         val invalidBody = validBodyConsolidated
           .update("/income/periodAmount", JsNumber(9999999999999999999.25))
           .update("/income/taxDeducted", JsNumber(-100.25))
@@ -156,7 +153,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
             ValueFormatError.withPaths(List("/income/periodAmount", "/income/taxDeducted", "/expenses/consolidatedExpenses"))))
       }
 
-      "passed an empty body" in {
+      "passed an empty body" in new SetupConfig {
         val invalidBody = JsObject.empty
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -165,7 +162,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "passed an invalid fromDate" in {
+      "passed an invalid fromDate" in new SetupConfig {
         val invalidBody = validBody.update("fromDate", JsString("BAD_DATE"))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -174,7 +171,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "passed a fromDate that precedes the minimum" in {
+      "passed a fromDate that precedes the minimum" in new SetupConfig {
         val invalidBody = validBody.update("fromDate", JsString("1800-01-01"))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -183,7 +180,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, FromDateFormatError))
       }
 
-      "passed an invalid toDate" in {
+      "passed an invalid toDate" in new SetupConfig {
         val invalidBody = validBody.update("toDate", JsString("BAD_DATE"))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -192,7 +189,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "passed a toDate that proceeds the maximum" in {
+      "passed a toDate that proceeds the maximum" in new SetupConfig {
         val invalidBody = validBody.update("toDate", JsString("2101-01-01"))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -201,7 +198,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, ToDateFormatError))
       }
 
-      "passed a toDate that precedes the fromDate" in {
+      "passed a toDate that precedes the fromDate" in new SetupConfig {
         val invalidBody = validBody.update("fromDate", JsString("2017-07-05")).update("toDate", JsString("2017-04-06"))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =
@@ -210,7 +207,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpe
         result shouldBe Left(ErrorWrapper(correlationId, RuleToDateBeforeFromDateError))
       }
 
-      "passed a body containing both expenses" in {
+      "passed a body containing both expenses" in new SetupConfig {
         val invalidBody = validBody.update("/expenses/consolidatedExpenses", JsNumber(121.11))
 
         val result: Either[ErrorWrapper, CreateHistoricFhlUkPropertyPeriodSummaryRequestData] =

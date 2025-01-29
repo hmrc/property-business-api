@@ -16,12 +16,13 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
+import config.MockPropertyBusinessConfig
 import play.api.libs.json.JsObject
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator
 
-class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with JsonErrorValidators {
+class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private val validNino     = "AA123456A"
   private val validPeriodId = "2017-04-06_2017-07-04"
@@ -34,12 +35,12 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends Uni
   "validator()" should {
     "return the Def1 Validator" when {
 
-      "given any valid request" in {
+      "given any valid request" in new SetupConfig {
         val result = validatorFactory.validator(validNino, validPeriodId, JsObject.empty)
         result shouldBe a[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator]
       }
 
-      "given any invalid request" in {
+      "given any invalid request" in new SetupConfig {
         val result = validatorFactory.validator(invalidNino, invalidPeriodId, JsObject.empty)
         result shouldBe a[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator]
       }

@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package v6.propertyPeriodSummary.list
+package config
 
-import config.PropertyBusinessConfig
-import shared.controllers.validators.Validator
-import v6.propertyPeriodSummary.list.def1.Def1_ListPropertyPeriodSummariesValidator
-import v6.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
+import play.api.Configuration
+import shared.config.AppConfigBase
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ListPropertyPeriodSummariesValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
+class PropertyBusinessConfig @Inject() (val config: ServicesConfig, val configuration: Configuration) extends AppConfigBase {
 
-  def validator(nino: String, businessId: String, taxYear: String): Validator[ListPropertyPeriodSummariesRequestData] = {
-
-    new Def1_ListPropertyPeriodSummariesValidator(
-      nino,
-      businessId,
-      taxYear
-    )
-  }
+  def ukMinimumTaxYear: String       = config.getString("ukMinimumTaxYear")
+  def foreignMinimumTaxYear: String  = config.getString("foreignMinimumTaxYear")
+  def historicMinimumTaxYear: String = config.getString("historicMinimumTaxYear")
+  def historicMaximumTaxYear: String = config.getString("historicMaximumTaxYear")
 
 }

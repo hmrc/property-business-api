@@ -17,6 +17,7 @@
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import config.MockPropertyBusinessConfig
 import play.api.libs.json._
 import shared.controllers.validators.Validator
 import shared.models.domain.{Nino, TaxYear}
@@ -26,7 +27,7 @@ import shared.utils.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request._
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
 
-class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
   private implicit val correlationId: String = "1234"
 
@@ -84,7 +85,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
 
   "validate()" should {
     "return the parsed domain object" when {
-      "given a valid request" in {
+      "given a valid request" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBody).validateAndWrapResult()
@@ -94,7 +95,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         )
       }
 
-      "given a valid request with only annualAdjustments" in {
+      "given a valid request with only annualAdjustments" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBody.removeProperty("/annualAllowances")).validateAndWrapResult()
@@ -104,7 +105,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         )
       }
 
-      "given a valid request with only annualAllowances" in {
+      "given a valid request with only annualAllowances" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBody.removeProperty("/annualAdjustments")).validateAndWrapResult()
@@ -114,8 +115,8 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         )
       }
 
-      "given the minimum supported taxYear" in allowsTaxYear("2017-18")
-      "given the maximum supported taxYear" in allowsTaxYear("2021-22")
+      "given the minimum supported taxYear" in new SetupConfig { allowsTaxYear("2017-18") }
+      "given the maximum supported taxYear" in new SetupConfig { allowsTaxYear("2021-22") }
 
       def allowsTaxYear(taxYearString: String): Unit = {
 
@@ -127,7 +128,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
     }
 
     "return a single error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validTaxYear, validBody).validateAndWrapResult()
@@ -135,7 +136,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "given an invalidly formatted taxYear" in {
+      "given an invalidly formatted taxYear" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "invalid", validBody).validateAndWrapResult()
@@ -143,8 +144,8 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
       }
 
-      "given a taxYear immediately before the minimum supported" in disallowsTaxYear("2016-17")
-      "given a taxYear immediately after the maximum supported" in disallowsTaxYear("2022-23")
+      "given a taxYear immediately before the minimum supported" in new SetupConfig { disallowsTaxYear("2016-17") }
+      "given a taxYear immediately after the maximum supported" in new SetupConfig { disallowsTaxYear("2022-23") }
 
       def disallowsTaxYear(taxYearString: String): Unit = {
 
@@ -152,7 +153,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
       }
 
-      "given a taxYear with an invalid range" in {
+      "given a taxYear with an invalid range" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, "2020-22", validBody).validateAndWrapResult()
@@ -164,7 +165,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         def testWith(path: String, min: BigDecimal, max: BigDecimal): Unit = s"for $path" when {
           val expected = Left(ErrorWrapper(correlationId, ValueFormatError.forPathAndRange(path, min.toString, max.toString)))
 
-          "it is too small" in {
+          "it is too small" in new SetupConfig {
 
             val invalidBody = validBody.update(path, JsNumber(min - 0.01))
             val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -173,7 +174,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
             result shouldBe expected
           }
 
-          "it is too big" in {
+          "it is too big" in new SetupConfig {
 
             val invalidBody = validBody.update(path, JsNumber(max + 0.01))
             val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -182,7 +183,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
             result shouldBe expected
           }
 
-          "it is a bad value" in {
+          "it is a bad value" in new SetupConfig {
 
             val invalidBody = validBody.update(path, JsNumber(123.456))
             val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -209,7 +210,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         ).foreach((testWith _).tupled)
       }
 
-      "given an empty body" in {
+      "given an empty body" in new SetupConfig {
 
         val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -218,7 +219,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
-      "given a body with a missing mandatory field" in {
+      "given a body with a missing mandatory field" in new SetupConfig {
 
         val invalidBody = validBody.removeProperty("/annualAdjustments/nonResidentLandlord")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -227,7 +228,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/annualAdjustments/nonResidentLandlord")))
       }
 
-      "given a body with an annualAdjustments/nonResidentLandlord field containing an empty object" in {
+      "given a body with an annualAdjustments/nonResidentLandlord field containing an empty object" in new SetupConfig {
 
         val invalidBody = validBody.replaceWithEmptyObject("/annualAdjustments/nonResidentLandlord")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -236,7 +237,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/annualAdjustments/nonResidentLandlord")))
       }
 
-      "given a body with an annualAdjustments field containing an empty object" in {
+      "given a body with an annualAdjustments field containing an empty object" in new SetupConfig {
 
         val invalidBody = validBody.replaceWithEmptyObject("/annualAdjustments")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -245,7 +246,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/annualAdjustments/nonResidentLandlord")))
       }
 
-      "given a body with an annualAllowances field containing an empty object" in {
+      "given a body with an annualAllowances field containing an empty object" in new SetupConfig {
 
         val invalidBody = validBody.replaceWithEmptyObject("/annualAllowances")
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
@@ -256,7 +257,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
     }
 
     "return multiple errors" when {
-      "the request has multiple issues (path parameters)" in {
+      "the request has multiple issues (path parameters)" in new SetupConfig {
 
         val result: Either[ErrorWrapper, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", validBody).validateAndWrapResult()

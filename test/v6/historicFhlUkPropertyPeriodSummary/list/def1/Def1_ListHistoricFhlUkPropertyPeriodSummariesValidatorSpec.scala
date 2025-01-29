@@ -16,6 +16,7 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.list.def1
 
+import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.models.domain.Nino
 import shared.models.errors._
@@ -25,7 +26,7 @@ import v6.historicFhlUkPropertyPeriodSummary.list.model.request.{
   ListHistoricFhlUkPropertyPeriodSummariesRequestData
 }
 
-class Def1_ListHistoricFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpec {
+class Def1_ListHistoricFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 
   private implicit val correlationId: String = "X-123"
   private val validNino                      = "AA123456A"
@@ -37,7 +38,7 @@ class Def1_ListHistoricFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpe
 
   "validate()" should {
     "return the parsed domain object" when {
-      "given a valid nino" in {
+      "given a valid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, ListHistoricFhlUkPropertyPeriodSummariesRequestData] =
           validator(validNino).validateAndWrapResult()
 
@@ -46,7 +47,7 @@ class Def1_ListHistoricFhlUkPropertyPeriodSummariesValidatorSpec extends UnitSpe
 
     }
     "return a single error" when {
-      "given an invalid nino" in {
+      "given an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, ListHistoricFhlUkPropertyPeriodSummariesRequestData] =
           validator("invalid").validateAndWrapResult()
 

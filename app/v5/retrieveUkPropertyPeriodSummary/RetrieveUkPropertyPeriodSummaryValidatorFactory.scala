@@ -16,6 +16,7 @@
 
 package v5.retrieveUkPropertyPeriodSummary
 
+import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
 import v5.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
@@ -27,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 @Singleton
-class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() {
+class RetrieveUkPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, businessId: String, taxYear: String, submissionId: String): Validator[RetrieveUkPropertyPeriodSummaryRequestData] = {
     TaxYear.maybeFromMtd(taxYear) match {

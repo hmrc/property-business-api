@@ -16,15 +16,16 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend
 
+import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory {
+class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
   def validator(nino: String, periodId: String, body: JsValue): Validator[AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] =
     new Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator(nino, periodId, body)

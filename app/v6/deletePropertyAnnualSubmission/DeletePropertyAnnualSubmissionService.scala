@@ -44,15 +44,15 @@ class DeletePropertyAnnualSubmissionService @Inject() (connector: DeleteProperty
       "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "SERVICE_UNAVAILABLE"       -> InternalError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"   -> InternalError,
-      "NOT_FOUND"                -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
-      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
+      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"  -> InternalError,
+      "NOT_FOUND"               -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError
     )
 
     downstreamErrors ++ extraTysErrors

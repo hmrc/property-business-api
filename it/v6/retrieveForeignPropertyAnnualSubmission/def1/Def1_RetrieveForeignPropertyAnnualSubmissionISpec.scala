@@ -264,7 +264,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
       setupStubs()
       buildRequest(s"/foreign/$nino/$businessId/annual/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.5.0+json"),
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

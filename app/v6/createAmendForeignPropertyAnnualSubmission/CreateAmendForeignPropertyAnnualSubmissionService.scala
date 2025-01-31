@@ -20,7 +20,12 @@ import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import common.models.errors.{RuleDuplicateCountryCodeError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.{
+  RuleDuplicateCountryCodeError,
+  RuleOutsideAmendmentWindowError,
+  RulePropertyIncomeAllowanceError,
+  RuleTypeOfBusinessIncorrectError
+}
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -51,7 +56,8 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
       "INVALID_CORRELATIONID"       -> InternalError,
       "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
       "SERVER_ERROR"                -> InternalError,
-      "SERVICE_UNAVAILABLE"         -> InternalError
+      "SERVICE_UNAVAILABLE"         -> InternalError,
+      "OUTSIDE_AMENDMENT_WINDOW"    -> RuleOutsideAmendmentWindowError
     )
 
     val extraTysErrors = Map(

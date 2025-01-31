@@ -20,7 +20,7 @@ import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import common.models.errors.{RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.{RuleOutsideAmendmentWindowError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -49,7 +49,8 @@ class CreateAmendUkPropertyAnnualSubmissionService @Inject() (connector: CreateA
       "MISSING_ALLOWANCES"          -> InternalError,
       "DUPLICATE_COUNTRY_CODE"      -> InternalError,
       "SERVER_ERROR"                -> InternalError,
-      "SERVICE_UNAVAILABLE"         -> InternalError
+      "SERVICE_UNAVAILABLE"         -> InternalError,
+      "OUTSIDE_AMENDMENT_WINDOW"    -> RuleOutsideAmendmentWindowError
     )
 
     val extraTysErrors = Map(

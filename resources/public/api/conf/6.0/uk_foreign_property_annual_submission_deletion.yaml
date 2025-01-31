@@ -54,6 +54,8 @@ delete:
               $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
             RULE_INCORRECT_GOV_TEST_SCENARIO:
               $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+            RULE_OUTSIDE_AMENDMENT_WINDOW:
+              $ref: './common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow'
 
     "403":
       description: Forbidden

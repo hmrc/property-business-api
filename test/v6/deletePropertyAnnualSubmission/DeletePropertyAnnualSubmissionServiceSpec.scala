@@ -16,6 +16,7 @@
 
 package v6.deletePropertyAnnualSubmission
 
+import common.models.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
@@ -69,10 +70,11 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
         )
 
         val extraTysErrors = List(
-          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-          "INVALID_CORRELATION_ID"  -> InternalError,
-          "NOT_FOUND"               -> NotFoundError,
-          "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError
+          "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID"   -> InternalError,
+          "NOT_FOUND"                -> NotFoundError,
+          "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+          "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

@@ -20,6 +20,7 @@ import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.RuleOutsideAmendmentWindowError
 import v6.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -47,10 +48,11 @@ class DeletePropertyAnnualSubmissionService @Inject() (connector: DeleteProperty
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-      "INVALID_CORRELATION_ID"  -> InternalError,
-      "NOT_FOUND"               -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError
+      "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"   -> InternalError,
+      "NOT_FOUND"                -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
     )
 
     downstreamErrors ++ extraTysErrors

@@ -117,7 +117,7 @@ object RuleStartAndEndDateNotAllowedError
 object RuleOutsideAmendmentWindowError
     extends MtdError(
       "RULE_OUTSIDE_AMENDMENT_WINDOW",
-      "Request cannot be completed as you are outside the amendment window",
+      "You are outside the amendment window",
       BAD_REQUEST
     )
 

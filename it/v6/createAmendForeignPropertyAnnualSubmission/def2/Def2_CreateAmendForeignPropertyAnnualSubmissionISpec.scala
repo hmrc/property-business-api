@@ -18,13 +18,7 @@ package v6.createAmendForeignPropertyAnnualSubmission.def2
 
 import shared.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleBothAllowancesSuppliedError,
-  RuleBuildingNameNumberError,
-  RuleDuplicateCountryCodeError,
-  RulePropertyIncomeAllowanceError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError, RuleOutsideAmendmentWindowError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -445,7 +439,8 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
       val extraTysErrors = List(
         (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
-        (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
+        (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError),
+        (BAD_REQUEST, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))

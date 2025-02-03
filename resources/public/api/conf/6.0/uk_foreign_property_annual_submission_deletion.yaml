@@ -6,11 +6,12 @@ delete:
     ### Test data
     Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
     
-    | Header Value (Gov-Test-Scenario)    | Scenario                                                                                      |
-    |-------------------------------------|-----------------------------------------------------------------------------------------------|
-    | N/A - DEFAULT                       | Simulate success response.                                                                    |
-    | NOT_FOUND                           | Simulates the scenario where no data is found.                                                |
-    | STATEFUL                            | Performs a stateful delete.                                                                   |
+    | Header Value (Gov-Test-Scenario)    | Scenario                                                                                        |
+    |-------------------------------------|-------------------------------------------------------------------------------------------------|
+    | N/A - DEFAULT                       | Simulate success response.                                                                      |
+    | NOT_FOUND                           | Simulates the scenario where no data is found.                                                  |
+    | STATEFUL                            | Performs a stateful delete.                                                                     |
+    | OUTSIDE_AMENDMENT_WINDOW            | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
 
   tags:
     - UK or Foreign Property Annual Submission Deletion

@@ -274,7 +274,7 @@ components:
       description: Request cannot be completed as you are outside the amendment window.
       value:
         code: RULE_OUTSIDE_AMENDMENT_WINDOW
-        message: Request cannot be completed as you are outside the amendment window
+        message: You are outside the amendment window
 
     ruleEarlyDataSubmissionNotAccepted:
       description: Cannot submit data more than 10 days before end of period.

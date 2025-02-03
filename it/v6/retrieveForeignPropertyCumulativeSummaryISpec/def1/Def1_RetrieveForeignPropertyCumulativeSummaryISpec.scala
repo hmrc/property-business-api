@@ -50,7 +50,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBase
       setupStubs()
       buildRequest(s"/foreign/$nino/$businessId/cumulative/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.5.0+json"),
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

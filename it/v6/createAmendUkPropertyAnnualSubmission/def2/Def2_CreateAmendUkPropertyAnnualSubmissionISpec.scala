@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.{
   RuleBothAllowancesSuppliedError,
   RuleBuildingNameNumberError,
+  RuleOutsideAmendmentWindowError,
   RulePropertyIncomeAllowanceError,
   RuleTypeOfBusinessIncorrectError
 }
@@ -106,7 +107,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.5.0+json"),
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
@@ -698,7 +699,8 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
         )
 
         val extraTysErrors = List(

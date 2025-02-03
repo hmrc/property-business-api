@@ -16,7 +16,7 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import common.models.errors.{RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.{RuleOutsideAmendmentWindowError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
@@ -75,7 +75,8 @@ class CreateAmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "MISSING_ALLOWANCES"          -> InternalError,
           "DUPLICATE_COUNTRY_CODE"      -> InternalError,
           "SERVER_ERROR"                -> InternalError,
-          "SERVICE_UNAVAILABLE"         -> InternalError
+          "SERVICE_UNAVAILABLE"         -> InternalError,
+          "OUTSIDE_AMENDMENT_WINDOW"    -> RuleOutsideAmendmentWindowError
         )
 
         val extraTysErrors = List(

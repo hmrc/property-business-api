@@ -20,6 +20,7 @@ import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits._
+import common.models.errors.RuleOutsideAmendmentWindowError
 import v6.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -43,7 +44,8 @@ class DeletePropertyAnnualSubmissionService @Inject() (connector: DeleteProperty
       "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "SERVICE_UNAVAILABLE"       -> InternalError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError
     )
 
     val extraTysErrors = Map(

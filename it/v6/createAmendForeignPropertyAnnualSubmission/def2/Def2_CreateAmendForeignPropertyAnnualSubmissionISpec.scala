@@ -22,6 +22,7 @@ import common.models.errors.{
   RuleBothAllowancesSuppliedError,
   RuleBuildingNameNumberError,
   RuleDuplicateCountryCodeError,
+  RuleOutsideAmendmentWindowError,
   RulePropertyIncomeAllowanceError,
   RuleTypeOfBusinessIncorrectError
 }
@@ -440,7 +441,8 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
         (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
+        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+        (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
       )
 
       val extraTysErrors = List(
@@ -470,7 +472,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       setupStubs()
       buildRequest(mtdUri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.5.0+json"),
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

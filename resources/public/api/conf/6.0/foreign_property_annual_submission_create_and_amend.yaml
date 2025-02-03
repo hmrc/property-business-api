@@ -18,6 +18,7 @@ description: |
   | DUPLICATE_COUNTRY_CODE          | Simulates the scenario where the same countryCode is supplied for multiple properties                       |
   | PROPERTY_INCOME_ALLOWANCE       | Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied |
   | STATEFUL                        | Performs a stateful create or update.                                                                       |
+  | OUTSIDE_AMENDMENT_WINDOW        | Simulates the scenario where request cannot be completed as it is outside the amendment window.             |
 
 
 tags:

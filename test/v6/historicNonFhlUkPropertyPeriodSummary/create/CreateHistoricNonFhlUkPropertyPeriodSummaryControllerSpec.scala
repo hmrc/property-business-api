@@ -63,7 +63,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
           .createPeriodSummary(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData))))
 
-        runOkTest(expectedStatus = CREATED, maybeExpectedResponseBody = Some(responseBodyJson))
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(responseBodyJson))
       }
     }
 

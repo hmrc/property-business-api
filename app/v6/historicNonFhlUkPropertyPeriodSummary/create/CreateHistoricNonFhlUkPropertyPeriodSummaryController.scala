@@ -71,7 +71,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
               responseBodyMap = None => None
             )
           )
-          .withPlainJsonResult(CREATED)
+          .withPlainJsonResult(OK)
 
       requestHandler.handleRequest()
     }

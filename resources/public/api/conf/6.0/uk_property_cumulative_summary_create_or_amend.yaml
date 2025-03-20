@@ -1,4 +1,4 @@
-summary: Create and Amend a UK Property Cumulative Period Summary
+summary: Create or Amend a UK Property Cumulative Period Summary
 description: |
   This endpoint enables you to submit the cumulative period income and expenses for a UK property business that occurred between two dates. A National Insurance number, tax year and business ID are required.
   

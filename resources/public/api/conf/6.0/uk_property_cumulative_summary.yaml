@@ -6,7 +6,7 @@ get:
         - read:self-assessment
 
 put:
-  $ref: "./uk_property_cumulative_summary_create_and_amend.yaml"
+  $ref: "./uk_property_cumulative_summary_create_or_amend.yaml"
   summary: Create and Amend a UK Property Cumulative Period Summary
   security:
     - User-Restricted:

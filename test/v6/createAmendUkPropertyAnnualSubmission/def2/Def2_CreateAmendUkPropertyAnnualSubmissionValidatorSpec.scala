@@ -66,7 +66,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
        |{
        |    "allowances": {
        |      "annualInvestmentAllowance": 678.45,
-       |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
        |      "businessPremisesRenovationAllowance": 573.45,
        |      "otherCapitalAllowance": 452.34,
        |      "costOfReplacingDomesticItems": 567.34,
@@ -101,7 +100,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
   private val parsedUkPropertyAllowances = Allowances(
     Some(678.45),
-    Some(456.34),
     Some(573.45),
     Some(452.34),
     Some(567.34),
@@ -298,7 +296,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
         List(
           "/ukProperty/allowances/annualInvestmentAllowance",
-          "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
           "/ukProperty/allowances/businessPremisesRenovationAllowance",
           "/ukProperty/allowances/otherCapitalAllowance",
           "/ukProperty/allowances/costOfReplacingDomesticItems",

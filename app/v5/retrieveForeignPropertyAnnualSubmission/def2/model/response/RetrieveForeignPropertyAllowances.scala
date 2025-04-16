@@ -21,7 +21,6 @@ import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class RetrieveForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                              costOfReplacingDomesticItems: Option[BigDecimal],
-                                             zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                              otherCapitalAllowance: Option[BigDecimal],
                                              zeroEmissionsCarAllowance: Option[BigDecimal],
                                              propertyIncomeAllowance: Option[BigDecimal],
@@ -33,7 +32,6 @@ object RetrieveForeignPropertyAllowances {
   implicit val reads: Reads[RetrieveForeignPropertyAllowances] = (
     (JsPath \ "annualInvestmentAllowance").readNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomesticItems").readNullable[BigDecimal] and
-      (JsPath \ "zeroEmissionsGoodsVehicleAllowance").readNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").readNullable[BigDecimal] and

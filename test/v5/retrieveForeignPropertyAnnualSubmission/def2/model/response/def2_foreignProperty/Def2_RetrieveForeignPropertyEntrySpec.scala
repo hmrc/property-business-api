@@ -36,7 +36,6 @@ class Def2_RetrieveForeignPropertyEntrySpec extends UnitSpec {
         Some(100.25),
         Some(100.25),
         Some(100.25),
-        Some(100.25),
         Some(
           List(
             RetrieveStructuredBuildingAllowance(
@@ -59,7 +58,6 @@ class Def2_RetrieveForeignPropertyEntrySpec extends UnitSpec {
     None,
     Some(
       RetrieveForeignPropertyAllowances(
-        Some(100.25),
         Some(100.25),
         Some(100.25),
         Some(100.25),
@@ -103,7 +101,6 @@ class Def2_RetrieveForeignPropertyEntrySpec extends UnitSpec {
       |      "allowances": {
       |        "annualInvestmentAllowance": 100.25,
       |        "costOfReplacingDomesticItems": 100.25,
-      |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |        "otherCapitalAllowance": 100.25,
       |        "zeroEmissionsCarAllowance": 100.25,
       |        "propertyIncomeAllowance": 100.25,
@@ -137,7 +134,6 @@ class Def2_RetrieveForeignPropertyEntrySpec extends UnitSpec {
       |      "allowances": {
       |        "annualInvestmentAllowance": 100.25,
       |        "costOfReplacingDomesticItems": 100.25,
-      |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |        "otherCapitalAllowance": 100.25,
       |        "zeroEmissionsCarAllowance": 100.25,
       |        "propertyAllowance": 100.25,
@@ -167,7 +163,6 @@ class Def2_RetrieveForeignPropertyEntrySpec extends UnitSpec {
       |   "allowances": {
       |     "annualInvestmentAllowance": 100.25,
       |     "costOfReplacingDomesticItems": 100.25,
-      |     "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |     "otherCapitalAllowance": 100.25,
       |     "zeroEmissionsCarAllowance": 100.25,
       |     "propertyIncomeAllowance": 100.25,
@@ -197,7 +192,6 @@ class Def2_RetrieveForeignPropertyEntrySpec extends UnitSpec {
       |   "allowances": {
       |     "annualInvestmentAllowance": 100.25,
       |     "costOfReplacingDomesticItems": 100.25,
-      |     "zeroEmissionsGoodsVehicleAllowance": 100.25,
       |     "otherCapitalAllowance": 100.25,
       |     "zeroEmissionsCarAllowance": 100.25,
       |     "propertyAllowance": 100.25,

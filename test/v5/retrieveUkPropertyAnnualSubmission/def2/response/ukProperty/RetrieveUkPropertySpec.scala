@@ -89,7 +89,6 @@ class RetrieveUkPropertySpec extends UnitSpec {
     allowances = Some(
       RetrieveUkPropertyAllowances(
         annualInvestmentAllowance = Some(678.45),
-        zeroEmissionsGoodsVehicleAllowance = Some(456.34),
         businessPremisesRenovationAllowance = Some(573.45),
         otherCapitalAllowance = Some(452.34),
         costOfReplacingDomesticItems = Some(567.34),
@@ -137,7 +136,6 @@ class RetrieveUkPropertySpec extends UnitSpec {
       |{
       |   "allowances":{
       |      "annualInvestmentAllowance":678.45,
-      |      "zeroEmissionsGoodsVehicleAllowance":456.34,
       |      "businessPremisesRenovationAllowance":573.45,
       |      "otherCapitalAllowance":452.34,
       |      "costOfReplacingDomesticItems":567.34,

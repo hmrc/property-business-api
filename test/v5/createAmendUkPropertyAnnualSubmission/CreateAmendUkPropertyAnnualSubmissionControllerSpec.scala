@@ -216,7 +216,6 @@ class CreateAmendUkPropertyAnnualSubmissionControllerSpec
         |  "ukProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 2000.50,
-        |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
         |      "businessPremisesRenovationAllowance": 2000.70,
         |      "otherCapitalAllowance": 2000.80,
         |      "costOfReplacingDomesticGoods": 2000.90,

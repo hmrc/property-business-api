@@ -49,7 +49,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         |  "ukProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 2000.50,
-        |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
         |      "businessPremisesRenovationAllowance": 2000.70,
         |      "otherCapitalAllowance": 2000.80,
         |      "costOfReplacingDomesticGoods": 2000.90,
@@ -172,7 +171,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
             |  "ukProperty": {
             |    "allowances": {
             |      "annualInvestmentAllowance": 2000.5456780,
-            |      "zeroEmissionsGoodsVehicleAllowance": 2000.6567890,
             |      "businessPremisesRenovationAllowance": 2000.75678900,
             |      "otherCapitalAllowance": 2000.56789080,
             |      "costOfReplacingDomesticItems": 2000.95678900,
@@ -241,7 +239,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
                 "/ukProperty/adjustments/privateUseAdjustment",
                 "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
                 "/ukProperty/allowances/annualInvestmentAllowance",
-                "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
                 "/ukProperty/allowances/businessPremisesRenovationAllowance",
                 "/ukProperty/allowances/otherCapitalAllowance",
                 "/ukProperty/allowances/costOfReplacingDomesticItems",
@@ -277,7 +274,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
-          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
@@ -327,7 +323,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.5635430,
-          |      "zeroEmissionsGoodsVehicleAllowance": 2000.6235450,
           |      "businessPremisesRenovationAllowance": 2000.745360,
           |      "otherCapitalAllowance": 2000.8243520,
           |      "costOfReplacingDomesticItems": 2000.9064532,
@@ -377,7 +372,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
-          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
@@ -427,7 +421,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
-          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
@@ -477,7 +470,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
-          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
@@ -526,7 +518,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           |    "allowances": {
           |      "propertyIncomeAllowance": 1000.00,
           |      "annualInvestmentAllowance": 2000.50,
-          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
@@ -578,7 +569,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
             "/ukProperty/adjustments/privateUseAdjustment",
             "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
             "/ukProperty/allowances/annualInvestmentAllowance",
-            "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
             "/ukProperty/allowances/businessPremisesRenovationAllowance",
             "/ukProperty/allowances/otherCapitalAllowance",
             "/ukProperty/allowances/costOfReplacingDomesticItems",

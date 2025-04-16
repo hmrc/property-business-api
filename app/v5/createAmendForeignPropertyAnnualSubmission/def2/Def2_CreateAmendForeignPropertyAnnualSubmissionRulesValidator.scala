@@ -76,10 +76,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
       (adjustments.flatMap(_.balancingCharge), s"/foreignProperty/$index/adjustments/balancingCharge"),
       (allowances.flatMap(_.annualInvestmentAllowance), s"/foreignProperty/$index/allowances/annualInvestmentAllowance"),
       (allowances.flatMap(_.costOfReplacingDomesticItems), s"/foreignProperty/$index/allowances/costOfReplacingDomesticItems"),
-      (
-        allowances.flatMap(_.zeroEmissionsGoodsVehicleAllowance),
-        s"/foreignProperty/$index/allowances/zeroEmissionsGoodsVehicleAllowance"
-      ),
       (allowances.flatMap(_.otherCapitalAllowance), s"/foreignProperty/$index/allowances/otherCapitalAllowance"),
       (allowances.flatMap(_.zeroEmissionsCarAllowance), s"/foreignProperty/$index/allowances/zeroEmissionsCarAllowance")
     )
@@ -114,7 +110,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
       case None => valid
       case Some(_) =>
         allowances match {
-          case Def2_Create_Amend_ForeignAllowances(None, None, None, None, None, Some(_), None) => valid
+          case Def2_Create_Amend_ForeignAllowances(None, None, None, None, Some(_), None) => valid
           case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath(s"/foreignProperty/$index/allowances")))
         }
     }

@@ -34,7 +34,6 @@ class UkPropertySpec extends UnitSpec {
       Some(
         Allowances(
           Some(2000.50),
-          Some(2000.60),
           Some(2000.70),
           Some(2000.80),
           Some(2000.90),
@@ -75,7 +74,6 @@ class UkPropertySpec extends UnitSpec {
       |{
       |    "allowances": {
       |      "annualInvestmentAllowance": 2000.50,
-      |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticItems": 2000.90,
@@ -123,7 +121,6 @@ class UkPropertySpec extends UnitSpec {
       |{
       |    "ukOtherPropertyAnnualAllowances": {
       |      "annualInvestmentAllowance": 2000.50,
-      |      "zeroEmissionGoodsVehicleAllowance": 2000.60,
       |      "businessPremisesRenovationAllowance": 2000.70,
       |      "otherCapitalAllowance": 2000.80,
       |      "costOfReplacingDomesticGoods": 2000.90,

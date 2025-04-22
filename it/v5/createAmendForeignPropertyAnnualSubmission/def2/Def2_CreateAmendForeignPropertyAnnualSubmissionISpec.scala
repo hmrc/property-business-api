@@ -48,7 +48,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "allowances":{
       |            "annualInvestmentAllowance":1.25,
       |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
       |            "otherCapitalAllowance":4.25,
       |            "zeroEmissionsCarAllowance":6.25,
       |            "structuredBuildingAllowance":[
@@ -83,7 +82,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "allowances":{
       |            "annualInvestmentAllowance":"OK",
       |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
       |            "otherCapitalAllowance":4.25,
       |            "zeroEmissionsCarAllowance":6.25,
       |            "structuredBuildingAllowance":[
@@ -118,7 +116,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "allowances":{
       |            "annualInvestmentAllowance":123.456,
       |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
       |            "otherCapitalAllowance":4.25,
       |            "zeroEmissionsCarAllowance":6.25,
       |            "structuredBuildingAllowance":[
@@ -198,7 +195,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       |         "allowances":{
       |            "annualInvestmentAllowance":1.25,
       |            "costOfReplacingDomesticItems":2.25,
-      |            "zeroEmissionsGoodsVehicleAllowance":3.25,
       |            "otherCapitalAllowance":4.25,
       |            "zeroEmissionsCarAllowance":6.25,
       |            "propertyIncomeAllowance":5.25

@@ -61,7 +61,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
                   |      "allowances": {
                   |        "annualInvestmentAllowance": 38330.95,
                   |        "costOfReplacingDomesticItems": 41985.17,
-                  |        "zeroEmissionsGoodsVehicleAllowance": 9769.19,
                   |        "otherCapitalAllowance": 1049.21,
                   |        "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowance)},
                   |        "zeroEmissionsCarAllowance": 3456.34
@@ -128,7 +127,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
   private val parsedForeignAllowances = Def2_Create_Amend_ForeignAllowances(
     annualInvestmentAllowance = Some(38330.95),
     costOfReplacingDomesticItems = Some(41985.17),
-    zeroEmissionsGoodsVehicleAllowance = Some(9769.19),
     otherCapitalAllowance = Some(1049.21),
     zeroEmissionsCarAllowance = Some(3456.34),
     propertyIncomeAllowance = None,
@@ -150,7 +148,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
     Some(parsedForeignAdjustments.copy(privateUseAdjustment = None)),
     Some(
       Def2_Create_Amend_ForeignAllowances(
-        None,
         None,
         None,
         None,
@@ -186,7 +183,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         Some(
           Def2_Create_Amend_ForeignAllowances(
             Some(38330.95),
-            None,
             None,
             None,
             None,
@@ -437,9 +433,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               bodyWith(entry.update("/allowances/costOfReplacingDomesticItems", badValue)),
               "/foreignProperty/0/allowances/costOfReplacingDomesticItems"),
-            (
-              bodyWith(entry.update("/allowances/zeroEmissionsGoodsVehicleAllowance", badValue)),
-              "/foreignProperty/0/allowances/zeroEmissionsGoodsVehicleAllowance"),
             (bodyWith(entry.update("/allowances/otherCapitalAllowance", badValue)), "/foreignProperty/0/allowances/otherCapitalAllowance"),
             (bodyWith(entry.update("/allowances/zeroEmissionsCarAllowance", badValue)), "/foreignProperty/0/allowances/zeroEmissionsCarAllowance"),
             (

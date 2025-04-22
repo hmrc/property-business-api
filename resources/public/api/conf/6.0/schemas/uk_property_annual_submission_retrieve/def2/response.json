@@ -66,11 +66,6 @@
               "description": "The amount claimed on equipment bought (except cars) up to maximum annual amount. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "example": "5000.99"
             },
-            "zeroEmissionsGoodsVehicleAllowance": {
-              "type": "number",
-              "description": "The amount of zero emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-              "example": "5000.99"
-            },
             "businessPremisesRenovationAllowance": {
               "type": "number",
               "description": "Allowance for renovation or conversion of derelict business properties. The value must be between 0 and 99999999999.99 up to 2 decimal places.",

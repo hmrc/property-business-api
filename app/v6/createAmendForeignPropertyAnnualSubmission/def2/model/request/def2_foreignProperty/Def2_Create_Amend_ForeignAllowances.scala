@@ -21,7 +21,6 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def2_Create_Amend_ForeignAllowances(annualInvestmentAllowance: Option[BigDecimal],
                                                costOfReplacingDomesticItems: Option[BigDecimal],
-                                               zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                                                otherCapitalAllowance: Option[BigDecimal],
                                                zeroEmissionsCarAllowance: Option[BigDecimal],
                                                propertyIncomeAllowance: Option[BigDecimal],
@@ -33,7 +32,6 @@ object Def2_Create_Amend_ForeignAllowances {
   implicit val writes: Writes[Def2_Create_Amend_ForeignAllowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomesticItems").writeNullable[BigDecimal] and
-      (JsPath \ "zeroEmissionsGoodsVehicleAllowance").writeNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").writeNullable[BigDecimal] and

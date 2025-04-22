@@ -44,7 +44,6 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
     Def2_Create_Amend_ForeignAllowances(
       annualInvestmentAllowance = Some(1.25),
       costOfReplacingDomesticItems = Some(2.25),
-      zeroEmissionsGoodsVehicleAllowance = Some(3.25),
       otherCapitalAllowance = Some(4.25),
       zeroEmissionsCarAllowance = Some(6.25),
       propertyIncomeAllowance = Some(7.25),
@@ -55,7 +54,6 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
       |{
       |    "annualInvestmentAllowance":1.25,
       |    "costOfReplacingDomesticItems":2.25,
-      |    "zeroEmissionsGoodsVehicleAllowance":3.25,
       |    "otherCapitalAllowance":4.25,
       |    "zeroEmissionsCarAllowance":6.25,
       |    "propertyIncomeAllowance":7.25,
@@ -67,7 +65,6 @@ trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
       |{
       |    "annualInvestmentAllowance":1.25,
       |    "costOfReplacingDomesticItems":2.25,
-      |    "zeroEmissionsGoodsVehicleAllowance":3.25,
       |    "otherCapitalAllowance":4.25,
       |    "zeroEmissionsCarAllowance":6.25,
       |    "propertyAllowance":7.25,

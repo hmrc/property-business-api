@@ -20,7 +20,6 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
-                      zeroEmissionsGoodsVehicleAllowance: Option[BigDecimal],
                       businessPremisesRenovationAllowance: Option[BigDecimal],
                       otherCapitalAllowance: Option[BigDecimal],
                       costOfReplacingDomesticItems: Option[BigDecimal],
@@ -34,7 +33,6 @@ object Allowances {
 
   implicit val writes: Writes[Allowances] = (
     (JsPath \ "annualInvestmentAllowance").writeNullable[BigDecimal] and
-      (JsPath \ "zeroEmissionGoodsVehicleAllowance").writeNullable[BigDecimal] and
       (JsPath \ "businessPremisesRenovationAllowance").writeNullable[BigDecimal] and
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomesticGoods").writeNullable[BigDecimal] and

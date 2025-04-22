@@ -51,11 +51,6 @@
                 "description": "Cost of Replacing Domestic Items - formerly Wear and Tear allowance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
                 "example": "5000.99"
               },
-              "zeroEmissionsGoodsVehicleAllowance": {
-                "type": "number",
-                "description": "The amount of zero emissions goods vehicle allowance for goods vehicles purchased for business use. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-                "example": "5000.99"
-              },
               "otherCapitalAllowance": {
                 "type": "number",
                 "description": "All other capital allowances. The value must be between 0 and 99999999999.99 up to 2 decimal places.",

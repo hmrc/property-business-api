@@ -18,7 +18,7 @@ description: |
   | STATEFUL                         | Performs a stateful retrieve.                                            |
 
 tags:
-  - Foreign Property Cumulative Period Summary
+  - Income and Expenses Period Summaries
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

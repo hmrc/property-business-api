@@ -23,7 +23,7 @@ description: |
 
 
 tags:
-  - Foreign Property Annual Submission
+  - Annual Submissions
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

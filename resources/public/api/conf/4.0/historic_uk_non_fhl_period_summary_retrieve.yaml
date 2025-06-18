@@ -15,7 +15,7 @@ description: |
 
 
 tags:
-  - Historic non-FHL UK Property Income & Expenses Period Summary
+  - Historic Annual and Periodic Submissions
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

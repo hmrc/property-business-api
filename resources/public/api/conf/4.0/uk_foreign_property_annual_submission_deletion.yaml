@@ -13,7 +13,7 @@ delete:
     | STATEFUL                            | Performs a stateful delete.                                                                   |
 
   tags:
-    - UK or Foreign Property Annual Submission Deletion
+    - Annual Submissions
 
   parameters:
     - $ref: './common/pathParameters.yaml#/components/parameters/nino'

@@ -19,7 +19,7 @@ description: |
 
 
 tags:
-  - UK Property Business Annual Submission
+  - Annual Submissions
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

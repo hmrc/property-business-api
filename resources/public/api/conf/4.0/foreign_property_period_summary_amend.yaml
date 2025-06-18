@@ -22,7 +22,7 @@ description: |
 
 
 tags:
-  - Foreign Property Income & Expenses Period Summary
+  - Income and Expenses Period Summaries
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

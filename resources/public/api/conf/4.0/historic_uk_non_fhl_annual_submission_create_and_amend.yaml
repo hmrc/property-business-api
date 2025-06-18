@@ -12,7 +12,7 @@ description: |
   | STATEFUL                         | Performs a stateful create or update.          |
 
 tags:
-  - Historic non-FHL UK Property Business Annual Submission
+  - Historic Annual and Periodic Submissions
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'

@@ -19,10 +19,8 @@ package v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
-}
+import uk.gov.hmrc.http.StringContextOps
+import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
@@ -38,7 +36,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends C
       private val outcome = Right(ResponseWrapper(correlationId, CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse(None)))
 
       willPut(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
+        url = url"$baseUrl/income-tax/nino/$nino/uk-properties/other/annual-summaries/$downstreamTaxYear",
         body = body
       ).returns(Future.successful(outcome))
 

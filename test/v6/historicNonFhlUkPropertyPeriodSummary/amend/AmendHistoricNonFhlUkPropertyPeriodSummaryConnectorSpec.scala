@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,8 @@ import org.scalamock.handlers.CallHandler
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
-import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
-  AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
-  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
-}
+import uk.gov.hmrc.http.StringContextOps
+import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData}
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.response.AmendHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -66,18 +63,11 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
     protected val request: AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData =
       Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData(nino, periodId, requestBody)
 
-    def pathFrom(request: AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData): String =
-      s"income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries" +
-        s"?from=${request.periodId.from}" +
-        s"&to=${request.periodId.to}"
-
     def stubHttpResponse(outcome: DownstreamOutcome[AmendHistoricNonFhlUkPropertyPeriodSummaryResponse])
         : CallHandler[Future[DownstreamOutcome[AmendHistoricNonFhlUkPropertyPeriodSummaryResponse]]]#Derived = {
 
-      val path = pathFrom(request)
-
       willPut(
-        url = s"$baseUrl/$path",
+        url = url"$baseUrl/income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries?from=${request.periodId.from}&to=${request.periodId.to}",
         body = requestBody
       ).returns(Future.successful(outcome))
     }

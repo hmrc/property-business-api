@@ -19,13 +19,14 @@ package v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector extends TestSuite with MockFactory {
 
   val mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector =
     mock[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector]

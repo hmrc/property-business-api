@@ -22,12 +22,14 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain._
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v6.fixtures.retrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import v6.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector._
 import v6.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
 import v6.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 import v6.retrieveUkPropertyPeriodSummary.model.response.{Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryResponse}
 
+import java.net.URL
 import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
@@ -156,7 +158,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   trait Test extends ConnectorTest {
 
     protected val taxYear: String
-    protected val uri: String
+    protected val uri: URL
 
     protected val connector: RetrieveUkPropertyPeriodSummaryConnector = new RetrieveUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
@@ -166,7 +168,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
     protected val request: RetrieveUkPropertyPeriodSummaryRequestData =
       Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, TaxYear.fromMtd(taxYear), submissionId)
 
-    def stubHttpResponse(uri: String, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
+    def stubHttpResponse(uri: URL, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
       willGet(
         url = uri
@@ -189,16 +191,15 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   trait NonTysTest extends Test with IfsTest {
     protected lazy val taxYear: String = "2019-20"
 
-    protected lazy val uri: String = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=" +
-      s"$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
+    protected lazy val uri: URL = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
 
   }
 
   trait TysTest extends Test with TysIfsTest {
     protected lazy val taxYear: String = "2023-24"
 
-    protected lazy val uri: String =
-      s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
+    protected lazy val uri: URL =
+      url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
 
   }
 

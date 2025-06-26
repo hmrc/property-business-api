@@ -20,6 +20,7 @@ import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v5.retrieveForeignPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveForeignPropertyCumulativeSummaryResponse, ForeignPropertyEntry}
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
@@ -52,7 +53,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
 
         private val response = responseWith(Some(Seq(ForeignPropertyEntry("AFG", None, None))))
 
-        willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveForeignPropertyCumulativeSummary(requestData)) shouldBe
@@ -65,7 +66,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
         private val response = responseWith(None)
 
-        willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveForeignPropertyCumulativeSummary(requestData)) shouldBe
@@ -78,7 +79,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
         private val response = responseWith(None)
 
-        willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveForeignPropertyCumulativeSummary(requestData)) shouldBe

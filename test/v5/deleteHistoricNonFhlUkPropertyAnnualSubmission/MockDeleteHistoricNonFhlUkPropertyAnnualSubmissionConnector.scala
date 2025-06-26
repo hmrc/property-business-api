@@ -19,12 +19,13 @@ package v5.deleteHistoricNonFhlUkPropertyAnnualSubmission
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockDeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector extends TestSuite with MockFactory {
 
   val mockDeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector: DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector =
     mock[DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector]

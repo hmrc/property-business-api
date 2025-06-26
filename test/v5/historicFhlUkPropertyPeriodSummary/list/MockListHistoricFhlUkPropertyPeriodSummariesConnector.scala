@@ -19,6 +19,7 @@ package v5.historicFhlUkPropertyPeriodSummary.list
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v5.historicFhlUkPropertyPeriodSummary.list.model.request.ListHistoricFhlUkPropertyPeriodSummariesRequestData
@@ -26,7 +27,7 @@ import v5.historicFhlUkPropertyPeriodSummary.list.model.response.ListHistoricFhl
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockListHistoricFhlUkPropertyPeriodSummariesConnector extends MockFactory {
+trait MockListHistoricFhlUkPropertyPeriodSummariesConnector extends TestSuite with MockFactory {
 
   val mockListHistoricUkPropertyPeriodSummariesConnector: ListHistoricFhlUkPropertyPeriodSummariesConnector =
     mock[ListHistoricFhlUkPropertyPeriodSummariesConnector]

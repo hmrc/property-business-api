@@ -21,7 +21,8 @@ import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
@@ -32,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (
-    val http: HttpClient,
+    val http: HttpClientV2,
     val appConfig: SharedAppConfig
 ) extends BaseDownstreamConnector {
 

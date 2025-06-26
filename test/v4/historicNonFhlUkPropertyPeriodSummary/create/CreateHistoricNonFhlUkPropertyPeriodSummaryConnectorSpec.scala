@@ -19,10 +19,8 @@ package v4.historicNonFhlUkPropertyPeriodSummary.create
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
-import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
-  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
-  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
-}
+import uk.gov.hmrc.http.StringContextOps
+import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
 
 import scala.concurrent.Future
 
@@ -37,7 +35,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connector
       val downstreamOutcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
       willPost(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries",
+        url = url"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries",
         body = requestBody
       ).returns(Future.successful(downstreamOutcome))
 

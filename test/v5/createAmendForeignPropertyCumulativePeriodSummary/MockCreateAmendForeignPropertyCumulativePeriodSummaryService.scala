@@ -20,11 +20,12 @@ import shared.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendForeignPropertyCumulativePeriodSummaryService extends MockFactory {
+trait MockCreateAmendForeignPropertyCumulativePeriodSummaryService extends TestSuite with MockFactory {
 
   val mockCreateAmendForeignPropertyCumulativePeriodSummaryService: CreateAmendForeignPropertyCumulativePeriodSummaryService =
     mock[CreateAmendForeignPropertyCumulativePeriodSummaryService]

@@ -19,6 +19,7 @@ package v4.createForeignPropertyPeriodSummary
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v4.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
 import v4.createForeignPropertyPeriodSummary.model.request._
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
@@ -40,7 +41,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
       val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
       willPost(
-        url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId",
+        url = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))
 
@@ -55,7 +56,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
       val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
       willPost(
-        url = s"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))
 

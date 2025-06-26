@@ -20,12 +20,13 @@ import shared.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveUkPropertyCumulativeSummaryService extends MockFactory {
+trait MockRetrieveUkPropertyCumulativeSummaryService extends TestSuite with MockFactory {
 
   val mockRetrieveUkPropertyService: RetrieveUkPropertyCumulativeSummaryService = mock[RetrieveUkPropertyCumulativeSummaryService]
 

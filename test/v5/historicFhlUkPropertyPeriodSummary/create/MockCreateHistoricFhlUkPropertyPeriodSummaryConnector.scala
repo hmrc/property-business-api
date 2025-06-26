@@ -20,11 +20,12 @@ import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
+import org.scalatest.TestSuite
 import v5.historicFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricFhlUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateHistoricFhlUkPropertyPeriodSummaryConnector extends MockFactory {
+trait MockCreateHistoricFhlUkPropertyPeriodSummaryConnector extends TestSuite with MockFactory {
 
   val mockCreateHistoricFhlUkPropertyPeriodSummaryConnector: CreateHistoricFhlUkPropertyPeriodSummaryConnector =
     mock[CreateHistoricFhlUkPropertyPeriodSummaryConnector]

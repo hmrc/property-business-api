@@ -18,8 +18,9 @@ package config
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 
-trait MockPropertyBusinessConfig extends MockFactory {
+trait MockPropertyBusinessConfig extends TestSuite with MockFactory {
 
   implicit val mockPropertyBusinessConfig: PropertyBusinessConfig = mock[PropertyBusinessConfig]
 

@@ -22,10 +22,11 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import play.api.libs.json.JsValue
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
-trait MockCreateAmendUkPropertyCumulativeSummaryValidatorFactory extends MockFactory {
+trait MockCreateAmendUkPropertyCumulativeSummaryValidatorFactory extends TestSuite with MockFactory {
 
   val mockCreateAmendUkPropertyCumulativeSummaryValidatorFactory: CreateAmendUkPropertyCumulativeSummaryValidatorFactory =
     mock[CreateAmendUkPropertyCumulativeSummaryValidatorFactory]

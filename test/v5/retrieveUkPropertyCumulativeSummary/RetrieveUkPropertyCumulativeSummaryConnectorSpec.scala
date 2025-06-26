@@ -20,6 +20,7 @@ import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveUkPropertyCumulativeSummaryResponse, UkProperty}
 import v5.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
@@ -52,7 +53,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
         private val response = responseWith(Some(UkProperty(None, None)))
 
-        willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
@@ -65,7 +66,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
         private val response = responseWith(None)
 
-        willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
@@ -78,7 +79,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
         private val response = responseWith(None)
 
-        willGet(url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe

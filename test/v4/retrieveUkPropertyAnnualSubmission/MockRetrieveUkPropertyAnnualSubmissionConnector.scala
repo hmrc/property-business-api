@@ -19,13 +19,14 @@ package v4.retrieveUkPropertyAnnualSubmission
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.Result
 import v4.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveUkPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockRetrieveUkPropertyAnnualSubmissionConnector extends TestSuite with MockFactory {
 
   val mockRetrieveUkPropertyConnector: RetrieveUkPropertyAnnualSubmissionConnector = mock[RetrieveUkPropertyAnnualSubmissionConnector]
 

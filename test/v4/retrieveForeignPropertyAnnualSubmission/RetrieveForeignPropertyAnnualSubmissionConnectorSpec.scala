@@ -21,17 +21,12 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.Def1_Retrieve_ForeignFhlEeaEntry
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty.Def1_Retrieve_ForeignPropertyEntry
-import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
-  Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
-  RetrieveForeignPropertyAnnualSubmissionRequestData
-}
-import v4.retrieveForeignPropertyAnnualSubmission.model.response.{
-  Def1_RetrieveForeignPropertyAnnualSubmissionResponse,
-  RetrieveForeignPropertyAnnualSubmissionResponse
-}
+import v4.retrieveForeignPropertyAnnualSubmission.model.request.{Def1_RetrieveForeignPropertyAnnualSubmissionRequestData, RetrieveForeignPropertyAnnualSubmissionRequestData}
+import v4.retrieveForeignPropertyAnnualSubmission.model.response.{Def1_RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionResponse}
 
 import scala.concurrent.Future
 
@@ -127,7 +122,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
           Right(ResponseWrapper(correlationId, response))
 
         willGet(
-          url = s"$baseUrl/income-tax/business/property/annual",
+          url = url"$baseUrl/income-tax/business/property/annual",
           parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> "2019-20")
         ).returns(Future.successful(outcome))
 
@@ -157,7 +152,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
       willGet(
-        url = s"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
+        url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))
 
     lazy val taxYear: String = "2023-24"

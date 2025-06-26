@@ -19,6 +19,7 @@ package v6.createUkPropertyPeriodSummary
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v6.createUkPropertyPeriodSummary.model.request._
 import v6.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
@@ -34,7 +35,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       lazy val taxYear: TaxYear = TaxYear.fromMtd("2022-23")
 
       willPost(
-        url = s"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId",
+        url = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId",
         body = requestBodyDef1
       ) returns Future.successful(outcome)
 
@@ -46,7 +47,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
       willPost(
-        url = s"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
         body = requestBodyDef1
       ) returns Future.successful(outcome)
 
@@ -58,7 +59,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       lazy val taxYear: TaxYear = TaxYear.fromMtd("2024-25")
 
       willPost(
-        url = s"$baseUrl/income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId",
         body = requestBodyDef2
       ) returns Future.successful(outcome)
 

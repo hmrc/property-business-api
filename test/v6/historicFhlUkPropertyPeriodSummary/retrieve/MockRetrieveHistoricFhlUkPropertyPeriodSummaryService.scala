@@ -20,12 +20,13 @@ import shared.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.response.RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveHistoricFhlUkPropertyPeriodSummaryService extends MockFactory {
+trait MockRetrieveHistoricFhlUkPropertyPeriodSummaryService extends TestSuite with MockFactory {
 
   val mockRetrieveHistoricFhlUkPropertyPeriodSummaryService: RetrieveHistoricFhlUkPropertyPeriodSummaryService =
     mock[RetrieveHistoricFhlUkPropertyPeriodSummaryService]

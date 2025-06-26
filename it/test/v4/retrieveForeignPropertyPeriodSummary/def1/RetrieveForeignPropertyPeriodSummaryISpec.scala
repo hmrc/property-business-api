@@ -253,7 +253,7 @@ class RetrieveForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
        """.stripMargin
     )
 
-    val mtdUri: String = s"/foreign/$nino/$businessId/period/$taxYear/$submissionId"
+    private val mtdUri: String = s"/foreign/$nino/$businessId/period/$taxYear/$submissionId"
 
     def setupStubs(): StubMapping
 
@@ -278,7 +278,7 @@ class RetrieveForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
   private trait NonTysTest extends Test {
     def taxYear: String           = "2022-23"
-    def downstreamTaxYear: String = taxYear
+    private def downstreamTaxYear: String = taxYear
     def downstreamUri: String     = s"/income-tax/business/property/periodic"
 
     def downstreamQueryParams: Map[String, String] = Map(
@@ -292,8 +292,8 @@ class RetrieveForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
   private trait TysIfsTest extends Test {
     def taxYear: String           = "2023-24"
-    def downstreamTaxYear: String = "23-24"
-    def downstreamUri: String     = s"/income-tax/business/property/$downstreamTaxYear/${nino}/${businessId}/periodic/${submissionId}"
+    private def downstreamTaxYear: String = "23-24"
+    def downstreamUri: String     = s"/income-tax/business/property/$downstreamTaxYear/$nino/$businessId/periodic/$submissionId"
 
     def downstreamQueryParams: Map[String, String] = Map.empty
   }

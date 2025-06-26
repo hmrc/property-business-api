@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import common.models.domain.PeriodId
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v6.historicFhlUkPropertyPeriodSummary.amend.request.{
-  AmendHistoricFhlUkPropertyPeriodSummaryRequestData,
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 }
@@ -37,10 +37,9 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec
     "put a body and return a 204" in new IfsTest with Test {
       private val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      val path: String = pathFrom(request)
-
       willPut(
-        url = s"$baseUrl/$path",
+        url =
+          url"$baseUrl/income-tax/nino/${request.nino.value}/uk-properties/furnished-holiday-lettings/periodic-summaries?from=${request.periodId.from}&to=${request.periodId.to}",
         body = requestBody
       ).returns(Future.successful(outcome))
 
@@ -62,11 +61,6 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec
 
     protected val request: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData =
       Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData(Nino(nino), periodId, requestBody)
-
-    def pathFrom(request: AmendHistoricFhlUkPropertyPeriodSummaryRequestData): String =
-      s"income-tax/nino/${request.nino.value}/uk-properties/furnished-holiday-lettings/periodic-summaries" +
-        s"?from=${request.periodId.from}" +
-        s"&to=${request.periodId.to}"
 
   }
 

@@ -21,11 +21,12 @@ import cats.data.Validated.{Invalid, Valid}
 import common.models.domain.HistoricPropertyType
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
-trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory extends MockFactory {
+trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory extends TestSuite with MockFactory {
 
   val mockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory: DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory =
     mock[DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory]

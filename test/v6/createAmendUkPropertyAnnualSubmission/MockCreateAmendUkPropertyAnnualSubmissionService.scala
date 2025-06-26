@@ -20,11 +20,12 @@ import shared.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendUkPropertyAnnualSubmissionService extends MockFactory {
+trait MockCreateAmendUkPropertyAnnualSubmissionService extends TestSuite with MockFactory {
 
   val mockService: CreateAmendUkPropertyAnnualSubmissionService = mock[CreateAmendUkPropertyAnnualSubmissionService]
 

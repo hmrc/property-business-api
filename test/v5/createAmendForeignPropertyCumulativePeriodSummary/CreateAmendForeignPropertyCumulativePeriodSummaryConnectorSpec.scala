@@ -19,11 +19,9 @@ package v5.createAmendForeignPropertyCumulativePeriodSummary
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
-import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
-  Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,
-  Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
-}
+import v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody, Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData}
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request._
 
 import scala.concurrent.Future
@@ -45,7 +43,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
       val outcome: DownstreamOutcome[Unit] = Right(ResponseWrapper(correlationId, response))
 
       willPut(
-        url = s"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId",
+        url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))
 

@@ -19,11 +19,13 @@ package v5.createAmendUkPropertyCumulativeSummary
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
+
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendUkPropertyCumulativeSummaryConnector extends MockFactory {
+trait MockCreateAmendUkPropertyCumulativeSummaryConnector extends TestSuite with MockFactory {
 
   val mockCreateUkPropertyCumulativeSummaryConnector: CreateAmendUkPropertyCumulativeSummaryConnector =
     mock[CreateAmendUkPropertyCumulativeSummaryConnector]

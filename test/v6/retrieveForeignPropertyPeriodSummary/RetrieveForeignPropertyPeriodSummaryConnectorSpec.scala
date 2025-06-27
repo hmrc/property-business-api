@@ -21,17 +21,12 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain._
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
 import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.ForeignFhlEea
 import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.ForeignNonFhlProperty
-import v6.retrieveForeignPropertyPeriodSummary.model.request.{
-  Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
-  RetrieveForeignPropertyPeriodSummaryRequestData
-}
-import v6.retrieveForeignPropertyPeriodSummary.model.response.{
-  Def1_RetrieveForeignPropertyPeriodSummaryResponse,
-  RetrieveForeignPropertyPeriodSummaryResponse
-}
+import v6.retrieveForeignPropertyPeriodSummary.model.request.{Def1_RetrieveForeignPropertyPeriodSummaryRequestData, RetrieveForeignPropertyPeriodSummaryRequestData}
+import v6.retrieveForeignPropertyPeriodSummary.model.response.{Def1_RetrieveForeignPropertyPeriodSummaryResponse, RetrieveForeignPropertyPeriodSummaryResponse}
 
 import scala.concurrent.Future
 
@@ -207,7 +202,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
-        url = s"$baseUrl/income-tax/business/property/periodic",
+        url = url"$baseUrl/income-tax/business/property/periodic",
         parameters = List(
           "taxableEntityId" -> nino.nino,
           "taxYear"         -> taxYear.asMtd,
@@ -217,7 +212,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
-        url = s"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"
+        url = url"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"
       ).returns(Future.successful(outcome))
 
   }

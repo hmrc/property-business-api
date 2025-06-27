@@ -19,13 +19,14 @@ package v4.historicNonFhlUkPropertyPeriodSummary.retrieve
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector extends MockFactory {
+trait MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector extends TestSuite with MockFactory {
 
   val mockRetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector =
     mock[RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector]

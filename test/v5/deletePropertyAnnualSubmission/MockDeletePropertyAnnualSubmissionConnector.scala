@@ -19,12 +19,13 @@ package v5.deletePropertyAnnualSubmission
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeletePropertyAnnualSubmissionConnector extends MockFactory {
+trait MockDeletePropertyAnnualSubmissionConnector extends TestSuite with MockFactory {
 
   val mockDeletePropertyAnnualSubmissionConnector: DeletePropertyAnnualSubmissionConnector =
     mock[DeletePropertyAnnualSubmissionConnector]

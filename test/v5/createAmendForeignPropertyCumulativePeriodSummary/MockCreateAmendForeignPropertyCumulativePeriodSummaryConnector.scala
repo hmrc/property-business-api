@@ -19,12 +19,13 @@ package v5.createAmendForeignPropertyCumulativePeriodSummary
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendForeignPropertyCumulativePeriodSummaryConnector extends MockFactory {
+trait MockCreateAmendForeignPropertyCumulativePeriodSummaryConnector extends TestSuite with MockFactory {
 
   val mockCreateAmendForeignPropertyCumulativePeriodSummaryConnector: CreateAmendForeignPropertyCumulativePeriodSummaryConnector =
     mock[CreateAmendForeignPropertyCumulativePeriodSummaryConnector]

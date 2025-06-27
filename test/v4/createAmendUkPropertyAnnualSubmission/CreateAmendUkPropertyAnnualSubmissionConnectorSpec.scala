@@ -21,6 +21,7 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import uk.gov.hmrc.http.StringContextOps
 import v4.createAmendUkPropertyAnnualSubmission.model.request._
 
 import scala.concurrent.Future
@@ -106,15 +107,14 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
-        url = s"$baseUrl/income-tax/business/property/annual?" +
-          s"taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}",
+        url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}",
         body = requestBody
       ).returns(Future.successful(outcome))
     }
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
-        url = s"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
+        url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))
     }

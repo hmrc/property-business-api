@@ -20,6 +20,7 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
 import scala.concurrent.Future
@@ -90,12 +91,12 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
-        url = s"$baseUrl/income-tax/business/property/annual?taxableEntityId=AA123456A&incomeSourceId=XAIS12345678910&taxYear=2021-22"
+        url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=AA123456A&incomeSourceId=XAIS12345678910&taxYear=2021-22"
       ).returns(Future.successful(outcome))
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
-        url = s"$baseUrl/income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino}/${request.businessId}"
+        url = url"$baseUrl/income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino}/${request.businessId}"
       ).returns(Future.successful(outcome))
 
   }

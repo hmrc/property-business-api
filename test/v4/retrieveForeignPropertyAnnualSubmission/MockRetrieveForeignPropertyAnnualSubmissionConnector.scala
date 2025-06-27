@@ -19,13 +19,14 @@ package v4.retrieveForeignPropertyAnnualSubmission
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.Result
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockRetrieveForeignPropertyAnnualSubmissionConnector extends TestSuite with MockFactory {
 
   val mockRetrieveForeignPropertyConnector: RetrieveForeignPropertyAnnualSubmissionConnector = mock[RetrieveForeignPropertyAnnualSubmissionConnector]
 

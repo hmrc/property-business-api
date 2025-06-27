@@ -23,7 +23,7 @@ Start the service manager profile: `sm2 --start MTDFB_PROPERTY_BUSINESS`
 
 Run unit tests: `sbt test`
 
-Run integration tests: `sbt it:test`
+Run integration tests: `sbt it/test`
 
 ## Viewing Open API Spec (OAS) docs
 

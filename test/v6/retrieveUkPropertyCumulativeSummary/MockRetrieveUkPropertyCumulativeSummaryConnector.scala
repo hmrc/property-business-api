@@ -19,13 +19,14 @@ package v6.retrieveUkPropertyCumulativeSummary
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveUkPropertyCumulativeSummary.RetrieveUkPropertyCumulativeSummaryConnector.Result
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveUkPropertyCumulativeSummaryConnector extends MockFactory {
+trait MockRetrieveUkPropertyCumulativeSummaryConnector extends TestSuite with MockFactory {
 
   val mockConnector: RetrieveUkPropertyCumulativeSummaryConnector = mock[RetrieveUkPropertyCumulativeSummaryConnector]
 

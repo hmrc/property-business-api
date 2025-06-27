@@ -22,9 +22,10 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-trait MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory extends MockFactory {
+trait MockRetrieveForeignPropertyAnnualSubmissionValidatorFactory extends TestSuite with MockFactory {
 
   val mockRetrieveForeignPropertyAnnualSubmissionValidatorFactory: RetrieveForeignPropertyAnnualSubmissionValidatorFactory =
     mock[RetrieveForeignPropertyAnnualSubmissionValidatorFactory]

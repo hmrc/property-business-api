@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v5.createAmendUkPropertyCumulativeSummary.def1
+package v6.createAmendUkPropertyCumulativeSummary.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors._
@@ -31,7 +31,7 @@ import shared.support.IntegrationBaseSpec
 
 class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  val validRequestBodyJson = Json.parse(
+  val validRequestBodyJson: JsValue = Json.parse(
     """
       |{
       |  "fromDate": "2023-04-01",
@@ -85,7 +85,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.5.0+json"),
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

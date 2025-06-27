@@ -19,6 +19,7 @@ package v6.propertyPeriodSummary.list
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v6.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v6.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 import v6.propertyPeriodSummary.list.model.response.ListPropertyPeriodSummariesResponse
@@ -39,7 +40,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
       willGet(
-        url = s"$baseUrl/income-tax/business/property/$nino/$businessId/period",
+        url = url"$baseUrl/income-tax/business/property/$nino/$businessId/period",
         parameters = List("taxYear" -> "2022-23")
       ).returns(Future.successful(outcome))
 
@@ -53,7 +54,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
       willGet(
-        url = s"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/period"
+        url = url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/period"
       ).returns(Future.successful(outcome))
 
       val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))

@@ -22,9 +22,10 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 
-trait MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory extends MockFactory {
+trait MockRetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory extends TestSuite with MockFactory {
 
   val mockRetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory: RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory =
     mock[RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory]

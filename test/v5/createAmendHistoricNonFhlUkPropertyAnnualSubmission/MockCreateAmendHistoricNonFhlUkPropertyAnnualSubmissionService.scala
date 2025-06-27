@@ -20,12 +20,13 @@ import shared.controllers.RequestContext
 import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService extends MockFactory {
+trait MockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService extends TestSuite with MockFactory {
 
   val mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService =
     mock[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService]

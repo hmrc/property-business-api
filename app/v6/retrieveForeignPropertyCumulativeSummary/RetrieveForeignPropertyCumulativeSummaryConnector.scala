@@ -21,7 +21,8 @@ import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector._
 import v6.retrieveForeignPropertyCumulativeSummary.model.request._
 import v6.retrieveForeignPropertyCumulativeSummary.model.response._
@@ -39,7 +40,7 @@ object RetrieveForeignPropertyCumulativeSummaryConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClient)(implicit val appConfig: SharedAppConfig)
+class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2)(implicit val appConfig: SharedAppConfig)
     extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyCumulativeSummary(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit

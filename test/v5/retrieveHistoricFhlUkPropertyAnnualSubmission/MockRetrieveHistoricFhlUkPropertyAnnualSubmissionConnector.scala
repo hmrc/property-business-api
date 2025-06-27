@@ -19,13 +19,14 @@ package v5.retrieveHistoricFhlUkPropertyAnnualSubmission
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector extends MockFactory {
+trait MockRetrieveHistoricFhlUkPropertyAnnualSubmissionConnector extends TestSuite with MockFactory {
 
   val mockRetrieveHistoricFhlUkPropertyConnector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector =
     mock[RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector]

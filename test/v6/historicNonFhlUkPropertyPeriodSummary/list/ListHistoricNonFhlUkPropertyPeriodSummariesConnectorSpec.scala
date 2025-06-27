@@ -19,15 +19,10 @@ package v6.historicNonFhlUkPropertyPeriodSummary.list
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v6.historicNonFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
-import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
-  Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData,
-  ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
-}
-import v6.historicNonFhlUkPropertyPeriodSummary.list.model.response.{
-  Def1_ListHistoricNonFhlUkPropertyPeriodSummariesResponse,
-  ListHistoricNonFhlUkPropertyPeriodSummariesResponse
-}
+import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData, ListHistoricNonFhlUkPropertyPeriodSummariesRequestData}
+import v6.historicNonFhlUkPropertyPeriodSummary.list.model.response.{Def1_ListHistoricNonFhlUkPropertyPeriodSummariesResponse, ListHistoricNonFhlUkPropertyPeriodSummariesResponse}
 
 import scala.concurrent.Future
 
@@ -39,7 +34,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesConnectorSpec extends Connector
 
     "send a request and return the response body" in new IfsTest with Test {
       willGet(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
+        url = url"$baseUrl/income-tax/nino/$nino/uk-properties/other/periodic-summaries"
       ).returns(Future.successful(outcome))
 
       val result: DownstreamOutcome[ListHistoricNonFhlUkPropertyPeriodSummariesResponse] =

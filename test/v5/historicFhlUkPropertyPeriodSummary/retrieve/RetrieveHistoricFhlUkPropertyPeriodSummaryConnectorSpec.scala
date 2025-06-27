@@ -22,14 +22,9 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
-import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
-  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
-  RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
-}
-import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{
-  Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse,
-  RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
-}
+import uk.gov.hmrc.http.StringContextOps
+import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricFhlUkPropertyPeriodSummaryResponse}
 
 import scala.concurrent.Future
 
@@ -77,7 +72,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]]]#Derived = {
       willGet(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
+        url = url"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=$periodIdFrom&to=$periodIdTo"
       ).returns(Future.successful(outcome))
     }
 

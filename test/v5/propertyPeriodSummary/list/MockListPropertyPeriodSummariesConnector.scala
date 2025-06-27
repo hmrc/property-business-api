@@ -19,13 +19,14 @@ package v5.propertyPeriodSummary.list
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 import v5.propertyPeriodSummary.list.model.response.ListPropertyPeriodSummariesResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockListPropertyPeriodSummariesConnector extends MockFactory {
+trait MockListPropertyPeriodSummariesConnector extends TestSuite with MockFactory {
 
   val mockListPropertyPeriodSummariesConnector: ListPropertyPeriodSummariesConnector = mock[ListPropertyPeriodSummariesConnector]
 

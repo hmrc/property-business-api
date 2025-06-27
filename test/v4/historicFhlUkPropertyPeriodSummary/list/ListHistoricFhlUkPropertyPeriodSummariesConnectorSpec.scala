@@ -19,11 +19,9 @@ package v4.historicFhlUkPropertyPeriodSummary.list
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
-import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{
-  Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData,
-  ListHistoricFhlUkPropertyPeriodSummariesRequestData
-}
+import v4.historicFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData, ListHistoricFhlUkPropertyPeriodSummariesRequestData}
 import v4.historicFhlUkPropertyPeriodSummary.list.model.response.ListHistoricFhlUkPropertyPeriodSummariesResponse
 
 import scala.concurrent.Future
@@ -35,7 +33,7 @@ class ListHistoricFhlUkPropertyPeriodSummariesConnectorSpec extends ConnectorSpe
   "connector" should {
     "send a request and return a body" in new IfsTest with Test {
       willGet(
-        url = s"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
+        url = url"$baseUrl/income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries"
       ).returns(Future.successful(outcome))
 
       val result: DownstreamOutcome[ListHistoricFhlUkPropertyPeriodSummariesResponse[SubmissionPeriod]] =

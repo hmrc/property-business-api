@@ -19,12 +19,13 @@ package v5.historicFhlUkPropertyPeriodSummary.amend
 import shared.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v5.historicFhlUkPropertyPeriodSummary.amend.request.AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendHistoricFhlUkPropertyPeriodSummaryConnector extends MockFactory {
+trait MockAmendHistoricFhlUkPropertyPeriodSummaryConnector extends TestSuite with MockFactory {
 
   val mockAmendHistoricFhlUkPropertyPeriodSummaryConnector: AmendHistoricFhlUkPropertyPeriodSummaryConnector =
     mock[AmendHistoricFhlUkPropertyPeriodSummaryConnector]

@@ -51,7 +51,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "amendUkPropertyPeriodSummary is called with a TYS tax year" must {
-      "send a request and return 204 no content" in new TysIfsTest with Test {
+      "send a request and return 204 no content" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -76,7 +76,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+      "return the error given a TYS tax year request" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 

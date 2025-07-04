@@ -17,7 +17,7 @@
 package v5.retrieveForeignPropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import shared.models.outcomes.ResponseWrapper
@@ -40,19 +40,19 @@ object RetrieveForeignPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
+  extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+                                                                                           hc: HeaderCarrier,
+                                                                                           ec: ExecutionContext,
+                                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
     import request._
     import schema._
 
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
       case taxYear if taxYear.useTaxYearSpecificApi =>
-        (TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
+        (IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
       case _ =>
         (
           IfsUri[DownstreamResp]("income-tax/business/property/annual"),
@@ -63,8 +63,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if resp.hasForeignData => Right(ResponseWrapper(corId, ForeignResult(resp)))
-      case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
-      case Left(e)                                                    => Left(e)
+      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonForeignResult))
+      case Left(e) => Left(e)
     }
 
   }

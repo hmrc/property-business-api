@@ -27,11 +27,11 @@ import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino       = Nino("AA123456A")
+  private val nino = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val preTysTaxYear = TaxYear.fromMtd("2021-22")
-  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear = TaxYear.fromMtd("2023-24")
 
   "connector" when {
     "the downstream response is a success" must {
@@ -45,7 +45,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return no content given a TYS tax year request" in new TysIfsTest with Test {
+      "return no content given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
@@ -67,7 +67,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+      "return the error given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
@@ -77,7 +77,8 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     protected val taxYear: TaxYear
 

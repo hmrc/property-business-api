@@ -17,21 +17,15 @@
 package v4.retrieveForeignPropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
-import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
-  Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
-  RetrieveForeignPropertyAnnualSubmissionRequestData
-}
-import v4.retrieveForeignPropertyAnnualSubmission.model.response.{
-  Def1_RetrieveForeignPropertyAnnualSubmissionResponse,
-  RetrieveForeignPropertyAnnualSubmissionResponse
-}
+import v4.retrieveForeignPropertyAnnualSubmission.model.request.{Def1_RetrieveForeignPropertyAnnualSubmissionRequestData, RetrieveForeignPropertyAnnualSubmissionRequestData}
+import v4.retrieveForeignPropertyAnnualSubmission.model.response.{Def1_RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -60,7 +54,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
 
         val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
           (
-            TaxYearSpecificIfsUri[Def1_RetrieveForeignPropertyAnnualSubmissionResponse](
+            IfsUri[Def1_RetrieveForeignPropertyAnnualSubmissionResponse](
               s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
             Nil
           )

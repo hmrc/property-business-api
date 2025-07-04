@@ -32,10 +32,10 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino       = Nino("AA123456A")
+  private val nino = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
-  private val ukFhlProperty    = Def1_Retrieve_UkFhlProperty(None, None)
+  private val ukFhlProperty = Def1_Retrieve_UkFhlProperty(None, None)
   private val ukNonFhlProperty = Def1_Retrieve_UkNonFhlProperty(None, None)
 
   "connector" when {
@@ -79,7 +79,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     "response has no details" must {
       "return a non-uk result" in new StandardTest {
-        val response: RetrieveUkPropertyAnnualSubmissionResponse                                 = responseWith(None, None)
+        val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
@@ -139,12 +139,12 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   }
 
-  trait StandardTest extends TysIfsTest with Test {
+  trait StandardTest extends IfsTest with Test {
 
     protected lazy val taxYear = "2023-24"
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
+    : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
       willGet(
         url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))

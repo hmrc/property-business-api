@@ -17,11 +17,11 @@
 package v4.amendUkPropertyPeriodSummary
 
 import common.models.domain.SubmissionId
+import org.scalamock.handlers.CallHandler
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
-import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
 import v4.amendUkPropertyPeriodSummary.model.request._
 
@@ -29,12 +29,12 @@ import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino: String         = "AA123456A"
-  private val businessId: String   = "XAIS12345678910"
+  private val nino: String = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
   private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val preTysTaxYear = TaxYear.fromMtd("2022-23")
-  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear = TaxYear.fromMtd("2023-24")
 
   "AmendUkPropertyPeriodSummaryConnector" when {
     val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -51,7 +51,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "amendUkPropertyPeriodSummary is called with a TYS tax year" must {
-      "send a request and return 204 no content" in new TysIfsTest with Test {
+      "send a request and return 204 no content" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -76,8 +76,9 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+      "return the error given a TYS tax year request" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
+
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
@@ -86,7 +87,8 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     def taxYear: TaxYear
 

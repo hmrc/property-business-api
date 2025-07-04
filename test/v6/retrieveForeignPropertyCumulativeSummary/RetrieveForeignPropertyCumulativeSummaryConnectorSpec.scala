@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino       = "AA123456A"
+  private val nino = "AA123456A"
   private val businessId = "someBusinessId"
 
   trait Test {
@@ -48,7 +48,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
 
   "RetrieveForeignPropertyCumulativeSummaryConnector" when {
     "the request is made and FOREIGN property data is returned" should {
-      "return ForeignResult" in new TysIfsTest with Test {
+      "return ForeignResult" in new IfsTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
 
         private val response = responseWith(Some(Seq(ForeignPropertyEntry("AFG", None, None))))
@@ -62,7 +62,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
     }
 
     "the request is made and non-FOREIGN property data is returned (e.g. because the businessId is for a foreign property)" should {
-      "return NonForeignResult" in new TysIfsTest with Test {
+      "return NonForeignResult" in new IfsTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
         private val response = responseWith(None)
 
@@ -75,7 +75,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
     }
 
     "isPassIntentHeader feature switch is on" must {
-      "pass FOREIGN_PROPERTY intent" in new TysIfsTest with Test {
+      "pass FOREIGN_PROPERTY intent" in new IfsTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
         private val response = responseWith(None)
 

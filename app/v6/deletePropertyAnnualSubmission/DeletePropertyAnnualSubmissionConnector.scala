@@ -17,7 +17,7 @@
 package v6.deletePropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,12 +28,12 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class DeletePropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def deletePropertyAnnualSubmission(request: DeletePropertyAnnualSubmissionRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+                                                                                         hc: HeaderCarrier,
+                                                                                         ec: ExecutionContext,
+                                                                                         correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     request match {
       case def1: Def1_DeletePropertyAnnualSubmissionRequestData =>
@@ -41,7 +41,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2,
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (
-              TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
+              IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
               Nil
             )
           } else {
@@ -49,8 +49,8 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2,
               IfsUri[Unit](s"income-tax/business/property/annual"),
               List(
                 "taxableEntityId" -> nino.nino,
-                "incomeSourceId"  -> businessId.businessId,
-                "taxYear"         -> taxYear.asMtd // Note that MTD tax year format is used
+                "incomeSourceId" -> businessId.businessId,
+                "taxYear" -> taxYear.asMtd // Note that MTD tax year format is used
               )
             )
           }

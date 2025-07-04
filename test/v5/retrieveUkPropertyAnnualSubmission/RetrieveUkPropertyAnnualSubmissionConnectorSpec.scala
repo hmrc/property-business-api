@@ -140,7 +140,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   }
 
-  trait StandardTest extends TysIfsTest with Test {
+  trait StandardTest extends IfsTest with Test {
 
     protected lazy val taxYear = "2023-24"
 

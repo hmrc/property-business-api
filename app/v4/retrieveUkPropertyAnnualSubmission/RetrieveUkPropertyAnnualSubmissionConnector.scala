@@ -17,7 +17,7 @@
 package v4.retrieveUkPropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
@@ -40,12 +40,12 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+                                                                                 hc: HeaderCarrier,
+                                                                                 ec: ExecutionContext,
+                                                                                 correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     request match {
       case def1: Def1_RetrieveUkPropertyAnnualSubmissionRequestData =>
@@ -53,7 +53,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
         val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
           (
-            TaxYearSpecificIfsUri[Def1_RetrieveUkPropertyAnnualSubmissionResponse](
+            IfsUri[Def1_RetrieveUkPropertyAnnualSubmissionResponse](
               s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
             Nil
           )
@@ -68,8 +68,8 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e)                                               => Left(e)
+          case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e) => Left(e)
         }
     }
 

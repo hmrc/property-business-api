@@ -18,7 +18,7 @@ package v6.retrieveUkPropertyCumulativeSummary
 
 import config.PropertyBusinessFeatureSwitches
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,19 +40,19 @@ object RetrieveUkPropertyCumulativeSummaryConnector {
 }
 
 @Singleton
-class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyCumulativeSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkPropertyCumulativeSummary(request: RetrieveUkPropertyCumulativeSummaryRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+                                                                                                   hc: HeaderCarrier,
+                                                                                                   ec: ExecutionContext,
+                                                                                                   correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     import request._
     import schema._
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("UK_PROPERTY") else None
 
-    val downstreamUri: DownstreamUri[DownstreamResp] = TaxYearSpecificIfsUri[DownstreamResp](
+    val downstreamUri: DownstreamUri[DownstreamResp] = IfsUri[DownstreamResp](
       s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
 
     get(uri = downstreamUri, maybeIntent = maybeIntent)

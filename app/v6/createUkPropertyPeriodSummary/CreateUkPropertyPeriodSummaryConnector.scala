@@ -18,36 +18,31 @@ package v6.createUkPropertyPeriodSummary
 
 import play.api.http.Status.OK
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.createUkPropertyPeriodSummary.model.request.{
-  CreateUkPropertyPeriodSummaryRequestData,
-  Def1_CreateUkPropertyPeriodSummaryRequestData,
-  Def2_CreateUkPropertyPeriodSummaryRequestData,
-  Def2_CreateUkPropertyPeriodSummarySubmissionRequestData
-}
+import v6.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestData, Def1_CreateUkPropertyPeriodSummaryRequestData, Def2_CreateUkPropertyPeriodSummaryRequestData, Def2_CreateUkPropertyPeriodSummarySubmissionRequestData}
 import v6.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
+                                                                          hc: HeaderCarrier,
+                                                                          ec: ExecutionContext,
+                                                                          correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
     request match {
       case def1: Def1_CreateUkPropertyPeriodSummaryRequestData =>
         import def1._
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
-          TaxYearSpecificIfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
+          IfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         } else {
           // Note that MTD tax year format is used pre-TYS
           IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
@@ -56,13 +51,13 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, 
 
       case def2: Def2_CreateUkPropertyPeriodSummaryRequestData =>
         import def2._
-        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = TaxYearSpecificIfsUri(
+        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = IfsUri(
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
 
       case def2Submission: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData =>
         import def2Submission._
-        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = TaxYearSpecificIfsUri(
+        val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = IfsUri(
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
     }

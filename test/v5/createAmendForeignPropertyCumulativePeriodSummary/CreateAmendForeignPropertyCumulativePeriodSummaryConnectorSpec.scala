@@ -27,17 +27,17 @@ import v5.createAmendForeignPropertyCumulativePeriodSummary.model.request._
 import scala.concurrent.Future
 
 class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
-    extends ConnectorSpec
+  extends ConnectorSpec
     with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
-  private val nino       = Nino("AA123456A")
+  private val nino = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val tysTaxYear = "2025-26"
 
   "connector" must {
 
-    "put a valid body and return 204 for a valid tax year" in new TysIfsTest with Test {
+    "put a valid body and return 204 for a valid tax year" in new IfsTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: DownstreamOutcome[Unit] = Right(ResponseWrapper(correlationId, response))
@@ -52,7 +52,8 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     def taxYear: TaxYear
 

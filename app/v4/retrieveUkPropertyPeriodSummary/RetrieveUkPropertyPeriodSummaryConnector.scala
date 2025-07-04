@@ -17,7 +17,7 @@
 package v4.retrieveUkPropertyPeriodSummary
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
@@ -40,19 +40,19 @@ object RetrieveUkPropertyPeriodSummaryConnector {
 }
 
 @Singleton
-class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkPropertyPeriodSummary(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+                                                                                           hc: HeaderCarrier,
+                                                                                           ec: ExecutionContext,
+                                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     request match {
       case def1: Def1_RetrieveUkPropertyPeriodSummaryRequestData =>
         import def1._
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          TaxYearSpecificIfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
+          IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
             s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
         } else {
           IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
@@ -63,15 +63,15 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e)                                               => Left(e)
+          case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e) => Left(e)
         }
 
       case def2: Def2_RetrieveUkPropertyPeriodSummaryRequestData =>
         import def2._
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          TaxYearSpecificIfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
+          IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
             s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
         } else {
           IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
@@ -82,8 +82,8 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if def2UkResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _))                          => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e)                                                   => Left(e)
+          case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e) => Left(e)
         }
     }
   }

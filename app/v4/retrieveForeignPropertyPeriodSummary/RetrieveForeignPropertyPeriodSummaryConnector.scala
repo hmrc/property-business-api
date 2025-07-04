@@ -17,7 +17,7 @@
 package v4.retrieveForeignPropertyPeriodSummary
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
@@ -40,12 +40,12 @@ object RetrieveForeignPropertyPeriodSummaryConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+                                                                                        hc: HeaderCarrier,
+                                                                                        ec: ExecutionContext,
+                                                                                        correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     request match {
       case def1: Def1_RetrieveForeignPropertyPeriodSummaryRequestData =>
@@ -53,7 +53,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (
-              TaxYearSpecificIfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
+              IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
                 s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"),
               Nil
             )
@@ -62,9 +62,9 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
               IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
               List(
                 "taxableEntityId" -> nino.nino,
-                "taxYear"         -> taxYear.asMtd, // Note that MTD tax year format is used
-                "incomeSourceId"  -> businessId.businessId,
-                "submissionId"    -> submissionId.submissionId
+                "taxYear" -> taxYear.asMtd, // Note that MTD tax year format is used
+                "incomeSourceId" -> businessId.businessId,
+                "submissionId" -> submissionId.submissionId
               )
             )
           }
@@ -73,7 +73,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
 
         response.map(_.map {
           case ResponseWrapper(corId, resp) if foreignResult(resp) => ResponseWrapper(corId, ForeignResult(resp))
-          case ResponseWrapper(corId, _)                           => ResponseWrapper(corId, NonForeignResult)
+          case ResponseWrapper(corId, _) => ResponseWrapper(corId, NonForeignResult)
         })
 
     }

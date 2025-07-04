@@ -17,7 +17,7 @@
 package v4.deletePropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,7 +41,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2,
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (
-              TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
+              IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"),
               Nil
             )
           } else {

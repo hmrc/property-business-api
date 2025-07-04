@@ -18,11 +18,11 @@ package v4.amendUkPropertyPeriodSummary
 
 import play.api.http.Status.NO_CONTENT
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v4.amendUkPropertyPeriodSummary.model.request._
 
 import javax.inject.{Inject, Singleton}
@@ -42,7 +42,7 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, v
       case def1: Def1_AmendUkPropertyPeriodSummaryRequestData =>
         import def1._
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          TaxYearSpecificIfsUri[Unit](
+          IfsUri[Unit](
             s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         } else
           IfsUri[Unit](
@@ -51,13 +51,13 @@ class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, v
 
       case def2: Def2_AmendUkPropertyPeriodSummaryRequestData =>
         import def2._
-        val downstreamUri = TaxYearSpecificIfsUri[Unit](
+        val downstreamUri = IfsUri[Unit](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         put(body, downstreamUri)
 
       case def2Submission: Def2_AmendUkPropertyPeriodSummarySubmissionRequestData =>
         import def2Submission._
-        val downstreamUri = TaxYearSpecificIfsUri[Unit](
+        val downstreamUri = IfsUri[Unit](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         put(body, downstreamUri)
 

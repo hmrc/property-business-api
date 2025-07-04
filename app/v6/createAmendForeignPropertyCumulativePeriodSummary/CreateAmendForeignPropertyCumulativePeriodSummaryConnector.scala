@@ -17,7 +17,7 @@
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.TaxYearSpecificIfsUri
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,16 +28,16 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
+  extends BaseDownstreamConnector {
 
   def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+                                                                                                        hc: HeaderCarrier,
+                                                                                                        ec: ExecutionContext,
+                                                                                                        correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     val downstreamUri =
-      TaxYearSpecificIfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/business/property/periodic/${request.nino}/${request.businessId}")
+      IfsUri[Unit](s"income-tax/${request.taxYear.asTysDownstream}/business/property/periodic/${request.nino}/${request.businessId}")
 
     put(request.body, downstreamUri)
   }

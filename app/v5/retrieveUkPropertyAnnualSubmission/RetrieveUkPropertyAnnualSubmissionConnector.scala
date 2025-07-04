@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import shared.models.outcomes.ResponseWrapper
@@ -40,18 +40,18 @@ object RetrieveUkPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Result]] = {
+                                                                                 hc: HeaderCarrier,
+                                                                                 ec: ExecutionContext,
+                                                                                 correlationId: String): Future[DownstreamOutcome[Result]] = {
     import request._
     import schema._
 
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
       case taxYear if taxYear.useTaxYearSpecificApi =>
-        (TaxYearSpecificIfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
+        (IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
       case _ =>
         (
           IfsUri[DownstreamResp]("income-tax/business/property/annual"),
@@ -62,8 +62,8 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if resp.hasUkData => Right(ResponseWrapper(corId, UkResult(resp)))
-      case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
-      case Left(e)                                               => Left(e)
+      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
+      case Left(e) => Left(e)
     }
 
   }

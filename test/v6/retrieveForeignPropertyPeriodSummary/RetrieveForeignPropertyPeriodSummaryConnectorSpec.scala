@@ -69,7 +69,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
       }
 
-      "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
+      "return a foreign result given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -96,7 +96,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
       }
 
-      "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
+      "return a foreign result given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -123,7 +123,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
       }
 
-      "return a foreign result given a TYS tax year request" in new TysIfsTest with Test {
+      "return a foreign result given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -149,7 +149,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
       }
 
-      "return a non-foreign result given a TYS tax year request" in new TysIfsTest with Test {
+      "return a non-foreign result given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -176,7 +176,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+      "return the error given a TYS tax year request" in new IfsTest with Test {
         lazy val taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)

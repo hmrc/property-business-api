@@ -28,11 +28,11 @@ import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Def1_CreateForeignPropertyPeriodSummaryFixtures {
 
-  private val nino       = Nino("AA123456A")
+  private val nino = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val preTysTaxYear = "2019-20"
-  private val tysTaxYear    = "2023-24"
+  private val tysTaxYear = "2023-24"
 
   "connector" must {
     "post a valid body and return 200 with submissionId" in new IfsTest with Test {
@@ -50,7 +50,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
 
     }
 
-    "post a valid body and return 200 with submissionId for a TYS tax year" in new TysIfsTest with Test {
+    "post a valid body and return 200 with submissionId for a TYS tax year" in new IfsTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
@@ -65,7 +65,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     def taxYear: TaxYear
 

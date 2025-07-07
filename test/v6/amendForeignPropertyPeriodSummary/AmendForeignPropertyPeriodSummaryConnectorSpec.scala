@@ -29,11 +29,11 @@ import scala.concurrent.Future
 
 class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino: String         = "AA123456A"
-  private val businessId: String   = "XAIS12345678910"
+  private val nino: String = "AA123456A"
+  private val businessId: String = "XAIS12345678910"
   private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
-  private val preTysTaxYear        = TaxYear.fromMtd("2022-23")
-  private val tysTaxYear           = TaxYear.fromMtd("2023-24")
+  private val preTysTaxYear = TaxYear.fromMtd("2022-23")
+  private val tysTaxYear = TaxYear.fromMtd("2023-24")
 
   private val outcome = Right(ResponseWrapper(correlationId, ()))
 
@@ -50,7 +50,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     " called for a Tax Year Specific tax year" must {
-      "send a request and return 204 no content" in new TysIfsTest with Test {
+      "send a request and return 204 no content" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -75,7 +75,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+      "return the error given a TYS tax year request" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -87,7 +87,8 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    _: ConnectorTest =>
 
     protected def taxYear: TaxYear
 

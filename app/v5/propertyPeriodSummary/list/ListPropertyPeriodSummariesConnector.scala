@@ -17,7 +17,7 @@
 package v5.propertyPeriodSummary.list
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,21 +29,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def listPeriodSummaries(
-      request: ListPropertyPeriodSummariesRequestData
-  )(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String
-  ): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
+                           request: ListPropertyPeriodSummariesRequestData
+                         )(implicit
+                           hc: HeaderCarrier,
+                           ec: ExecutionContext,
+                           correlationId: String
+                         ): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     import request._
 
     val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
       (
-        TaxYearSpecificIfsUri[ListPropertyPeriodSummariesResponse](
+        IfsUri[ListPropertyPeriodSummariesResponse](
           s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
         Nil
       )

@@ -16,11 +16,11 @@
 
 package v4.createAmendUkPropertyAnnualSubmission
 
+import org.scalamock.handlers.CallHandler
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
-import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
 import v4.createAmendUkPropertyAnnualSubmission.model.request._
 
@@ -28,11 +28,11 @@ import scala.concurrent.Future
 
 class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino: String       = "AA123456A"
+  private val nino: String = "AA123456A"
   private val businessId: String = "XAIS12345678910"
 
   private val preTysTaxYear = TaxYear.fromMtd("2022-23")
-  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear = TaxYear.fromMtd("2023-24")
 
   "CreateAmendUkPropertyAnnualSubmissionConnector" when {
     val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -49,7 +49,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year" must {
-      "put a body and return a 204" in new TysIfsTest with Test {
+      "put a body and return a 204" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
@@ -75,7 +75,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new TysIfsTest with Test {
+      "return the error given a TYS tax year request" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)

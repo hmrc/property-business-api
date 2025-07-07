@@ -18,7 +18,7 @@ package v5.createAmendUkPropertyAnnualSubmission
 
 import play.api.http.Status.NO_CONTENT
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.domain.TaxYear
@@ -30,13 +30,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class CreateAmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
+  extends BaseDownstreamConnector {
 
   def createAmendUkPropertyAnnualSubmission(request: CreateAmendUkPropertyAnnualSubmissionRequestData)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+                                                                                                       hc: HeaderCarrier,
+                                                                                                       ec: ExecutionContext,
+                                                                                                       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
@@ -44,7 +44,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
 
     val downstreamUri = taxYear match {
       case ty if ty.year >= TaxYear.tysTaxYear.year =>
-        TaxYearSpecificIfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
+        IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
       case _ =>
         IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
     }

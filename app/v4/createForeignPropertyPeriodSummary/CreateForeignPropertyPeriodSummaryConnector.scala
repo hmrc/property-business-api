@@ -18,16 +18,12 @@ package v4.createForeignPropertyPeriodSummary
 
 import play.api.http.Status.OK
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v4.createForeignPropertyPeriodSummary.model.request.{
-  CreateForeignPropertyPeriodSummaryRequestData,
-  Def1_CreateForeignPropertyPeriodSummaryRequestData,
-  Def2_CreateForeignPropertyPeriodSummaryRequestData
-}
+import v4.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData, Def2_CreateForeignPropertyPeriodSummaryRequestData}
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -48,7 +44,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
         import def1._
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
-            TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
+            IfsUri[CreateForeignPropertyPeriodSummaryResponse](
               s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
           } else {
             IfsUri[CreateForeignPropertyPeriodSummaryResponse](
@@ -59,7 +55,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
       case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
         import def2._
-        val downstreamUri = TaxYearSpecificIfsUri[CreateForeignPropertyPeriodSummaryResponse](
+        val downstreamUri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
     }

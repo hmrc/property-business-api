@@ -34,12 +34,12 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino       = Nino("AA123456A")
+  private val nino = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val countryCode = "FRA"
 
-  private val foreignFhlEea         = RetrieveForeignFhlEeaEntry(None, None)
+  private val foreignFhlEea = RetrieveForeignFhlEeaEntry(None, None)
   private val foreignNonFhlProperty = RetrieveForeignPropertyEntry(countryCode, None, None)
 
   def responseWith(foreignFhlEea: Option[RetrieveForeignFhlEeaEntry],
@@ -149,10 +149,10 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
   }
 
-  trait StandardTest extends TysIfsTest with Test {
+  trait StandardTest extends IfsTest with Test {
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
+    : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
       willGet(
         url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))

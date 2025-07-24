@@ -57,19 +57,19 @@ responses:
             - $ref: './schemas/uk_property_period_summary_retrieve/def1/response.json'
             - $ref: './schemas/uk_property_period_summary_retrieve/def2/response.json'
         examples:
-          full-expense-response-for-TY-2022-23:
+          Full Expenses response for TY 2023-24 and before:
             description: Full Expenditure response for TY 2023-24 and before
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def1/response.json'
-          consolidated-expense-response-for-TY-2022-23:
+          Consolidated Expenses response for TY 2023-24 and before:
             description: Consolidated Expenditure response for TY 2023-24 and before
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def1/consolidated_response.json'
-          full-expense-response-for-TY-2024-25:
+          Full Expenses response for TY 2024-25 onwards:
             description: Full Expenditure response for TY 2024-25 and after
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/response.json'
-          consolidated-expense-response-for-TY-2024-25:
+          Consolidated Expenses response for TY 2024-25 onwards:
             description: Consolidated Expenses request for TY 2024-25 and after
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/consolidated_response.json'

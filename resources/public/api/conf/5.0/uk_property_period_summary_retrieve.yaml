@@ -62,10 +62,10 @@ responses:
           Consolidated Expenses response for TY 2023-24 and before:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def1/consolidated_response.json'
-          Full Expenses response for TY 2024-25:
+          Full Expenses response for TY 2024-25 onwards:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/response.json'
-          Consolidated Expenses response for TY 2024-25:
+          Consolidated Expenses response for TY 2024-25 onwards:
             value:
               $ref: './examples/uk_property_period_summary_retrieve/def2/consolidated_response.json'
 

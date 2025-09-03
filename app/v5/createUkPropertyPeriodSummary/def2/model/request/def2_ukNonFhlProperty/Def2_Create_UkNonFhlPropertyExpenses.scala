@@ -16,8 +16,8 @@
 
 package v5.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 import v5.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Create_UkPropertyExpensesRentARoom
 
 case class Def2_Create_UkNonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
@@ -67,7 +67,7 @@ object Def2_Create_UkNonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCostsCarriedForward").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Create_UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-  )(unlift(Def2_Create_UkNonFhlPropertyExpenses.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }
 
@@ -103,6 +103,6 @@ object Def2_Create_UkNonFhlPropertyExpensesSubmission {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def2_Create_UkPropertyExpensesRentARoom] and
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal]
-  )(unlift(Def2_Create_UkNonFhlPropertyExpensesSubmission.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

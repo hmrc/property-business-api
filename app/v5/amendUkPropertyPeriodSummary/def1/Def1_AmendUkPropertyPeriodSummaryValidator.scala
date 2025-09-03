@@ -22,10 +22,10 @@ import common.controllers.validators.resolvers.ResolveSubmissionId
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v5.amendUkPropertyPeriodSummary.model.request._
+import v5.amendUkPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 

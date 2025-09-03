@@ -16,8 +16,8 @@
 
 package v5.retrieveUkPropertyPeriodSummary.def2.model.response
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class Def2_Retrieve_NonFhlPropertyExpenses(premisesRunningCosts: Option[BigDecimal],
                                                 repairsAndMaintenance: Option[BigDecimal],

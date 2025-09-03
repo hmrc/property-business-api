@@ -23,19 +23,24 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, 
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.createUkPropertyPeriodSummary.model.request.{CreateUkPropertyPeriodSummaryRequestData, Def1_CreateUkPropertyPeriodSummaryRequestData, Def2_CreateUkPropertyPeriodSummaryRequestData, Def2_CreateUkPropertyPeriodSummarySubmissionRequestData}
+import v5.createUkPropertyPeriodSummary.model.request.{
+  CreateUkPropertyPeriodSummaryRequestData,
+  Def1_CreateUkPropertyPeriodSummaryRequestData,
+  Def2_CreateUkPropertyPeriodSummaryRequestData,
+  Def2_CreateUkPropertyPeriodSummarySubmissionRequestData
+}
 import v5.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createUkProperty(request: CreateUkPropertyPeriodSummaryRequestData)(implicit
-                                                                          hc: HeaderCarrier,
-                                                                          ec: ExecutionContext,
-                                                                          correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[CreateUkPropertyPeriodSummaryResponse]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
     request match {

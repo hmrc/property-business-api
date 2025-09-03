@@ -18,14 +18,14 @@ package v6.createAmendForeignPropertyAnnualSubmission.def1
 
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors._
+import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
-import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
-import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty._
+import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
+import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty.*
 
 import java.time.LocalDate
 

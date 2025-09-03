@@ -17,12 +17,12 @@
 package v5.retrieveForeignPropertyCumulativeSummary
 
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import common.models.errors.RuleTypeOfBusinessIncorrectError
-import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector.{ForeignResult, NonForeignResult}
+import v5.retrieveForeignPropertyCumulativeSummary.model.{Result, ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 import v5.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
@@ -54,7 +54,7 @@ class RetrieveForeignPropertyCumulativeSummaryService @Inject() (connector: Retr
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveForeignPropertyCumulativeSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =
     resultWrapper.responseData match {
       case ForeignResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonForeignResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

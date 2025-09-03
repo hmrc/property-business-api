@@ -16,7 +16,7 @@
 
 package v4.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def2_AmendForeignFhlEeaExpenses(
@@ -42,6 +42,6 @@ object Def2_AmendForeignFhlEeaExpenses {
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").writeNullable[BigDecimal]
-  )(unlift(Def2_AmendForeignFhlEeaExpenses.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

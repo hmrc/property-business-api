@@ -22,8 +22,14 @@ import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
-import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
-import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
+import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.Future
 

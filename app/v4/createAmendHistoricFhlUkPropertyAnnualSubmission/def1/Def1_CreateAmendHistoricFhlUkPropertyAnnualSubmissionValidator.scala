@@ -17,17 +17,17 @@
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.data.Validated._
-import cats.implicits._
+import cats.data.Validated.*
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request._
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request.*
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

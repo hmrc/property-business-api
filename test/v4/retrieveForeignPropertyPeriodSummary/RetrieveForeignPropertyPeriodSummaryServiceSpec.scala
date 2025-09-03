@@ -19,8 +19,8 @@ package v4.retrieveForeignPropertyPeriodSummary
 import common.models.domain.SubmissionId
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import shared.controllers.EndpointLogContext
-import shared.models.domain._
-import shared.models.errors._
+import shared.models.domain.*
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier

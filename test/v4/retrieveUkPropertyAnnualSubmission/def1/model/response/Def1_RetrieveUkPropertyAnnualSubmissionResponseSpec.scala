@@ -19,9 +19,9 @@ package v4.retrieveUkPropertyAnnualSubmission.def1.model.response
 import play.api.libs.json.Json
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
-import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
-import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
-import v4.retrieveUkPropertyAnnualSubmission.model.response._
+import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.*
+import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.*
+import v4.retrieveUkPropertyAnnualSubmission.model.response.*
 
 class Def1_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
 

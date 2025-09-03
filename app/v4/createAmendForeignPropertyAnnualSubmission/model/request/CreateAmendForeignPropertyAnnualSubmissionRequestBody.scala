@@ -16,8 +16,8 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission.model.request
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.Def1_Create_Amend_ForeignFhlEea
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.Def1_Create_Amend_ForeignNonFhlEntry
 
@@ -35,6 +35,6 @@ object Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody {
   implicit val writes: OWrites[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[Def1_Create_Amend_ForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[Def1_Create_Amend_ForeignNonFhlEntry]]
-  )(unlift(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

@@ -38,6 +38,6 @@ object HistoricNonFhlAnnualAllowances {
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomGoods").writeNullable[BigDecimal] and
       (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal]
-  )(unlift(HistoricNonFhlAnnualAllowances.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

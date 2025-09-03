@@ -22,20 +22,20 @@ import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
+import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.*
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
-import v4.retrieveUkPropertyAnnualSubmission.model.request._
-import v4.retrieveUkPropertyAnnualSubmission.model.response._
+import v4.retrieveUkPropertyAnnualSubmission.model.request.*
+import v4.retrieveUkPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
-  private val ukFhlProperty = Def1_Retrieve_UkFhlProperty(None, None)
+  private val ukFhlProperty    = Def1_Retrieve_UkFhlProperty(None, None)
   private val ukNonFhlProperty = Def1_Retrieve_UkNonFhlProperty(None, None)
 
   "connector" when {
@@ -79,7 +79,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     "response has no details" must {
       "return a non-uk result" in new StandardTest {
-        val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(None, None)
+        val response: RetrieveUkPropertyAnnualSubmissionResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
@@ -144,7 +144,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     protected lazy val taxYear = "2023-24"
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
+        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
       willGet(
         url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))

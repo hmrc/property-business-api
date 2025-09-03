@@ -20,11 +20,11 @@ import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
-import v6.retrieveUkPropertyAnnualSubmission.model.request._
+import v6.retrieveUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

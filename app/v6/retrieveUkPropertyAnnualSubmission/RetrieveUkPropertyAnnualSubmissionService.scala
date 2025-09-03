@@ -17,7 +17,7 @@
 package v6.retrieveUkPropertyAnnualSubmission
 
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT

@@ -17,7 +17,7 @@
 package common.controllers.validators.resolvers
 
 import shared.models.domain.DateRange
-import shared.models.errors._
+import shared.models.errors.*
 import cats.data.Validated
 import common.models.errors.RuleToDateBeforeFromDateError
 import shared.controllers.validators.resolvers.{ResolveDateRange, ResolverSupport}

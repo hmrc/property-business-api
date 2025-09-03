@@ -20,7 +20,7 @@ import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceOutcome
 import shared.utils.UnitSpec

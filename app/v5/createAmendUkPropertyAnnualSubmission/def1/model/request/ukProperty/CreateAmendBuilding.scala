@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class CreateAmendBuilding(name: Option[String], number: Option[String], postcode: String)
@@ -28,6 +28,6 @@ object CreateAmendBuilding {
     (JsPath \ "name").writeNullable[String] and
       (JsPath \ "number").writeNullable[String] and
       (JsPath \ "postCode").write[String]
-  )(unlift(CreateAmendBuilding.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

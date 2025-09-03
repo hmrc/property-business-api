@@ -21,7 +21,10 @@ import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
-import v6.historicFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData, ListHistoricFhlUkPropertyPeriodSummariesRequestData}
+import v6.historicFhlUkPropertyPeriodSummary.list.model.request.{
+  Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData,
+  ListHistoricFhlUkPropertyPeriodSummariesRequestData
+}
 import v6.historicFhlUkPropertyPeriodSummary.list.model.response.ListHistoricFhlUkPropertyPeriodSummariesResponse
 
 import scala.concurrent.Future

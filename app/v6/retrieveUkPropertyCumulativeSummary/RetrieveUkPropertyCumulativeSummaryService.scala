@@ -17,11 +17,11 @@
 package v6.retrieveUkPropertyCumulativeSummary
 
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
-import RetrieveUkPropertyCumulativeSummaryConnector.{NonUkResult, UkResult}
+import v6.retrieveUkPropertyCumulativeSummary.model.{Result, NonUkResult, UkResult}
 import common.models.errors.RuleTypeOfBusinessIncorrectError
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
@@ -54,7 +54,7 @@ class RetrieveUkPropertyCumulativeSummaryService @Inject() (connector: RetrieveU
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyCumulativeSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =
     resultWrapper.responseData match {
       case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

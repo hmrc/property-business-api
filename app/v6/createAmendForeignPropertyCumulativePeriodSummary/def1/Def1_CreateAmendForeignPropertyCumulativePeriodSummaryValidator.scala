@@ -20,14 +20,14 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
 import shared.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import play.api.libs.json.JsValue
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
   Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,
   Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 }
-import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request._
+import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.*
 
 class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] {

@@ -16,7 +16,7 @@
 
 package v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyIncomeRentARoom
 
@@ -31,6 +31,6 @@ object Def2_Amend_UkFhlPropertyIncome {
     (JsPath \ "periodAmount").writeNullable[BigDecimal] and
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "ukFhlRentARoom").writeNullable[Def2_Amend_UkPropertyIncomeRentARoom]
-  )(unlift(Def2_Amend_UkFhlPropertyIncome.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

@@ -20,7 +20,10 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody, Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,
+  Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future

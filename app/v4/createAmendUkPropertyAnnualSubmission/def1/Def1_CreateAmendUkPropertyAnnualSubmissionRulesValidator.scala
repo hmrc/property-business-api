@@ -18,13 +18,13 @@ package v4.createAmendUkPropertyAnnualSubmission.def1
 
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import shared.models.errors._
+import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
-import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
+import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty.*
+import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty.*
 import v4.createAmendUkPropertyAnnualSubmission.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyAnnualSubmissionRequestData] {

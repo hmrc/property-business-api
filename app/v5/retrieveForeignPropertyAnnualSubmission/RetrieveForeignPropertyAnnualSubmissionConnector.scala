@@ -40,13 +40,13 @@ object RetrieveForeignPropertyAnnualSubmissionConnector {
 }
 
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
-  extends BaseDownstreamConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequestData)(implicit
-                                                                                           hc: HeaderCarrier,
-                                                                                           ec: ExecutionContext,
-                                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
     import request._
     import schema._
 
@@ -63,8 +63,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if resp.hasForeignData => Right(ResponseWrapper(corId, ForeignResult(resp)))
-      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonForeignResult))
-      case Left(e) => Left(e)
+      case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
+      case Left(e)                                                    => Left(e)
     }
 
   }

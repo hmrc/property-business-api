@@ -23,11 +23,11 @@ import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
-import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
+import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

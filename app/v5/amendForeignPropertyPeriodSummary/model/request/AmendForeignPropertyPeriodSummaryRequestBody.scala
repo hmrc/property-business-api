@@ -16,7 +16,7 @@
 
 package v5.amendForeignPropertyPeriodSummary.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.AmendForeignFhlEea
 import v5.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.AmendForeignNonFhlPropertyEntry
@@ -35,7 +35,7 @@ object Def1_AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val writes: OWrites[Def1_AmendForeignPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[AmendForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[AmendForeignNonFhlPropertyEntry]]
-  )(unlift(Def1_AmendForeignPropertyPeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }
 
@@ -49,6 +49,6 @@ object Def2_AmendForeignPropertyPeriodSummaryRequestBody {
   implicit val writes: OWrites[Def2_AmendForeignPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "foreignFhlEea").writeNullable[Def2_AmendForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[Def2_AmendForeignNonFhlPropertyEntry]]
-  )(unlift(Def2_AmendForeignPropertyPeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

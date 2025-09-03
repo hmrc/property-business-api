@@ -16,7 +16,7 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import shared.controllers._
+import shared.controllers.*
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}

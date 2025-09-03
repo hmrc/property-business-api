@@ -16,7 +16,7 @@
 
 package v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_UkPropertyIncomeRentARoom
 
@@ -37,6 +37,6 @@ object Def1_Create_UkNonFhlPropertyIncome {
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "otherIncome").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[Def1_Create_UkPropertyIncomeRentARoom]
-  )(unlift(Def1_Create_UkNonFhlPropertyIncome.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

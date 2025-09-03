@@ -23,29 +23,20 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector._
-import v4.retrieveUkPropertyAnnualSubmission.model.request._
+import v4.retrieveUkPropertyAnnualSubmission.model.{Result, UkResult, NonUkResult}
+import v4.retrieveUkPropertyAnnualSubmission.model.request.*
 import v4.retrieveUkPropertyAnnualSubmission.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveUkPropertyAnnualSubmissionConnector {
-
-  sealed trait Result
-
-  case class UkResult(response: Def1_RetrieveUkPropertyAnnualSubmissionResponse) extends Result
-
-  case object NonUkResult extends Result
-}
-
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-                                                                                 hc: HeaderCarrier,
-                                                                                 ec: ExecutionContext,
-                                                                                 correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     request match {
       case def1: Def1_RetrieveUkPropertyAnnualSubmissionRequestData =>
@@ -68,8 +59,8 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e) => Left(e)
+          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e)                                               => Left(e)
         }
     }
 

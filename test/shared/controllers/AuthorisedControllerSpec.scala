@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import play.api.libs.json.JsObject
 import play.api.mvc.{Action, AnyContent, Result}
 import shared.config.MockSharedAppConfig
 import shared.models.auth.UserDetails
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{EnrolmentsAuthService, MockEnrolmentsAuthService, MockMtdIdLookupService, MtdIdLookupService}
 import uk.gov.hmrc.auth.core.Enrolment
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -35,7 +35,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConf
   private val nino  = "AA123456A"
   private val mtdId = "X123567890"
 
-  "Calling an action" when {
+  "Calling an actionBuilder" when {
 
     "the user is authorised" should {
       "return a 200" in new Test {
@@ -176,7 +176,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConf
 
     }
 
-    lazy val controller = new TestController()
+    lazy val controller: TestController = new TestController()
 
     protected def supportingAgentsfeatureEnabled: Boolean = true
 

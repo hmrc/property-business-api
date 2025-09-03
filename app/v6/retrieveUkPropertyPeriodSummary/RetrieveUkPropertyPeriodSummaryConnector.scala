@@ -23,29 +23,20 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector._
-import v6.retrieveUkPropertyPeriodSummary.model.request._
-import v6.retrieveUkPropertyPeriodSummary.model.response._
+import v6.retrieveUkPropertyPeriodSummary.model.{Result, UkResult, NonUkResult}
+import v6.retrieveUkPropertyPeriodSummary.model.request.*
+import v6.retrieveUkPropertyPeriodSummary.model.response.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveUkPropertyPeriodSummaryConnector {
-
-  sealed trait Result
-
-  case class UkResult(response: RetrieveUkPropertyPeriodSummaryResponse) extends Result
-
-  case object NonUkResult extends Result
-}
-
 @Singleton
-class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkPropertyPeriodSummary(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
-                                                                                           hc: HeaderCarrier,
-                                                                                           ec: ExecutionContext,
-                                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     request match {
       case def1: Def1_RetrieveUkPropertyPeriodSummaryRequestData =>
@@ -63,8 +54,8 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2,
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if ukResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e) => Left(e)
+          case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e)                                               => Left(e)
         }
 
       case def2: Def2_RetrieveUkPropertyPeriodSummaryRequestData =>
@@ -82,8 +73,8 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2,
 
         response.map {
           case Right(ResponseWrapper(corId, resp)) if def2UkResult(resp) => Right(ResponseWrapper(corId, UkResult(resp)))
-          case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
-          case Left(e) => Left(e)
+          case Right(ResponseWrapper(corId, _))                          => Right(ResponseWrapper(corId, NonUkResult))
+          case Left(e)                                                   => Left(e)
         }
     }
   }

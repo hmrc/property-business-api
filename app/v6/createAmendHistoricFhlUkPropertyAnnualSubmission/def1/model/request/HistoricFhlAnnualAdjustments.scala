@@ -38,6 +38,6 @@ object HistoricFhlAnnualAdjustments {
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyAdjustmentsRentARoom]
-  )(unlift(HistoricFhlAnnualAdjustments.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

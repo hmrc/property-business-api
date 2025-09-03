@@ -17,14 +17,14 @@
 package v5.retrieveHistoricFhlUkPropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

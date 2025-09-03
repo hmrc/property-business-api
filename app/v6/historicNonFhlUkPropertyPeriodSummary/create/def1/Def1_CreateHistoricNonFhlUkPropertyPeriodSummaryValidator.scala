@@ -18,7 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.create.def1
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue

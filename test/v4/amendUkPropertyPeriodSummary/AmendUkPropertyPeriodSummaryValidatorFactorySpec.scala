@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
-import v4.amendUkPropertyPeriodSummary.model.request._
+import v4.amendUkPropertyPeriodSummary.model.request.*
 
 class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 

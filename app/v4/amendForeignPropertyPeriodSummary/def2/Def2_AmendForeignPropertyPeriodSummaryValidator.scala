@@ -17,15 +17,15 @@
 package v4.amendForeignPropertyPeriodSummary.def2
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveSubmissionId
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.amendForeignPropertyPeriodSummary.model.request._
+import v4.amendForeignPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 

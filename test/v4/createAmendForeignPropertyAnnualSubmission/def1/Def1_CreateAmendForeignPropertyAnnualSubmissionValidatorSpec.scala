@@ -18,16 +18,16 @@ package v4.createAmendForeignPropertyAnnualSubmission.def1
 
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import config.MockPropertyBusinessConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
-import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
-import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.*
 import v4.createAmendForeignPropertyAnnualSubmission.model.request
-import v4.createAmendForeignPropertyAnnualSubmission.model.request._
+import v4.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

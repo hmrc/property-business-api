@@ -33,11 +33,11 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val ukFhlProperty = RetrieveUkFhlProperty(None, None)
-  private val ukProperty = RetrieveUkProperty(None, None)
+  private val ukProperty    = RetrieveUkProperty(None, None)
 
   "connector" when {
     "response has uk fhl details" must {
@@ -80,7 +80,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     "response has no details" must {
       "return a non-uk result" in new StandardTest {
-        val response: RetrieveUkPropertyAnnualSubmissionResponse = responseWith(None, None)
+        val response: RetrieveUkPropertyAnnualSubmissionResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(outcome)
@@ -145,7 +145,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     protected lazy val taxYear = "2023-24"
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
+        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
       willGet(
         url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))

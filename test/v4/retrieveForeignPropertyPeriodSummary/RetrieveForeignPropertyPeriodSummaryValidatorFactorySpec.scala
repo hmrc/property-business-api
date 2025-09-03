@@ -20,7 +20,7 @@ import config.MockPropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
-import v4.retrieveForeignPropertyPeriodSummary.model.request._
+import v4.retrieveForeignPropertyPeriodSummary.model.request.*
 
 class RetrieveForeignPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
   private val validNino         = "AA123456A"

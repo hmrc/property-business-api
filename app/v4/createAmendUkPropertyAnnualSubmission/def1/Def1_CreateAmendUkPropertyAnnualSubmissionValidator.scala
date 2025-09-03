@@ -21,10 +21,10 @@ import cats.implicits.catsSyntaxTuple4Semigroupal
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.createAmendUkPropertyAnnualSubmission.model.request._
+import v4.createAmendUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

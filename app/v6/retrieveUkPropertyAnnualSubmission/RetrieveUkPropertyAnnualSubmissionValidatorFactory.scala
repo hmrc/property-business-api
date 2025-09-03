@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import cats.data.Validated._
+import cats.data.Validated.*
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.models.errors.MtdError

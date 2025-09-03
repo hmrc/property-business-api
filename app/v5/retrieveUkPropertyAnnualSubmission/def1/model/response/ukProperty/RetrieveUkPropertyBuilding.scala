@@ -16,8 +16,8 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class RetrieveUkPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
 

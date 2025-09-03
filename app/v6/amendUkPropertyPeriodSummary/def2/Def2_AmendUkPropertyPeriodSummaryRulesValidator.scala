@@ -21,7 +21,7 @@ import shared.controllers.validators.resolvers.ResolveParsedNumber
 import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleBothExpensesSuppliedError
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.{Def2_Amend_UkFhlProperty, Def2_Amend_UkFhlPropertyExpenses}
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{Def2_Amend_UkNonFhlProperty, Def2_Amend_UkNonFhlPropertyExpenses}

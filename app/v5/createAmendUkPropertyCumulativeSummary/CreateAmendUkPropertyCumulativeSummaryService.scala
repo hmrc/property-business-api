@@ -16,10 +16,10 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import cats.implicits._
-import common.models.errors._
+import cats.implicits.*
+import common.models.errors.*
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 

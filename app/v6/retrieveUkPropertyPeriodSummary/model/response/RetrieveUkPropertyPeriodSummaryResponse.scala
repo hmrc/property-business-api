@@ -17,7 +17,7 @@
 package v6.retrieveUkPropertyPeriodSummary.model.response
 
 import shared.models.domain.Timestamp
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Json, OWrites, Reads, __}
 import v6.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
 import v6.retrieveUkPropertyPeriodSummary.def2.model.response.{Def2_Retrieve_UkFhlProperty, Def2_Retrieve_UkNonFhlProperty}

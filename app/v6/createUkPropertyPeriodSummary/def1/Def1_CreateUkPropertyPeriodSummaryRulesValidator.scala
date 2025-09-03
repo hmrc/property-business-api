@@ -24,8 +24,8 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
 import v6.createUkPropertyPeriodSummary.model.request.Def1_CreateUkPropertyPeriodSummaryRequestData
 
 class Def1_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_CreateUkPropertyPeriodSummaryRequestData] {

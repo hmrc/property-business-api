@@ -18,15 +18,15 @@ package v4.historicFhlUkPropertyPeriodSummary.create.def1
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.errors.MtdError
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request._
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.*
 
 class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body: JsValue)
     extends Validator[CreateHistoricFhlUkPropertyPeriodSummaryRequestData] {

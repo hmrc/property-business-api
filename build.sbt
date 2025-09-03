@@ -16,7 +16,7 @@
 import sbt.*
 import uk.gov.hmrc.DefaultBuildSettings
 
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "3.4.3" //TODO change to 3.5.2 before pushing, only on this one to show some errors
 ThisBuild / majorVersion := 0
 
 val appName = "property-business-api"
@@ -26,32 +26,29 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    retrieveManaged                 := true,
-    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
-    scalacOptions ++= List(
-      "-language:higherKinds",
-      "-Xlint:-byname-implicit",
-      "-Xfatal-warnings",
+    scalacOptions ++= Seq(
+      "-Werror",
+      "-Wconf:msg=Flag.*repeatedly:s",
       "-Wconf:src=routes/.*:silent",
-      "-feature"
-    )
-  )
-  .settings(
+      "-feature",
+      "-nowarn"
+    ),
+    scalafmtOnCompile := true,
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
-    Compile / unmanagedClasspath += baseDirectory.value / "resources"
+    Compile / unmanagedClasspath += baseDirectory.value / "resources",
+
+    CodeCoverageSettings.settings,
+    PlayKeys.playDefaultPort := 7798
   )
-  .settings(CodeCoverageSettings.settings *)
-  .settings(PlayKeys.playDefaultPort := 7798)
 
 lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
-  .settings(DefaultBuildSettings.itSettings() ++ ScalafmtPlugin.scalafmtConfigSettings)
   .settings(
+    DefaultBuildSettings.itSettings(),
     Test / fork := true,
-    Test / javaOptions += "-Dlogger.resource=logback-test.xml")
-  .settings(libraryDependencies ++= AppDependencies.itDependencies)
-  .settings(
+    Test / javaOptions += "-Dlogger.resource=logback-test.xml",
+    libraryDependencies ++= AppDependencies.itDependencies,
     scalacOptions ++= Seq("-Xfatal-warnings")
   )
 

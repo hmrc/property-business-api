@@ -19,9 +19,9 @@ package v4.retrieveForeignPropertyPeriodSummary.def1.model.response
 import play.api.libs.json.Json
 import shared.models.domain.Timestamp
 import shared.utils.UnitSpec
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea._
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
-import v4.retrieveForeignPropertyPeriodSummary.model.response._
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.*
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.*
+import v4.retrieveForeignPropertyPeriodSummary.model.response.*
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec {
 

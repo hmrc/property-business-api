@@ -24,8 +24,14 @@ import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
-import v4.retrieveForeignPropertyAnnualSubmission.model.request.{Def1_RetrieveForeignPropertyAnnualSubmissionRequestData, RetrieveForeignPropertyAnnualSubmissionRequestData}
-import v4.retrieveForeignPropertyAnnualSubmission.model.response.{Def1_RetrieveForeignPropertyAnnualSubmissionResponse, RetrieveForeignPropertyAnnualSubmissionResponse}
+import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
+  RetrieveForeignPropertyAnnualSubmissionRequestData
+}
+import v4.retrieveForeignPropertyAnnualSubmission.model.response.{
+  Def1_RetrieveForeignPropertyAnnualSubmissionResponse,
+  RetrieveForeignPropertyAnnualSubmissionResponse
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

@@ -31,7 +31,7 @@ import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
-import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response._
+import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

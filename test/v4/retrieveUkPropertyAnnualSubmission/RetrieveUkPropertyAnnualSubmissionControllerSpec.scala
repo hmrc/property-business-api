@@ -21,12 +21,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
-import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty._
-import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty._
-import v4.retrieveUkPropertyAnnualSubmission.model.request._
-import v4.retrieveUkPropertyAnnualSubmission.model.response._
+import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.*
+import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.*
+import v4.retrieveUkPropertyAnnualSubmission.model.request.*
+import v4.retrieveUkPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

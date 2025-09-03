@@ -26,7 +26,7 @@ import common.models.errors.{
 }
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v5.createUkPropertyPeriodSummary.model.request.{Def1_CreateUkPropertyPeriodSummaryRequestBody, Def1_CreateUkPropertyPeriodSummaryRequestData}

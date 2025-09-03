@@ -16,8 +16,8 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class Def1_Retrieve_UkFhlPropertyAdjustments(
     privateUseAdjustment: Option[BigDecimal],

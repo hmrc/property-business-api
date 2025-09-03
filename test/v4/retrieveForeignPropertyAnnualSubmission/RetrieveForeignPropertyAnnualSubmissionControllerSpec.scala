@@ -21,14 +21,14 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea._
-import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty._
-import v4.retrieveForeignPropertyAnnualSubmission.model.request._
-import v4.retrieveForeignPropertyAnnualSubmission.model.response._
+import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.*
+import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty.*
+import v4.retrieveForeignPropertyAnnualSubmission.model.request.*
+import v4.retrieveForeignPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

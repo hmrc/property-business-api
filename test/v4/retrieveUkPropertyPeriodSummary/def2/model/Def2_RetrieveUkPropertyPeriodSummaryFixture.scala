@@ -18,8 +18,8 @@ package v4.retrieveUkPropertyPeriodSummary.def2.model
 
 import shared.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
-import v4.retrieveUkPropertyPeriodSummary.def2.model.response._
-import v4.retrieveUkPropertyPeriodSummary.model.response._
+import v4.retrieveUkPropertyPeriodSummary.def2.model.response.*
+import v4.retrieveUkPropertyPeriodSummary.model.response.*
 
 trait Def2_RetrieveUkPropertyPeriodSummaryFixture {
 

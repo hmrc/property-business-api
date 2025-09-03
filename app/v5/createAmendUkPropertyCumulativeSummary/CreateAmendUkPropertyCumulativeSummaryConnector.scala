@@ -28,13 +28,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendUkPropertyCumulativeSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
-  extends BaseDownstreamConnector {
+class CreateAmendUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def createAmendUkPropertyCumulativeSummary(request: CreateAmendUkPropertyCumulativeSummaryRequestData)(implicit
-                                                                                                         hc: HeaderCarrier,
-                                                                                                         ec: ExecutionContext,
-                                                                                                         correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request._
 

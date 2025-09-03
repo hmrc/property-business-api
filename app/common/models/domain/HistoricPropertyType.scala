@@ -16,9 +16,7 @@
 
 package common.models.domain
 
-sealed trait HistoricPropertyType
-
-object HistoricPropertyType {
-  case object NonFhl extends HistoricPropertyType
-  case object Fhl    extends HistoricPropertyType
+enum HistoricPropertyType {
+  case NonFhl extends HistoricPropertyType
+  case Fhl    extends HistoricPropertyType
 }

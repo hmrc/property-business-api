@@ -32,6 +32,6 @@ object Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody {
   implicit val writes: OWrites[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "ukFhlProperty").writeNullable[CreateAmendUkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[CreateAmendUkProperty]
-  )(unlift(Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

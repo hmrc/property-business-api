@@ -36,6 +36,6 @@ object PropertyIncome {
       (JsPath \ "otherPropertyIncomeAmount").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-  )(unlift(PropertyIncome.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

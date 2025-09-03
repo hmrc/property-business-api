@@ -17,7 +17,7 @@
 package v5.createForeignPropertyPeriodSummary.def2.model
 
 import play.api.libs.json.{JsValue, Json}
-import v5.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea._
+import v5.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea.*
 import v5.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignPropertyEntry._
 import v5.createForeignPropertyPeriodSummary.model.request.Def2_CreateForeignPropertyPeriodSummaryRequestBody
 

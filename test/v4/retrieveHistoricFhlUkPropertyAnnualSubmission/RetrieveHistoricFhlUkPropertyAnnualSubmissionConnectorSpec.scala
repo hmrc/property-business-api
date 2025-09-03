@@ -23,7 +23,7 @@ import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.Future
 

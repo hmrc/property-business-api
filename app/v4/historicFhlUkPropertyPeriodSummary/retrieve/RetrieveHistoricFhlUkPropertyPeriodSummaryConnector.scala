@@ -22,8 +22,8 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request._
-import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response._
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.request.*
+import v4.historicFhlUkPropertyPeriodSummary.retrieve.model.response.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

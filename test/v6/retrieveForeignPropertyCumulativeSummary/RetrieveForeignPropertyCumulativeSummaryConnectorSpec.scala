@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = "AA123456A"
+  private val nino       = "AA123456A"
   private val businessId = "someBusinessId"
 
   trait Test {

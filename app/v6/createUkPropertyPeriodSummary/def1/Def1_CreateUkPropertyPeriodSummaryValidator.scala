@@ -24,7 +24,7 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.createUkPropertyPeriodSummary.model.request._
+import v6.createUkPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 

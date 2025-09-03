@@ -17,7 +17,7 @@
 package v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
-import shapeless.HNil
+import shared.utils.EmptinessChecker.field
 import shared.utils.EmptinessChecker
 
 case class ForeignProperty(
@@ -29,8 +29,10 @@ case class ForeignProperty(
 object ForeignProperty {
 
   implicit val emptinessChecker: EmptinessChecker[ForeignProperty] = EmptinessChecker.use { body =>
-    "income"     -> body.income ::
-      "expenses" -> body.expenses :: HNil
+    List(
+      field("income", body.income),
+      field("expenses", body.expenses)
+    )
   }
 
   implicit val format: OFormat[ForeignProperty] = Json.format[ForeignProperty]

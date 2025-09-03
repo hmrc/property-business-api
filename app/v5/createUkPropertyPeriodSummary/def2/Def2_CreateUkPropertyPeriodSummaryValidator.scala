@@ -24,8 +24,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
-import v5.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator._
-import v5.createUkPropertyPeriodSummary.model.request._
+import v5.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator.*
+import v5.createUkPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 

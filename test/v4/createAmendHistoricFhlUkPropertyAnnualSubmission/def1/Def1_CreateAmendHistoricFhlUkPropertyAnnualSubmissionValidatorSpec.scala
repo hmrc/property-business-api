@@ -20,11 +20,11 @@ import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request._
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request.*
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

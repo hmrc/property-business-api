@@ -17,14 +17,14 @@
 package v4.createForeignPropertyPeriodSummary.def2
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMaximum}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v4.createForeignPropertyPeriodSummary.model.request._
+import v4.createForeignPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 

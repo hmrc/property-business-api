@@ -16,7 +16,7 @@
 
 package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}

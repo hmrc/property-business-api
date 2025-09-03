@@ -20,13 +20,13 @@ import common.models.domain.SubmissionId
 import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v5.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
-import v5.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
-import v5.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
-import v5.amendUkPropertyPeriodSummary.model.request._
+import v5.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.*
+import v5.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.*
+import v5.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.*
+import v5.amendUkPropertyPeriodSummary.model.request.*
 
 class Def2_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
 

@@ -27,7 +27,7 @@ import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJson
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

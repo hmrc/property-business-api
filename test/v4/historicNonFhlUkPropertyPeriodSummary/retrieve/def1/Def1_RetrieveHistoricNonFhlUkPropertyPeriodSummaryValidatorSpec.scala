@@ -20,7 +20,7 @@ import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
 import config.MockPropertyBusinessConfig
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,

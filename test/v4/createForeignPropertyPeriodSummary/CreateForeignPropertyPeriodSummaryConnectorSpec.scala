@@ -21,18 +21,18 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v4.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
-import v4.createForeignPropertyPeriodSummary.model.request._
+import v4.createForeignPropertyPeriodSummary.model.request.*
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
 
 class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Def1_CreateForeignPropertyPeriodSummaryFixtures {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val preTysTaxYear = "2019-20"
-  private val tysTaxYear = "2023-24"
+  private val tysTaxYear    = "2023-24"
 
   "connector" must {
     "post a valid body and return 200 with submissionId" in new IfsTest with Test {

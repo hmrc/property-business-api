@@ -16,7 +16,7 @@
 
 package v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def1_Create_CreateForeignFhlEeaExpenses(premisesRunningCosts: Option[BigDecimal],
@@ -40,6 +40,6 @@ object Def1_Create_CreateForeignFhlEeaExpenses {
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "other").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
-  )(unlift(Def1_Create_CreateForeignFhlEeaExpenses.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

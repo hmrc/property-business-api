@@ -16,7 +16,7 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission
 
-import shared.controllers._
+import shared.controllers.*
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.config.SharedAppConfig
 import play.api.libs.json.JsValue

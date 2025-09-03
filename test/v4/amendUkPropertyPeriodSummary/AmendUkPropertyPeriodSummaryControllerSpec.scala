@@ -24,13 +24,13 @@ import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
-import v4.amendUkPropertyPeriodSummary.model.request._
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
+import v4.amendUkPropertyPeriodSummary.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

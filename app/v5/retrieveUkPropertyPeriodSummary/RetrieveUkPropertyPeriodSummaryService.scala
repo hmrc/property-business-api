@@ -17,12 +17,12 @@
 package v5.retrieveUkPropertyPeriodSummary
 
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
-import RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import v5.retrieveUkPropertyPeriodSummary.model.{Result, UkResult, NonUkResult}
 import v5.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
 import v5.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
 
@@ -64,7 +64,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject() (connector: RetrieveUkPro
     errorMap ++ tysErrorMap
   }
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyPeriodSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =
     resultWrapper.responseData match {
       case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

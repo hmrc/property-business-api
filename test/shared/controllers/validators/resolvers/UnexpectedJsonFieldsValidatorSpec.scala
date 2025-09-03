@@ -119,9 +119,9 @@ class UnexpectedJsonFieldsValidatorSpec extends UnitSpec {
         "the field is nested in an object" must {
           "return an error with path to the extra field" in {
             val json = Json
-              .parse("""{ "bar": {"a" : "v1", "baz": "extra", "b" : "v2" }, 
+              .parse("""{ "bar": {"a" : "v1", "baz": "extra", "b" : "v2" },
                    |  "bars": [
-                   |    {"a" : "v1",  "b" : "v2" }, 
+                   |    {"a" : "v1",  "b" : "v2" },
                    |    {"a" : "v1", "b" : "v2" }
                    |  ]
                    |}""".stripMargin)
@@ -137,7 +137,7 @@ class UnexpectedJsonFieldsValidatorSpec extends UnitSpec {
               .parse("""{
                    |  "bar": {"a" : "v1", "b" : "v2" },
                    |  "bars": [
-                   |    {"a" : "v1",  "b" : "v2" }, 
+                   |    {"a" : "v1",  "b" : "v2" },
                    |    {"a" : "v1", "baz": "extra", "b" : "v2" }
                    |  ]
                    |}""".stripMargin)
@@ -154,7 +154,7 @@ class UnexpectedJsonFieldsValidatorSpec extends UnitSpec {
                  |  "bar": {"a" : "v1", "b" : "v2" , "baz": "extra"},
                  |  "baz": "extra",
                  |  "bars": [
-                 |    {"a" : "v1", "baz": "extra0", "b" : "v2" }, 
+                 |    {"a" : "v1", "baz": "extra0", "b" : "v2" },
                  |    {"a" : "v1", "baz": "extra1", "b" : "v2" }
                  |  ]
                  |}""".stripMargin)

@@ -17,7 +17,7 @@
 package v5.retrieveUkPropertyAnnualSubmission.def2.model.response
 
 import shared.models.domain.Timestamp
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Json, OWrites, Reads, __}
 import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
 

@@ -19,7 +19,7 @@ package v5.deleteHistoricFhlUkPropertyAnnualSubmission
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import v5.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 

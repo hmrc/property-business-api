@@ -18,7 +18,7 @@ package v5.createAmendForeignPropertyAnnualSubmission.def2
 
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors._
+import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps

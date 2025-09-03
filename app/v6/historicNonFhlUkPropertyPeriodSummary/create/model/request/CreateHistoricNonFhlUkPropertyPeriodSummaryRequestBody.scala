@@ -18,7 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.create.model.request
 
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import shapeless.HNil
+import shared.utils.EmptinessChecker.field
 import shared.utils.EmptinessChecker
 import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 
@@ -37,8 +37,10 @@ case class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody(
 object Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody {
 
   implicit val emptinessChecker: EmptinessChecker[Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
-    "income"     -> body.income ::
-      "expenses" -> body.expenses :: HNil
+    List(
+      field("income", body.income),
+      field("expenses", body.expenses)
+    )
   }
 
   implicit val reads: Reads[Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody] =
@@ -49,6 +51,6 @@ object Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody {
       (JsPath \ "to").write[String] and
       (JsPath \ "financials" \ "incomes").writeNullable[UkNonFhlPropertyIncome] and
       (JsPath \ "financials" \ "deductions").writeNullable[UkNonFhlPropertyExpenses]
-  )(unlift(Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

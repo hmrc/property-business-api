@@ -19,7 +19,7 @@ package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier

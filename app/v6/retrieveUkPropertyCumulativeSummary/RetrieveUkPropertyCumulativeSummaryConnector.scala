@@ -19,41 +19,33 @@ package v6.retrieveUkPropertyCumulativeSummary
 import config.PropertyBusinessFeatureSwitches
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.retrieveUkPropertyCumulativeSummary.RetrieveUkPropertyCumulativeSummaryConnector._
-import v6.retrieveUkPropertyCumulativeSummary.model.request._
-import v6.retrieveUkPropertyCumulativeSummary.model.response._
+import v6.retrieveUkPropertyCumulativeSummary.model.{Result, NonUkResult, UkResult}
+import v6.retrieveUkPropertyCumulativeSummary.model.request.*
+import v6.retrieveUkPropertyCumulativeSummary.model.response.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveUkPropertyCumulativeSummaryConnector {
-
-  sealed trait Result
-
-  case class UkResult(response: RetrieveUkPropertyCumulativeSummaryResponse) extends Result
-
-  case object NonUkResult extends Result
-}
-
 @Singleton
-class RetrieveUkPropertyCumulativeSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveUkPropertyCumulativeSummary(request: RetrieveUkPropertyCumulativeSummaryRequestData)(implicit
-                                                                                                   hc: HeaderCarrier,
-                                                                                                   ec: ExecutionContext,
-                                                                                                   correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     import request._
     import schema._
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("UK_PROPERTY") else None
 
-    val downstreamUri: DownstreamUri[DownstreamResp] = IfsUri[DownstreamResp](
-      s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
+    val downstreamUri: DownstreamUri[DownstreamResp] =
+      IfsUri[DownstreamResp](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
 
     get(uri = downstreamUri, maybeIntent = maybeIntent)
       .map(_.map(_.map { response => if (response.hasUkData) UkResult(response) else NonUkResult }))

@@ -21,7 +21,7 @@ import cats.implicits.catsSyntaxTuple2Semigroupal
 import common.controllers.validators.resolvers.ResolvePeriodId
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{

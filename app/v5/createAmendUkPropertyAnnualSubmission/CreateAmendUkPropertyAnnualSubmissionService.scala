@@ -17,9 +17,9 @@
 package v5.createAmendUkPropertyAnnualSubmission
 
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.{RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 

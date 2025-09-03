@@ -20,7 +20,10 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 

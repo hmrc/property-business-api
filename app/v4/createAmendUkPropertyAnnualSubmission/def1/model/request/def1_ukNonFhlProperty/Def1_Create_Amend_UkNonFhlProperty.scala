@@ -16,7 +16,7 @@
 
 package v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def1_Create_Amend_UkNonFhlProperty(adjustments: Option[Def1_Create_Amend_UkNonFhlPropertyAdjustments],
@@ -28,6 +28,6 @@ object Def1_Create_Amend_UkNonFhlProperty {
   implicit val writes: Writes[Def1_Create_Amend_UkNonFhlProperty] = (
     (JsPath \ "ukOtherPropertyAnnualAdjustments").writeNullable[Def1_Create_Amend_UkNonFhlPropertyAdjustments] and
       (JsPath \ "ukOtherPropertyAnnualAllowances").writeNullable[Def1_Create_Amend_UkNonFhlPropertyAllowances]
-  )(unlift(Def1_Create_Amend_UkNonFhlProperty.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

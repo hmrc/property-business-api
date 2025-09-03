@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   val ukProperty: UkProperty = UkProperty(

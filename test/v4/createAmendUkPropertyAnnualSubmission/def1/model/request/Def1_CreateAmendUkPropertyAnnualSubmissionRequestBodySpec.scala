@@ -18,8 +18,8 @@ package v4.createAmendUkPropertyAnnualSubmission.def1.model.request
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
-import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty._
-import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
+import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty.*
+import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty.*
 import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
 import v4.createAmendUkPropertyAnnualSubmission.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody
 

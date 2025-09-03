@@ -24,8 +24,8 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
-import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
-import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
+import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.*
+import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.*
 import v4.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Create_UkPropertyExpensesRentARoom
 import v4.createUkPropertyPeriodSummary.model.request.Def2_CreateUkPropertyPeriodSummaryRequestData
 

@@ -20,9 +20,9 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import shared.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
-import v6.retrieveUkPropertyAnnualSubmission.model.request._
+import v6.retrieveUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 

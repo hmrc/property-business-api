@@ -19,11 +19,11 @@ package v4.createAmendUkPropertyAnnualSubmission
 import common.models.errors.{RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.createAmendUkPropertyAnnualSubmission.model.request._
+import v4.createAmendUkPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

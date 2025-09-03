@@ -20,7 +20,7 @@ import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.models.domain.TaxYear
 import v5.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
-import v5.retrieveForeignPropertyPeriodSummary.model.request._
+import v5.retrieveForeignPropertyPeriodSummary.model.request.*
 
 import javax.inject.{Inject, Singleton}
 

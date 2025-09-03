@@ -20,9 +20,9 @@ import common.models.domain.HistoricPropertyType
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.utils.UnitSpec
-import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v4.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 

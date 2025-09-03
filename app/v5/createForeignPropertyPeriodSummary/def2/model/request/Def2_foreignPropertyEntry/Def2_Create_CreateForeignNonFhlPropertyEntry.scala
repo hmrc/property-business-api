@@ -16,9 +16,9 @@
 
 package v5.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignPropertyEntry
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
-import shapeless.HNil
+import shared.utils.EmptinessChecker.field
 import shared.utils.EmptinessChecker
 
 case class Def2_Create_CreateForeignNonFhlPropertyEntry(
@@ -30,8 +30,10 @@ case class Def2_Create_CreateForeignNonFhlPropertyEntry(
 object Def2_Create_CreateForeignNonFhlPropertyEntry {
 
   implicit val emptinessChecker: EmptinessChecker[Def2_Create_CreateForeignNonFhlPropertyEntry] = EmptinessChecker.use { body =>
-    "income"     -> body.income ::
-      "expenses" -> body.expenses :: HNil
+    List(
+      field("income", body.income),
+      field("expenses", body.expenses)
+    )
   }
 
   implicit val reads: Reads[Def2_Create_CreateForeignNonFhlPropertyEntry] = Json.reads[Def2_Create_CreateForeignNonFhlPropertyEntry]
@@ -40,6 +42,6 @@ object Def2_Create_CreateForeignNonFhlPropertyEntry {
     (JsPath \ "countryCode").write[String] and
       (JsPath \ "income").writeNullable[Def2_Create_ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").writeNullable[Def2_Create_CreateForeignNonFhlPropertyExpenses]
-  )(unlift(Def2_Create_CreateForeignNonFhlPropertyEntry.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

@@ -18,7 +18,7 @@ package v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFh
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.*
 
 class ForeignNonFhlPropertySpec extends UnitSpec {
 

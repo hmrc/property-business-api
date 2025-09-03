@@ -16,7 +16,7 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def2_Create_Amend_Building(name: Option[String], number: Option[String], postcode: String)
@@ -28,6 +28,6 @@ object Def2_Create_Amend_Building {
     (JsPath \ "name").writeNullable[String] and
       (JsPath \ "number").writeNullable[String] and
       (JsPath \ "postCode").write[String]
-  )(unlift(Def2_Create_Amend_Building.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

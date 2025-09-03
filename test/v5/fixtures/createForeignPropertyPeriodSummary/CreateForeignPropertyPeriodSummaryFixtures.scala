@@ -17,9 +17,9 @@
 package v5.fixtures.createForeignPropertyPeriodSummary
 
 import play.api.libs.json.{JsValue, Json}
-import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea._
-import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry._
-import v5.createForeignPropertyPeriodSummary.model.request._
+import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.*
+import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.*
+import v5.createForeignPropertyPeriodSummary.model.request.*
 
 trait CreateForeignPropertyPeriodSummaryFixtures {
 

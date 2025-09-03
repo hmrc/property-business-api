@@ -18,17 +18,17 @@ package v6.historicFhlUkPropertyPeriodSummary.amend.def1
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolvePeriodId
 import common.models.errors.RuleBothExpensesSuppliedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.historicFhlUkPropertyPeriodSummary.amend.def1.model.request.UkFhlPropertyExpenses
-import v6.historicFhlUkPropertyPeriodSummary.amend.request._
+import v6.historicFhlUkPropertyPeriodSummary.amend.request.*
 
 import javax.inject.Inject
 

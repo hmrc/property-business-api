@@ -36,6 +36,6 @@ object Income {
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "otherIncome").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[RentARoomIncome]
-  )(unlift(Income.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

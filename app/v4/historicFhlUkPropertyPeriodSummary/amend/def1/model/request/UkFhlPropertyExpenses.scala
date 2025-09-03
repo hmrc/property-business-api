@@ -43,6 +43,6 @@ object UkFhlPropertyExpenses {
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom]
-  )(unlift(UkFhlPropertyExpenses.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

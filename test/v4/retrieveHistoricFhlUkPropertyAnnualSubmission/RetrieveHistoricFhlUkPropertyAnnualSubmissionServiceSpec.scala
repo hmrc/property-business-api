@@ -19,13 +19,13 @@ package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceOutcome
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.*
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

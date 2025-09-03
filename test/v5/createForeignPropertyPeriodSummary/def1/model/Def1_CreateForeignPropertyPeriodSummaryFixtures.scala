@@ -22,7 +22,7 @@ import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlE
   Def1_Create_CreateForeignFhlEeaExpenses,
   Def1_Create_ForeignFhlEeaIncome
 }
-import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry._
+import v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.*
 import v5.createForeignPropertyPeriodSummary.model.request.Def1_CreateForeignPropertyPeriodSummaryRequestBody
 
 trait Def1_CreateForeignPropertyPeriodSummaryFixtures {

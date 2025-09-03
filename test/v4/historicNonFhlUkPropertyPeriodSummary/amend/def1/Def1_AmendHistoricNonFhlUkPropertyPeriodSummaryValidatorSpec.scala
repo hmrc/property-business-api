@@ -21,7 +21,7 @@ import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue}
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.Def1_Fixtures

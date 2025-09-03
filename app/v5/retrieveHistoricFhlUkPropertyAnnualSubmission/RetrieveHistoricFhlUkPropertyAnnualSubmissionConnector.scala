@@ -18,12 +18,12 @@ package v5.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
-import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
+import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.*
+import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

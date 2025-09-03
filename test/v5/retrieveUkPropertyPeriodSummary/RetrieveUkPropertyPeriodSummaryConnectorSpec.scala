@@ -19,12 +19,12 @@ package v5.retrieveUkPropertyPeriodSummary
 import common.models.domain.SubmissionId
 import org.scalamock.handlers.CallHandler
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain._
+import shared.models.domain.*
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v5.fixtures.retrieveUkPropertyPeriodSummary.ResponseModelsFixture
-import v5.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector._
+import v5.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector.*
 import v5.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
 import v5.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 import v5.retrieveUkPropertyPeriodSummary.model.response.{Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryResponse}
@@ -34,10 +34,10 @@ import scala.concurrent.Future
 
 class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with ResponseModelsFixture {
 
-  private val nino = Nino("AA123456A")
-  private val businessId = BusinessId("XAIS12345678910")
-  private val submissionId = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
-  private val ukFhlProperty = Def1_Retrieve_UkFhlProperty(None, None)
+  private val nino             = Nino("AA123456A")
+  private val businessId       = BusinessId("XAIS12345678910")
+  private val submissionId     = SubmissionId("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+  private val ukFhlProperty    = Def1_Retrieve_UkFhlProperty(None, None)
   private val ukNonFhlProperty = Def1_Retrieve_UkNonFhlProperty(None, None)
 
   "connector" when {
@@ -112,7 +112,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
     "response has no details" must {
       "return a non-uk result" in new NonTysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(None, None)
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)
@@ -122,7 +122,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       }
 
       "the tys endpoint return a non-uk result" in new TysTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(None, None)
+        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
         stubHttpResponse(uri, outcome)
@@ -169,7 +169,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
       Def1_RetrieveUkPropertyPeriodSummaryRequestData(nino, businessId, TaxYear.fromMtd(taxYear), submissionId)
 
     def stubHttpResponse(uri: URL, outcome: DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
+        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyPeriodSummaryResponse]]]#Derived = {
       willGet(
         url = uri
       ).returns(Future.successful(outcome))
@@ -191,7 +191,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   trait NonTysTest extends Test with IfsTest {
     protected lazy val taxYear: String = "2019-20"
 
-    protected lazy val uri: URL = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
+    protected lazy val uri: URL =
+      url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
 
   }
 

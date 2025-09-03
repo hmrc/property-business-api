@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyCumulativeSummary.def1.model.request
 
 import play.api.libs.functional.syntax.unlift
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestBody
 
@@ -36,6 +36,6 @@ object Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody {
     (JsPath \ "fromDate").writeNullable[String] and
       (JsPath \ "toDate").writeNullable[String] and
       (JsPath \ "ukOtherProperty").write[UkProperty]
-  )(unlift(Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

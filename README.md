@@ -8,7 +8,7 @@ The Property Business API allows software packages to create, retrieve, amend an
 
 ## Requirements
 
-- Scala 2.13.x
+- Scala 3.x.x
 - Java 11
 - sbt 1.9.7
 - [Service Manager](https://github.com/hmrc/service-manager)

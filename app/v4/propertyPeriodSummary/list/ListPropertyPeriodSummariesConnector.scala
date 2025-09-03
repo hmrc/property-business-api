@@ -29,22 +29,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListPropertyPeriodSummariesConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def listPeriodSummaries(
-                           request: ListPropertyPeriodSummariesRequestData
-                         )(implicit
-                           hc: HeaderCarrier,
-                           ec: ExecutionContext,
-                           correlationId: String
-                         ): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
+      request: ListPropertyPeriodSummariesRequestData
+  )(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String
+  ): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
     import request._
 
     val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
       (
-        IfsUri[ListPropertyPeriodSummariesResponse](
-          s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
+        IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
         Nil
       )
     } else {

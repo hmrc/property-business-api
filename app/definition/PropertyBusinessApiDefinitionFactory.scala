@@ -25,7 +25,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PropertyBusinessApiDefinitionFactory @Inject() (protected val appConfig: SharedAppConfig) extends ApiDefinitionFactory {
 
-  lazy val definition: Definition =
+  val definition: Definition =
     Definition(
       api = APIDefinition(
         name = "Property Business (MTD)",

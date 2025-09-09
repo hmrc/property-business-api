@@ -107,21 +107,26 @@ object EmptinessChecker {
 
   def primitive[A]: EmptinessChecker[A] = EmptinessChecker.instance(_ => Structure.Primitive)
 
-  given EmptinessChecker[String]     = instance(_ => Structure.Primitive)
-  given EmptinessChecker[Int]        = instance(_ => Structure.Primitive)
-  given EmptinessChecker[Double]     = instance(_ => Structure.Primitive)
-  given EmptinessChecker[Boolean]    = instance(_ => Structure.Primitive)
-  given EmptinessChecker[BigInt]     = instance(_ => Structure.Primitive)
+  given EmptinessChecker[String] = instance(_ => Structure.Primitive)
+
+  given EmptinessChecker[Int] = instance(_ => Structure.Primitive)
+
+  given EmptinessChecker[Double] = instance(_ => Structure.Primitive)
+
+  given EmptinessChecker[Boolean] = instance(_ => Structure.Primitive)
+
+  given EmptinessChecker[BigInt] = instance(_ => Structure.Primitive)
+
   given EmptinessChecker[BigDecimal] = instance(_ => Structure.Primitive)
 
   given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Option[A]] =
     instance(opt => opt.map(aInstance.structureOf).getOrElse(Structure.Null))
 
-  given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Seq[A]] =
-    instance(seq => Structure.Arr(seq.map(aInstance.structureOf)))
-
   given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[List[A]] =
     instance(list => Structure.Arr(list.map(aInstance.structureOf)))
+
+  given [A](using aInstance: EmptinessChecker[A]): EmptinessChecker[Seq[A]] =
+    instance(seq => Structure.Arr(seq.map(aInstance.structureOf)))
 
   // Lazy prevents infinite recursion in generic derivation
   final class Lazy[+A](val value: () => A) extends AnyVal
@@ -130,7 +135,7 @@ object EmptinessChecker {
     given [A](using a: => A): Lazy[A] = new Lazy(() => a)
   }
 
-  inline given derived[A](using m: Mirror.ProductOf[A]): EmptinessChecker[A] =
+  inline given derived[A](using m: Mirror.Of[A]): EmptinessChecker[A] =
     instance { a =>
       val elemLabels    = summonLabels[m.MirroredElemLabels]
       val elemInstances = summonAllInstances[m.MirroredElemTypes]

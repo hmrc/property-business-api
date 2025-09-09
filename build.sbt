@@ -16,7 +16,7 @@
 import sbt.*
 import uk.gov.hmrc.DefaultBuildSettings
 
-ThisBuild / scalaVersion := "3.4.3" //TODO change to 3.5.2 before pushing, only on this one to show some errors
+ThisBuild / scalaVersion := "3.5.2"
 ThisBuild / majorVersion := 0
 
 val appName = "property-business-api"
@@ -31,7 +31,8 @@ lazy val microservice = Project(appName, file("."))
       "-Wconf:msg=Flag.*repeatedly:s",
       "-Wconf:src=routes/.*:silent",
       "-feature",
-      "-nowarn"
+      "-nowarn",
+      "-Xmax-inlines:150"
     ),
     scalafmtOnCompile := true,
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",

@@ -23,21 +23,12 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, Downstream
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, Result, UkResult}
+import v5.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 import v5.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 import v5.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-
-object RetrieveUkPropertyAnnualSubmissionConnector {
-
-  sealed trait Result
-
-  case class UkResult(response: RetrieveUkPropertyAnnualSubmissionResponse) extends Result
-
-  case object NonUkResult extends Result
-}
 
 @Singleton
 class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {

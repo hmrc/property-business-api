@@ -84,15 +84,16 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      validatorFactory = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
-      service = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
-      auditService = mockAuditService,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
+    protected val controller: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController =
+      new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
+        authService = mockEnrolmentsAuthService,
+        lookupService = mockMtdIdLookupService,
+        validatorFactory = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
+        service = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
+        auditService = mockAuditService,
+        cc = cc,
+        idGenerator = mockIdGenerator
+      )
 
     MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true

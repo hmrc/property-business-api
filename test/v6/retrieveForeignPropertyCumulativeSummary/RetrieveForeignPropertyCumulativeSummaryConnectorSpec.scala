@@ -24,6 +24,7 @@ import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveForeignPropertyCumulativeSummaryResponse, ForeignPropertyEntry}
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
+import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import scala.concurrent.Future
 
@@ -33,7 +34,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
   private val businessId = "someBusinessId"
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     val connector: RetrieveForeignPropertyCumulativeSummaryConnector =
       new RetrieveForeignPropertyCumulativeSummaryConnector(http = mockHttpClient)
@@ -57,7 +58,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveForeignPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, RetrieveForeignPropertyCumulativeSummaryConnector.ForeignResult(response)))
+          Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
 
@@ -70,7 +71,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveForeignPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, RetrieveForeignPropertyCumulativeSummaryConnector.NonForeignResult))
+          Right(ResponseWrapper(correlationId, NonForeignResult))
       }
     }
 
@@ -83,7 +84,7 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveForeignPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, RetrieveForeignPropertyCumulativeSummaryConnector.NonForeignResult))
+          Right(ResponseWrapper(correlationId, NonForeignResult))
       }
     }
   }

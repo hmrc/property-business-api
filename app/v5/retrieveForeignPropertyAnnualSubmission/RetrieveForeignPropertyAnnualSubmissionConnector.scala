@@ -23,21 +23,12 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, Downstream
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
+import v5.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-
-object RetrieveForeignPropertyAnnualSubmissionConnector {
-
-  sealed trait Result
-
-  case class ForeignResult(response: RetrieveForeignPropertyAnnualSubmissionResponse) extends Result
-
-  case object NonForeignResult extends Result
-}
 
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)

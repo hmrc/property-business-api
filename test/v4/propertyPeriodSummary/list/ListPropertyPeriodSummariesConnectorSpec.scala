@@ -35,7 +35,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
   "connector" must {
     "send a request and return a body for a non-tys tax year" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd(preTysTaxYear)
+      val taxYear: TaxYear = TaxYear.fromMtd(preTysTaxYear)
 
       val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -49,7 +49,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
     }
 
     "send a request and return a body for a tys tax year" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
+      val taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -63,7 +63,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val taxYear: TaxYear
 

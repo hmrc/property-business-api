@@ -35,7 +35,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
   "connector" must {
     "send a request and return no content" when {
       "using FHL data" in new IfsTest with Test {
-        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+        val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
@@ -50,7 +50,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       }
 
       "using non-FHL data" in new IfsTest with Test {
-        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+        val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
@@ -65,7 +65,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       }
 
       "isPassIntentHeader feature switch is off" in new IfsTest with Test {
-        lazy val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+        val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
@@ -81,7 +81,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val propertyType: HistoricPropertyType
 

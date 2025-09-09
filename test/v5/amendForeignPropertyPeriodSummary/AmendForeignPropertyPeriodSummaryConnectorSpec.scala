@@ -92,7 +92,7 @@ class AmendForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected def taxYear: TaxYear
 

@@ -84,7 +84,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateAmendForeignPropertyAnnualSubmissionController(
+    protected val controller: CreateAmendForeignPropertyAnnualSubmissionController = new CreateAmendForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory,

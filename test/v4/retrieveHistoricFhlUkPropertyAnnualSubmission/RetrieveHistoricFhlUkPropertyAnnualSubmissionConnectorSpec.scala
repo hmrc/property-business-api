@@ -59,7 +59,8 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connect
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     protected val connector: RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector = new RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,

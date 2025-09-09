@@ -60,7 +60,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
 
   "connector" must {
     "post a body and return 204" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+      val taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
       willPut(
         url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}",
@@ -75,7 +75,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val taxYear: TaxYear
 

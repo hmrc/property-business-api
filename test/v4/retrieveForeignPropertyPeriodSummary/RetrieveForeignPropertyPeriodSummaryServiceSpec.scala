@@ -24,7 +24,7 @@ import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
+import v4.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult, Result}
 import v4.retrieveForeignPropertyPeriodSummary.model.request.{
   Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
   RetrieveForeignPropertyPeriodSummaryRequestData

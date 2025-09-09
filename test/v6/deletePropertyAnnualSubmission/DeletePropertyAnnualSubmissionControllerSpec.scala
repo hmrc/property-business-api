@@ -80,7 +80,7 @@ class DeletePropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new DeletePropertyAnnualSubmissionController(
+    protected val controller: DeletePropertyAnnualSubmissionController = new DeletePropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeletePropertyAnnualSubmissionValidatorFactory,

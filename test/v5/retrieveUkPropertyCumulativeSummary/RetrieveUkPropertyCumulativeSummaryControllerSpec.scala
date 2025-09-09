@@ -73,7 +73,7 @@ class RetrieveUkPropertyCumulativeSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveUkPropertyCumulativeSummaryController(
+    protected val controller: RetrieveUkPropertyCumulativeSummaryController = new RetrieveUkPropertyCumulativeSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyCumulativeSummaryValidatorFactory,

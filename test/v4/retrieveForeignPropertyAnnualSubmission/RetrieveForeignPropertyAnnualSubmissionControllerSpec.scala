@@ -81,7 +81,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveForeignPropertyAnnualSubmissionController(
+    protected val controller: RetrieveForeignPropertyAnnualSubmissionController = new RetrieveForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyAnnualSubmissionValidatorFactory,

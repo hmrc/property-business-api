@@ -28,6 +28,7 @@ import v4.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnect
 import v4.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
 import v4.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 import v4.retrieveUkPropertyPeriodSummary.model.response.{Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryResponse}
+import v4.retrieveUkPropertyPeriodSummary.model.{Result, UkResult, NonUkResult}
 
 import java.net.URL
 import scala.concurrent.Future
@@ -189,17 +190,17 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   }
 
   trait NonTysTest extends Test with IfsTest {
-    protected lazy val taxYear: String = "2019-20"
+    protected val taxYear: String = "2019-20"
 
-    protected lazy val uri: URL =
+    protected val uri: URL =
       url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
 
   }
 
   trait TysTest extends Test with IfsTest {
-    protected lazy val taxYear: String = "2023-24"
+    protected val taxYear: String = "2023-24"
 
-    protected lazy val uri: URL = url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
+    protected val uri: URL = url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
 
   }
 

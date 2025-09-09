@@ -74,7 +74,7 @@ class ListPropertyPeriodSummariesControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new ListPropertyPeriodSummariesController(
+    protected val controller: ListPropertyPeriodSummariesController = new ListPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockListPropertyPeriodSummariesValidatorFactory,

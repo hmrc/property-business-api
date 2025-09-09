@@ -66,7 +66,7 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 

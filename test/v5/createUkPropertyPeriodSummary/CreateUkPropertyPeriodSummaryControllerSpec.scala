@@ -104,7 +104,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateUkPropertyPeriodSummaryController(
+    protected val controller: CreateUkPropertyPeriodSummaryController = new CreateUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateUkPropertyPeriodSummaryService,

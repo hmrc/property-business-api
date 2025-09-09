@@ -84,14 +84,15 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      validatorFactory = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
-      service = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
+    protected val controller: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController =
+      new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionController(
+        authService = mockEnrolmentsAuthService,
+        lookupService = mockMtdIdLookupService,
+        validatorFactory = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
+        service = mockRetrieveHistoricNonFhlUkPropertyAnnualSubmissionService,
+        cc = cc,
+        idGenerator = mockIdGenerator
+      )
 
     MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true

@@ -50,7 +50,8 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesConnectorSpec extends Connector
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     protected val connector: ListHistoricNonFhlUkPropertyPeriodSummariesConnector =
       new ListHistoricNonFhlUkPropertyPeriodSummariesConnector(

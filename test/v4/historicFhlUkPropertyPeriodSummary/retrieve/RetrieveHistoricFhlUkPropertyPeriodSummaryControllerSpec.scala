@@ -86,7 +86,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveHistoricFhlUkPropertyPeriodSummaryController(
+    protected val controller: RetrieveHistoricFhlUkPropertyPeriodSummaryController = new RetrieveHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPropertyPeriodSummaryValidatorFactory,

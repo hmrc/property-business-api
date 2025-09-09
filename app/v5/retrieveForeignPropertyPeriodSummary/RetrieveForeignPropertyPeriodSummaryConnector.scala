@@ -23,21 +23,12 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult, Result}
+import v5.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult, Result}
 import v5.retrieveForeignPropertyPeriodSummary.model.request.*
 import v5.retrieveForeignPropertyPeriodSummary.model.response.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-
-object RetrieveForeignPropertyPeriodSummaryConnector {
-
-  sealed trait Result
-
-  case class ForeignResult(response: RetrieveForeignPropertyPeriodSummaryResponse) extends Result
-
-  case object NonForeignResult extends Result
-}
 
 @Singleton
 class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)

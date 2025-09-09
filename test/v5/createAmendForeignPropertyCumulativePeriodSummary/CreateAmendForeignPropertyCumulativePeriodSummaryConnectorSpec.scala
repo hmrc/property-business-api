@@ -56,7 +56,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 

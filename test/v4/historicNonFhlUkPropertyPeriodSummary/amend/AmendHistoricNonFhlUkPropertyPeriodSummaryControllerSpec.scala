@@ -87,7 +87,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
+    protected val controller: AmendHistoricNonFhlUkPropertyPeriodSummaryController = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendHistoricNonFhlUkPeriodSummaryValidatorFactory,

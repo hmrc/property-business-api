@@ -64,7 +64,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     protected val connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector =
       new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector(

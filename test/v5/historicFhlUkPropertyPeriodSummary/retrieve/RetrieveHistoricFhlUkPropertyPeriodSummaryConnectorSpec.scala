@@ -67,7 +67,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector: RetrieveHistoricFhlUkPropertyPeriodSummaryConnector =
       new RetrieveHistoricFhlUkPropertyPeriodSummaryConnector(

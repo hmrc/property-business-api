@@ -22,11 +22,11 @@ import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.*
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukFhlProperty.Def1_Retrieve_UkFhlProperty
 import v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty.Def1_Retrieve_UkNonFhlProperty
 import v4.retrieveUkPropertyAnnualSubmission.model.request.*
 import v4.retrieveUkPropertyAnnualSubmission.model.response.*
+import v4.retrieveUkPropertyAnnualSubmission.model.{UkResult, NonUkResult, Result}
 
 import scala.concurrent.Future
 
@@ -103,7 +103,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     "request is for a pre-TYS tax year" must {
       "use the pre-TYS URL" in new IfsTest with Test {
-        lazy val taxYear: String = "2019-20"
+        val taxYear: String = "2019-20"
 
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(Some(ukFhlProperty), ukNonFhlProperty = None)
@@ -121,7 +121,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
@@ -141,7 +141,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   trait StandardTest extends IfsTest with Test {
 
-    protected lazy val taxYear = "2023-24"
+    protected val taxYear = "2023-24"
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {

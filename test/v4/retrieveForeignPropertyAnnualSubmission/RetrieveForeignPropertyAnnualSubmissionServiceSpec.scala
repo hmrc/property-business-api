@@ -23,7 +23,7 @@ import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
+import v4.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 import v4.retrieveForeignPropertyAnnualSubmission.model.request.{
   Def1_RetrieveForeignPropertyAnnualSubmissionRequestData,
   RetrieveForeignPropertyAnnualSubmissionRequestData

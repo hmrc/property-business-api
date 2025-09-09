@@ -86,7 +86,8 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 

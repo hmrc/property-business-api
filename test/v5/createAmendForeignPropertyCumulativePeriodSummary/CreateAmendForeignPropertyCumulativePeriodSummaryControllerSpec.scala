@@ -83,7 +83,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new CreateAmendForeignPropertyCumulativePeriodSummaryController(
+    val controller: CreateAmendForeignPropertyCumulativePeriodSummaryController = new CreateAmendForeignPropertyCumulativePeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateAmendForeignPropertyCumulativePeriodSummaryService,

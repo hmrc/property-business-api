@@ -39,8 +39,8 @@ class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClie
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
 
-    import request._
-    import schema._
+    import request.*
+    import schema.*
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("UK_PROPERTY") else None
 

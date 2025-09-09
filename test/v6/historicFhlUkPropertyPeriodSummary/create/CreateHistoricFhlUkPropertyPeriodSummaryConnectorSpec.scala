@@ -46,7 +46,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpe
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector = new CreateHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,

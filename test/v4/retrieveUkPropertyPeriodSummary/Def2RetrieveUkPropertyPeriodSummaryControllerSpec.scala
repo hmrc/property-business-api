@@ -75,7 +75,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveUkPropertyPeriodSummaryController(
+    protected val controller: RetrieveUkPropertyPeriodSummaryController = new RetrieveUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,

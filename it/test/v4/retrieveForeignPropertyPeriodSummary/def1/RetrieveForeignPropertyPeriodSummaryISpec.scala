@@ -16,7 +16,6 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1
 
-import shared.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.SubmissionIdFormatError
 import play.api.http.HeaderNames.ACCEPT
@@ -25,10 +24,9 @@ import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, SERV
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
-import play.api.libs.ws.DefaultBodyReadables.readableAsString
-import shared.services._
 
 class RetrieveForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 

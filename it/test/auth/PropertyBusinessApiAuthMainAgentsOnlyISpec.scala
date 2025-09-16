@@ -16,11 +16,9 @@
 
 package auth
 
-import shared.services.DownstreamStub
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
-import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import shared.services.DownstreamStub
 
 class PropertyBusinessApiAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec {
 

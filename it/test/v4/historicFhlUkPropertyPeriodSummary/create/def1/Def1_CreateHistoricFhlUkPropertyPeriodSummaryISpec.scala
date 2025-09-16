@@ -16,27 +16,18 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create.def1
 
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleBothExpensesSuppliedError,
-  RuleDuplicateSubmissionError,
-  RuleHistoricTaxYearNotSupportedError,
-  RuleMisalignedPeriodError,
-  RuleNotContiguousPeriodError,
-  RuleOverlappingPeriodError,
-  RuleToDateBeforeFromDateError
-}
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.models.utils.JsonErrorValidators
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
-import play.api.libs.ws.DefaultBodyReadables.readableAsString
-import shared.services._
 
 class Def1_CreateHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

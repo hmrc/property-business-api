@@ -18,9 +18,9 @@ package v4.models.request.createAmendForeignPropertyAnnualSubmission
 
 import play.api.libs.json.{JsValue, Json}
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.StructuredBuildingAllowanceFixture
-import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
-import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
-import v4.createAmendForeignPropertyAnnualSubmission.model.request._
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.*
+import v4.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 trait CreateAmendForeignPropertyAnnualSubmissionFixture extends StructuredBuildingAllowanceFixture {
 

@@ -16,25 +16,16 @@
 
 package v4.createUkPropertyPeriodSummary.def1
 
-import common.models.errors.{
-  RuleBothExpensesSuppliedError,
-  RuleDuplicateSubmissionError,
-  RuleMisalignedPeriodError,
-  RuleNotContiguousPeriodError,
-  RuleOverlappingPeriodError,
-  RuleToDateBeforeFromDateError,
-  RuleTypeOfBusinessIncorrectError
-}
-import shared.models.errors._
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
-import play.api.libs.ws.DefaultBodyReadables.readableAsString
-import shared.services._
 
 class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 

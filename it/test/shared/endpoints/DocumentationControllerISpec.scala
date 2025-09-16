@@ -25,8 +25,6 @@ import play.api.libs.ws.WSResponse
 import shared.config.SharedAppConfig
 import shared.routing.{Version, Versions}
 import shared.support.IntegrationBaseSpec
-import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
-import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 import scala.util.Try
 

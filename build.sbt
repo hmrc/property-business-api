@@ -27,7 +27,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= Seq(
-      //"-Werror",
+      "-Werror",
       "-Wconf:msg=Flag.*repeatedly:s",
       "-Wconf:src=routes/.*:silent",
       "-feature",
@@ -50,6 +50,9 @@ lazy val it = project
     Test / fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
     libraryDependencies ++= AppDependencies.itDependencies,
-    scalacOptions ++= Seq("-Xfatal-warnings")
+    scalacOptions ++= Seq(
+      "-Xfatal-warnings",
+      "-Wconf:msg=Flag.*repeatedly:s"
+    )
   )
 

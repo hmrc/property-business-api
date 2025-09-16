@@ -158,7 +158,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
   trait Test extends ConnectorTest {
 
-    protected val taxYear: String
+    protected def taxYear: String
     protected val uri: URL
 
     protected val connector: RetrieveUkPropertyPeriodSummaryConnector = new RetrieveUkPropertyPeriodSummaryConnector(
@@ -190,7 +190,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   }
 
   trait NonTysTest extends Test with IfsTest {
-    protected val taxYear: String = "2019-20"
+    protected def taxYear: String = "2019-20"
 
     protected val uri: URL =
       url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2019-20&incomeSourceId=$businessId&submissionId=$submissionId"
@@ -198,7 +198,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
   }
 
   trait TysTest extends Test with IfsTest {
-    protected val taxYear: String = "2023-24"
+    protected def taxYear: String = "2023-24"
 
     protected val uri: URL = url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
 

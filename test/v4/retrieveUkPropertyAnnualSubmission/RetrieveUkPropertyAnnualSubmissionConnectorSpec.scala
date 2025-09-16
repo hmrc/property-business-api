@@ -103,7 +103,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
     "request is for a pre-TYS tax year" must {
       "use the pre-TYS URL" in new IfsTest with Test {
-        val taxYear: String = "2019-20"
+        def taxYear: String = "2019-20"
 
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(Some(ukFhlProperty), ukNonFhlProperty = None)
@@ -123,12 +123,12 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   trait Test {
     self: ConnectorTest =>
 
+    protected def taxYear: String
+
     protected val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig
     )
-
-    protected val taxYear: String
 
     protected val request: Def1_RetrieveUkPropertyAnnualSubmissionRequestData =
       Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
@@ -141,7 +141,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
   trait StandardTest extends IfsTest with Test {
 
-    protected val taxYear = "2023-24"
+    protected def taxYear = "2023-24"
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {

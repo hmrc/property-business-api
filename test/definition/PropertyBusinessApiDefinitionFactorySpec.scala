@@ -25,25 +25,19 @@ import shared.mocks.MockHttpClient
 import shared.routing._
 import shared.utils.UnitSpec
 
-class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec {
-
-  class Test extends MockHttpClient with MockSharedAppConfig {
-    val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockSharedAppConfig)
-    MockedSharedAppConfig.apiGatewayContext returns "individuals/business/property"
-  }
+class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
 
   "definition" when {
     "called" should {
-      "return a valid Definition case class" in new Test {
-        MockedSharedAppConfig.deprecationFor(Version4).returns(NotDeprecated.valid).anyNumberOfTimes()
-        MockedSharedAppConfig.deprecationFor(Version5).returns(NotDeprecated.valid).anyNumberOfTimes()
-        MockedSharedAppConfig.deprecationFor(Version6).returns(NotDeprecated.valid).anyNumberOfTimes()
-        MockedSharedAppConfig.apiStatus(Version4) returns "BETA"
-        MockedSharedAppConfig.apiStatus(Version5) returns "BETA"
-        MockedSharedAppConfig.apiStatus(Version6) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version4).returns(true).anyNumberOfTimes()
-        MockedSharedAppConfig.endpointsEnabled(Version5).returns(true).anyNumberOfTimes()
-        MockedSharedAppConfig.endpointsEnabled(Version6).returns(true).anyNumberOfTimes()
+      "return a valid Definition case class" in {
+        List(Version4, Version5, Version6).foreach { version =>
+          MockedSharedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
+          MockedSharedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
+          MockedSharedAppConfig.apiStatus(version) returns "BETA"
+          MockedSharedAppConfig.endpointsEnabled(version) returns true
+        }
+
+        val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockSharedAppConfig)
 
         apiDefinitionFactory.definition shouldBe
           Definition(

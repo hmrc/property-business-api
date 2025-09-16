@@ -38,7 +38,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       "return no content" in new IfsTest with Test {
-        val taxYear: TaxYear = preTysTaxYear
+        def taxYear: TaxYear = preTysTaxYear
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -46,7 +46,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       }
 
       "return no content given a TYS tax year request" in new IfsTest with Test {
-        val taxYear: TaxYear = tysTaxYear
+        def taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -60,7 +60,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
 
       "return the error" in new IfsTest with Test {
-        val taxYear: TaxYear = preTysTaxYear
+        def taxYear: TaxYear = preTysTaxYear
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -68,7 +68,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       }
 
       "return the error given a TYS tax year request" in new IfsTest with Test {
-        val taxYear: TaxYear = tysTaxYear
+        def taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -80,7 +80,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   trait Test {
     self: ConnectorTest =>
 
-    protected val taxYear: TaxYear
+    protected def taxYear: TaxYear
 
     val connector: DeletePropertyAnnualSubmissionConnector = new DeletePropertyAnnualSubmissionConnector(
       http = mockHttpClient,

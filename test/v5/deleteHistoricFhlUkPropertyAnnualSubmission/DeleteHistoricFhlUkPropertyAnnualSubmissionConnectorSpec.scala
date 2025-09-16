@@ -29,13 +29,12 @@ import scala.concurrent.Future
 
 class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino    = Nino("AA123456A")
-  private val taxYear = TaxYear.fromMtd("2021-22")
+  private val nino = Nino("AA123456A")
 
   "connector" must {
     "send a request and return no content" when {
       "using FHL data" in new IfsTest with Test {
-        val propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
+        def propertyType: HistoricPropertyType = HistoricPropertyType.Fhl
 
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
@@ -50,7 +49,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       }
 
       "using non-FHL data" in new IfsTest with Test {
-        val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+        def propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
@@ -65,7 +64,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
       }
 
       "isPassIntentHeader feature switch is off" in new IfsTest with Test {
-        val propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
+        def propertyType: HistoricPropertyType = HistoricPropertyType.NonFhl
 
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
 
@@ -83,7 +82,9 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Connector
   trait Test {
     self: ConnectorTest =>
 
-    protected val propertyType: HistoricPropertyType
+    protected def propertyType: HistoricPropertyType
+
+    protected val taxYear: TaxYear = TaxYear.fromMtd("2021-22")
 
     val connector: DeleteHistoricFhlUkPropertyAnnualSubmissionConnector = new DeleteHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,

@@ -116,7 +116,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
     "request is for a pre-TYS tax year" must {
       "use the TYS URL" in new IfsTest with Test {
-        val taxYear: String = "2019-20"
+        def taxYear: String = "2019-20"
 
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
           responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
@@ -142,7 +142,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
       appConfig = mockSharedAppConfig
     )
 
-    protected val taxYear: String
+    protected def taxYear: String
 
     protected val request: RetrieveForeignPropertyAnnualSubmissionRequestData =
       Def1_RetrieveForeignPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
@@ -157,7 +157,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))
 
-    val taxYear: String = "2023-24"
+    def taxYear: String = "2023-24"
   }
 
 }

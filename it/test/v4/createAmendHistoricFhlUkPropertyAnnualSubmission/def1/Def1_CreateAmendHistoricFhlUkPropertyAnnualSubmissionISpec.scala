@@ -26,6 +26,8 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
@@ -212,7 +214,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends Integra
         ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
         ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "downstream service error" when {
@@ -244,7 +246,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionISpec extends Integra
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

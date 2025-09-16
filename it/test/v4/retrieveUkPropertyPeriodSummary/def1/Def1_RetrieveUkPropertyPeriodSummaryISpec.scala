@@ -27,6 +27,8 @@ import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
@@ -266,7 +268,7 @@ class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
         ("AA123456A", "XA123", "2022-23", "4557ecb5-fd32-48cc-81f5-e6acd1099f3c", Status.BAD_REQUEST, BusinessIdFormatError),
         ("AA123456A", "XAIS12345678910", "2022-23", "4557ecb5-48cc-81f5-e6acd1099f3c", Status.BAD_REQUEST, SubmissionIdFormatError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return ifs service error" when {
@@ -303,7 +305,7 @@ class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
         (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError)
       )
 
-      (input ++ tysInput).foreach(args => (serviceErrorTest _).tupled(args))
+      (input ++ tysInput).foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

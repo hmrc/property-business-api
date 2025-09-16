@@ -26,6 +26,8 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError}
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
@@ -74,7 +76,7 @@ class Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBa
           ("AA123", "2017-04-06_2017-07-04", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "2017-07-04_2017-04-06", BAD_REQUEST, PeriodIdFormatError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "Downstream service error" when {
@@ -104,7 +106,7 @@ class Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBa
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+        input.foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

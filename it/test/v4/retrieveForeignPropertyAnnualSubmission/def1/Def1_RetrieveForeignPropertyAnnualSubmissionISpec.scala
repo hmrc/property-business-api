@@ -25,6 +25,8 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
@@ -83,7 +85,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
           ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "downstream service error" when {
@@ -115,7 +117,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
 

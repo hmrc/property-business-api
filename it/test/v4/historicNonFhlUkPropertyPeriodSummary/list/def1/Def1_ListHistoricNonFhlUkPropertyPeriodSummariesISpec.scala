@@ -24,6 +24,8 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import shared.services._
 
 class Def1_ListHistoricNonFhlUkPropertyPeriodSummariesISpec extends IntegrationBaseSpec {
@@ -125,7 +127,7 @@ class Def1_ListHistoricNonFhlUkPropertyPeriodSummariesISpec extends IntegrationB
       val input = List(
         ("AA1123A", BAD_REQUEST, NinoFormatError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return ifs service error" when {
@@ -152,7 +154,7 @@ class Def1_ListHistoricNonFhlUkPropertyPeriodSummariesISpec extends IntegrationB
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

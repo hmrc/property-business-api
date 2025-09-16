@@ -35,6 +35,8 @@ import play.api.libs.json._
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import shared.services._
 
 class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
@@ -192,7 +194,7 @@ class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec w
               "AFG",
               List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "ifs service error" when {
@@ -241,7 +243,7 @@ class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec w
           (UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

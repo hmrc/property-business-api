@@ -26,6 +26,8 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
@@ -492,7 +494,7 @@ class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
           BAD_REQUEST,
           RuleBothExpensesSuppliedRequestError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return downstream service error" when {
@@ -535,7 +537,7 @@ class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
         (BAD_REQUEST, "INCOME_SOURCE_NOT_COMPATIBLE", BAD_REQUEST, RuleTypeOfBusinessIncorrectError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

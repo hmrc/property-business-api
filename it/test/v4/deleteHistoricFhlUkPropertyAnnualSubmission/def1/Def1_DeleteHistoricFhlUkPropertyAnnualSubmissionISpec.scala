@@ -26,6 +26,8 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors._
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
@@ -106,7 +108,7 @@ class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationB
           ("AA123456A", "2021-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2016-17", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "downstream service error" when {
@@ -139,7 +141,7 @@ class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionISpec extends IntegrationB
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+        input.foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

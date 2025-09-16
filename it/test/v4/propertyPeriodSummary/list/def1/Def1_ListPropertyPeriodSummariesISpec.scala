@@ -24,6 +24,8 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import shared.services._
 
 class Def1_ListPropertyPeriodSummariesISpec extends IntegrationBaseSpec {
@@ -94,7 +96,7 @@ class Def1_ListPropertyPeriodSummariesISpec extends IntegrationBaseSpec {
         ("AA123456A", "XAIS12345678910", "2020-21", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
         ("AA123456A", "XA123", "2022-23", Status.BAD_REQUEST, BusinessIdFormatError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return downstream service error" when {
@@ -124,7 +126,7 @@ class Def1_ListPropertyPeriodSummariesISpec extends IntegrationBaseSpec {
         (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
         (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

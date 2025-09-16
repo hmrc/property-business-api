@@ -24,6 +24,8 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import shared.services._
 
 class Def1_DeletePropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
@@ -92,13 +94,13 @@ class Def1_DeletePropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
           ("AA123456A", "XAIS12345678910", "2021-23", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "return an MTD error mapped from a downstream error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamErrorCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
 
-          trait HasTest { _: Test =>
+          trait HasTest { self: Test =>
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
@@ -132,7 +134,7 @@ class Def1_DeletePropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

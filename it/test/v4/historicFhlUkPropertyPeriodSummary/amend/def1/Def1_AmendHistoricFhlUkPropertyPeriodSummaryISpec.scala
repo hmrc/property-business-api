@@ -27,6 +27,8 @@ import shared.models.errors._
 import shared.models.utils.JsonErrorValidators
 import shared.services._
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody
 
 class Def1_AmendHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
@@ -188,7 +190,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseS
         ("AA123456A", "BAD_PERIOD_ID", requestBodyJson, BAD_REQUEST, PeriodIdFormatError)
       )
 
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return ifs service error" when {
@@ -222,7 +224,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseS
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

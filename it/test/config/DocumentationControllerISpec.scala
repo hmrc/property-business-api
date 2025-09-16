@@ -23,6 +23,8 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import shared.routing.{Version4, Version5}
 import shared.support.IntegrationBaseSpec
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
 
 import scala.util.Try
 

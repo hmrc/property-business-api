@@ -27,7 +27,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= Seq(
-      "-Werror",
+      //"-Werror",
       "-Wconf:msg=Flag.*repeatedly:s",
       "-Wconf:src=routes/.*:silent",
       "-feature",

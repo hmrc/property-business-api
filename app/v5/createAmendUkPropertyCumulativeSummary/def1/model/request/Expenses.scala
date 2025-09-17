@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyCumulativeSummary.def1.model.request
 
-import play.api.libs.json.{JsNull, JsObject, Json, Reads, Writes}
+import play.api.libs.json.*
 
 case class Expenses(premisesRunningCosts: Option[BigDecimal],
                     repairsAndMaintenance: Option[BigDecimal],

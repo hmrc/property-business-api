@@ -52,6 +52,6 @@ object Expenses {
       } and
       (JsPath \ "ukOtherRentARoom").readNullable[RentARoomExpenses] and
       (JsPath \ "consolidatedExpenses").readNullable[BigDecimal]
-  )(Expenses.apply _)
+  )(Expenses.apply)
 
 }

@@ -21,7 +21,6 @@ import shared.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v4.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryService
 import v4.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}

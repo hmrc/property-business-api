@@ -110,7 +110,7 @@ class CreateUkPropertyPeriodSummaryServiceSpec extends ServiceSpec with MockCrea
           "BUSINESS_INCOME_PERIOD_RESTRICTION" -> InternalError
         )
 
-        (errors ++ extraTysErrors).foreach((serviceError _).tupled)
+        (errors ++ extraTysErrors).foreach((serviceError).tupled)
       }
     }
   }

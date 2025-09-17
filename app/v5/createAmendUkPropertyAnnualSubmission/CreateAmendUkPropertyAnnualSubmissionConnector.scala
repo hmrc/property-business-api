@@ -40,7 +40,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
 
     implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
-    import request._
+    import request.*
 
     val downstreamUri = taxYear match {
       case ty if ty.year >= TaxYear.tysTaxYear.year =>

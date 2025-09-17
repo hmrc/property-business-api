@@ -80,7 +80,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "SERVICE_UNAVAILABLE"         -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      input.foreach(args => (serviceError).tupled(args))
     }
   }
 

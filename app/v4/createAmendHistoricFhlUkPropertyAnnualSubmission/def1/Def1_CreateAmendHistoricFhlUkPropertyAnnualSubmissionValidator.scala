@@ -51,11 +51,11 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     List(
       annualAdjustments.map(validateAnnualAdjustments).getOrElse(valid),
@@ -65,7 +65,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
   }
 
   private def validateAnnualAdjustments(annualAdjustments: HistoricFhlAnnualAdjustments): Validated[Seq[MtdError], Unit] = {
-    import annualAdjustments._
+    import annualAdjustments.*
     val annualAdjustmentsWithPaths = List(
       (lossBroughtForward, "/annualAdjustments/lossBroughtForward"),
       (privateUseAdjustment, "/annualAdjustments/privateUseAdjustment"),
@@ -83,7 +83,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
   }
 
   private def validateAnnualAllowance(annualAllowances: HistoricFhlAnnualAllowances): Validated[Seq[MtdError], Unit] = {
-    import annualAllowances._
+    import annualAllowances.*
     val resolvePropertyIncomeAllowanceNumber = ResolveParsedNumber(max = 1000.00)
 
     val annualAllowancesWithPaths = List(

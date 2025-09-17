@@ -16,10 +16,10 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads, __}
-import shared.utils.EmptinessChecker.field
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 import v4.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 
 sealed trait CreateHistoricFhlUkPiePeriodSummaryRequestBody {
@@ -48,7 +48,7 @@ object Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody {
       (__ \ "toDate").read[String] and
       (__ \ "income").readNullable[UkFhlPropertyIncome] and
       (__ \ "expenses").readNullable[UkFhlPropertyExpenses]
-  )(Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody.apply _)
+  )(Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody.apply)
 
   implicit val writes: OWrites[Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
     (JsPath \ "from").write[String] and

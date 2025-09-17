@@ -16,13 +16,13 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def2
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.*
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.{
   Def2_Create_Amend_ForeignAllowances,
@@ -51,7 +51,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
 
   def validateBusinessRules(parsed: Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     combine(
       validateForeignEntries(foreignProperty)
     ).onSuccess(parsed)
@@ -68,7 +68,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   }
 
   private def validateForeignEntry(entry: Def2_Create_Amend_ForeignEntry, index: Int): Validated[Seq[MtdError], Unit] = {
-    import entry._
+    import entry.*
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignProperty/$index/countryCode")
 
     val valuesWithPaths = List(
@@ -126,7 +126,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   private def validateStructuredBuildingAllowance(structuredBuildingAllowance: Def2_Create_Amend_StructuredBuildingAllowance,
                                                   index: Int,
                                                   buildingIndex: Int): Validated[Seq[MtdError], Unit] = {
-    import structuredBuildingAllowance._
+    import structuredBuildingAllowance.*
 
     val validatedNumberAmount =
       resolveParsedNumber(amount, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/amount")

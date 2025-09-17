@@ -77,7 +77,7 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
           "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
       }
     }
   }

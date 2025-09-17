@@ -38,6 +38,6 @@ class Def1_RetrieveHistoricFhlUkPeriodSummaryValidator @Inject() (nino: String, 
     (
       ResolveNino(nino),
       resolvePeriodId(periodId)
-    ).mapN(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData)
+    ).mapN(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData.apply)
 
 }

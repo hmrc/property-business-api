@@ -16,16 +16,16 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission
 
+import cats.data.EitherT
+import cats.implicits.*
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
-import cats.data.EitherT
-import cats.implicits.*
-import common.models.errors.RuleTypeOfBusinessIncorrectError
-import v5.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
+import v5.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

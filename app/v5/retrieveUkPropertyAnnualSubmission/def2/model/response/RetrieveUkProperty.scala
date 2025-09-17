@@ -27,6 +27,6 @@ object RetrieveUkProperty {
   implicit val reads: Reads[RetrieveUkProperty] = (
     (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[RetrieveUkPropertyAdjustments] and
       (__ \ "ukOtherPropertyAnnualAllowances").readNullable[RetrieveUkPropertyAllowances]
-  )(RetrieveUkProperty.apply _)
+  )(RetrieveUkProperty.apply)
 
 }

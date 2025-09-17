@@ -98,7 +98,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec
         "SUBMISSION_DATE_ISSUE"   -> RuleMisalignedPeriodError
       )
 
-      (errors ++ extraTysErrors).foreach((serviceError _).tupled)
+      (errors ++ extraTysErrors).foreach((serviceError).tupled)
     }
   }
 

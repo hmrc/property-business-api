@@ -16,13 +16,13 @@
 
 package v4.createAmendUkPropertyAnnualSubmission.def1
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors.*
 import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty.*
 import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty.*
 import v4.createAmendUkPropertyAnnualSubmission.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
@@ -42,7 +42,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
 
   def validateBusinessRules(parsed: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     combine(
       ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid),
       ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)
@@ -50,7 +50,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
   }
 
   private def validateUkFhlProperty(ukFhlProperty: Def1_Create_Amend_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukFhlProperty._
+    import ukFhlProperty.*
 
     val fieldsWithPaths = List(
       (adjustments.flatMap(_.balancingCharge), "/ukFhlProperty/adjustments/balancingCharge"),
@@ -91,7 +91,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
   }
 
   private def validateUkNonFhlProperty(ukNonFhlProperty: Def1_Create_Amend_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukNonFhlProperty._
+    import ukNonFhlProperty.*
 
     val fieldsWithPaths = List(
       (adjustments.flatMap(_.balancingCharge), "/ukNonFhlProperty/adjustments/balancingCharge"),
@@ -153,7 +153,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
   private def validateBuildingAllowance(buildingAllowance: Def1_Create_Amend_StructuredBuildingAllowance,
                                         index: Int,
                                         enhanced: Boolean): Validated[Seq[MtdError], Unit] = {
-    import buildingAllowance._
+    import buildingAllowance.*
 
     val buildingType = if (enhanced) "enhancedStructuredBuildingAllowance" else "structuredBuildingAllowance"
 

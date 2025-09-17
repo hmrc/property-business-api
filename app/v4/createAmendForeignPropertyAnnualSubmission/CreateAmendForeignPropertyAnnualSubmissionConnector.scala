@@ -44,7 +44,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: H
     request match {
 
       case def1: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
           IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
         } else {

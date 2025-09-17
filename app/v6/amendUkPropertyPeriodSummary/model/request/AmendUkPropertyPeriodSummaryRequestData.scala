@@ -16,8 +16,8 @@
 
 package v6.amendUkPropertyPeriodSummary.model.request
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
 import common.models.domain.SubmissionId
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.Def2_Amend_UkNonFhlPropertySubmission
 
 sealed trait AmendUkPropertyPeriodSummaryRequestData {

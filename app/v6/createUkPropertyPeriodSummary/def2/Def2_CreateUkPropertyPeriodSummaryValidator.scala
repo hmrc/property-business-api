@@ -16,14 +16,14 @@
 
 package v6.createUkPropertyPeriodSummary.def2
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMaximum}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMaximum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v6.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator.*
 import v6.createUkPropertyPeriodSummary.model.request.*
 
@@ -38,7 +38,7 @@ class Def2_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, busin
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def2_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def2_CreateUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
 
     result.fold(Invalid(_), e => Valid(e.toSubmission))
   }

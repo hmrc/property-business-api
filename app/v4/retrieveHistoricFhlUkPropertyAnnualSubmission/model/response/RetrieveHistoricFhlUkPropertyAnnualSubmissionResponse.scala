@@ -41,6 +41,6 @@ object Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse {
 
   implicit val reads: Reads[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
     ((JsPath \ "annualAdjustments").readNullable[AnnualAdjustments] and
-      (JsPath \ "annualAllowances").readNullable[AnnualAllowances])(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse.apply _)
+      (JsPath \ "annualAllowances").readNullable[AnnualAllowances])(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse.apply)
 
 }

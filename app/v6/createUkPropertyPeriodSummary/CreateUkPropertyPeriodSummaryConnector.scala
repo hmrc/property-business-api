@@ -45,7 +45,7 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, 
     implicit val successCode: SuccessCode = SuccessCode(OK)
     request match {
       case def1: Def1_CreateUkPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
           IfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         } else {
@@ -55,13 +55,13 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, 
         post(body, downstreamUri)
 
       case def2: Def2_CreateUkPropertyPeriodSummaryRequestData =>
-        import def2._
+        import def2.*
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = IfsUri(
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)
 
       case def2Submission: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData =>
-        import def2Submission._
+        import def2Submission.*
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = IfsUri(
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)

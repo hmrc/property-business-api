@@ -36,6 +36,6 @@ object Def1_Retrieve_NonFhlPropertyIncome {
       (JsPath \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "otherIncome").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[Def1_Retrieve_RentARoomIncome]
-  )(Def1_Retrieve_NonFhlPropertyIncome.apply _)
+  )(Def1_Retrieve_NonFhlPropertyIncome.apply)
 
 }

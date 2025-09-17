@@ -43,6 +43,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
     (
       ResolveNino(nino),
       resolvePeriodId(periodId)
-    ).mapN(Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData)
+    ).mapN(Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply)
 
 }

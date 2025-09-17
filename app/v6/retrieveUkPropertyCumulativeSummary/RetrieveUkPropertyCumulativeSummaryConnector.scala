@@ -23,9 +23,8 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.retrieveUkPropertyCumulativeSummary.model.{Result, NonUkResult, UkResult}
 import v6.retrieveUkPropertyCumulativeSummary.model.request.*
-import v6.retrieveUkPropertyCumulativeSummary.model.response.*
+import v6.retrieveUkPropertyCumulativeSummary.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,8 +38,8 @@ class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClie
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
 
-    import request._
-    import schema._
+    import request.*
+    import schema.*
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("UK_PROPERTY") else None
 

@@ -43,6 +43,6 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidator @Inject() (nino: String
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId)
-    ).mapN(Def1_RetrieveForeignPropertyPeriodSummaryRequestData)
+    ).mapN(Def1_RetrieveForeignPropertyPeriodSummaryRequestData.apply)
 
 }

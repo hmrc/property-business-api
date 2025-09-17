@@ -16,13 +16,13 @@
 
 package v4.createAmendForeignPropertyAnnualSubmission.def1
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.*
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.*
 import v4.createAmendForeignPropertyAnnualSubmission.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
@@ -48,7 +48,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
 
   def validateBusinessRules(parsed: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     combine(
       foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
       foreignNonFhlProperty.map(validateForeignNonFhlEntries).getOrElse(valid)
@@ -56,7 +56,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   }
 
   private def validateForeignFhlEea(foreignFhlEea: Def1_Create_Amend_ForeignFhlEea): Validated[Seq[MtdError], Unit] = {
-    import foreignFhlEea._
+    import foreignFhlEea.*
     val valuesWithPaths = List(
       (adjustments.flatMap(_.privateUseAdjustment), "/foreignFhlEea/adjustments/privateUseAdjustment"),
       (adjustments.flatMap(_.balancingCharge), "/foreignFhlEea/adjustments/balancingCharge"),
@@ -103,7 +103,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   }
 
   private def validateForeignNonFhlEntry(entry: Def1_Create_Amend_ForeignNonFhlEntry, index: Int): Validated[Seq[MtdError], Unit] = {
-    import entry._
+    import entry.*
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")
 
     val valuesWithPaths = List(
@@ -166,7 +166,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   private def validateStructuredBuildingAllowance(structuredBuildingAllowance: Def1_Create_Amend_StructuredBuildingAllowance,
                                                   index: Int,
                                                   buildingIndex: Int): Validated[Seq[MtdError], Unit] = {
-    import structuredBuildingAllowance._
+    import structuredBuildingAllowance.*
 
     val validatedNumberAmount =
       resolveParsedNumber(amount, s"/foreignNonFhlProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/amount")

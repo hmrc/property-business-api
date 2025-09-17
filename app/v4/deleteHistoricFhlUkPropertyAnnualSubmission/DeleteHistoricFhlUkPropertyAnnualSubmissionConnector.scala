@@ -42,7 +42,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: 
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    import request.*
 
     val intent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("DELETE") else None
 
@@ -53,7 +53,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: 
 
     request match {
       case def1: Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/$propertyTypeName/annual-summaries/${taxYear.asDownstream}")
 
         put(JsObject.empty, downstreamUri, intent)

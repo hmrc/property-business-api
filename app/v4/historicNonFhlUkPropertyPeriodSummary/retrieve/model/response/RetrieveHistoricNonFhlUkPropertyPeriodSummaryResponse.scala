@@ -48,6 +48,6 @@ object Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse {
       (JsPath \ "to").read[String] and
       (JsPath \ "financials" \ "incomes").readNullable[PeriodIncome] and
       (JsPath \ "financials" \ "deductions").readNullable[PeriodExpenses]
-  )(Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse.apply _)
+  )(Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse.apply)
 
 }

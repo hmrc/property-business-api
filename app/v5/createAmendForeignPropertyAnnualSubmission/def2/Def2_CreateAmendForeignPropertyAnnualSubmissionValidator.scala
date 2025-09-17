@@ -43,6 +43,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino: String, bus
       ResolveBusinessId(businessId),
       ResolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

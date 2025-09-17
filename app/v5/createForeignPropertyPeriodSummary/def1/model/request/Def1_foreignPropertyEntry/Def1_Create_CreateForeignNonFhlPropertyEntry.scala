@@ -18,8 +18,8 @@ package v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPro
 
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
-import shared.utils.EmptinessChecker.field
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 
 case class Def1_Create_CreateForeignNonFhlPropertyEntry(
     countryCode: String,

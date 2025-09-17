@@ -16,15 +16,15 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
+import cats.data.EitherT
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
-import cats.data.EitherT
-import v6.retrieveUkPropertyCumulativeSummary.model.{Result, NonUkResult, UkResult}
-import common.models.errors.RuleTypeOfBusinessIncorrectError
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
+import v6.retrieveUkPropertyCumulativeSummary.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

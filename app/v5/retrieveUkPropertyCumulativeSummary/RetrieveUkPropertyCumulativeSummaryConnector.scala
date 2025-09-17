@@ -23,9 +23,8 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveUkPropertyCumulativeSummary.model.{Result, NonUkResult, UkResult}
 import v5.retrieveUkPropertyCumulativeSummary.model.request.*
-import v5.retrieveUkPropertyCumulativeSummary.model.response.*
+import v5.retrieveUkPropertyCumulativeSummary.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

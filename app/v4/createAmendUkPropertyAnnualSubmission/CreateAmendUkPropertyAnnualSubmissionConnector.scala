@@ -44,7 +44,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
 
     request match {
       case def1: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
             IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")

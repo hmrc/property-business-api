@@ -31,7 +31,6 @@ lazy val microservice = Project(appName, file("."))
       "-Wconf:msg=Flag.*repeatedly:s",
       "-Wconf:src=routes/.*:silent",
       "-feature",
-      "-nowarn",
       "-Xmax-inlines:150"
     ),
     scalafmtOnCompile := true,

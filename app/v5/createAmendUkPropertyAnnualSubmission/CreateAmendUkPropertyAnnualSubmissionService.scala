@@ -16,11 +16,11 @@
 
 package v5.createAmendUkPropertyAnnualSubmission
 
+import cats.implicits.*
+import common.models.errors.{RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits.*
-import common.models.errors.{RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import v5.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

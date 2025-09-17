@@ -36,7 +36,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpC
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    import request.*
 
     val downstreamUri: DownstreamUri[Unit] =
       IfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")

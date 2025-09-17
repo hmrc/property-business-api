@@ -50,12 +50,12 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
       ResolveNino(nino),
       resolvePeriodId(periodId),
       resolveJson(body)
-    ).mapN(Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] = {
 
-    import parsed.body._
+    import parsed.body.*
 
     List(
       income.map(validateIncome).getOrElse(valid),
@@ -64,7 +64,7 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
   }
 
   private def validateIncome(income: UkNonFhlPropertyIncome): Validated[Seq[MtdError], Unit] = {
-    import income._
+    import income.*
 
     val valuesWithPaths = List(
       (periodAmount, "/income/periodAmount"),
@@ -85,7 +85,7 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
   }
 
   private def validateExpenses(expenses: UkNonFhlPropertyExpenses): Validated[Seq[MtdError], Unit] = {
-    import expenses._
+    import expenses.*
 
     val valuesWithPaths = List(
       (premisesRunningCosts, "/expenses/premisesRunningCosts"),

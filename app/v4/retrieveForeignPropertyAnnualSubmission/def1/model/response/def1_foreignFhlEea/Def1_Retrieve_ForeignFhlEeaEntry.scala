@@ -17,7 +17,6 @@
 package v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea
 
 import play.api.libs.json.{Json, OFormat}
-import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.Def1_Retrieve_ForeignFhlEeaAdjustments
 
 case class Def1_Retrieve_ForeignFhlEeaEntry(adjustments: Option[Def1_Retrieve_ForeignFhlEeaAdjustments],
                                             allowances: Option[Def1_Retrieve_ForeignFhlEeaAllowances])

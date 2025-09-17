@@ -207,7 +207,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
           ("/annualAllowances/otherCapitalAllowance", zero, max),
           ("/annualAllowances/costOfReplacingDomesticGoods", zero, max),
           ("/annualAllowances/propertyIncomeAllowance", zero, 1000: BigDecimal)
-        ).foreach((testWith _).tupled)
+        ).foreach((testWith).tupled)
       }
 
       "given an empty body" in new SetupConfig {

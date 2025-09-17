@@ -43,6 +43,6 @@ class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (nino:
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       Valid(propertyType)
-    ).mapN(Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData.apply)
 
 }

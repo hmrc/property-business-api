@@ -46,6 +46,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
 }

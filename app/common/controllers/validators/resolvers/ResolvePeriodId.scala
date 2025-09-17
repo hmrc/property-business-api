@@ -52,7 +52,7 @@ class ResolvePeriodId(minimumTaxYear: TaxYear, maximumTaxYear: TaxYear) extends 
   }
 
   val resolver: Resolver[String, PeriodId] =
-    (splitAndResolveDateRange thenValidate withinLimits).map(dateRange => PeriodId(dateRange))
+    splitAndResolveDateRange.thenValidate(withinLimits).map(dateRange => PeriodId(dateRange))
 
   def apply(value: String): Validated[Seq[MtdError], PeriodId] = resolver(value)
 }

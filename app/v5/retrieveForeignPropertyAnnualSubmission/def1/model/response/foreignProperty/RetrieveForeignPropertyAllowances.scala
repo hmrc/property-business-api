@@ -40,6 +40,6 @@ object RetrieveForeignPropertyAllowances {
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").readNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[RetrieveStructuredBuildingAllowance]]
-  )(RetrieveForeignPropertyAllowances.apply _)
+  )(RetrieveForeignPropertyAllowances.apply)
 
 }

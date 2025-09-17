@@ -16,16 +16,16 @@
 
 package v4.retrieveUkPropertyAnnualSubmission
 
+import cats.data.EitherT
+import cats.implicits.*
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
-import cats.data.EitherT
-import cats.implicits.*
-import common.models.errors.RuleTypeOfBusinessIncorrectError
-import v4.retrieveUkPropertyAnnualSubmission.model.{Result, UkResult, NonUkResult}
 import v4.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 import v4.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
+import v4.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

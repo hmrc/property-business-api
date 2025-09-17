@@ -16,14 +16,14 @@
 
 package v5.createUkPropertyPeriodSummary.def2
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.ResolveParsedNumber
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.ResolveParsedNumber
+import shared.models.errors.MtdError
 import v5.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.*
 import v5.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.*
 import v5.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Create_UkPropertyExpensesRentARoom
@@ -36,7 +36,7 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
 
   def validateBusinessRules(
       parsed: Def2_CreateUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def2_CreateUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       ResolveFromAndToDates((fromDate, toDate)),
@@ -46,7 +46,7 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
   }
 
   private def validateUkFhlProperty(ukFhlProperty: Def2_Create_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukFhlProperty.{expenses => maybeExpenses, income => maybeIncome}
+    import ukFhlProperty.{expenses as maybeExpenses, income as maybeIncome}
 
     val maybeNegativeValues = List(
       (maybeExpenses.flatMap(_.premisesRunningCosts), "/ukFhlProperty/expenses/premisesRunningCosts"),
@@ -108,7 +108,7 @@ class Def2_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
   }
 
   private def validateUkNonFhlProperty(ukNonFhlProperty: Def2_Create_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukNonFhlProperty.{expenses => maybeExpenses, income => maybeIncome}
+    import ukNonFhlProperty.{expenses as maybeExpenses, income as maybeIncome}
 
     val maybeNegativeExpensesValues = List(
       (maybeExpenses.flatMap(_.premisesRunningCosts), "/ukNonFhlProperty/expenses/premisesRunningCosts"),

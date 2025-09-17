@@ -49,15 +49,15 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator @Inject() (nino: Str
       ResolveNino(nino),
       resolvePeriodId(periodId),
       resolveJson(body)
-    ).mapN(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], AmendHistoricFhlUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     val validatedIncome = income
       .map { i =>
-        import i._
+        import i.*
 
         List(
           (periodAmount, "/income/periodAmount"),
@@ -72,7 +72,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator @Inject() (nino: Str
 
     val validatedExpenses = expenses
       .map { e =>
-        import e._
+        import e.*
 
         List(
           (premisesRunningCosts, "/expenses/premisesRunningCosts"),

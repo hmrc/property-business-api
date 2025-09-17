@@ -44,6 +44,6 @@ object Expenses {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").readNullable[BigDecimal] and
       (JsPath \ "otherAmount").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenseAmount").readNullable[BigDecimal]
-  )(Expenses.apply _)
+  )(Expenses.apply)
 
 }

@@ -23,9 +23,9 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v4.retrieveUkPropertyAnnualSubmission.model.{Result, UkResult, NonUkResult}
 import v4.retrieveUkPropertyAnnualSubmission.model.request.*
 import v4.retrieveUkPropertyAnnualSubmission.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
+import v4.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +40,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
 
     request match {
       case def1: Def1_RetrieveUkPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
 
         val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
           (

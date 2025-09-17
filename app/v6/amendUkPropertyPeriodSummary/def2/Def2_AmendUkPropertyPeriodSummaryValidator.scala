@@ -41,7 +41,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
       ResolveBusinessId(businessId),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
-    ).mapN(Def2_AmendUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def2_AmendUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
 
     result.fold(Invalid(_), e => Valid(e.toSubmission))
   }

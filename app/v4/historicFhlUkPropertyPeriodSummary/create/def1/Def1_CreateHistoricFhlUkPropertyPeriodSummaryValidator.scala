@@ -41,11 +41,11 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
     (
       ResolveNino(nino),
       resolveJson(body)
-    ).mapN(Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], CreateHistoricFhlUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     val validatedDates = ResolveFromAndToDates((fromDate, toDate))
 
@@ -58,7 +58,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
   }
 
   private def validateIncome(income: UkFhlPropertyIncome): Validated[Seq[MtdError], Unit] = {
-    import income._
+    import income.*
 
     val valuesWithPaths = List(
       (periodAmount, "/income/periodAmount"),
@@ -76,7 +76,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator(nino: String, body:
   }
 
   private def validateExpenses(expenses: UkFhlPropertyExpenses): Validated[Seq[MtdError], Unit] = {
-    import expenses._
+    import expenses.*
 
     val valuesWithPaths = List(
       (premisesRunningCosts, "/expenses/premisesRunningCosts"),

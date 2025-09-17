@@ -564,7 +564,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             bodyWith(entryWith("AFG", validStructuredBuildingAllowance.removeProperty("/building/postcode"))),
             "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode"
           )
-        ).foreach((testRuleIncorrectOrEmptyBodyWith _).tupled)
+        ).foreach((testRuleIncorrectOrEmptyBodyWith).tupled)
       }
 
       "passed a request body with empty fields except for additional (non-schema) properties" in new SetupConfig {
@@ -617,7 +617,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               bodyWith(entryWith("AFG", validStructuredBuildingAllowance.update("/firstYear/qualifyingAmountExpenditure", badValue))),
               "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure")
-          ).foreach((testValueFormatErrorWith _).tupled)
+          ).foreach((testValueFormatErrorWith).tupled)
         }
 
         "propertyIncomeAllowance allowances is invalid" when {
@@ -629,7 +629,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", badValue)),
               "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
-          ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
+          ).foreach(p => (testForPropertyIncomeAllowance).tupled(p))
         }
 
         "propertyIncomeAllowance allowances is too large" when {
@@ -642,7 +642,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", bigValue)),
               "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
-          ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
+          ).foreach(p => (testForPropertyIncomeAllowance).tupled(p))
         }
 
         "passed a request body with empty fields except for additional (non-schema) properties" in new SetupConfig {
@@ -676,7 +676,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         (
           bodyWith(entry, entryWith("ZWE", validStructuredBuildingAllowance.update("/building/name", badStringValue))),
           "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/name")
-      ).foreach(p => (testStringFormatErrorWith _).tupled(p))
+      ).foreach(p => (testStringFormatErrorWith).tupled(p))
     }
 
     "passed a request body with a field containing an invalid date format" when {

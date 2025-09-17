@@ -28,6 +28,6 @@ object Def1_Retrieve_UkNonFhlProperty {
   implicit val reads: Reads[Def1_Retrieve_UkNonFhlProperty] = (
     (__ \ "ukOtherPropertyAnnualAdjustments").readNullable[Def1_Retrieve_UkNonFhlPropertyAdjustments] and
       (__ \ "ukOtherPropertyAnnualAllowances").readNullable[Def1_Retrieve_UkNonFhlPropertyAllowances]
-  )(Def1_Retrieve_UkNonFhlProperty.apply _)
+  )(Def1_Retrieve_UkNonFhlProperty.apply)
 
 }

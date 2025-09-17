@@ -34,6 +34,6 @@ object RetrieveForeignFhlEeaAllowances {
       (JsPath \ "electricChargePointAllowance").readNullable[BigDecimal] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").readNullable[BigDecimal]
-  )(RetrieveForeignFhlEeaAllowances.apply _)
+  )(RetrieveForeignFhlEeaAllowances.apply)
 
 }

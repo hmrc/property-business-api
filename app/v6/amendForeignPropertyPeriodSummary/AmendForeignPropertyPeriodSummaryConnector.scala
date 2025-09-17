@@ -37,7 +37,7 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient
 
     request match {
       case def1: Def1_AmendForeignPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
             IfsUri[Unit](
@@ -48,7 +48,7 @@ class AmendForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClient
               s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
         put(def1.body, downstreamUri)
       case def2: Def2_AmendForeignPropertyPeriodSummaryRequestData =>
-        import def2._
+        import def2.*
         val downstreamUri = IfsUri[Unit](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId")
         put(def2.body, downstreamUri)

@@ -45,7 +45,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (
 
     request match {
       case def1: Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
 
         val downstreamUri =
           IfsUri[Unit](

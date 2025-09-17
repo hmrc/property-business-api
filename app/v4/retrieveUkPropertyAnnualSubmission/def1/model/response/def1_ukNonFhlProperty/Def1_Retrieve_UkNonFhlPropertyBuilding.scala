@@ -28,6 +28,6 @@ object Def1_Retrieve_UkNonFhlPropertyBuilding {
     (__ \ "name").readNullable[String] and
       (__ \ "number").readNullable[String] and
       (__ \ "postCode").read[String]
-  )(Def1_Retrieve_UkNonFhlPropertyBuilding.apply _)
+  )(Def1_Retrieve_UkNonFhlPropertyBuilding.apply)
 
 }

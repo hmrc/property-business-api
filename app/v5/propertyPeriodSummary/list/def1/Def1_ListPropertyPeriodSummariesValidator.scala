@@ -41,6 +41,6 @@ class Def1_ListPropertyPeriodSummariesValidator @Inject() (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(ListPropertyPeriodSummariesRequestData)
+    ).mapN(ListPropertyPeriodSummariesRequestData.apply)
 
 }

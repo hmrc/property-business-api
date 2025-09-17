@@ -23,9 +23,9 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult, Result}
 import v6.retrieveForeignPropertyPeriodSummary.model.request.*
 import v6.retrieveForeignPropertyPeriodSummary.model.response.*
+import v6.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +41,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
 
     request match {
       case def1: Def1_RetrieveForeignPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (

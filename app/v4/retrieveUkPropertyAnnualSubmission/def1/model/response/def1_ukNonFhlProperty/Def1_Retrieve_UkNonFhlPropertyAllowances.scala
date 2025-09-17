@@ -47,6 +47,6 @@ object Def1_Retrieve_UkNonFhlPropertyAllowances {
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
-  )(Def1_Retrieve_UkNonFhlPropertyAllowances.apply _)
+  )(Def1_Retrieve_UkNonFhlPropertyAllowances.apply)
 
 }

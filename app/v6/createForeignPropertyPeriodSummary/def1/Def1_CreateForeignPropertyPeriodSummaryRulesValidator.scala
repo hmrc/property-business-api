@@ -16,14 +16,14 @@
 
 package v6.createForeignPropertyPeriodSummary.def1
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.*
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.{
   Def1_Create_CreateForeignFhlEea,
   Def1_Create_CreateForeignFhlEeaExpenses
@@ -40,7 +40,7 @@ object Def1_CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValida
 
   def validateBusinessRules(
       parsed: Def1_CreateForeignPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def1_CreateForeignPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       ResolveFromAndToDates((fromDate, toDate)),
@@ -50,7 +50,7 @@ object Def1_CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValida
   }
 
   private def validateForeignFhlEea(foreignFhlEea: Def1_Create_CreateForeignFhlEea): Validated[Seq[MtdError], Unit] = {
-    import foreignFhlEea._
+    import foreignFhlEea.*
 
     val validatedConsolidatedExpenses = expenses match {
       case Some(Def1_Create_CreateForeignFhlEeaExpenses(None, None, None, None, None, None, None, Some(_))) => valid
@@ -104,7 +104,7 @@ object Def1_CreateForeignPropertyPeriodSummaryRulesValidator extends RulesValida
   }
 
   private def validateForeignNonFhlPropertyEntry(entry: Def1_Create_CreateForeignNonFhlPropertyEntry, index: Int): Validated[Seq[MtdError], Unit] = {
-    import entry._
+    import entry.*
     val valuesWithPaths = List(
       (income.flatMap(_.rentIncome.flatMap(_.rentAmount)), s"/foreignNonFhlProperty/$index/income/rentIncome/rentAmount"),
       (income.flatMap(_.premiumsOfLeaseGrant), s"/foreignNonFhlProperty/$index/income/premiumsOfLeaseGrant"),

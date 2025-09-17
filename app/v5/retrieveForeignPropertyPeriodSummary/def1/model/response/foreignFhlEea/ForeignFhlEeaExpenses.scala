@@ -40,6 +40,6 @@ object ForeignFhlEeaExpenses {
       (JsPath \ "travelCosts").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-  )(ForeignFhlEeaExpenses.apply _)
+  )(ForeignFhlEeaExpenses.apply)
 
 }

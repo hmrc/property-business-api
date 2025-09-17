@@ -16,9 +16,9 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def1.model.response
 
-import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Json, OWrites, Reads, __}
+import shared.models.domain.Timestamp
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty.RetrieveUkFhlProperty
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.RetrieveUkProperty
 import v6.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
@@ -40,6 +40,6 @@ object Def1_RetrieveUkPropertyAnnualSubmissionResponse {
     (__ \ "submittedOn").read[Timestamp] and
       (__ \ "ukFhlProperty").readNullable[RetrieveUkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[RetrieveUkProperty]
-  )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply _)
+  )(Def1_RetrieveUkPropertyAnnualSubmissionResponse.apply)
 
 }

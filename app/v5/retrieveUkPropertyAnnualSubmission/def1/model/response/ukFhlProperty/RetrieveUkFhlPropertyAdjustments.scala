@@ -38,6 +38,6 @@ object RetrieveUkFhlPropertyAdjustments {
       (__ \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (__ \ "nonResidentLandlord").read[Boolean] and
       (__ \ "ukFhlRentARoom").readNullable[RetrieveUkFhlPropertyRentARoom]
-  )(RetrieveUkFhlPropertyAdjustments.apply _)
+  )(RetrieveUkFhlPropertyAdjustments.apply)
 
 }

@@ -16,9 +16,9 @@
 
 package v6.retrieveUkPropertyPeriodSummary.model.response
 
-import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Json, OWrites, Reads, __}
+import shared.models.domain.Timestamp
 import v6.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
 import v6.retrieveUkPropertyPeriodSummary.def2.model.response.{Def2_Retrieve_UkFhlProperty, Def2_Retrieve_UkNonFhlProperty}
 
@@ -53,7 +53,7 @@ object Def1_RetrieveUkPropertyPeriodSummaryResponse {
 //      (__ \ "periodCreationDate").readNullable[String] and // To be reinstated, see MTDSA-15575
       (__ \ "ukFhlProperty").readNullable[Def1_Retrieve_UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[Def1_Retrieve_UkNonFhlProperty]
-  )(Def1_RetrieveUkPropertyPeriodSummaryResponse.apply _)
+  )(Def1_RetrieveUkPropertyPeriodSummaryResponse.apply)
 
 }
 
@@ -76,6 +76,6 @@ object Def2_RetrieveUkPropertyPeriodSummaryResponse {
       //      (__ \ "periodCreationDate").readNullable[String] and // To be reinstated, see MTDSA-15575
       (__ \ "ukFhlProperty").readNullable[Def2_Retrieve_UkFhlProperty] and
       (__ \ "ukOtherProperty").readNullable[Def2_Retrieve_UkNonFhlProperty]
-  )(Def2_RetrieveUkPropertyPeriodSummaryResponse.apply _)
+  )(Def2_RetrieveUkPropertyPeriodSummaryResponse.apply)
 
 }

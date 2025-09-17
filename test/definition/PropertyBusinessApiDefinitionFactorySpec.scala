@@ -21,7 +21,6 @@ import shared.config.Deprecation.NotDeprecated
 import shared.config.MockSharedAppConfig
 import shared.definition.APIStatus.BETA
 import shared.definition._
-import shared.mocks.MockHttpClient
 import shared.routing._
 import shared.utils.UnitSpec
 

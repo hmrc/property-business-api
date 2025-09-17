@@ -37,7 +37,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: H
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    import request.*
 
     implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 

@@ -23,9 +23,8 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveForeignPropertyCumulativeSummary.model.{Result, ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.*
-import v5.retrieveForeignPropertyCumulativeSummary.model.response.*
+import v5.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,8 +38,8 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
 
-    import request._
-    import schema._
+    import request.*
+    import schema.*
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
 

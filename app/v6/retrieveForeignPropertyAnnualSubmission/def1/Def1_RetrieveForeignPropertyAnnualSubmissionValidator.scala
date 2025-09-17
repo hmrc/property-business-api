@@ -39,6 +39,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: Str
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData.apply)
 
 }

@@ -43,7 +43,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, busin
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
   }
 
 }

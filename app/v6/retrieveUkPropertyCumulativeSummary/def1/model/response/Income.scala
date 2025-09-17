@@ -36,6 +36,6 @@ object Income {
       (JsPath \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "otherIncome").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[RentARoomIncome]
-  )(Income.apply _)
+  )(Income.apply)
 
 }

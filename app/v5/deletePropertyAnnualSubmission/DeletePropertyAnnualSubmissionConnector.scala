@@ -37,7 +37,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2,
 
     request match {
       case def1: Def1_DeletePropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (

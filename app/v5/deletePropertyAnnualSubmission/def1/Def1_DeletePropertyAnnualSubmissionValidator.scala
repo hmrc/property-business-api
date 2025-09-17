@@ -38,6 +38,6 @@ class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, busi
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData.apply)
 
 }

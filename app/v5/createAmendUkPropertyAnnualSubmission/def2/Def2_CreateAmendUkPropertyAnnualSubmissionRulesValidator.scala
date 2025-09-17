@@ -16,13 +16,13 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import shared.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors.*
 import v5.createAmendUkPropertyAnnualSubmission.def2.model.request.{
   Allowances,
   Def2_CreateAmendUkPropertyAnnualSubmissionRequestData,
@@ -45,14 +45,14 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
 
   def validateBusinessRules(parsed: Def2_CreateAmendUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     combine(
       validateUkProperty(ukProperty)
     ).onSuccess(parsed)
   }
 
   private def validateUkProperty(ukProperty: UkProperty): Validated[Seq[MtdError], Unit] = {
-    import ukProperty._
+    import ukProperty.*
 
     val fieldsWithPaths = List(
       (adjustments.flatMap(_.balancingCharge), "/ukProperty/adjustments/balancingCharge"),
@@ -112,7 +112,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
   private def validateBuildingAllowance(buildingAllowance: StructuredBuildingAllowance,
                                         index: Int,
                                         enhanced: Boolean): Validated[Seq[MtdError], Unit] = {
-    import buildingAllowance._
+    import buildingAllowance.*
 
     val buildingType = if (enhanced) "enhancedStructuredBuildingAllowance" else "structuredBuildingAllowance"
 

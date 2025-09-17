@@ -16,7 +16,7 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.amend.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.UkPropertyExpensesRentARoom
 

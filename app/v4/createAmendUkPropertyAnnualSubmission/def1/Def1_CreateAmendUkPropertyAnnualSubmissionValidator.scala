@@ -43,6 +43,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: Strin
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

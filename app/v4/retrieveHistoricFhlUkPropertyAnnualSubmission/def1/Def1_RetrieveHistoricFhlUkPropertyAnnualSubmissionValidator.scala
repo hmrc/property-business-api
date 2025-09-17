@@ -40,6 +40,6 @@ class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (nin
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData.apply)
 
 }

@@ -44,6 +44,6 @@ object RetrieveUkPropertyAllowances {
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[RetrieveUkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[RetrieveUkPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
-  )(RetrieveUkPropertyAllowances.apply _)
+  )(RetrieveUkPropertyAllowances.apply)
 
 }

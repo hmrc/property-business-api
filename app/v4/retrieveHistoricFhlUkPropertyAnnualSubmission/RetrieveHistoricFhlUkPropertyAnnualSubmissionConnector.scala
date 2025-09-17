@@ -39,7 +39,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http
 
     request match {
       case def1: Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri =
           IfsUri[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse](
             s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/annual-summaries/${taxYear.asDownstream}")

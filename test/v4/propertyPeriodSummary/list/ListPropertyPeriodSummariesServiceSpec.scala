@@ -79,7 +79,7 @@ class ListPropertyPeriodSummariesServiceSpec extends UnitSpec {
         "NOT_FOUND"               -> NotFoundError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

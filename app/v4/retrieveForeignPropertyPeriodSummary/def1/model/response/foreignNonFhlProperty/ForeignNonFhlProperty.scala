@@ -28,6 +28,6 @@ object ForeignNonFhlProperty {
     (JsPath \ "countryCode").read[String] and
       (JsPath \ "income").readNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").readNullable[ForeignNonFhlPropertyExpenses]
-  )(ForeignNonFhlProperty.apply _)
+  )(ForeignNonFhlProperty.apply)
 
 }

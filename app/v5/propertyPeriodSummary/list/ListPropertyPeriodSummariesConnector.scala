@@ -39,7 +39,7 @@ class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClientV2, va
       correlationId: String
   ): Future[DownstreamOutcome[ListPropertyPeriodSummariesResponse]] = {
 
-    import request._
+    import request.*
 
     val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
       (

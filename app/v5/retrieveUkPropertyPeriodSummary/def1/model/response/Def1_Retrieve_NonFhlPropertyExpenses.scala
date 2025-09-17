@@ -46,6 +46,6 @@ object Def1_Retrieve_NonFhlPropertyExpenses {
       (JsPath \ "residentialFinancialCostsCarriedForward").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[Def1_Retrieve_RentARoomExpenses] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-  )(Def1_Retrieve_NonFhlPropertyExpenses.apply _)
+  )(Def1_Retrieve_NonFhlPropertyExpenses.apply)
 
 }

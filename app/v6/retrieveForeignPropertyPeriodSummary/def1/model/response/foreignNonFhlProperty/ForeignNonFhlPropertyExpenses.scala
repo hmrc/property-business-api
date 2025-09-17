@@ -44,6 +44,6 @@ object ForeignNonFhlPropertyExpenses {
       (JsPath \ "broughtFwdResidentialFinancialCost").readNullable[BigDecimal] and
       (JsPath \ "other").readNullable[BigDecimal] and
       (JsPath \ "consolidatedExpense").readNullable[BigDecimal]
-  )(ForeignNonFhlPropertyExpenses.apply _)
+  )(ForeignNonFhlPropertyExpenses.apply)
 
 }

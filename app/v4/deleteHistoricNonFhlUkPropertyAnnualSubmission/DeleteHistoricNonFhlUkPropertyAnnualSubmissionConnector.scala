@@ -38,7 +38,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val htt
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    import request.*
 
     val intent        = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("DELETE") else None
     val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.asDownstream}")

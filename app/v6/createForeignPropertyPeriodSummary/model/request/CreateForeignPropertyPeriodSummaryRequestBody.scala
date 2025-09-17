@@ -18,8 +18,8 @@ package v6.createForeignPropertyPeriodSummary.model.request
 
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import shared.utils.EmptinessChecker.field
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.Def1_Create_CreateForeignFhlEea
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.Def1_Create_CreateForeignNonFhlPropertyEntry
 import v6.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea.Def2_Create_CreateForeignFhlEea

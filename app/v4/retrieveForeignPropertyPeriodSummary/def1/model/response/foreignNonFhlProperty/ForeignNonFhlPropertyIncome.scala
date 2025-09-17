@@ -36,6 +36,6 @@ object ForeignNonFhlPropertyIncome {
       (JsPath \ "otherPropertyIncome").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
-  )(ForeignNonFhlPropertyIncome.apply _)
+  )(ForeignNonFhlPropertyIncome.apply)
 
 }

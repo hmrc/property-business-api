@@ -21,7 +21,7 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
-import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}
+import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult}
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
@@ -75,7 +75,7 @@ class RetrieveForeignPropertyCumulativeSummaryServiceSpec extends ServiceSpec wi
           "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
-        errorMap.foreach(args => (serviceError _).tupled(args))
+        errorMap.foreach(args => (serviceError).tupled(args))
       }
     }
 

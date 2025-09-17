@@ -39,6 +39,6 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, 
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_RetrieveUkPropertyAnnualSubmissionRequestData.apply)
 
 }

@@ -16,10 +16,10 @@
 
 package v5.deletePropertyAnnualSubmission
 
+import cats.implicits.*
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits.*
 import v5.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

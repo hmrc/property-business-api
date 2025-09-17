@@ -36,6 +36,6 @@ object AnnualAllowances {
       (JsPath \ "businessPremisesRenovationAllowance").readNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomGoods").readNullable[BigDecimal] and
       (JsPath \ "propertyIncomeAllowance").readNullable[BigDecimal]
-  )(AnnualAllowances.apply _)
+  )(AnnualAllowances.apply)
 
 }

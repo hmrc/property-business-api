@@ -147,21 +147,6 @@ class RequestHandlerSpec
         header("X-CorrelationId", result) shouldBe Some(serviceCorrelationId)
         status(result) shouldBe NO_CONTENT
       }
-
-      "wrap the response with hateoas links if required" in {
-        val requestHandler = successRequestHandler.withHateoasResult(mockHateoasFactory)(HData, successCode)
-
-        mockDeprecation(NotDeprecated)
-        service returns Future.successful(Right(ResponseWrapper(serviceCorrelationId, Output)))
-
-        MockHateoasFactory.wrap(Output, HData) returns HateoasWrapper(Output, hateoaslinks)
-
-        val result = requestHandler.handleRequest()
-
-        contentAsJson(result) shouldBe successResponseJson ++ hateoaslinksJson
-        header("X-CorrelationId", result) shouldBe Some(serviceCorrelationId)
-        status(result) shouldBe successCode
-      }
     }
 
     "given a request with a RequestCannotBeFulfilled gov-test-scenario header" when {

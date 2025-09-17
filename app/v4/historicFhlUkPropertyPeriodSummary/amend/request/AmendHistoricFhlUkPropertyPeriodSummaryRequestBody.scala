@@ -16,7 +16,7 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.amend.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.model.request.*
 

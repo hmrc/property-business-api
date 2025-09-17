@@ -28,6 +28,6 @@ object RetrieveUkPropertyBuilding {
     (__ \ "name").readNullable[String] and
       (__ \ "number").readNullable[String] and
       (__ \ "postCode").read[String]
-  )(RetrieveUkPropertyBuilding.apply _)
+  )(RetrieveUkPropertyBuilding.apply)
 
 }

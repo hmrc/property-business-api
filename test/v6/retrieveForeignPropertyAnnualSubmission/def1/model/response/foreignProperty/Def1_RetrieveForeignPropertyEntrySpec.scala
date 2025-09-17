@@ -18,7 +18,6 @@ package v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignPr
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty._
 
 class Def1_RetrieveForeignPropertyEntrySpec extends UnitSpec {
 

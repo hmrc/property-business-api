@@ -16,9 +16,6 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import shared.controllers.RequestContext
-import shared.models.errors.*
-import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
 import common.models.errors.{
   RuleDuplicateCountryCodeError,
@@ -26,6 +23,9 @@ import common.models.errors.{
   RulePropertyIncomeAllowanceError,
   RuleTypeOfBusinessIncorrectError
 }
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.services.{BaseService, ServiceOutcome}
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

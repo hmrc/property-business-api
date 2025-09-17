@@ -80,7 +80,7 @@ class CreateAmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
       }
     }
   }

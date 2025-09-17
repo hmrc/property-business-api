@@ -28,6 +28,6 @@ case object PeriodIncome {
     (JsPath \ "rentIncome" \ "amount").readNullable[BigDecimal] and
       (JsPath \ "rentIncome" \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").readNullable[RentARoomIncome]
-  )(PeriodIncome.apply _)
+  )(PeriodIncome.apply)
 
 }

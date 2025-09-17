@@ -16,15 +16,15 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary
 
+import cats.data.EitherT
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
-import cats.data.EitherT
-import common.models.errors.RuleTypeOfBusinessIncorrectError
-import v5.retrieveForeignPropertyCumulativeSummary.model.{Result, ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 import v5.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
+import v5.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

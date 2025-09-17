@@ -16,7 +16,7 @@
 
 package v6.createAmendUkPropertyAnnualSubmission.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.CreateAmendUkFhlProperty
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkProperty

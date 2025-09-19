@@ -17,14 +17,16 @@
 package v4.createAmendForeignPropertyAnnualSubmission.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors._
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services._
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v4.models.request.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionFixture
 
@@ -463,7 +465,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           BAD_REQUEST,
           RuleBuildingNameNumberError.copy(paths = Some(List("/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "downstream service error" when {
@@ -504,7 +506,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

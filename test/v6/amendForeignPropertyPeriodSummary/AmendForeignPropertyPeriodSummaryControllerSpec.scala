@@ -107,7 +107,7 @@ class AmendForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new AmendForeignPropertyPeriodSummaryController(
+    protected val controller: AmendForeignPropertyPeriodSummaryController = new AmendForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendForeignPropertyPeriodSummaryValidatorFactory,

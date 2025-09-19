@@ -22,7 +22,7 @@ import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
+import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.RetrieveForeignFhlEeaEntry
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.RetrieveForeignPropertyEntry
@@ -34,12 +34,12 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val countryCode = "FRA"
 
-  private val foreignFhlEea = RetrieveForeignFhlEeaEntry(None, None)
+  private val foreignFhlEea         = RetrieveForeignFhlEeaEntry(None, None)
   private val foreignNonFhlProperty = RetrieveForeignPropertyEntry(countryCode, None, None)
 
   def responseWith(foreignFhlEea: Option[RetrieveForeignFhlEeaEntry],
@@ -56,7 +56,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         stubHttpResponse(outcome)
 
-        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
@@ -70,7 +70,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         stubHttpResponse(outcome)
 
-        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
@@ -84,7 +84,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         stubHttpResponse(outcome)
 
-        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
@@ -96,7 +96,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         stubHttpResponse(outcome)
 
-        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
       }
     }
@@ -108,7 +108,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         stubHttpResponse(outcome)
 
-        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe
           Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
@@ -116,7 +116,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
     "request is for a pre-TYS tax year" must {
       "use the TYS URL" in new IfsTest with Test {
-        lazy val taxYear: String = "2019-20"
+        def taxYear: String = "2019-20"
 
         val response: RetrieveForeignPropertyAnnualSubmissionResponse =
           responseWith(foreignFhlEea = Some(foreignFhlEea), foreignNonFhlProperty = None)
@@ -128,21 +128,21 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
           parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> "2019-20")
         ).returns(Future.successful(outcome))
 
-        val result: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionConnector.Result] = await(connector.retrieveForeignProperty(request))
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector: RetrieveForeignPropertyAnnualSubmissionConnector = new RetrieveForeignPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig
     )
 
-    protected val taxYear: String
+    protected def taxYear: String
 
     protected val request: RetrieveForeignPropertyAnnualSubmissionRequestData =
       Def1_RetrieveForeignPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
@@ -152,12 +152,12 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
   trait StandardTest extends IfsTest with Test {
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse])
-    : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
+        : CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyAnnualSubmissionResponse]]]#Derived =
       willGet(
         url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
       ).returns(Future.successful(outcome))
 
-    lazy val taxYear: String = "2023-24"
+    def taxYear: String = "2023-24"
   }
 
 }

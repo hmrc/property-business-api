@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,9 @@ trait MockSharedAppConfig extends TestSuite with MockFactory {
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler0[String] = (() => mockSharedAppConfig.mtdIdBaseUrl: String).expects()
 
-    def desDownstreamConfig: CallHandler0[DownstreamConfig]    = (() => mockSharedAppConfig.desDownstreamConfig: DownstreamConfig).expects()
-    def ifsDownstreamConfig: CallHandler0[DownstreamConfig]    = (() => mockSharedAppConfig.ifsDownstreamConfig: DownstreamConfig).expects()
+    def desDownstreamConfig: CallHandler0[DownstreamConfig] = (() => mockSharedAppConfig.desDownstreamConfig: DownstreamConfig).expects()
+    def ifsDownstreamConfig: CallHandler0[DownstreamConfig] = (() => mockSharedAppConfig.ifsDownstreamConfig: DownstreamConfig).expects()
+
     def hipDownstreamConfig: CallHandler[BasicAuthDownstreamConfig] =
       (() => mockSharedAppConfig.hipDownstreamConfig: BasicAuthDownstreamConfig).expects()
 

@@ -22,7 +22,7 @@ import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 

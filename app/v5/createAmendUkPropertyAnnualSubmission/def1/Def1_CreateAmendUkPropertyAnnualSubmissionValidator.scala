@@ -21,7 +21,7 @@ import cats.implicits.catsSyntaxTuple4Semigroupal
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.{
@@ -47,6 +47,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: Strin
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

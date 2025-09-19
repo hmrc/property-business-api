@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Adjustments(balancingCharge: Option[BigDecimal],
@@ -34,6 +34,6 @@ object Adjustments {
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukOtherRentARoom").writeNullable[RentARoom]
-  )(unlift(Adjustments.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

@@ -20,7 +20,7 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 import v4.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future
@@ -46,7 +46,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector = new CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,

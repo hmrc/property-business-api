@@ -16,7 +16,7 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def2_Create_Amend_ForeignAllowances(annualInvestmentAllowance: Option[BigDecimal],
@@ -36,6 +36,6 @@ object Def2_Create_Amend_ForeignAllowances {
       (JsPath \ "zeroEmissionsCarAllowance").writeNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[Def2_Create_Amend_StructuredBuildingAllowance]]
-  )(unlift(Def2_Create_Amend_ForeignAllowances.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

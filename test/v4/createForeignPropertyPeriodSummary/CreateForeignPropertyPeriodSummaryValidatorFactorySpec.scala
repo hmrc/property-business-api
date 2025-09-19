@@ -17,7 +17,7 @@
 package v4.createForeignPropertyPeriodSummary
 
 import config.MockPropertyBusinessConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.controllers.validators.Validator
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec

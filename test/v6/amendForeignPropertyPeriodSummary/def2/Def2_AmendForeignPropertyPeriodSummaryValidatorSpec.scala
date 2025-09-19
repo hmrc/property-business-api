@@ -426,7 +426,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
           (bodyWith(entry.removeProperty("/countryCode")), "/foreignNonFhlProperty/0/countryCode"),
           (bodyWith(entry.removeProperty("/income/foreignTaxCreditRelief")), "/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"),
           (bodyWith(entry.removeProperty("/income").removeProperty("/expenses")), "/foreignNonFhlProperty/0")
-        ).foreach((testRuleIncorrectOrEmptyBodyWith _).tupled)
+        ).foreach((testRuleIncorrectOrEmptyBodyWith).tupled)
 
       }
 
@@ -456,7 +456,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
           (
             bodyWith(entry.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
             "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost")
-        ).foreach((testValueFormatErrorWith _).tupled)
+        ).foreach((testValueFormatErrorWith).tupled)
 
         List(
           (bodyWith(entry.update("/expenses/premisesRunningCosts", badValue)), "/foreignNonFhlProperty/0/expenses/premisesRunningCosts"),
@@ -466,7 +466,7 @@ class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
           (bodyWith(entry.update("/expenses/travelCosts", badValue)), "/foreignNonFhlProperty/0/expenses/travelCosts"),
           (bodyWith(entry.update("/expenses/costOfServices", badValue)), "/foreignNonFhlProperty/0/expenses/costOfServices"),
           (bodyWith(entry.update("/expenses/other", badValue)), "/foreignNonFhlProperty/0/expenses/other")
-        ).foreach((testValueFormatErrorWithNegativeValue _).tupled)
+        ).foreach((testValueFormatErrorWithNegativeValue).tupled)
       }
 
       "passed a request body with invalid consolidated expenses" when {

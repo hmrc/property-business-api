@@ -16,26 +16,18 @@
 
 package v4.createForeignPropertyPeriodSummary.def1
 
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleBothExpensesSuppliedError,
-  RuleDuplicateCountryCodeError,
-  RuleDuplicateSubmissionError,
-  RuleMisalignedPeriodError,
-  RuleNotContiguousPeriodError,
-  RuleOverlappingPeriodError,
-  RuleToDateBeforeFromDateError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
-import play.api.libs.json._
+import play.api.http.Status.*
+import play.api.libs.json.*
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.models.utils.JsonErrorValidators
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import shared.services._
 
 class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
@@ -192,7 +184,7 @@ class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec w
               "AFG",
               List("/foreignNonFhlProperty/0/countryCode", "/foreignNonFhlProperty/1/countryCode")))
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "ifs service error" when {
@@ -241,7 +233,7 @@ class Def1_CreateForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec w
           (UNPROCESSABLE_ENTITY, "BUSINESS_INCOME_PERIOD_RESTRICTION", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

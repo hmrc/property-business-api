@@ -44,7 +44,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: Htt
 
     request match {
       case def1: Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
 
         val downstreamUri = IfsUri[Unit](s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summaries")
 

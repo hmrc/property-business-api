@@ -16,9 +16,9 @@
 
 package v5.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
+import v5.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response.*
 
 sealed trait RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
@@ -41,6 +41,6 @@ object Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse {
 
   implicit val reads: Reads[Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse] =
     ((JsPath \ "annualAdjustments").readNullable[AnnualAdjustments] and
-      (JsPath \ "annualAllowances").readNullable[AnnualAllowances])(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse.apply _)
+      (JsPath \ "annualAllowances").readNullable[AnnualAllowances])(Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse.apply)
 
 }

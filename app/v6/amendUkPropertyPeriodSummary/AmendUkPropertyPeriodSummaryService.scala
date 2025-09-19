@@ -16,11 +16,11 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.services.{BaseService, ServiceOutcome}
 import v6.amendUkPropertyPeriodSummary.model.request.AmendUkPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}

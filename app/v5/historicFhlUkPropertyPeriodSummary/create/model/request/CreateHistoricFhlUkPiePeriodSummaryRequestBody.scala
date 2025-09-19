@@ -16,10 +16,10 @@
 
 package v5.historicFhlUkPropertyPeriodSummary.create.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, OWrites, Reads, __}
-import shapeless.HNil
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 import v5.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 
 sealed trait CreateHistoricFhlUkPiePeriodSummaryRequestBody {
@@ -37,8 +37,10 @@ case class Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody(
 object Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody {
 
   implicit val emptinessChecker: EmptinessChecker[Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody] = EmptinessChecker.use { body =>
-    "income"     -> body.income ::
-      "expenses" -> body.expenses :: HNil
+    List(
+      field("income", body.income),
+      field("expenses", body.expenses)
+    )
   }
 
   implicit val reads: Reads[Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
@@ -46,13 +48,13 @@ object Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody {
       (__ \ "toDate").read[String] and
       (__ \ "income").readNullable[UkFhlPropertyIncome] and
       (__ \ "expenses").readNullable[UkFhlPropertyExpenses]
-  )(Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody.apply _)
+  )(Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody.apply)
 
   implicit val writes: OWrites[Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody] = (
     (JsPath \ "from").write[String] and
       (JsPath \ "to").write[String] and
       (JsPath \ "financials" \ "incomes").writeNullable[UkFhlPropertyIncome] and
       (JsPath \ "financials" \ "deductions").writeNullable[UkFhlPropertyExpenses]
-  )(unlift(Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

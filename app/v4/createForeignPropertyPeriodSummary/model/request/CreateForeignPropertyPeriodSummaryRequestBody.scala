@@ -16,10 +16,10 @@
 
 package v4.createForeignPropertyPeriodSummary.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import shapeless.HNil
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.Def1_Create_CreateForeignFhlEea
 import v4.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.Def1_Create_CreateForeignNonFhlPropertyEntry
 import v4.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea.Def2_Create_CreateForeignFhlEea
@@ -36,8 +36,10 @@ case class Def1_CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
 object Def1_CreateForeignPropertyPeriodSummaryRequestBody {
 
   implicit val emptinessChecker: EmptinessChecker[Def1_CreateForeignPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
-    "foreignFhlEea"           -> body.foreignFhlEea ::
-      "foreignNonFhlProperty" -> body.foreignNonFhlProperty :: HNil
+    List(
+      field("foreignFhlEea", body.foreignFhlEea),
+      field("foreignNonFhlProperty", body.foreignNonFhlProperty)
+    )
   }
 
   implicit val reads: Reads[Def1_CreateForeignPropertyPeriodSummaryRequestBody] = Json.reads[Def1_CreateForeignPropertyPeriodSummaryRequestBody]
@@ -47,7 +49,7 @@ object Def1_CreateForeignPropertyPeriodSummaryRequestBody {
       (JsPath \ "toDate").write[String] and
       (JsPath \ "foreignFhlEea").writeNullable[Def1_Create_CreateForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[Def1_Create_CreateForeignNonFhlPropertyEntry]]
-  )(unlift(Def1_CreateForeignPropertyPeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }
 
@@ -60,8 +62,10 @@ case class Def2_CreateForeignPropertyPeriodSummaryRequestBody(fromDate: String,
 object Def2_CreateForeignPropertyPeriodSummaryRequestBody {
 
   implicit val emptinessChecker: EmptinessChecker[Def2_CreateForeignPropertyPeriodSummaryRequestBody] = EmptinessChecker.use { body =>
-    "foreignFhlEea"           -> body.foreignFhlEea ::
-      "foreignNonFhlProperty" -> body.foreignNonFhlProperty :: HNil
+    List(
+      field("foreignFhlEea", body.foreignFhlEea),
+      field("foreignNonFhlProperty", body.foreignNonFhlProperty)
+    )
   }
 
   implicit val reads: Reads[Def2_CreateForeignPropertyPeriodSummaryRequestBody] = Json.reads[Def2_CreateForeignPropertyPeriodSummaryRequestBody]
@@ -71,6 +75,6 @@ object Def2_CreateForeignPropertyPeriodSummaryRequestBody {
       (JsPath \ "toDate").write[String] and
       (JsPath \ "foreignFhlEea").writeNullable[Def2_Create_CreateForeignFhlEea] and
       (JsPath \ "foreignProperty").writeNullable[Seq[Def2_Create_CreateForeignNonFhlPropertyEntry]]
-  )(unlift(Def2_CreateForeignPropertyPeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

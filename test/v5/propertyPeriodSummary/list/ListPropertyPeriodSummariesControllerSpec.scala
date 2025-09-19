@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v5.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v5.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
@@ -74,7 +74,7 @@ class ListPropertyPeriodSummariesControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new ListPropertyPeriodSummariesController(
+    protected val controller: ListPropertyPeriodSummariesController = new ListPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockListPropertyPeriodSummariesValidatorFactory,

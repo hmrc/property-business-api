@@ -22,7 +22,10 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData, DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
+import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
 
 import scala.concurrent.Future
 
@@ -63,7 +66,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Connec
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     val connector: DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,

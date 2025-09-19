@@ -19,11 +19,11 @@ package v4.createAmendForeignPropertyAnnualSubmission
 import common.models.errors.{RuleDuplicateCountryCodeError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.createAmendForeignPropertyAnnualSubmission.model.request._
+import v4.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -81,7 +81,7 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 
@@ -35,6 +35,6 @@ object CreateAmendUkPropertyAdjustments {
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukOtherRentARoom").writeNullable[CreateAmendUkPropertyAdjustmentsRentARoom]
-  )(unlift(CreateAmendUkPropertyAdjustments.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

@@ -16,9 +16,9 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def2.model.response
 
-import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shared.models.domain.Timestamp
 import v5.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
 // Note: foreignProperty is effectively mandatory.
@@ -40,6 +40,6 @@ object Def2_RetrieveForeignPropertyAnnualSubmissionResponse {
   implicit val reads: Reads[Def2_RetrieveForeignPropertyAnnualSubmissionResponse] = (
     (JsPath \ "submittedOn").read[Timestamp] and
       (JsPath \ "foreignProperty").readNullable[Seq[RetrieveForeignPropertyEntry]]
-  )(Def2_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
+  )(Def2_RetrieveForeignPropertyAnnualSubmissionResponse.apply)
 
 }

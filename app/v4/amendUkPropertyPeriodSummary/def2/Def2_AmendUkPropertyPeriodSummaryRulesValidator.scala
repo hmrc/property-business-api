@@ -16,13 +16,13 @@
 
 package v4.amendUkPropertyPeriodSummary.def2
 
+import cats.data.Validated
+import cats.data.Validated.Invalid
+import cats.implicits.*
+import common.models.errors.RuleBothExpensesSuppliedError
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.ResolveParsedNumber
 import shared.models.errors.MtdError
-import cats.data.Validated
-import cats.data.Validated.Invalid
-import cats.implicits._
-import common.models.errors.RuleBothExpensesSuppliedError
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.{Def2_Amend_UkFhlProperty, Def2_Amend_UkFhlPropertyExpenses}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{Def2_Amend_UkNonFhlProperty, Def2_Amend_UkNonFhlPropertyExpenses}
 import v4.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom
@@ -35,7 +35,7 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
 
   def validateBusinessRules(
       parsed: Def2_AmendUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def2_AmendUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     combine(
       ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid),
       ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)
@@ -43,7 +43,7 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
   }
 
   private def validateUkFhlProperty(ukFhlProperty: Def2_Amend_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukFhlProperty._
+    import ukFhlProperty.*
     val nonNegativeUkFhlProperty = List(
       (income.flatMap(_.periodAmount), "/ukFhlProperty/income/periodAmount"),
       (income.flatMap(_.taxDeducted), "/ukFhlProperty/income/taxDeducted"),
@@ -104,7 +104,7 @@ class Def2_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
   }
 
   private def validateUkNonFhlProperty(ukNonFhlProperty: Def2_Amend_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukNonFhlProperty._
+    import ukNonFhlProperty.*
     val nonNegativeUkNonFhlProperty = List(
       (income.flatMap(_.premiumsOfLeaseGrant), "/ukNonFhlProperty/income/premiumsOfLeaseGrant"),
       (income.flatMap(_.reversePremiums), "/ukNonFhlProperty/income/reversePremiums"),

@@ -18,9 +18,9 @@ package v4.createAmendUkPropertyAnnualSubmission.def1
 
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import config.MockPropertyBusinessConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlProperty.{
@@ -28,7 +28,7 @@ import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukFhlPro
   Def1_Create_Amend_UkFhlPropertyAdjustments,
   Def1_Create_Amend_UkFhlPropertyAllowances
 }
-import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty._
+import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukNonFhlProperty.*
 import v4.createAmendUkPropertyAnnualSubmission.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_Amend_UkPropertyAdjustmentsRentARoom
 import v4.createAmendUkPropertyAnnualSubmission.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,

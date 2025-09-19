@@ -16,7 +16,7 @@
 
 package v5.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Expenses(premisesRunningCosts: Option[BigDecimal],
@@ -44,6 +44,6 @@ object Expenses {
       (JsPath \ "broughtFwdResidentialFinancialCostAmount").writeNullable[BigDecimal] and
       (JsPath \ "otherAmount").writeNullable[BigDecimal] and
       (JsPath \ "consolidatedExpenseAmount").writeNullable[BigDecimal]
-  )(unlift(Expenses.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

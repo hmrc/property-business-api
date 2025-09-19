@@ -16,10 +16,10 @@
 
 package v5.historicNonFhlUkPropertyPeriodSummary.list.def1
 
+import cats.data.Validated
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.ResolveNino
 import shared.models.errors.MtdError
-import cats.data.Validated
 import v5.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
   Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData,
   ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
@@ -29,6 +29,6 @@ class Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator(nino: String)
     extends Validator[ListHistoricNonFhlUkPropertyPeriodSummariesRequestData] {
 
   def validate: Validated[Seq[MtdError], ListHistoricNonFhlUkPropertyPeriodSummariesRequestData] =
-    ResolveNino(nino).map(Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData)
+    ResolveNino(nino).map(Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData.apply)
 
 }

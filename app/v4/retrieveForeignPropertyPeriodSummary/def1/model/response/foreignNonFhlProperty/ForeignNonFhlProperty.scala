@@ -16,7 +16,7 @@
 
 package v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class ForeignNonFhlProperty(countryCode: String, income: Option[ForeignNonFhlPropertyIncome], expenses: Option[ForeignNonFhlPropertyExpenses])
@@ -28,6 +28,6 @@ object ForeignNonFhlProperty {
     (JsPath \ "countryCode").read[String] and
       (JsPath \ "income").readNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").readNullable[ForeignNonFhlPropertyExpenses]
-  )(ForeignNonFhlProperty.apply _)
+  )(ForeignNonFhlProperty.apply)
 
 }

@@ -16,7 +16,7 @@
 
 package v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class RetrieveForeignPropertyAllowances(annualInvestmentAllowance: Option[BigDecimal],
@@ -40,6 +40,6 @@ object RetrieveForeignPropertyAllowances {
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal] and
       (JsPath \ "propertyAllowance").readNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[RetrieveStructuredBuildingAllowance]]
-  )(RetrieveForeignPropertyAllowances.apply _)
+  )(RetrieveForeignPropertyAllowances.apply)
 
 }

@@ -20,19 +20,19 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.createUkPropertyPeriodSummary.model.request._
+import v4.createUkPropertyPeriodSummary.model.request.*
 import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   "connector" must {
     "post a body and return 200 with submissionId" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2022-23")
+      def taxYear: TaxYear = TaxYear.fromMtd("2022-23")
 
       willPost(
         url = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId",
@@ -44,7 +44,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "post a body and return 200 with submissionId for TYS" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+      def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
       willPost(
         url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
@@ -56,7 +56,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "post a body and return 200 with submissionId for TY24-25" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+      def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
 
       willPost(
         url = url"$baseUrl/income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId",
@@ -69,9 +69,9 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
-    protected val taxYear: TaxYear
+    protected def taxYear: TaxYear
 
     protected val requestBodyDef1: Def1_CreateUkPropertyPeriodSummaryRequestBody =
       Def1_CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)

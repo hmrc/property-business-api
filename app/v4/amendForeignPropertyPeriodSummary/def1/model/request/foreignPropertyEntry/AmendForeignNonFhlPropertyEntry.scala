@@ -16,10 +16,10 @@
 
 package v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
-import shapeless.HNil
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 
 case class AmendForeignNonFhlPropertyEntry(
     countryCode: String,
@@ -30,8 +30,10 @@ case class AmendForeignNonFhlPropertyEntry(
 object AmendForeignNonFhlPropertyEntry {
 
   implicit val emptinessChecker: EmptinessChecker[AmendForeignNonFhlPropertyEntry] = EmptinessChecker.use { body =>
-    "income"     -> body.income ::
-      "expenses" -> body.expenses :: HNil
+    List(
+      field("income", body.income),
+      field("expenses", body.expenses)
+    )
   }
 
   implicit val reads: Reads[AmendForeignNonFhlPropertyEntry] = Json.reads[AmendForeignNonFhlPropertyEntry]
@@ -40,6 +42,6 @@ object AmendForeignNonFhlPropertyEntry {
     (JsPath \ "countryCode").write[String] and
       (JsPath \ "income").writeNullable[ForeignNonFhlPropertyIncome] and
       (JsPath \ "expenses").writeNullable[AmendForeignNonFhlPropertyExpenses]
-  )(unlift(AmendForeignNonFhlPropertyEntry.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

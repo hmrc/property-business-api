@@ -19,12 +19,14 @@ package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services._
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
@@ -217,7 +219,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionISpec extends Inte
         ("AA123456A", "2015-16", requestJson, BAD_REQUEST, RuleHistoricTaxYearNotSupportedError),
         ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "downstream service error" when {
@@ -250,7 +252,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionISpec extends Inte
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

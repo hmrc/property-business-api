@@ -28,14 +28,14 @@ import scala.concurrent.Future
 
 class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
-  private val businessId = BusinessId("XAIS12345678910")
+  private val nino          = Nino("AA123456A")
+  private val businessId    = BusinessId("XAIS12345678910")
   private val preTysTaxYear = "2022-23"
-  private val tysTaxYear = "2023-24"
+  private val tysTaxYear    = "2023-24"
 
   "connector" must {
     "send a request and return a body for a non-tys tax year" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd(preTysTaxYear)
+      def taxYear: TaxYear = TaxYear.fromMtd(preTysTaxYear)
 
       val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -49,7 +49,7 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
     }
 
     "send a request and return a body for a tys tax year" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
+      def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -63,9 +63,9 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
-    protected val taxYear: TaxYear
+    protected def taxYear: TaxYear
 
     protected val connector: ListPropertyPeriodSummariesConnector = new ListPropertyPeriodSummariesConnector(
       http = mockHttpClient,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,7 +109,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     private val token       = s"$name-token"
     private val environment = s"$name-environment"
 
-    protected final lazy val requiredHeaders: Seq[(String, String)] = List(
+    protected val requiredHeaders: Seq[(String, String)] = List(
       "Authorization"        -> s"Bearer $token",
       "Environment"          -> environment,
       "User-Agent"           -> "this-api",
@@ -141,7 +141,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
     private val environment = "hip-environment"
 
-    protected final lazy val requiredHeaders: Seq[(String, String)] = List(
+    protected val requiredHeaders: Seq[(String, String)] = List(
       "Authorization"        -> s"Basic $token",
       "Environment"          -> environment,
       "User-Agent"           -> "this-api",

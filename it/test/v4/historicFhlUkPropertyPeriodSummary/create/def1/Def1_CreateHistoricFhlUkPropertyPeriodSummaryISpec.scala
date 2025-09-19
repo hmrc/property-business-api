@@ -16,25 +16,18 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.create.def1
 
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleBothExpensesSuppliedError,
-  RuleDuplicateSubmissionError,
-  RuleHistoricTaxYearNotSupportedError,
-  RuleMisalignedPeriodError,
-  RuleNotContiguousPeriodError,
-  RuleOverlappingPeriodError,
-  RuleToDateBeforeFromDateError
-}
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.models.utils.JsonErrorValidators
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import shared.services._
 
 class Def1_CreateHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
@@ -235,7 +228,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBase
         ("AA123456A", invalidToDateRequestBodyJson, BAD_REQUEST, ToDateFormatError),
         ("AA123456A", validRequestJson.update("/fromDate", JsString("2099-01-01")), BAD_REQUEST, RuleToDateBeforeFromDateError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "map each downstream service error to an MTD error" when {
@@ -271,7 +264,7 @@ class Def1_CreateHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBase
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

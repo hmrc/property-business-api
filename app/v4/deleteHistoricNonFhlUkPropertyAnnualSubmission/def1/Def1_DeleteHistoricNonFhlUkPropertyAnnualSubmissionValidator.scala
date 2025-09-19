@@ -24,7 +24,7 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request._
+import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
@@ -40,6 +40,6 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (ni
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData.apply)
 
 }

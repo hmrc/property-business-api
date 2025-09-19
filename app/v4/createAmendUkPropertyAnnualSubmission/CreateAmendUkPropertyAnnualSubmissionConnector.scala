@@ -23,25 +23,28 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, 
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v4.createAmendUkPropertyAnnualSubmission.model.request.{CreateAmendUkPropertyAnnualSubmissionRequestData, Def1_CreateAmendUkPropertyAnnualSubmissionRequestData}
+import v4.createAmendUkPropertyAnnualSubmission.model.request.{
+  CreateAmendUkPropertyAnnualSubmissionRequestData,
+  Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
+}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
-  extends BaseDownstreamConnector {
+class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def createAmendUkPropertyAnnualSubmission(request: CreateAmendUkPropertyAnnualSubmissionRequestData)(implicit
-                                                                                                       hc: HeaderCarrier,
-                                                                                                       ec: ExecutionContext,
-                                                                                                       correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(NO_CONTENT)
 
     request match {
       case def1: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
             IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")

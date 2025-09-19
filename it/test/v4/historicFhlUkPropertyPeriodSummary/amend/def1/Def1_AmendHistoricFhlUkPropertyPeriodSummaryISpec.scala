@@ -19,13 +19,15 @@ package v4.historicFhlUkPropertyPeriodSummary.amend.def1
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
-import play.api.libs.json.{Format, JsNumber, JsObject, JsValue, Json}
+import play.api.http.Status.*
+import play.api.libs.json.*
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
-import shared.services._
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody
 
@@ -188,7 +190,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseS
         ("AA123456A", "BAD_PERIOD_ID", requestBodyJson, BAD_REQUEST, PeriodIdFormatError)
       )
 
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return ifs service error" when {
@@ -222,7 +224,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryISpec extends IntegrationBaseS
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

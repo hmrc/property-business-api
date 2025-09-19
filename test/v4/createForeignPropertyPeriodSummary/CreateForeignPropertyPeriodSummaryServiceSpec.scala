@@ -16,9 +16,9 @@
 
 package v4.createForeignPropertyPeriodSummary
 
-import common.models.errors._
+import common.models.errors.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v4.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
@@ -98,7 +98,7 @@ class CreateForeignPropertyPeriodSummaryServiceSpec
         "SUBMISSION_DATE_ISSUE"   -> RuleMisalignedPeriodError
       )
 
-      (errors ++ extraTysErrors).foreach((serviceError _).tupled)
+      (errors ++ extraTysErrors).foreach((serviceError).tupled)
     }
   }
 

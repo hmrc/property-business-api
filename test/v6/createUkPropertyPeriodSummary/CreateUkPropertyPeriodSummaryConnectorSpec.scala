@@ -27,12 +27,20 @@ import scala.concurrent.Future
 
 class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   "connector" must {
     "post a body and return 200 with submissionId" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2022-23")
+      val taxYear: TaxYear = TaxYear.fromMtd("2022-23")
+
+      val requestDataDef1: CreateUkPropertyPeriodSummaryRequestData =
+        Def1_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBodyDef1)
+
+      val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
+        http = mockHttpClient,
+        appConfig = mockSharedAppConfig
+      )
 
       willPost(
         url = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=2022-23&incomeSourceId=$businessId",
@@ -44,7 +52,15 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "post a body and return 200 with submissionId for TYS" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+      val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+      val requestDataDef1: CreateUkPropertyPeriodSummaryRequestData =
+        Def1_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBodyDef1)
+
+      val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
+        http = mockHttpClient,
+        appConfig = mockSharedAppConfig
+      )
 
       willPost(
         url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
@@ -56,7 +72,15 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "post a body and return 200 with submissionId for TY24-25" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+      val taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+      val requestDataDef2: CreateUkPropertyPeriodSummaryRequestData =
+        Def2_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBodyDef2)
+
+      val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
+        http = mockHttpClient,
+        appConfig = mockSharedAppConfig
+      )
 
       willPost(
         url = url"$baseUrl/income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId",
@@ -69,9 +93,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
-
-    protected val taxYear: TaxYear
+    self: ConnectorTest =>
 
     protected val requestBodyDef1: Def1_CreateUkPropertyPeriodSummaryRequestBody =
       Def1_CreateUkPropertyPeriodSummaryRequestBody("2020-01-01", "2020-01-31", None, None)
@@ -79,20 +101,8 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     protected val requestBodyDef2: Def2_CreateUkPropertyPeriodSummaryRequestBody =
       Def2_CreateUkPropertyPeriodSummaryRequestBody("2024-04-06", "2024-07-05", None, None)
 
-    protected val requestDataDef1: CreateUkPropertyPeriodSummaryRequestData =
-      Def1_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBodyDef1)
-
-    protected val requestDataDef2: CreateUkPropertyPeriodSummaryRequestData =
-      Def2_CreateUkPropertyPeriodSummaryRequestData(nino, businessId, taxYear, requestBodyDef2)
-
     protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
     protected val outcome: Right[Nothing, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
-
-    protected val connector: CreateUkPropertyPeriodSummaryConnector = new CreateUkPropertyPeriodSummaryConnector(
-      http = mockHttpClient,
-      appConfig = mockSharedAppConfig
-    )
-
   }
 
 }

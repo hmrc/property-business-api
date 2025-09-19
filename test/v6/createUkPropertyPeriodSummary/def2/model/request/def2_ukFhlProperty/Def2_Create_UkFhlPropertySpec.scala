@@ -18,7 +18,6 @@ package v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
 
 class Def2_Create_UkFhlPropertySpec extends UnitSpec {

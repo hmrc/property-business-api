@@ -40,6 +40,6 @@ class Def1_RetrieveUkPropertyPeriodSummaryValidator @Inject() (nino: String, bus
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId)
-    ).mapN(Def1_RetrieveUkPropertyPeriodSummaryRequestData)
+    ).mapN(Def1_RetrieveUkPropertyPeriodSummaryRequestData.apply)
 
 }

@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Income(rentIncome: Option[RentIncome],
@@ -36,6 +36,6 @@ object Income {
       (JsPath \ "otherPropertyIncomeAmount").readNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").readNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").readNullable[BigDecimal]
-  )(Income.apply _)
+  )(Income.apply)
 
 }

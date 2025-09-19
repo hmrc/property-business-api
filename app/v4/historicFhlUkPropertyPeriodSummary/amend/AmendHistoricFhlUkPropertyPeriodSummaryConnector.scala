@@ -44,7 +44,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: Http
 
     request match {
       case def1: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
 
         val downstreamUri =
           IfsUri[Unit](

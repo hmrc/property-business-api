@@ -16,8 +16,8 @@
 
 package v4.propertyPeriodSummary.list.def1.model.response
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class SubmissionPeriod(submissionId: String, fromDate: String, toDate: String)
 
@@ -27,7 +27,7 @@ object SubmissionPeriod {
     (JsPath \ "submissionId").read[String] and
       (JsPath \ "fromDate").read[String] and
       (JsPath \ "toDate").read[String]
-  )(SubmissionPeriod.apply _)
+  )(SubmissionPeriod.apply)
 
   implicit val writes: OWrites[SubmissionPeriod] = Json.writes[SubmissionPeriod]
 }

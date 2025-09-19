@@ -16,7 +16,7 @@
 
 package v6.createAmendUkPropertyCumulativeSummary.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Income(premiumsOfLeaseGrant: Option[BigDecimal],
@@ -36,6 +36,6 @@ object Income {
       (JsPath \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "otherIncome").writeNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").writeNullable[RentARoomIncome]
-  )(unlift(Income.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

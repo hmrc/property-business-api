@@ -25,7 +25,7 @@ import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
 import v4.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
@@ -94,7 +94,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
+    protected val controller: DeleteHistoricNonFhlUkPropertyAnnualSubmissionController = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,

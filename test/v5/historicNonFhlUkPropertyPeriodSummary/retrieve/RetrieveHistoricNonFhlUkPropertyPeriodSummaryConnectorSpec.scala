@@ -23,8 +23,14 @@ import shared.models.domain.Nino
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v5.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData, RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData}
-import v5.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse, RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse}
+import v5.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
+import v5.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse,
+  RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse
+}
 
 import scala.concurrent.Future
 
@@ -62,7 +68,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends Connect
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector: RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,

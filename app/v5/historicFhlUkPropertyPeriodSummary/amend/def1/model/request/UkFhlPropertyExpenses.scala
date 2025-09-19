@@ -16,7 +16,7 @@
 
 package v5.historicFhlUkPropertyPeriodSummary.amend.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.UkPropertyExpensesRentARoom
 
@@ -43,6 +43,6 @@ object UkFhlPropertyExpenses {
       (JsPath \ "consolidatedExpenses").writeNullable[BigDecimal] and
       (JsPath \ "travelCosts").writeNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyExpensesRentARoom]
-  )(unlift(UkFhlPropertyExpenses.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

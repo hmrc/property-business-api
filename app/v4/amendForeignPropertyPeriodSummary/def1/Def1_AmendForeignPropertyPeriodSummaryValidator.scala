@@ -17,16 +17,16 @@
 package v4.amendForeignPropertyPeriodSummary.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveSubmissionId
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
-import v4.amendForeignPropertyPeriodSummary.model.request._
+import v4.amendForeignPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 
@@ -49,6 +49,6 @@ class Def1_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
       resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
-    ).mapN(Def1_AmendForeignPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_AmendForeignPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
 }

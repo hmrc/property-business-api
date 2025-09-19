@@ -87,7 +87,7 @@ class CreateForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateForeignPropertyPeriodSummaryController(
+    val controller: CreateForeignPropertyPeriodSummaryController = new CreateForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateForeignPropertyPeriodSummaryService,

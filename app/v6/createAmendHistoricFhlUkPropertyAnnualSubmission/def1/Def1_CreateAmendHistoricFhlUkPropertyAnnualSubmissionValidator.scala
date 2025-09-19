@@ -17,17 +17,17 @@
 package v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.data.Validated._
-import cats.implicits._
+import cats.data.Validated.*
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request._
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request.*
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
@@ -50,11 +50,11 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     List(
       annualAdjustments.map(validateAnnualAdjustments).getOrElse(valid),
@@ -64,7 +64,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
   }
 
   private def validateAnnualAdjustments(annualAdjustments: HistoricFhlAnnualAdjustments): Validated[Seq[MtdError], Unit] = {
-    import annualAdjustments._
+    import annualAdjustments.*
     val annualAdjustmentsWithPaths = List(
       (lossBroughtForward, "/annualAdjustments/lossBroughtForward"),
       (privateUseAdjustment, "/annualAdjustments/privateUseAdjustment"),
@@ -82,7 +82,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
   }
 
   private def validateAnnualAllowance(annualAllowances: HistoricFhlAnnualAllowances): Validated[Seq[MtdError], Unit] = {
-    import annualAllowances._
+    import annualAllowances.*
     val resolvePropertyIncomeAllowanceNumber = ResolveParsedNumber(max = 1000.00)
 
     val annualAllowancesWithPaths = List(

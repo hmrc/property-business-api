@@ -23,25 +23,29 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, 
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData, Def2_CreateForeignPropertyPeriodSummaryRequestData}
+import v6.createForeignPropertyPeriodSummary.model.request.{
+  CreateForeignPropertyPeriodSummaryRequestData,
+  Def1_CreateForeignPropertyPeriodSummaryRequestData,
+  Def2_CreateForeignPropertyPeriodSummaryRequestData
+}
 import v6.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
-                                                                                    hc: HeaderCarrier,
-                                                                                    ec: ExecutionContext,
-                                                                                    correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse]] = {
 
     implicit val successCode: SuccessCode = SuccessCode(OK)
 
     request match {
       case def1: Def1_CreateForeignPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
             IfsUri[CreateForeignPropertyPeriodSummaryResponse](
@@ -54,7 +58,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClient
         post(body, downstreamUri)
 
       case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
-        import def2._
+        import def2.*
         val downstreamUri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)

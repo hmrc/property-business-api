@@ -21,16 +21,19 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody, Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData}
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
+  Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,
+  Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
+}
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request._
 
 import scala.concurrent.Future
 
 class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
-  extends ConnectorSpec
+    extends ConnectorSpec
     with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val tysTaxYear = "2025-26"
@@ -53,7 +56,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 

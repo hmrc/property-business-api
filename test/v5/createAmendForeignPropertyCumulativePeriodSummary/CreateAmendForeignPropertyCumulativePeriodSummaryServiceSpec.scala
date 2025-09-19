@@ -90,7 +90,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
         "SERVICE_UNAVAILABLE"                -> InternalError
       )
 
-      errors.foreach((serviceError _).tupled)
+      errors.foreach((serviceError).tupled)
     }
   }
 

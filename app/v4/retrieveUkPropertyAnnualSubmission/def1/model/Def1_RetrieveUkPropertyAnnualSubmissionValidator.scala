@@ -23,7 +23,7 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.retrieveUkPropertyAnnualSubmission.model.request._
+import v4.retrieveUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
@@ -38,6 +38,6 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, 
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_RetrieveUkPropertyAnnualSubmissionRequestData.apply)
 
 }

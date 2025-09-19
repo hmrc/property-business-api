@@ -16,8 +16,8 @@
 
 package v5.retrieveUkPropertyCumulativeSummary
 
-import shared.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
+import shared.controllers.validators.Validator
 import v5.retrieveUkPropertyCumulativeSummary.def1.Def1_RetrieveUkPropertyCumulativeSummaryValidator
 import v5.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 

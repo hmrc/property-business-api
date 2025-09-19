@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def2.model.response
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class RetrieveUkPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
 
@@ -28,6 +28,6 @@ object RetrieveUkPropertyBuilding {
     (__ \ "name").readNullable[String] and
       (__ \ "number").readNullable[String] and
       (__ \ "postCode").read[String]
-  )(RetrieveUkPropertyBuilding.apply _)
+  )(RetrieveUkPropertyBuilding.apply)
 
 }

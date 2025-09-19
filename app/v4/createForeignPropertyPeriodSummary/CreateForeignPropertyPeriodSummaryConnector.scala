@@ -23,7 +23,11 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, 
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v4.createForeignPropertyPeriodSummary.model.request.{CreateForeignPropertyPeriodSummaryRequestData, Def1_CreateForeignPropertyPeriodSummaryRequestData, Def2_CreateForeignPropertyPeriodSummaryRequestData}
+import v4.createForeignPropertyPeriodSummary.model.request.{
+  CreateForeignPropertyPeriodSummaryRequestData,
+  Def1_CreateForeignPropertyPeriodSummaryRequestData,
+  Def2_CreateForeignPropertyPeriodSummaryRequestData
+}
 import v4.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -41,7 +45,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
     request match {
       case def1: Def1_CreateForeignPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
             IfsUri[CreateForeignPropertyPeriodSummaryResponse](
@@ -54,7 +58,7 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
         post(body, downstreamUri)
 
       case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
-        import def2._
+        import def2.*
         val downstreamUri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](
           s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
         post(body, downstreamUri)

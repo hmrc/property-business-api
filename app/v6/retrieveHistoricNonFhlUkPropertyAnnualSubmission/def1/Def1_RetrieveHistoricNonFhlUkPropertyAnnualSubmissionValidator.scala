@@ -17,7 +17,7 @@
 package v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
@@ -43,6 +43,6 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData.apply)
 
 }

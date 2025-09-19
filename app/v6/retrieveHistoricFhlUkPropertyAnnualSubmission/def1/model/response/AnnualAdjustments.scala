@@ -16,7 +16,7 @@
 
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class RentARoom(jointlyLet: Boolean)
@@ -46,6 +46,6 @@ object AnnualAdjustments {
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").read[Boolean] and
       (JsPath \ "ukRentARoom").readNullable[RentARoom]
-  )(AnnualAdjustments.apply _)
+  )(AnnualAdjustments.apply)
 
 }

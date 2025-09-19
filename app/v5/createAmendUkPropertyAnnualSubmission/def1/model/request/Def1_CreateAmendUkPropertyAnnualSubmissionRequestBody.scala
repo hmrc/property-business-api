@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.CreateAmendUkFhlProperty
 import v5.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.CreateAmendUkProperty
@@ -32,6 +32,6 @@ object Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody {
   implicit val writes: OWrites[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody] = (
     (JsPath \ "ukFhlProperty").writeNullable[CreateAmendUkFhlProperty] and
       (JsPath \ "ukOtherProperty").writeNullable[CreateAmendUkProperty]
-  )(unlift(Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

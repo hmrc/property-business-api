@@ -16,23 +16,16 @@
 
 package v4.createUkPropertyPeriodSummary.def1
 
-import common.models.errors.{
-  RuleBothExpensesSuppliedError,
-  RuleDuplicateSubmissionError,
-  RuleMisalignedPeriodError,
-  RuleNotContiguousPeriodError,
-  RuleOverlappingPeriodError,
-  RuleToDateBeforeFromDateError,
-  RuleTypeOfBusinessIncorrectError
-}
-import shared.models.errors._
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import shared.services._
 
 class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 
@@ -530,7 +523,7 @@ class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
           ("AA123456A", "XAIS12345678910", "2022-23", bothExpensesSuppliedRequestJson, BAD_REQUEST, RuleBothExpensesSuppliedRequestError),
           ("AA123456A", "XAIS12345678910", "2022-23", toDateBeforeFromDateRequestJson, BAD_REQUEST, RuleToDateBeforeFromDateError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "ifs service error" when {
@@ -577,7 +570,7 @@ class Def1_CreateUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
 //          To be reinstated, see MTDSA-15575
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

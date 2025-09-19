@@ -24,7 +24,7 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.createUkPropertyPeriodSummary.model.request._
+import v4.createUkPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 
@@ -43,7 +43,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, busin
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
   }
 
 }

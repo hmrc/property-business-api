@@ -16,18 +16,11 @@
 
 package v4.createUkPropertyPeriodSummary
 
+import cats.implicits.*
+import common.models.errors.*
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
-import common.models.errors.{
-  RuleDuplicateSubmissionError,
-  RuleMisalignedPeriodError,
-  RuleNotContiguousPeriodError,
-  RuleOverlappingPeriodError,
-  RuleToDateBeforeFromDateError,
-  RuleTypeOfBusinessIncorrectError
-}
 import v4.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData
 import v4.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 

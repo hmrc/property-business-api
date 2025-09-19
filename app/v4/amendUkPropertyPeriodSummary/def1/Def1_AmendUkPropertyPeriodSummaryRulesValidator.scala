@@ -16,13 +16,13 @@
 
 package v4.amendUkPropertyPeriodSummary.def1
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers._
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleBothExpensesSuppliedError
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.*
+import shared.models.errors.MtdError
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.{Def1_Amend_UkFhlProperty, Def1_Amend_UkFhlPropertyExpenses}
 import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{Def1_Amend_UkNonFhlProperty, Def1_Amend_UkNonFhlPropertyExpenses}
 import v4.amendUkPropertyPeriodSummary.model.request.Def1_AmendUkPropertyPeriodSummaryRequestData
@@ -33,7 +33,7 @@ class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
 
   def validateBusinessRules(
       parsed: Def1_AmendUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def1_AmendUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
     combine(
       ukFhlProperty.map(validateUkFhlProperty).getOrElse(valid),
       ukNonFhlProperty.map(validateUkNonFhlProperty).getOrElse(valid)
@@ -41,7 +41,7 @@ class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
   }
 
   private def validateUkFhlProperty(ukFhlProperty: Def1_Amend_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukFhlProperty._
+    import ukFhlProperty.*
     val valuesWithPaths = List(
       (income.flatMap(_.periodAmount), "/ukFhlProperty/income/periodAmount"),
       (income.flatMap(_.taxDeducted), "/ukFhlProperty/income/taxDeducted"),
@@ -78,7 +78,7 @@ class Def1_AmendUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def
   }
 
   private def validateUkNonFhlProperty(ukNonFhlProperty: Def1_Amend_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukNonFhlProperty._
+    import ukNonFhlProperty.*
     val valuesWithPaths = List(
       (income.flatMap(_.premiumsOfLeaseGrant), "/ukNonFhlProperty/income/premiumsOfLeaseGrant"),
       (income.flatMap(_.reversePremiums), "/ukNonFhlProperty/income/reversePremiums"),

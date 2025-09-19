@@ -16,7 +16,7 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.model.request
 
-import shared.models.domain.{Nino, BusinessId, TaxYear}
+import shared.models.domain.{BusinessId, Nino, TaxYear}
 
 sealed trait RetrieveUkPropertyAnnualSubmissionRequestData {
   val nino: Nino

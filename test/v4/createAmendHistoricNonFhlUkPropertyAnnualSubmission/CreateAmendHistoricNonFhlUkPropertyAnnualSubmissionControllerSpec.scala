@@ -25,11 +25,11 @@ import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -84,15 +84,16 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      validatorFactory = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
-      service = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
-      auditService = mockAuditService,
-      cc = cc,
-      idGenerator = mockIdGenerator
-    )
+    protected val controller: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController =
+      new CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionController(
+        authService = mockEnrolmentsAuthService,
+        lookupService = mockMtdIdLookupService,
+        validatorFactory = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,
+        service = mockCreateAmendHistoricNonFhlUkPropertyAnnualSubmissionService,
+        auditService = mockAuditService,
+        cc = cc,
+        idGenerator = mockIdGenerator
+      )
 
     MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true

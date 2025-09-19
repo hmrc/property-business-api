@@ -49,7 +49,7 @@ class AmendHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector = new AmendHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,

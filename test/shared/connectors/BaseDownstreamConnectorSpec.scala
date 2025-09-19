@@ -25,6 +25,7 @@ import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -61,7 +62,7 @@ class BaseDownstreamConnectorSpec extends UnitSpec with MockHttpClient with Mock
     HeaderCarrier(otherHeaders = inputHeaders)
 
   val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-    val http: HttpClientV2 = mockHttpClient
+    val http: HttpClientV2         = mockHttpClient
     val appConfig: SharedAppConfig = mockSharedAppConfig
   }
 
@@ -232,7 +233,7 @@ class BaseDownstreamConnectorSpec extends UnitSpec with MockHttpClient with Mock
           implicit val hc: HeaderCarrier = headerCarrierForInput()
 
           MockedHttpClient.delete(
-            url"$baseUrl/some/url?param1=value1&param2=value2",
+            url"$absoluteUrl?param1=value1&param2=value2",
             headerCarrierConfig,
             requiredHeaders = standardContractHeadersWith(additionalRequiredHeaders),
             excludedHeaders = Seq(contentTypeHeader) ++ additionalExcludedHeaders

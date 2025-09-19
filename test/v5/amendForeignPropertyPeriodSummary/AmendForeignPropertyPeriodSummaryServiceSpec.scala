@@ -20,7 +20,7 @@ import common.models.domain.SubmissionId
 import common.models.errors.{RuleDuplicateCountryCodeError, RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -88,7 +88,7 @@ class AmendForeignPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
       }
     }
   }

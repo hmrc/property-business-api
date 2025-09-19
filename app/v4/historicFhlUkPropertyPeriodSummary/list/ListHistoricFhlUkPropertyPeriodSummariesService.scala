@@ -18,7 +18,7 @@ package v4.historicFhlUkPropertyPeriodSummary.list
 
 import cats.implicits.toBifunctorOps
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
 import v4.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v4.historicFhlUkPropertyPeriodSummary.list.model.request.ListHistoricFhlUkPropertyPeriodSummariesRequestData

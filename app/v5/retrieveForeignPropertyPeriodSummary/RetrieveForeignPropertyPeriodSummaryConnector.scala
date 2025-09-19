@@ -23,33 +23,25 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult, Result}
-import v5.retrieveForeignPropertyPeriodSummary.model.request._
-import v5.retrieveForeignPropertyPeriodSummary.model.response._
+import v5.retrieveForeignPropertyPeriodSummary.model.request.*
+import v5.retrieveForeignPropertyPeriodSummary.model.response.*
+import v5.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveForeignPropertyPeriodSummaryConnector {
-
-  sealed trait Result
-
-  case class ForeignResult(response: RetrieveForeignPropertyPeriodSummaryResponse) extends Result
-
-  case object NonForeignResult extends Result
-}
-
 @Singleton
-class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyPeriodSummaryRequestData)(implicit
-                                                                                        hc: HeaderCarrier,
-                                                                                        ec: ExecutionContext,
-                                                                                        correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
     request match {
       case def1: Def1_RetrieveForeignPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (
@@ -62,9 +54,9 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
               IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
               List(
                 "taxableEntityId" -> nino.nino,
-                "taxYear" -> taxYear.asMtd, // Note that MTD tax year format is used
-                "incomeSourceId" -> businessId.businessId,
-                "submissionId" -> submissionId.submissionId
+                "taxYear"         -> taxYear.asMtd, // Note that MTD tax year format is used
+                "incomeSourceId"  -> businessId.businessId,
+                "submissionId"    -> submissionId.submissionId
               )
             )
           }
@@ -73,7 +65,7 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject()(val http: HttpClie
 
         response.map(_.map {
           case ResponseWrapper(corId, resp) if foreignResult(resp) => ResponseWrapper(corId, ForeignResult(resp))
-          case ResponseWrapper(corId, _) => ResponseWrapper(corId, NonForeignResult)
+          case ResponseWrapper(corId, _)                           => ResponseWrapper(corId, NonForeignResult)
         })
 
     }

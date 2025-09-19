@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class UkProperty(adjustments: Option[Adjustments], allowances: Option[Allowances])
@@ -27,6 +27,6 @@ object UkProperty {
   implicit val writes: Writes[UkProperty] = (
     (JsPath \ "ukOtherPropertyAnnualAdjustments").writeNullable[Adjustments] and
       (JsPath \ "ukOtherPropertyAnnualAllowances").writeNullable[Allowances]
-  )(unlift(UkProperty.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

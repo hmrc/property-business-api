@@ -16,15 +16,15 @@
 
 package v4.historicFhlUkPropertyPeriodSummary.list.def1
 
-import shared.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import shared.services._
 
 class Def1_ListHistoricFhlUkPropertyPeriodSummariesISpec extends IntegrationBaseSpec {
 
@@ -125,7 +125,7 @@ class Def1_ListHistoricFhlUkPropertyPeriodSummariesISpec extends IntegrationBase
       val input = List(
         ("AA1123A", BAD_REQUEST, NinoFormatError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return ifs service error" when {
@@ -152,7 +152,7 @@ class Def1_ListHistoricFhlUkPropertyPeriodSummariesISpec extends IntegrationBase
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
       )
-      input.foreach(args => (serviceErrorTest _).tupled(args))
+      input.foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

@@ -17,8 +17,8 @@
 package v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty
 
 import play.api.libs.json.{Json, OFormat}
-import shapeless.HNil
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 
 case class Def1_Create_Amend_ForeignEntry(countryCode: String,
                                           adjustments: Option[Def1_Create_Amend_ForeignAdjustments],
@@ -27,8 +27,10 @@ case class Def1_Create_Amend_ForeignEntry(countryCode: String,
 object Def1_Create_Amend_ForeignEntry {
 
   implicit val emptinessChecker: EmptinessChecker[Def1_Create_Amend_ForeignEntry] = EmptinessChecker.use { body =>
-    "adjustments"  -> body.adjustments ::
-      "allowances" -> body.allowances :: HNil
+    List(
+      field("adjustments", body.adjustments),
+      field("allowances", body.allowances)
+    )
   }
 
   implicit val format: OFormat[Def1_Create_Amend_ForeignEntry] = Json.format[Def1_Create_Amend_ForeignEntry]

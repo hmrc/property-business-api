@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import controllers.{AssetsConfiguration, DefaultAssetsMetadata, RewriteableAsset
 import play.api.http.{DefaultFileMimeTypes, DefaultHttpErrorHandler, FileMimeTypesConfiguration, HttpConfiguration}
 import play.api.mvc.Result
 import play.api.{Configuration, Environment}
+import shared.config.rewriters.*
 import shared.config.rewriters.DocumentationRewriters.CheckAndRewrite
-import shared.config.rewriters._
-import shared.config.{SharedAppConfig, MockSharedAppConfig, RealAppConfig}
-import shared.definition._
+import shared.config.{MockSharedAppConfig, RealAppConfig, SharedAppConfig}
+import shared.definition.*
 import shared.routing.{Version, Versions}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -136,9 +136,9 @@ class DocumentationControllerSpec extends ControllerBaseSpec with MockSharedAppC
         }
 
         result should startWith(s"""openapi: "3.0.3"
-                                  |
-                                  |info:
-                                  |  version: "$apiVersionName"""".stripMargin)
+                                   |
+                                   |info:
+                                   |  version: "$apiVersionName"""".stripMargin)
       }
     }
 

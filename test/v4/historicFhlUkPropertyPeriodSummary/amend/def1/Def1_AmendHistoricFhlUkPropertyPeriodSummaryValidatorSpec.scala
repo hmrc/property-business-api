@@ -21,10 +21,10 @@ import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request._
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.*
 import v4.historicFhlUkPropertyPeriodSummary.amend.AmendHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v4.historicFhlUkPropertyPeriodSummary.amend.request.{

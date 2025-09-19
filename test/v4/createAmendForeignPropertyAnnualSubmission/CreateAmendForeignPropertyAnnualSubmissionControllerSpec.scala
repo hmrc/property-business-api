@@ -23,12 +23,12 @@ import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
 import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
-import v4.createAmendForeignPropertyAnnualSubmission.model.request._
+import v4.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -84,7 +84,7 @@ class CreateAmendForeignPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateAmendForeignPropertyAnnualSubmissionController(
+    protected val controller: CreateAmendForeignPropertyAnnualSubmissionController = new CreateAmendForeignPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendForeignPropertyAnnualSubmissionValidatorFactory,

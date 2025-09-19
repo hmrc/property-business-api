@@ -16,8 +16,8 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json._
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.*
 import v4.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 
 sealed trait AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody
@@ -35,7 +35,7 @@ object Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody {
   implicit val writes: OWrites[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody] = (
     (JsPath \ "incomes").writeNullable[UkNonFhlPropertyIncome] and
       (JsPath \ "deductions").writeNullable[UkNonFhlPropertyExpenses]
-  )(unlift(Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
   implicit val format: OFormat[Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody] = OFormat(reads, writes)
 }

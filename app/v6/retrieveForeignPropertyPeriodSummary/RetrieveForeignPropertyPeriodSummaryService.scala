@@ -16,15 +16,15 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
-import v6.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import v6.retrieveForeignPropertyPeriodSummary.model.request.RetrieveForeignPropertyPeriodSummaryRequestData
 import v6.retrieveForeignPropertyPeriodSummary.model.response.RetrieveForeignPropertyPeriodSummaryResponse
+import v6.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,7 +64,7 @@ class RetrieveForeignPropertyPeriodSummaryService @Inject() (connector: Retrieve
     downstreamErrors ++ extraTysErrors
   }
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveForeignPropertyPeriodSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =
     resultWrapper.responseData match {
       case ForeignResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonForeignResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

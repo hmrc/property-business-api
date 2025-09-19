@@ -18,10 +18,10 @@ package v4.createUkPropertyPeriodSummary.def1.model.request
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
-import v4.createUkPropertyPeriodSummary.model.request._
+import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
+import v4.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
+import v4.createUkPropertyPeriodSummary.model.request.*
 
 class CreateUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec {
 

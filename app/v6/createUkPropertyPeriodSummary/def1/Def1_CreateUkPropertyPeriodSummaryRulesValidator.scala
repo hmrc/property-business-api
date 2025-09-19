@@ -16,16 +16,16 @@
 
 package v6.createUkPropertyPeriodSummary.def1
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.ResolveParsedNumber
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.ResolveParsedNumber
+import shared.models.errors.MtdError
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
 import v6.createUkPropertyPeriodSummary.model.request.Def1_CreateUkPropertyPeriodSummaryRequestData
 
 class Def1_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[Def1_CreateUkPropertyPeriodSummaryRequestData] {
@@ -34,7 +34,7 @@ class Def1_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
 
   def validateBusinessRules(
       parsed: Def1_CreateUkPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def1_CreateUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       ResolveFromAndToDates((fromDate, toDate)),
@@ -44,7 +44,7 @@ class Def1_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
   }
 
   private def validateUkFhlProperty(ukFhlProperty: Def1_Create_UkFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukFhlProperty._
+    import ukFhlProperty.*
 
     val valuesWithPaths = List(
       (income.flatMap(_.periodAmount), "/ukFhlProperty/income/periodAmount"),
@@ -79,7 +79,7 @@ class Def1_CreateUkPropertyPeriodSummaryRulesValidator extends RulesValidator[De
   }
 
   private def validateUkNonFhlProperty(ukNonFhlProperty: Def1_Create_UkNonFhlProperty): Validated[Seq[MtdError], Unit] = {
-    import ukNonFhlProperty._
+    import ukNonFhlProperty.*
 
     val valuesWithPaths = List(
       (income.flatMap(_.premiumsOfLeaseGrant), "/ukNonFhlProperty/income/premiumsOfLeaseGrant"),

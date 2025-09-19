@@ -20,11 +20,11 @@ import common.models.domain.SubmissionId
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v5.amendUkPropertyPeriodSummary.model.request._
+import v5.amendUkPropertyPeriodSummary.model.request.*
 
 import scala.concurrent.Future
 
@@ -84,7 +84,7 @@ class AmendUkPropertyPeriodSummaryServiceSpec extends ServiceSpec {
           "INCOME_SOURCE_NOT_COMPATIBLE" -> RuleTypeOfBusinessIncorrectError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
       }
     }
   }

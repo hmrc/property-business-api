@@ -16,7 +16,7 @@
 
 package v5.createAmendForeignPropertyAnnualSubmission.model.request
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.utils.JsonWritesUtil.writesFrom
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody
 import v5.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody

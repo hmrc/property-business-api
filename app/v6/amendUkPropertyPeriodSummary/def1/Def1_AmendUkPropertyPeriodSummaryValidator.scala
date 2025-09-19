@@ -22,10 +22,10 @@ import common.controllers.validators.resolvers.ResolveSubmissionId
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.amendUkPropertyPeriodSummary.model.request._
+import v6.amendUkPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 
@@ -45,6 +45,6 @@ class Def1_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
       ResolveBusinessId(businessId),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
-    ).mapN(Def1_AmendUkPropertyPeriodSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_AmendUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

@@ -16,15 +16,15 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{BaseService, ServiceOutcome}
 import cats.data.EitherT
 import common.models.errors.RuleTypeOfBusinessIncorrectError
-import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector.{ForeignResult, NonForeignResult}
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{BaseService, ServiceOutcome}
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
+import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,7 +54,7 @@ class RetrieveForeignPropertyCumulativeSummaryService @Inject() (connector: Retr
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveForeignPropertyCumulativeSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =
     resultWrapper.responseData match {
       case ForeignResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonForeignResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

@@ -17,7 +17,7 @@
 package v5.historicFhlUkPropertyPeriodSummary.list.model.response
 
 import cats.Functor
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class ListHistoricFhlUkPropertyPeriodSummariesResponse[I](submissions: Seq[I])
 

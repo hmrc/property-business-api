@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class PropertyIncome(rentIncome: Option[RentIncome],
@@ -36,6 +36,6 @@ object PropertyIncome {
       (JsPath \ "otherPropertyIncomeAmount").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-  )(unlift(PropertyIncome.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

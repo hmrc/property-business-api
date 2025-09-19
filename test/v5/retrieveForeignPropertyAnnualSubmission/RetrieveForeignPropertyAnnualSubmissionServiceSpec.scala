@@ -23,7 +23,7 @@ import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v5.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult}
+import v5.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v5.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v5.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
@@ -90,7 +90,7 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         "INVALID_CORRELATION_ID"  -> InternalError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

@@ -18,7 +18,7 @@ package v4.fixtures.retrieveUkPropertyPeriodSummary
 
 import shared.models.domain.Timestamp
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v4.retrieveUkPropertyPeriodSummary.def1.model.response._
+import v4.retrieveUkPropertyPeriodSummary.def1.model.response.*
 import v4.retrieveUkPropertyPeriodSummary.model.response.Def1_RetrieveUkPropertyPeriodSummaryResponse
 
 trait ResponseModelsFixture {

@@ -44,7 +44,7 @@ class EndpointSummaryRewriterSpec extends UnitSpec with MockSharedAppConfig {
 
     "the summary already contains [test only]" should {
       "return the summary unchanged" in {
-        val summary = """summary: "[tesT oNLy] Create and Amend employment expenses""""
+        val summary = """summary: "[tesT oNLy] Create and Amend CGT Residential Property Disposals""""
         val result  = rewrite("", "", summary)
         result shouldBe summary
       }
@@ -52,38 +52,38 @@ class EndpointSummaryRewriterSpec extends UnitSpec with MockSharedAppConfig {
 
     "the yaml summary is ready to be rewritten" should {
       "return the rewritten summary, in quotes due to the '[' special character" in {
-        val result = rewrite("", "", "summary: Create and Amend employment expenses")
-        result shouldBe """summary: "Create and Amend employment expenses [test only]""""
+        val result = rewrite("", "", "summary: Create and Amend CGT Residential Property Disposals")
+        result shouldBe """summary: "Create and Amend CGT Residential Property Disposals [test only]""""
       }
 
       "return the rewritten summary preserving indentation" in {
-        val result = rewrite("", "", "  summary: Create and Amend employment expenses")
-        result shouldBe """  summary: "Create and Amend employment expenses [test only]""""
+        val result = rewrite("", "", "  summary: Create and Amend CGT Residential Property Disposals")
+        result shouldBe """  summary: "Create and Amend CGT Residential Property Disposals [test only]""""
       }
 
       "return the rewritten summary when it contains parentheses" in {
-        val result = rewrite("", "", "summary: Create and Amend employment expenses (parentheses test)")
-        result shouldBe """summary: "Create and Amend employment expenses (parentheses test) [test only]""""
+        val result = rewrite("", "", "summary: Create and Amend CGT Residential Property Disposals (non-PPD)")
+        result shouldBe """summary: "Create and Amend CGT Residential Property Disposals (non-PPD) [test only]""""
       }
 
       "return the rewritten summary when it contains square brackets" in {
-        val result = rewrite("", "", "summary: Create and Amend employment expenses [square brackets test]")
-        result shouldBe """summary: "Create and Amend employment expenses [square brackets test] [test only]""""
+        val result = rewrite("", "", "summary: Create and Amend CGT Residential Property Disposals [non-PPD]")
+        result shouldBe """summary: "Create and Amend CGT Residential Property Disposals [non-PPD] [test only]""""
       }
     }
 
     "the yaml summary is already in quotes" should {
       "return the rewritten summary" in {
-        val result = rewrite("", "", """summary: "Create and Amend employment expenses"""")
-        result shouldBe """summary: "Create and Amend employment expenses [test only]""""
+        val result = rewrite("", "", """summary: "Create and Amend CGT Residential Property Disposals"""")
+        result shouldBe """summary: "Create and Amend CGT Residential Property Disposals [test only]""""
       }
     }
 
     "the yaml is not for a single endpoint" should {
       "return the yaml unchanged" in {
         val yaml = """
-                     |summary: "Create and Amend employment expenses"
-                     |summary: "Create and Amend employment expenses"""".stripMargin
+                     |summary: "Create and Amend CGT Residential Property Disposals"
+                     |summary: "Create and Amend CGT Residential Property Disposals"""".stripMargin
         val result = rewrite("", "", yaml)
         result shouldBe yaml
 

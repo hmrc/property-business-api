@@ -19,11 +19,6 @@ package v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFh
 import shared.models.utils.JsonErrorValidators
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.{
-  RetrieveForeignFhlEeaAdjustments,
-  RetrieveForeignFhlEeaAllowances,
-  RetrieveForeignFhlEeaEntry
-}
 
 class Def1_RetrieveForeignFhlEeaEntrySpec extends UnitSpec with JsonErrorValidators {
 

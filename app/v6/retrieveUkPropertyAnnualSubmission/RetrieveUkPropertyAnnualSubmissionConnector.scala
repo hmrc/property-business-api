@@ -23,31 +23,21 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, Downstream
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionConnector.{NonUkResult, Result, UkResult}
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
-import v6.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
+import v6.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveUkPropertyAnnualSubmissionConnector {
-
-  sealed trait Result
-
-  case class UkResult(response: RetrieveUkPropertyAnnualSubmissionResponse) extends Result
-
-  case object NonUkResult extends Result
-}
-
 @Singleton
-class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkProperty(request: RetrieveUkPropertyAnnualSubmissionRequestData)(implicit
-                                                                                 hc: HeaderCarrier,
-                                                                                 ec: ExecutionContext,
-                                                                                 correlationId: String): Future[DownstreamOutcome[Result]] = {
-    import request._
-    import schema._
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
+    import request.*
+    import schema.*
 
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
       case taxYear if taxYear.useTaxYearSpecificApi =>
@@ -62,8 +52,8 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject()(val http: HttpClient
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if resp.hasUkData => Right(ResponseWrapper(corId, UkResult(resp)))
-      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonUkResult))
-      case Left(e) => Left(e)
+      case Right(ResponseWrapper(corId, _))                      => Right(ResponseWrapper(corId, NonUkResult))
+      case Left(e)                                               => Left(e)
     }
 
   }

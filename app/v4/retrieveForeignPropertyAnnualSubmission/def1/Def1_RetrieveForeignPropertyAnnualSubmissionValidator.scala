@@ -17,7 +17,7 @@
 package v4.retrieveForeignPropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
@@ -41,6 +41,6 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: Str
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData.apply)
 
 }

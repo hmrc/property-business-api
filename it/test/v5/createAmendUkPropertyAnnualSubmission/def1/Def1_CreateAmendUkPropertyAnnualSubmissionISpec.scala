@@ -16,20 +16,17 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def1
 
-import shared.models.errors._
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleBothAllowancesSuppliedError,
-  RuleBuildingNameNumberError,
-  RulePropertyIncomeAllowanceError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
@@ -856,7 +853,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           ("AA123456A", "XAIS12345678910", "2022-23", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
           ("AA123456A", "XAIS12345678910", "2022-23", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "downstream service error" when {
@@ -897,7 +894,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

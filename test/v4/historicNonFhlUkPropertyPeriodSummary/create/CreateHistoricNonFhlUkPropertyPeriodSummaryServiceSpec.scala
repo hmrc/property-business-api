@@ -17,10 +17,10 @@
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
 import common.models.domain.PeriodId
-import common.models.errors._
+import common.models.errors.*
 import shared.controllers.EndpointLogContext
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -96,7 +96,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryServiceSpec extends ServiceSpec
         "SERVICE_UNAVAILABLE"     -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      input.foreach(args => (serviceError).tupled(args))
     }
   }
 

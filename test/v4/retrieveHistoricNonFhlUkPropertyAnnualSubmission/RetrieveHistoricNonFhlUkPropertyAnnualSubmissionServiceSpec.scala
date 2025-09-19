@@ -19,7 +19,7 @@ package v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceOutcome
 import shared.utils.UnitSpec
@@ -79,7 +79,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSp
         "SERVICE_UNAVAILABLE"     -> InternalError
       )
 
-      input.foreach(args => (serviceError _).tupled(args))
+      input.foreach(args => (serviceError).tupled(args))
     }
   }
 

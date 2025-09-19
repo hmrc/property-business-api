@@ -16,12 +16,12 @@
 
 package v6.createAmendUkPropertyCumulativeSummary.def1
 
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
-import shared.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import shared.models.errors.MtdError
 import v6.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator.{resolveJson, rulesValidator}
 import v6.createAmendUkPropertyCumulativeSummary.def1.model.request.{
   Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody,
@@ -40,7 +40,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidator @Inject() (nino: Stri
       ResolveTaxYear(taxYear),
       ResolveBusinessId(businessId),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendUkPropertyCumulativeSummaryRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAmendUkPropertyCumulativeSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
 
   }
 

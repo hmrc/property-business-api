@@ -18,16 +18,16 @@ package v4.createAmendForeignPropertyAnnualSubmission.def1
 
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import config.MockPropertyBusinessConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionValidatorFactory
-import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea._
-import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl._
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
+import v4.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignNonFhl.*
 import v4.createAmendForeignPropertyAnnualSubmission.model.request
-import v4.createAmendForeignPropertyAnnualSubmission.model.request._
+import v4.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -564,7 +564,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             bodyWith(entryWith("AFG", validStructuredBuildingAllowance.removeProperty("/building/postcode"))),
             "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/building/postcode"
           )
-        ).foreach((testRuleIncorrectOrEmptyBodyWith _).tupled)
+        ).foreach((testRuleIncorrectOrEmptyBodyWith).tupled)
       }
 
       "passed a request body with empty fields except for additional (non-schema) properties" in new SetupConfig {
@@ -617,7 +617,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               bodyWith(entryWith("AFG", validStructuredBuildingAllowance.update("/firstYear/qualifyingAmountExpenditure", badValue))),
               "/foreignNonFhlProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure")
-          ).foreach((testValueFormatErrorWith _).tupled)
+          ).foreach((testValueFormatErrorWith).tupled)
         }
 
         "propertyIncomeAllowance allowances is invalid" when {
@@ -629,7 +629,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", badValue)),
               "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
-          ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
+          ).foreach(p => (testForPropertyIncomeAllowance).tupled(p))
         }
 
         "propertyIncomeAllowance allowances is too large" when {
@@ -642,7 +642,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
             (
               propertyIncomeAllowanceBodyWith(entryPropertyIncomeAllowance.update("/allowances/propertyIncomeAllowance", bigValue)),
               "/foreignNonFhlProperty/0/allowances/propertyIncomeAllowance")
-          ).foreach(p => (testForPropertyIncomeAllowance _).tupled(p))
+          ).foreach(p => (testForPropertyIncomeAllowance).tupled(p))
         }
 
         "passed a request body with empty fields except for additional (non-schema) properties" in new SetupConfig {
@@ -676,7 +676,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec extends UnitS
         (
           bodyWith(entry, entryWith("ZWE", validStructuredBuildingAllowance.update("/building/name", badStringValue))),
           "/foreignNonFhlProperty/1/allowances/structuredBuildingAllowance/0/building/name")
-      ).foreach(p => (testStringFormatErrorWith _).tupled(p))
+      ).foreach(p => (testStringFormatErrorWith).tupled(p))
     }
 
     "passed a request body with a field containing an invalid date format" when {

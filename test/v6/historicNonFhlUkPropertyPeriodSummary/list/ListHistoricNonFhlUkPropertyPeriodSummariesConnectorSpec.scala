@@ -21,8 +21,14 @@ import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.historicNonFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
-import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.{Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData, ListHistoricNonFhlUkPropertyPeriodSummariesRequestData}
-import v6.historicNonFhlUkPropertyPeriodSummary.list.model.response.{Def1_ListHistoricNonFhlUkPropertyPeriodSummariesResponse, ListHistoricNonFhlUkPropertyPeriodSummariesResponse}
+import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
+  Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData,
+  ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
+}
+import v6.historicNonFhlUkPropertyPeriodSummary.list.model.response.{
+  Def1_ListHistoricNonFhlUkPropertyPeriodSummariesResponse,
+  ListHistoricNonFhlUkPropertyPeriodSummariesResponse
+}
 
 import scala.concurrent.Future
 
@@ -44,7 +50,8 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesConnectorSpec extends Connector
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     protected val connector: ListHistoricNonFhlUkPropertyPeriodSummariesConnector =
       new ListHistoricNonFhlUkPropertyPeriodSummariesConnector(

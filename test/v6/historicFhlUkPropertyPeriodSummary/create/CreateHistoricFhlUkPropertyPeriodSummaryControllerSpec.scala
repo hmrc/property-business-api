@@ -85,7 +85,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateHistoricFhlUkPropertyPeriodSummaryController(
+    protected val controller: CreateHistoricFhlUkPropertyPeriodSummaryController = new CreateHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory,

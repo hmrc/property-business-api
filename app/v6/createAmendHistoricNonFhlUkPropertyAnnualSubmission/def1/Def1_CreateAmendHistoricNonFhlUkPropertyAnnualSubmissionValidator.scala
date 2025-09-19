@@ -23,11 +23,11 @@ import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
-import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
+import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
@@ -51,12 +51,12 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject(
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] = {
 
-    import parsed.body._
+    import parsed.body.*
 
     val validatedAnnualAdjustments = annualAdjustments.map(validateAnnualAdjustments).getOrElse(valid)
     val validatedAnnualAllowances  = annualAllowances.map(validateAnnualAllowances).getOrElse(valid)
@@ -70,7 +70,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject(
   }
 
   def validateAnnualAdjustments(annualAdjustments: HistoricNonFhlAnnualAdjustments): Validated[Seq[MtdError], Unit] = {
-    import annualAdjustments._
+    import annualAdjustments.*
 
     val valuesWithPaths = List(
       (lossBroughtForward, "/annualAdjustments/lossBroughtForward"),
@@ -88,7 +88,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject(
   }
 
   def validateAnnualAllowances(annualAllowances: HistoricNonFhlAnnualAllowances): Validated[Seq[MtdError], Unit] = {
-    import annualAllowances._
+    import annualAllowances.*
 
     val valuesWithPaths = List(
       (annualInvestmentAllowance, "/annualAllowances/annualInvestmentAllowance"),

@@ -44,6 +44,6 @@ object AnnualAdjustments {
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").read[Boolean] and
       (JsPath \ "ukRentARoom").readNullable[RentARoom]
-  )(AnnualAdjustments.apply _)
+  )(AnnualAdjustments.apply)
 
 }

@@ -16,9 +16,9 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
-import shared.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
 import v5.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator
 import v5.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 

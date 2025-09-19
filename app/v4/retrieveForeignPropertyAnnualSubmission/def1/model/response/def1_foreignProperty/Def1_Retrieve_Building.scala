@@ -16,7 +16,7 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Def1_Retrieve_Building(name: Option[String], number: Option[String], postcode: String)
@@ -28,6 +28,6 @@ object Def1_Retrieve_Building {
     (JsPath \ "name").readNullable[String] and
       (JsPath \ "number").readNullable[String] and
       (JsPath \ "postCode").read[String]
-  )(Def1_Retrieve_Building.apply _)
+  )(Def1_Retrieve_Building.apply)
 
 }

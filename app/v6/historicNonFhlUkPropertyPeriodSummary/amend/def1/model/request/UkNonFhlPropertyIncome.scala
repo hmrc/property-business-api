@@ -16,7 +16,7 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class UkNonFhlPropertyIncome(periodAmount: Option[BigDecimal],
@@ -37,6 +37,6 @@ object UkNonFhlPropertyIncome {
       (JsPath \ "otherIncome").writeNullable[BigDecimal] and
       (JsPath \ "rentIncome" \ "taxDeducted").writeNullable[BigDecimal] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyIncomeRentARoom]
-  )(unlift(UkNonFhlPropertyIncome.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

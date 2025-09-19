@@ -18,7 +18,7 @@ package v4.deletePropertyAnnualSubmission.def1
 
 import config.MockPropertyBusinessConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.utils.UnitSpec
 import v4.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionValidatorFactory
 import v4.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}

@@ -22,7 +22,11 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody, Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData}
+import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
+  AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBody,
+  Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData
+}
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.response.AmendHistoricNonFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -50,7 +54,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector: AmendHistoricNonFhlUkPropertyPeriodSummaryConnector = new AmendHistoricNonFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,
@@ -67,7 +71,8 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorS
         : CallHandler[Future[DownstreamOutcome[AmendHistoricNonFhlUkPropertyPeriodSummaryResponse]]]#Derived = {
 
       willPut(
-        url = url"$baseUrl/income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries?from=${request.periodId.from}&to=${request.periodId.to}",
+        url =
+          url"$baseUrl/income-tax/nino/${request.nino.value}/uk-properties/other/periodic-summaries?from=${request.periodId.from}&to=${request.periodId.to}",
         body = requestBody
       ).returns(Future.successful(outcome))
     }

@@ -25,9 +25,9 @@ import play.api.libs.json.{JsString, Json, OWrites}
 import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.{FakeRequest, ResultExtractors}
 import shared.config.Deprecation.{Deprecated, NotDeprecated}
-import shared.config.{SharedAppConfig, Deprecation, MockSharedAppConfig}
+import shared.config.{Deprecation, MockSharedAppConfig, SharedAppConfig}
 import shared.controllers.validators.Validator
-import shared.hateoas._
+import shared.hateoas.*
 import shared.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.errors.{ErrorWrapper, InternalError, MtdError, NinoFormatError}
@@ -146,21 +146,6 @@ class RequestHandlerSpec
         contentAsString(result) shouldBe ""
         header("X-CorrelationId", result) shouldBe Some(serviceCorrelationId)
         status(result) shouldBe NO_CONTENT
-      }
-
-      "wrap the response with hateoas links if required" in {
-        val requestHandler = successRequestHandler.withHateoasResult(mockHateoasFactory)(HData, successCode)
-
-        mockDeprecation(NotDeprecated)
-        service returns Future.successful(Right(ResponseWrapper(serviceCorrelationId, Output)))
-
-        MockHateoasFactory.wrap(Output, HData) returns HateoasWrapper(Output, hateoaslinks)
-
-        val result = requestHandler.handleRequest()
-
-        contentAsJson(result) shouldBe successResponseJson ++ hateoaslinksJson
-        header("X-CorrelationId", result) shouldBe Some(serviceCorrelationId)
-        status(result) shouldBe successCode
       }
     }
 

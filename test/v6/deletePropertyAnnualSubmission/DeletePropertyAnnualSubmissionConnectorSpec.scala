@@ -27,18 +27,18 @@ import scala.concurrent.Future
 
 class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   private val preTysTaxYear = TaxYear.fromMtd("2021-22")
-  private val tysTaxYear = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
 
   "connector" when {
     "the downstream response is a success" must {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       "return no content" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = preTysTaxYear
+        def taxYear: TaxYear = preTysTaxYear
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -46,7 +46,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       }
 
       "return no content given a TYS tax year request" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = tysTaxYear
+        def taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -60,7 +60,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
 
       "return the error" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = preTysTaxYear
+        def taxYear: TaxYear = preTysTaxYear
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -68,7 +68,7 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       }
 
       "return the error given a TYS tax year request" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = tysTaxYear
+        def taxYear: TaxYear = tysTaxYear
         stubTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -78,9 +78,9 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
-    protected val taxYear: TaxYear
+    protected def taxYear: TaxYear
 
     val connector: DeletePropertyAnnualSubmissionConnector = new DeletePropertyAnnualSubmissionConnector(
       http = mockHttpClient,

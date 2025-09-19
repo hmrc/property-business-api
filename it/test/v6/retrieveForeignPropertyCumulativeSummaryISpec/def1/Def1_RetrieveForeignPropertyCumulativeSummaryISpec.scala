@@ -17,14 +17,14 @@
 package v6.retrieveForeignPropertyCumulativeSummaryISpec.def1
 
 import common.models.errors.RuleTypeOfBusinessIncorrectError
-import shared.models.domain.TaxYear
-import shared.models.errors._
-import shared.services._
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.domain.TaxYear
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
@@ -127,7 +127,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBase
           ("AA123456A", "XAIS12345678910", "2024-25", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "BAD_BUSINESS_ID", "2025-26", Status.BAD_REQUEST, BusinessIdFormatError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
     }
 
@@ -157,7 +157,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBase
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+        input.foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

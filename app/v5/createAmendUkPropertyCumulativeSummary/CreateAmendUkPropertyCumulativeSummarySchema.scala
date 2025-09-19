@@ -16,11 +16,11 @@
 
 package v5.createAmendUkPropertyCumulativeSummary
 
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
 import shared.controllers.validators.resolvers.ResolveTaxYear
 import shared.models.domain.TaxYear
 import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
-import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
 
 import scala.math.Ordered.orderingToOrdered
 

@@ -16,9 +16,9 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.retrieve.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import v6.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response._
+import v6.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response.*
 
 sealed trait RetrieveHistoricFhlUkPropertyPeriodSummaryResponse
 
@@ -48,6 +48,6 @@ object Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse {
       (JsPath \ "to").read[String] and
       (JsPath \ "financials" \ "incomes").readNullable[PeriodIncome] and
       (JsPath \ "financials" \ "deductions").readNullable[PeriodExpenses]
-  )(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse.apply _)
+  )(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse.apply)
 
 }

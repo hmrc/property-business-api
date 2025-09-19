@@ -16,9 +16,9 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1.model.response
 
-import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Json, OWrites, Reads, __}
+import shared.models.domain.Timestamp
 import v5.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
 
 // Note: ukProperty is effectively mandatory.
@@ -42,6 +42,6 @@ object Def1_RetrieveUkPropertyCumulativeSummaryResponse {
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
       (__ \ "ukOtherProperty").readNullable[UkProperty]
-  )(Def1_RetrieveUkPropertyCumulativeSummaryResponse.apply _)
+  )(Def1_RetrieveUkPropertyCumulativeSummaryResponse.apply)
 
 }

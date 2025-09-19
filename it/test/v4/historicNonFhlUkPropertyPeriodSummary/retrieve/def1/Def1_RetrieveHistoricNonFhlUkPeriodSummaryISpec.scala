@@ -19,12 +19,12 @@ package v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.PeriodIdFormatError
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError}
-import shared.services._
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 class Def1_RetrieveHistoricNonFhlUkPeriodSummaryISpec extends IntegrationBaseSpec {
@@ -74,7 +74,7 @@ class Def1_RetrieveHistoricNonFhlUkPeriodSummaryISpec extends IntegrationBaseSpe
           ("AA123", "2020-01-01_2020-01-31", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "2020-01-31_2020-01-01", BAD_REQUEST, PeriodIdFormatError)
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "Downstream service error" when {
@@ -104,7 +104,7 @@ class Def1_RetrieveHistoricNonFhlUkPeriodSummaryISpec extends IntegrationBaseSpe
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest _).tupled(args))
+        input.foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

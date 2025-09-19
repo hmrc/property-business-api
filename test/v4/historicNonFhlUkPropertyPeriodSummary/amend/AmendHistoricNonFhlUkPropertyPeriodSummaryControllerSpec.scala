@@ -30,7 +30,7 @@ import shared.models.errors.{ErrorWrapper, NinoFormatError}
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request._
+import v4.historicNonFhlUkPropertyPeriodSummary.amend.model.request.*
 import v4.historicNonFhlUkPropertyPeriodSummary.create.MockAmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -87,7 +87,7 @@ class AmendHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
+    protected val controller: AmendHistoricNonFhlUkPropertyPeriodSummaryController = new AmendHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockAmendHistoricNonFhlUkPeriodSummaryValidatorFactory,

@@ -37,7 +37,7 @@ class Def2_AmendForeignPropertyPeriodSummaryRulesValidator extends RulesValidato
 
   def validateBusinessRules(
       parsed: Def2_AmendForeignPropertyPeriodSummaryRequestData): Validated[Seq[MtdError], Def2_AmendForeignPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     List(
       foreignFhlEea.map(validateForeignFhlEea).getOrElse(valid),
@@ -46,7 +46,7 @@ class Def2_AmendForeignPropertyPeriodSummaryRulesValidator extends RulesValidato
   }
 
   private def validateForeignFhlEea(foreignFhlEea: Def2_AmendForeignFhlEea): Validated[Seq[MtdError], Unit] = {
-    import foreignFhlEea._
+    import foreignFhlEea.*
 
     val nonNegativeForeignFhlProperty = List(
       (income.flatMap(_.rentAmount), "/foreignFhlEea/income/rentAmount")
@@ -116,7 +116,7 @@ class Def2_AmendForeignPropertyPeriodSummaryRulesValidator extends RulesValidato
 
   private def validateForeignNonFhlProperty(foreignNonFhlPropertyEntry: Def2_AmendForeignNonFhlPropertyEntry,
                                             index: Int): Validated[Seq[MtdError], Unit] = {
-    import foreignNonFhlPropertyEntry.{countryCode, expenses => e, income => i}
+    import foreignNonFhlPropertyEntry.{countryCode, expenses as e, income as i}
 
     val validatedCountryCode = ResolveParsedCountryCode(countryCode, s"/foreignNonFhlProperty/$index/countryCode")
 

@@ -17,13 +17,13 @@
 package v6.deletePropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.deletePropertyAnnualSubmission.model.request._
+import v6.deletePropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
@@ -38,6 +38,6 @@ class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, busi
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData.apply)
 
 }

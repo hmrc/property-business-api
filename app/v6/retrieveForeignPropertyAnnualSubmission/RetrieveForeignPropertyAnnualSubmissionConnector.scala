@@ -23,32 +23,22 @@ import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, Downstream
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionConnector.{ForeignResult, NonForeignResult, Result}
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
-import v6.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
+import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveForeignPropertyAnnualSubmissionConnector {
-
-  sealed trait Result
-
-  case class ForeignResult(response: RetrieveForeignPropertyAnnualSubmissionResponse) extends Result
-
-  case object NonForeignResult extends Result
-}
-
 @Singleton
-class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpClientV2, val appConfig: SharedAppConfig)
-  extends BaseDownstreamConnector {
+class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveForeignProperty(request: RetrieveForeignPropertyAnnualSubmissionRequestData)(implicit
-                                                                                           hc: HeaderCarrier,
-                                                                                           ec: ExecutionContext,
-                                                                                           correlationId: String): Future[DownstreamOutcome[Result]] = {
-    import request._
-    import schema._
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
+    import request.*
+    import schema.*
 
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
       case taxYear if taxYear.useTaxYearSpecificApi =>
@@ -63,8 +53,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject()(val http: HttpC
 
     response.map {
       case Right(ResponseWrapper(corId, resp)) if resp.hasForeignData => Right(ResponseWrapper(corId, ForeignResult(resp)))
-      case Right(ResponseWrapper(corId, _)) => Right(ResponseWrapper(corId, NonForeignResult))
-      case Left(e) => Left(e)
+      case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
+      case Left(e)                                                    => Left(e)
     }
 
   }

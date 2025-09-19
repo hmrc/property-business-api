@@ -19,42 +19,32 @@ package v5.retrieveForeignPropertyCumulativeSummary
 import config.PropertyBusinessFeatureSwitches
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryConnector._
-import v5.retrieveForeignPropertyCumulativeSummary.model.request._
-import v5.retrieveForeignPropertyCumulativeSummary.model.response._
+import v5.retrieveForeignPropertyCumulativeSummary.model.request.*
+import v5.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-object RetrieveForeignPropertyCumulativeSummaryConnector {
-
-  sealed trait Result
-
-  case class ForeignResult(response: RetrieveForeignPropertyCumulativeSummaryResponse) extends Result
-
-  case object NonForeignResult extends Result
-}
-
 @Singleton
-class RetrieveForeignPropertyCumulativeSummaryConnector @Inject()(val http: HttpClientV2)(implicit val appConfig: SharedAppConfig)
-  extends BaseDownstreamConnector {
+class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2)(implicit val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyCumulativeSummary(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit
-                                                                                                             hc: HeaderCarrier,
-                                                                                                             ec: ExecutionContext,
-                                                                                                             correlationId: String): Future[DownstreamOutcome[Result]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Result]] = {
 
-    import request._
-    import schema._
+    import request.*
+    import schema.*
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
 
-    val downstreamUri: DownstreamUri[DownstreamResp] = IfsUri[DownstreamResp](
-      s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
+    val downstreamUri: DownstreamUri[DownstreamResp] =
+      IfsUri[DownstreamResp](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
 
     get(uri = downstreamUri, maybeIntent = maybeIntent)
       .map(_.map(_.map { response => if (response.hasForeignData) ForeignResult(response) else NonForeignResult }))

@@ -16,8 +16,8 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class Def1_Retrieve_UkNonFhlPropertyBuilding(name: Option[String], number: Option[String], postcode: String)
 
@@ -28,6 +28,6 @@ object Def1_Retrieve_UkNonFhlPropertyBuilding {
     (__ \ "name").readNullable[String] and
       (__ \ "number").readNullable[String] and
       (__ \ "postCode").read[String]
-  )(Def1_Retrieve_UkNonFhlPropertyBuilding.apply _)
+  )(Def1_Retrieve_UkNonFhlPropertyBuilding.apply)
 
 }

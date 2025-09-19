@@ -42,15 +42,16 @@ import javax.inject.{Inject, Singleton}
     },
     rewrite = (_, _, yaml) => {
       if (rewriteSummaryRegex.findAllIn(yaml).length == 1) {
-        val maybeLine = rewriteSummaryRegex.findFirstIn(yaml)
+        val maybeLine: Option[String] = rewriteSummaryRegex.findFirstIn(yaml)
         val rewritten = maybeLine
           .collect {
             case line if !line.toLowerCase.contains("[test only]") =>
-              val components = line.split("summary: ")
-              val whitespace = components(0)
-              val summary    = components(1).replace("\"", "")
+              val components: Array[String] = line.split("summary: ")
+              val whitespace: String        = components(0)
+              val summary: String           = components(1).replace("\"", "")
 
-              val replacement           = s"""${whitespace}summary: "$summary [test only]""""
+              val replacement: String = s"""${whitespace}summary: "$summary [test only]""""
+
               val literalString: String = Pattern.quote(line)
 
               yaml.replaceFirst(literalString, replacement)

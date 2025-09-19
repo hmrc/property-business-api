@@ -16,15 +16,15 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
+import cats.data.EitherT
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
-import cats.data.EitherT
-import RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
-import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import v6.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
 import v6.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
+import v6.retrieveUkPropertyPeriodSummary.model.{NonUkResult, Result, UkResult}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,7 +64,7 @@ class RetrieveUkPropertyPeriodSummaryService @Inject() (connector: RetrieveUkPro
     errorMap ++ tysErrorMap
   }
 
-  private def validateBusinessType(resultWrapper: ResponseWrapper[RetrieveUkPropertyPeriodSummaryConnector.Result]) =
+  private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =
     resultWrapper.responseData match {
       case UkResult(response) => Right(ResponseWrapper(resultWrapper.correlationId, response))
       case NonUkResult        => Left(ErrorWrapper(resultWrapper.correlationId, RuleTypeOfBusinessIncorrectError))

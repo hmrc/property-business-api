@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 package shared.controllers.validators.resolvers
 
 import cats.data.Validated.{Invalid, Valid}
-import play.api.libs.json._
-import shapeless.HNil
+import play.api.libs.json.*
 import shared.models.errors.RuleIncorrectOrEmptyBodyError
 import shared.models.utils.JsonErrorValidators
+import shared.utils.EmptinessChecker.field
 import shared.utils.{EmptinessChecker, UnitSpec}
 
 class ResolveNonEmptyJsonObjectSpec extends UnitSpec with ResolverSupport with JsonErrorValidators {
@@ -31,7 +31,10 @@ class ResolveNonEmptyJsonObjectSpec extends UnitSpec with ResolverSupport with J
 
   // at least one of oneOf1 and oneOf2 must be included:
   implicit val emptinessChecker: EmptinessChecker[Qux] = EmptinessChecker.use { o =>
-    "oneOf1" -> o.oneOf1 :: "oneOf2" -> o.oneOf2 :: HNil
+    List(
+      field("oneOf1", o.oneOf1),
+      field("oneOf2", o.oneOf2)
+    )
   }
 
   case class Foo(bar: Bar, bars: Option[Seq[Bar]] = None, baz: Option[Baz] = None, qux: Option[Qux] = None)
@@ -99,7 +102,7 @@ class ResolveNonEmptyJsonObjectSpec extends UnitSpec with ResolverSupport with J
   "ResolveNonEmptyJsonObject" when {
 
     "the default resolver is used" must {
-      val resolver = ResolveNonEmptyJsonObject.resolver[Foo]
+      val resolver: Resolver[JsValue, Foo] = ResolveNonEmptyJsonObject.resolver[Foo]
 
       behave like jsonObjectResolver(resolver)
       behave like jsonObjectResolverWithEmptinessChecking(resolver)
@@ -111,8 +114,19 @@ class ResolveNonEmptyJsonObjectSpec extends UnitSpec with ResolverSupport with J
       }
     }
 
+    "an instance is created" must {
+      "delegate to the companion object resolver and apply" in {
+        val json = Json.parse("""{ "bar": {"field1" : "field one", "field2" : "field two" }}""")
+
+        val instance = ResolveNonEmptyJsonObject[Foo]
+
+        instance.resolver(json) shouldBe Valid(Foo(bar = Bar("field one", "field two")))
+        instance(json) shouldBe Valid(Foo(bar = Bar("field one", "field two")))
+      }
+    }
+
     "the strict resolver is used" must {
-      val resolver = ResolveNonEmptyJsonObject.strictResolver[Foo]
+      val resolver: Resolver[JsValue, Foo] = ResolveNonEmptyJsonObject.strictResolver[Foo]
 
       behave like jsonObjectResolver(resolver)
       behave like jsonObjectResolverWithEmptinessChecking(resolver)

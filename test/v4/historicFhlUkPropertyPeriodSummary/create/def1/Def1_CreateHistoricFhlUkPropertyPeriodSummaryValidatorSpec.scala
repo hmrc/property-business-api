@@ -17,10 +17,10 @@
 package v4.historicFhlUkPropertyPeriodSummary.create.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.controllers.validators.Validator
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}

@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyCumulativeSummary.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Income(premiumsOfLeaseGrant: Option[BigDecimal],
@@ -36,6 +36,6 @@ object Income {
       (JsPath \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "otherIncome").readNullable[BigDecimal] and
       (JsPath \ "ukOtherRentARoom").readNullable[RentARoomIncome]
-  )(Income.apply _)
+  )(Income.apply)
 
 }

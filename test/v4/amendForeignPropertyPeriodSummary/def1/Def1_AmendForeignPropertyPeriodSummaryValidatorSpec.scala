@@ -21,12 +21,12 @@ import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountry
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea._
-import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry._
-import v4.amendForeignPropertyPeriodSummary.model.request._
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.*
+import v4.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.*
+import v4.amendForeignPropertyPeriodSummary.model.request.*
 
 class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
@@ -448,7 +448,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
           (bodyWith(entry.removeProperty("/countryCode")), "/foreignNonFhlProperty/0/countryCode"),
           (bodyWith(entry.removeProperty("/income/foreignTaxCreditRelief")), "/foreignNonFhlProperty/0/income/foreignTaxCreditRelief"),
           (bodyWith(entry.removeProperty("/income").removeProperty("/expenses")), "/foreignNonFhlProperty/0")
-        ).foreach((testRuleIncorrectOrEmptyBodyWith _).tupled)
+        ).foreach((testRuleIncorrectOrEmptyBodyWith).tupled)
 
       }
 
@@ -483,7 +483,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with 
             bodyWith(entry.update("/expenses/broughtFwdResidentialFinancialCost", badValue)),
             "/foreignNonFhlProperty/0/expenses/broughtFwdResidentialFinancialCost"),
           (bodyWith(entry.update("/expenses/other", badValue)), "/foreignNonFhlProperty/0/expenses/other")
-        ).foreach((testValueFormatErrorWith _).tupled)
+        ).foreach((testValueFormatErrorWith).tupled)
       }
 
       "passed a request body with invalid consolidated expenses" when {

@@ -20,10 +20,10 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.RuleBothExpensesSuppliedError
+import common.utils.DateValidator
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.ResolveParsedNumber
 import shared.models.errors.MtdError
-import common.utils.DateValidator
 import v5.createAmendUkPropertyCumulativeSummary.def1.model.request.{Def1_CreateAmendUkPropertyCumulativeSummaryRequestData, Expenses, UkProperty}
 
 class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidator[Def1_CreateAmendUkPropertyCumulativeSummaryRequestData] {
@@ -34,7 +34,7 @@ class Def1_CreateUkPropertyCumulativeSummaryRulesValidator extends RulesValidato
   def validateBusinessRules(parsed: Def1_CreateAmendUkPropertyCumulativeSummaryRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendUkPropertyCumulativeSummaryRequestData] = {
 
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       DateValidator.validateFromAndToDates(fromDate, toDate),

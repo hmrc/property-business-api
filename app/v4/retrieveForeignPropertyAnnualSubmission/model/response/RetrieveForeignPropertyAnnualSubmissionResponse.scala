@@ -16,9 +16,9 @@
 
 package v4.retrieveForeignPropertyAnnualSubmission.model.response
 
-import shared.models.domain.Timestamp
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shared.models.domain.Timestamp
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignFhlEea.Def1_Retrieve_ForeignFhlEeaEntry
 import v4.retrieveForeignPropertyAnnualSubmission.def1.model.response.def1_foreignProperty.Def1_Retrieve_ForeignPropertyEntry
 
@@ -47,6 +47,6 @@ object Def1_RetrieveForeignPropertyAnnualSubmissionResponse {
     (JsPath \ "submittedOn").read[Timestamp] and
       (JsPath \ "foreignFhlEea").readNullable[Def1_Retrieve_ForeignFhlEeaEntry] and
       (JsPath \ "foreignProperty").readNullable[Seq[Def1_Retrieve_ForeignPropertyEntry]]
-  )(Def1_RetrieveForeignPropertyAnnualSubmissionResponse.apply _)
+  )(Def1_RetrieveForeignPropertyAnnualSubmissionResponse.apply)
 
 }

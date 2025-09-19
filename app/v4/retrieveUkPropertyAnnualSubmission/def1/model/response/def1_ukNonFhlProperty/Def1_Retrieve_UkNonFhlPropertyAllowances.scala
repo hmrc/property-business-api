@@ -16,7 +16,7 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Def1_Retrieve_UkNonFhlPropertyAllowances(
@@ -47,6 +47,6 @@ object Def1_Retrieve_UkNonFhlPropertyAllowances {
       (JsPath \ "structuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").readNullable[Seq[Def1_Retrieve_UkNonFhlPropertyStructuredBuildingAllowance]] and
       (JsPath \ "zeroEmissionsCarAllowance").readNullable[BigDecimal]
-  )(Def1_Retrieve_UkNonFhlPropertyAllowances.apply _)
+  )(Def1_Retrieve_UkNonFhlPropertyAllowances.apply)
 
 }

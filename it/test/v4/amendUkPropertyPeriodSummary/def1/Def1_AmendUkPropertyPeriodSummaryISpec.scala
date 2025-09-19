@@ -19,12 +19,14 @@ package v4.amendUkPropertyPeriodSummary.def1
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services._
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
@@ -492,7 +494,7 @@ class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
           BAD_REQUEST,
           RuleBothExpensesSuppliedRequestError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "return downstream service error" when {
@@ -535,7 +537,7 @@ class Def1_AmendUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec {
         (BAD_REQUEST, "INCOME_SOURCE_NOT_COMPATIBLE", BAD_REQUEST, RuleTypeOfBusinessIncorrectError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

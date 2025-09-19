@@ -80,7 +80,7 @@ class ListHistoricFhlUkPropertyPeriodSummariesControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new ListHistoricFhlUkPropertyPeriodSummariesController(
+    protected val controller: ListHistoricFhlUkPropertyPeriodSummariesController = new ListHistoricFhlUkPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockListHistoricUkPropertyPeriodSummariesValidatorFactory,

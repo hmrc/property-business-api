@@ -16,7 +16,7 @@
 
 package v5.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def1_Create_ForeignNonFhlPropertyIncome(
@@ -38,6 +38,6 @@ object Def1_Create_ForeignNonFhlPropertyIncome {
       (JsPath \ "otherPropertyIncome").writeNullable[BigDecimal] and
       (JsPath \ "foreignTaxPaidOrDeducted").writeNullable[BigDecimal] and
       (JsPath \ "specialWithholdingTaxOrUkTaxPaid").writeNullable[BigDecimal]
-  )(unlift(Def1_Create_ForeignNonFhlPropertyIncome.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

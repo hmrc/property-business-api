@@ -16,11 +16,11 @@
 
 package v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import play.api.libs.json.Format.GenericFormat
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import play.api.libs.json.Format.GenericFormat
-import shared.config.SharedAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v5.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
@@ -41,7 +41,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (va
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse]] = {
 
-    import request._
+    import request.*
 
     val downstreamUri = IfsUri[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse](
       s"income-tax/nino/$nino/uk-properties/other/annual-summaries/${taxYear.asDownstream}")

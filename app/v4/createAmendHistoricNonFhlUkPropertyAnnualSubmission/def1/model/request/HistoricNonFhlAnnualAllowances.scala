@@ -16,7 +16,7 @@
 
 package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class HistoricNonFhlAnnualAllowances(
@@ -38,6 +38,6 @@ object HistoricNonFhlAnnualAllowances {
       (JsPath \ "otherCapitalAllowance").writeNullable[BigDecimal] and
       (JsPath \ "costOfReplacingDomGoods").writeNullable[BigDecimal] and
       (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal]
-  )(unlift(HistoricNonFhlAnnualAllowances.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

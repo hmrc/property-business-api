@@ -17,11 +17,11 @@
 package v5.createAmendForeignPropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v5.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
@@ -47,6 +47,6 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: 
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
 
 }

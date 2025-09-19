@@ -18,10 +18,10 @@ package v5.deletePropertyAnnualSubmission.def1
 
 import config.MockPropertyBusinessConfig
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.utils.UnitSpec
 import v5.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionValidatorFactory
-import v5.deletePropertyAnnualSubmission.model.request._
+import v5.deletePropertyAnnualSubmission.model.request.*
 
 class Def1_DeletePropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
   private implicit val correlationId: String = "1234"

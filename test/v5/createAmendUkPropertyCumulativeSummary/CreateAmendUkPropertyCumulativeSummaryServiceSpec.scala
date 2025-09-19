@@ -113,7 +113,7 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "SERVICE_UNAVAILABLE"                -> InternalError
         )
 
-        errorMap.foreach(args => (serviceError _).tupled(args))
+        errorMap.foreach(args => (serviceError).tupled(args))
       }
     }
 

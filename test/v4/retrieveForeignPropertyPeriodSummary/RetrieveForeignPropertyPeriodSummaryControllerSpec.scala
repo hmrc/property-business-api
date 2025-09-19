@@ -21,13 +21,13 @@ import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain._
+import shared.models.domain.*
 import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
 import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.{ForeignFhlEea, ForeignFhlEeaExpenses, ForeignFhlEeaIncome}
-import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
+import v4.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.*
 import v4.retrieveForeignPropertyPeriodSummary.model.request.{
   Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
   RetrieveForeignPropertyPeriodSummaryRequestData
@@ -87,7 +87,7 @@ class RetrieveForeignPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveForeignPropertyPeriodSummaryController(
+    protected val controller: RetrieveForeignPropertyPeriodSummaryController = new RetrieveForeignPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyPeriodSummaryValidatorFactory,

@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class RetrieveUkPropertyAdjustments(
     balancingCharge: Option[BigDecimal],
@@ -41,6 +41,6 @@ object RetrieveUkPropertyAdjustments {
       (__ \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (__ \ "nonResidentLandlord").read[Boolean] and
       rentARoomReads
-  )(RetrieveUkPropertyAdjustments.apply _)
+  )(RetrieveUkPropertyAdjustments.apply)
 
 }

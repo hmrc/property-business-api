@@ -20,11 +20,11 @@ import common.models.domain.SubmissionId
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v5.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryConnector.{NonUkResult, UkResult}
+import v5.retrieveUkPropertyPeriodSummary.model.{NonUkResult, UkResult}
 import v5.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v5.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
@@ -93,7 +93,7 @@ class RetrieveUkPropertyPeriodSummaryServiceSpec extends UnitSpec with Def1_Retr
           "INVALID_CORRELATION_ID"  -> InternalError
         )
 
-      (errorMap ++ tysErrorMap).foreach(args => (serviceError _).tupled(args))
+      (errorMap ++ tysErrorMap).foreach(args => (serviceError).tupled(args))
     }
   }
 

@@ -16,7 +16,7 @@
 
 package v4.retrieveUkPropertyPeriodSummary.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Def1_Retrieve_FhlPropertyIncome(periodAmount: Option[BigDecimal],
@@ -30,6 +30,6 @@ object Def1_Retrieve_FhlPropertyIncome {
     (JsPath \ "periodAmount").readNullable[BigDecimal] and
       (JsPath \ "taxDeducted").readNullable[BigDecimal] and
       (JsPath \ "ukFhlRentARoom").readNullable[Def1_Retrieve_RentARoomIncome]
-  )(Def1_Retrieve_FhlPropertyIncome.apply _)
+  )(Def1_Retrieve_FhlPropertyIncome.apply)
 
 }

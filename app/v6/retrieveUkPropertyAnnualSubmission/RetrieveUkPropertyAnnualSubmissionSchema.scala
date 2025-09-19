@@ -25,7 +25,7 @@ import shared.models.errors.MtdError
 import shared.schema.DownstreamReadable
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
-import v6.retrieveUkPropertyAnnualSubmission.model.response._
+import v6.retrieveUkPropertyAnnualSubmission.model.response.*
 
 import scala.math.Ordered.orderingToOrdered
 

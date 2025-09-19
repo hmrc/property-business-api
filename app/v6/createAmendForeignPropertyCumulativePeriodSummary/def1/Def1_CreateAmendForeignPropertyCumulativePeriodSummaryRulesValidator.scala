@@ -16,14 +16,14 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors._
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.RuleBothExpensesSuppliedError
 import common.utils.DateValidator
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.models.errors.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
   Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData,
   Expenses,
@@ -39,7 +39,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
 
   def validateBusinessRules(parsed: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     combine(
       DateValidator.validateFromAndToDates(fromDate, toDate),
@@ -58,7 +58,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
   }
 
   private def validateForeignPropertyEntry(entry: ForeignProperty, index: Int): Validated[Seq[MtdError], Unit] = {
-    import entry._
+    import entry.*
     val valuesWithPaths = List(
       (income.flatMap(_.rentIncome.flatMap(_.rentAmount)), s"/foreignProperty/$index/income/rentIncome/rentAmount"),
       (income.flatMap(_.premiumsOfLeaseGrant), s"/foreignProperty/$index/income/premiumsOfLeaseGrant"),

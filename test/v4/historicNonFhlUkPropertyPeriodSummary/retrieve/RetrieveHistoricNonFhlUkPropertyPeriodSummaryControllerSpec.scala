@@ -31,7 +31,7 @@ import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
-import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response._
+import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -83,7 +83,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryController(
+    protected val controller: RetrieveHistoricNonFhlUkPropertyPeriodSummaryController = new RetrieveHistoricNonFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory,

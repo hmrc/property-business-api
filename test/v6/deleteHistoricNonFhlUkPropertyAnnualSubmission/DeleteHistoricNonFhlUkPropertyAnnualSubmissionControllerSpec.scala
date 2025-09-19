@@ -94,7 +94,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
+    protected val controller: DeleteHistoricNonFhlUkPropertyAnnualSubmissionController = new DeleteHistoricNonFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory,

@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v4.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome}
 
@@ -48,6 +48,6 @@ object Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse {
       (JsPath \ "to").read[String] and
       (JsPath \ "financials" \ "incomes").readNullable[PeriodIncome] and
       (JsPath \ "financials" \ "deductions").readNullable[PeriodExpenses]
-  )(Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse.apply _)
+  )(Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse.apply)
 
 }

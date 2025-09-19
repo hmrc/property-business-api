@@ -18,15 +18,14 @@ package shared.controllers
 
 import cats.data.EitherT
 import cats.data.Validated.Valid
-import cats.implicits._
+import cats.implicits.*
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
-import shared.config.SharedAppConfig
 import shared.config.Deprecation.Deprecated
+import shared.config.SharedAppConfig
 import shared.controllers.validators.Validator
-import shared.hateoas.{HateoasData, HateoasFactory, HateoasLinksFactory, HateoasWrapper}
 import shared.models.errors.{ErrorWrapper, InternalError, RuleRequestCannotBeFulfilledError}
 import shared.models.outcomes.ResponseWrapper
 import shared.routing.Version
@@ -37,7 +36,7 @@ import shared.utils.Logging
 import scala.concurrent.{ExecutionContext, Future}
 
 trait RequestHandler {
-  def handleRequest()(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: SharedAppConfig): Future[Result]
+  def handleRequest()(implicit ctx: RequestContext, request: UserRequest[?], ec: ExecutionContext, appConfig: SharedAppConfig): Future[Result]
 }
 
 object RequestHandler {
@@ -61,7 +60,7 @@ object RequestHandler {
       responseModifier: Option[Output => Output] = None
   ) extends RequestHandler {
 
-    def handleRequest()(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: SharedAppConfig): Future[Result] =
+    def handleRequest()(implicit ctx: RequestContext, request: UserRequest[?], ec: ExecutionContext, appConfig: SharedAppConfig): Future[Result] =
       Delegate.handleRequest()
 
     def withErrorHandling(errorHandling: ErrorHandling): RequestHandlerBuilder[Input, Output] =
@@ -91,27 +90,6 @@ object RequestHandler {
 
     def withResultCreator(resultCreator: ResultCreator[Input, Output]): RequestHandlerBuilder[Input, Output] =
       copy(resultCreator = resultCreator)
-
-    /** Shorthand for
-      * {{{
-      * withResultCreator(ResultCreator.hateoasWrapping(hateoasFactory, successStatus)(data))
-      * }}}
-      */
-    def withHateoasResultFrom[HData <: HateoasData](
-        hateoasFactory: HateoasFactory)(data: (Input, Output) => HData, successStatus: Int = Status.OK)(implicit
-        linksFactory: HateoasLinksFactory[Output, HData],
-        writes: Writes[HateoasWrapper[Output]]): RequestHandlerBuilder[Input, Output] =
-      withResultCreator(ResultCreator.hateoasWrapping(hateoasFactory, successStatus)(data))
-
-    /** Shorthand for
-      * {{{
-      * withResultCreator(ResultCreator.hateoasWrapping(hateoasFactory, successStatus)((_,_) => data))
-      * }}}
-      */
-    def withHateoasResult[HData <: HateoasData](hateoasFactory: HateoasFactory)(data: HData, successStatus: Int = Status.OK)(implicit
-        linksFactory: HateoasLinksFactory[Output, HData],
-        writes: Writes[HateoasWrapper[Output]]): RequestHandlerBuilder[Input, Output] =
-      withResultCreator(ResultCreator.hateoasWrapping(hateoasFactory, successStatus)((_, _) => data))
 
     // Scoped as a private delegate so as to keep the logic completely separate from the configuration
     private object Delegate extends RequestHandler with Logging with RequestContextImplicits {
@@ -153,7 +131,7 @@ object RequestHandler {
 
       def handleRequest()(implicit
           ctx: RequestContext,
-          request: UserRequest[_],
+          request: UserRequest[?],
           ec: ExecutionContext,
           appConfig: SharedAppConfig
       ): Future[Result] = {
@@ -186,7 +164,7 @@ object RequestHandler {
         }.merge
       }
 
-      private def simulateRequestCannotBeFulfilled(implicit request: UserRequest[_], appConfig: SharedAppConfig): Boolean =
+      private def simulateRequestCannotBeFulfilled(implicit request: UserRequest[?], appConfig: SharedAppConfig): Boolean =
         request.headers.get("Gov-Test-Scenario").contains("REQUEST_CANNOT_BE_FULFILLED") &&
           appConfig.allowRequestCannotBeFulfilledHeader(Version(request))
 
@@ -194,7 +172,7 @@ object RequestHandler {
 
       private def handleSuccess(parsedRequest: Input, serviceResponse: ResponseWrapper[Output])(implicit
           ctx: RequestContext,
-          request: UserRequest[_],
+          request: UserRequest[?],
           ec: ExecutionContext,
           appConfig: SharedAppConfig): Result = {
 
@@ -214,7 +192,7 @@ object RequestHandler {
 
       private def handleFailure(errorWrapper: ErrorWrapper)(implicit
           ctx: RequestContext,
-          request: UserRequest[_],
+          request: UserRequest[?],
           ec: ExecutionContext,
           appConfig: SharedAppConfig): Result = {
 
@@ -238,7 +216,7 @@ object RequestHandler {
 
       private def auditIfRequired(httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
           ctx: RequestContext,
-          request: UserRequest[_],
+          request: UserRequest[?],
           ec: ExecutionContext): Unit =
         auditHandler.foreach { creator =>
           creator.performAudit(request.userDetails, httpStatus, response)

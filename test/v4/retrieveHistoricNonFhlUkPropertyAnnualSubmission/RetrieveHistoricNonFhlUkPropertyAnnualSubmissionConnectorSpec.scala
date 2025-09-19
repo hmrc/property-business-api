@@ -22,8 +22,14 @@ import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
-import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData}
-import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse}
+import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
+}
+import v4.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.{
+  Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse,
+  RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
+}
 
 import scala.concurrent.Future
 
@@ -58,7 +64,8 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnectorSpec extends Conn
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     protected val connector: RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector =
       new RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector(

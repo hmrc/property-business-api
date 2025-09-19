@@ -16,11 +16,11 @@
 
 package v6.deletePropertyAnnualSubmission
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleOutsideAmendmentWindowError
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.services.{BaseService, ServiceOutcome}
 import v6.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

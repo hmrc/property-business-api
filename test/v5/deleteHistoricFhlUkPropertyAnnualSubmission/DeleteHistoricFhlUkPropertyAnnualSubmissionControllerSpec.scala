@@ -100,7 +100,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
     protected val propertyTypeValue: HistoricPropertyType
 
-    protected val controller = new DeleteHistoricFhlUkPropertyAnnualSubmissionController(
+    protected val controller: DeleteHistoricFhlUkPropertyAnnualSubmissionController = new DeleteHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteHistoricUkPropertyAnnualSubmissionValidatorFactory,

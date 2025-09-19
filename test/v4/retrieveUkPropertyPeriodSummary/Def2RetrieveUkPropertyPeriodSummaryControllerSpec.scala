@@ -21,10 +21,10 @@ import play.api.Configuration
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v4.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
-import v4.retrieveUkPropertyPeriodSummary.model.request._
+import v4.retrieveUkPropertyPeriodSummary.model.request.*
 import v4.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -75,7 +75,7 @@ class Def2RetrieveUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveUkPropertyPeriodSummaryController(
+    protected val controller: RetrieveUkPropertyPeriodSummaryController = new RetrieveUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveUkPropertyPeriodSummaryValidatorFactory,

@@ -44,6 +44,6 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId)
-    ).mapN(Def2_RetrieveUkPropertyPeriodSummaryRequestData)
+    ).mapN(Def2_RetrieveUkPropertyPeriodSummaryRequestData.apply)
 
 }

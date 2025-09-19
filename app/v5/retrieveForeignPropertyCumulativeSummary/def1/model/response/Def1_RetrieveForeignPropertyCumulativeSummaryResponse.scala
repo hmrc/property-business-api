@@ -16,9 +16,9 @@
 
 package v5.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
-import shared.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Json, OWrites, Reads, __}
+import shared.models.domain.Timestamp
 import v5.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
 // Note: ForeignPropertyEntry is effectively mandatory.
@@ -43,6 +43,6 @@ object Def1_RetrieveForeignPropertyCumulativeSummaryResponse {
       (__ \ "fromDate").read[String] and
       (__ \ "toDate").read[String] and
       (__ \ "foreignProperty").readNullable[Seq[ForeignPropertyEntry]]
-  )(Def1_RetrieveForeignPropertyCumulativeSummaryResponse.apply _)
+  )(Def1_RetrieveForeignPropertyCumulativeSummaryResponse.apply)
 
 }

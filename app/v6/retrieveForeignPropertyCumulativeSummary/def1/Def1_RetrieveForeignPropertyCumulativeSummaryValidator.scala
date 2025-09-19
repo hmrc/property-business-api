@@ -16,11 +16,11 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.def1
 
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import shared.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple3Semigroupal
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
@@ -37,6 +37,6 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryValidator @Inject() (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       ResolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveForeignPropertyCumulativeSummaryRequestData)
+    ).mapN(Def1_RetrieveForeignPropertyCumulativeSummaryRequestData.apply)
 
 }

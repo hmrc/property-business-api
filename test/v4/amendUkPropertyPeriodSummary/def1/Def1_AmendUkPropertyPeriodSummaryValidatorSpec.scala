@@ -22,14 +22,14 @@ import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import shared.controllers.validators.Validator
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
-import v4.amendUkPropertyPeriodSummary.model.request._
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
+import v4.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
+import v4.amendUkPropertyPeriodSummary.model.request.*
 
 class Def1_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 

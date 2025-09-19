@@ -19,7 +19,7 @@ package v4.deleteHistoricFhlUkPropertyAnnualSubmission
 import common.models.domain.HistoricPropertyType
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
-import shared.controllers._
+import shared.controllers.*
 import shared.models.audit.GenericAuditDetail
 import shared.routing.Version
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}

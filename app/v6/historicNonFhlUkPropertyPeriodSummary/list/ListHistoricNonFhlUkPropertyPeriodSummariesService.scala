@@ -18,7 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.list
 
 import cats.implicits.toBifunctorOps
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
 import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
 import v6.historicNonFhlUkPropertyPeriodSummary.list.model.response.ListHistoricNonFhlUkPropertyPeriodSummariesResponse

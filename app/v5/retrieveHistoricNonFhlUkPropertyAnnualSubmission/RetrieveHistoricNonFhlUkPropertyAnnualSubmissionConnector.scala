@@ -45,7 +45,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val h
 
     request match {
       case def1: Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData =>
-        import def1._
+        import def1.*
 
         val downstreamUri =
           IfsUri[Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse](

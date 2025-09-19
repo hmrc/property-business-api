@@ -16,16 +16,16 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.{
   RuleDuplicateCountryCodeError,
   RuleOutsideAmendmentWindowError,
   RulePropertyIncomeAllowanceError,
   RuleTypeOfBusinessIncorrectError
 }
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.services.{BaseService, ServiceOutcome}
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}

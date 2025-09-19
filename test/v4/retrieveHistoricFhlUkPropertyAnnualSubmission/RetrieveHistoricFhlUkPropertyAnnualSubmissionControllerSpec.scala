@@ -21,13 +21,13 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
-import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response.*
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.*
+import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -79,7 +79,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
+    protected val controller: RetrieveHistoricFhlUkPropertyAnnualSubmissionController = new RetrieveHistoricFhlUkPropertyAnnualSubmissionController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,

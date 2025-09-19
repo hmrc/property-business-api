@@ -16,7 +16,7 @@
 
 package v4.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class HistoricFhlAnnualAdjustments(lossBroughtForward: Option[BigDecimal],
@@ -38,6 +38,6 @@ object HistoricFhlAnnualAdjustments {
       (JsPath \ "businessPremisesRenovationAllowanceBalancingCharges").writeNullable[BigDecimal] and
       (JsPath \ "nonResidentLandlord").write[Boolean] and
       (JsPath \ "ukRentARoom").writeNullable[UkPropertyAdjustmentsRentARoom]
-  )(unlift(HistoricFhlAnnualAdjustments.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

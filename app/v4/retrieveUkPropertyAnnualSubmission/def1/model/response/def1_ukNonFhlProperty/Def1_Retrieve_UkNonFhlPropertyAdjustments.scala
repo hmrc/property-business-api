@@ -16,8 +16,8 @@
 
 package v4.retrieveUkPropertyAnnualSubmission.def1.model.response.def1_ukNonFhlProperty
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class Def1_Retrieve_UkNonFhlPropertyAdjustments(
     balancingCharge: Option[BigDecimal],
@@ -36,6 +36,6 @@ object Def1_Retrieve_UkNonFhlPropertyAdjustments {
       (__ \ "businessPremisesRenovationAllowanceBalancingCharges").readNullable[BigDecimal] and
       (__ \ "nonResidentLandlord").read[Boolean] and
       (__ \ "ukOtherRentARoom").readNullable[Def1_Retrieve_UkNonFhlPropertyRentARoom]
-  )(Def1_Retrieve_UkNonFhlPropertyAdjustments.apply _)
+  )(Def1_Retrieve_UkNonFhlPropertyAdjustments.apply)
 
 }

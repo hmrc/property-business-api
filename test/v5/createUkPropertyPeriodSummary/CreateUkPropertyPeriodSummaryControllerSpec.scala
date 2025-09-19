@@ -22,13 +22,13 @@ import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.MockAuditService
-import v5.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v5.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v5.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
-import v5.createUkPropertyPeriodSummary.model.request._
+import v5.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v5.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
+import v5.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
+import v5.createUkPropertyPeriodSummary.model.request.*
 import v5.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -104,7 +104,7 @@ class CreateUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateUkPropertyPeriodSummaryController(
+    protected val controller: CreateUkPropertyPeriodSummaryController = new CreateUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateUkPropertyPeriodSummaryService,

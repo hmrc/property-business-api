@@ -18,17 +18,17 @@ package v4.historicFhlUkPropertyPeriodSummary.amend.def1
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolvePeriodId
 import common.models.errors.RuleBothExpensesSuppliedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v4.historicFhlUkPropertyPeriodSummary.amend.def1.model.request.UkFhlPropertyExpenses
-import v4.historicFhlUkPropertyPeriodSummary.amend.request._
+import v4.historicFhlUkPropertyPeriodSummary.amend.request.*
 
 import javax.inject.Inject
 
@@ -49,15 +49,15 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator @Inject() (nino: Str
       ResolveNino(nino),
       resolvePeriodId(periodId),
       resolveJson(body)
-    ).mapN(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], AmendHistoricFhlUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     val validatedIncome = income
       .map { i =>
-        import i._
+        import i.*
 
         List(
           (periodAmount, "/income/periodAmount"),
@@ -72,7 +72,7 @@ class Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator @Inject() (nino: Str
 
     val validatedExpenses = expenses
       .map { e =>
-        import e._
+        import e.*
 
         List(
           (premisesRunningCosts, "/expenses/premisesRunningCosts"),

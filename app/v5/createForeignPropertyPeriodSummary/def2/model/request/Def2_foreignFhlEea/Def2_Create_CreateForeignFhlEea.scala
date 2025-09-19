@@ -16,7 +16,7 @@
 
 package v5.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Def2_Create_CreateForeignFhlEea(income: Option[Def2_Create_ForeignFhlEeaIncome], expenses: Option[Def2_Create_CreateForeignFhlEeaExpenses])
@@ -27,6 +27,6 @@ object Def2_Create_CreateForeignFhlEea {
   implicit val writes: Writes[Def2_Create_CreateForeignFhlEea] = (
     (JsPath \ "income").writeNullable[Def2_Create_ForeignFhlEeaIncome] and
       (JsPath \ "expenses").writeNullable[Def2_Create_CreateForeignFhlEeaExpenses]
-  )(unlift(Def2_Create_CreateForeignFhlEea.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

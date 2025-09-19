@@ -16,11 +16,11 @@
 
 package v5.amendForeignPropertyPeriodSummary
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.{RuleDuplicateCountryCodeError, RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.services.{BaseService, ServiceOutcome}
 import v5.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 
 import javax.inject.{Inject, Singleton}

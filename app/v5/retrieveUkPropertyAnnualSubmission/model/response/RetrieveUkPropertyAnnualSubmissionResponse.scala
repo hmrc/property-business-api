@@ -16,7 +16,7 @@
 
 package v5.retrieveUkPropertyAnnualSubmission.model.response
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.utils.JsonWritesUtil.writesFrom
 import v5.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v5.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse

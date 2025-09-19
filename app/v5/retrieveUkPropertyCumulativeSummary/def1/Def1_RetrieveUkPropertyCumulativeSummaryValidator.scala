@@ -16,11 +16,11 @@
 
 package v5.retrieveUkPropertyCumulativeSummary.def1
 
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import shared.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple3Semigroupal
 import v5.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v5.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 
@@ -37,6 +37,6 @@ class Def1_RetrieveUkPropertyCumulativeSummaryValidator @Inject() (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       ResolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveUkPropertyCumulativeSummaryRequestData)
+    ).mapN(Def1_RetrieveUkPropertyCumulativeSummaryRequestData.apply)
 
 }

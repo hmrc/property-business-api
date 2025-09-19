@@ -17,7 +17,7 @@
 package v5.deletePropertyAnnualSubmission.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinimum}
@@ -38,6 +38,6 @@ class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, busi
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData)
+    ).mapN(Def1_DeletePropertyAnnualSubmissionRequestData.apply)
 
 }

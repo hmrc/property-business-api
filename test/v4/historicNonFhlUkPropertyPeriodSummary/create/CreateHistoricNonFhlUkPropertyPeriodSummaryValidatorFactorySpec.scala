@@ -16,7 +16,7 @@
 
 package v4.historicNonFhlUkPropertyPeriodSummary.create
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v4.historicNonFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator

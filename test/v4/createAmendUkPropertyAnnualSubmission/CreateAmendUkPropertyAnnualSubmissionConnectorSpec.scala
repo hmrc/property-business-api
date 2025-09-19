@@ -22,17 +22,17 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.createAmendUkPropertyAnnualSubmission.model.request._
+import v4.createAmendUkPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.Future
 
 class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino: String = "AA123456A"
+  private val nino: String       = "AA123456A"
   private val businessId: String = "XAIS12345678910"
 
   private val preTysTaxYear = TaxYear.fromMtd("2022-23")
-  private val tysTaxYear = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
 
   "CreateAmendUkPropertyAnnualSubmissionConnector" when {
     val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -88,7 +88,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
     def taxYear: TaxYear
 
     protected val connector: CreateAmendUkPropertyAnnualSubmissionConnector = new CreateAmendUkPropertyAnnualSubmissionConnector(

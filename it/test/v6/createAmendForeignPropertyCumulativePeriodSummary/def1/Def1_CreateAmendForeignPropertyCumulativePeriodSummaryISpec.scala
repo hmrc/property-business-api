@@ -16,30 +16,20 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.services._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleAdvanceSubmissionRequiresPeriodEndDateError,
-  RuleBothExpensesSuppliedError,
-  RuleDuplicateCountryCodeError,
-  RuleEarlyDataSubmissionNotAcceptedError,
-  RuleEndDateNotAlignedWithReportingTypeError,
-  RuleMissingSubmissionDatesError,
-  RuleOutsideAmendmentWindowError,
-  RuleStartAndEndDateNotAllowedError,
-  RuleStartDateNotAlignedToCommencementDateError,
-  RuleStartDateNotAlignedWithReportingTypeError,
-  RuleSubmissionEndDateCannotMoveBackwardsError,
-  RuleToDateBeforeFromDateError
-}
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
-import play.api.libs.json._
+import play.api.http.Status.*
+import play.api.libs.json.*
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.models.utils.JsonErrorValidators
+import shared.services.*
 import shared.support.IntegrationBaseSpec
+
 
 class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
@@ -212,7 +202,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             None
           )
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "downstream service error" when {
@@ -256,7 +246,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        errors.foreach(args => (serviceErrorTest _).tupled(args))
+        errors.foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

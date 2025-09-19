@@ -16,7 +16,7 @@
 
 package v5.createAmendUkPropertyAnnualSubmission.def2.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class Allowances(annualInvestmentAllowance: Option[BigDecimal],
@@ -40,6 +40,6 @@ object Allowances {
       (JsPath \ "propertyIncomeAllowance").writeNullable[BigDecimal] and
       (JsPath \ "structuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]] and
       (JsPath \ "enhancedStructuredBuildingAllowance").writeNullable[Seq[StructuredBuildingAllowance]]
-  )(unlift(Allowances.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

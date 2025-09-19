@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = Nino("AA123456A")
+  private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
   val ukProperty: UkProperty = UkProperty(
@@ -60,7 +60,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
 
   "connector" must {
     "post a body and return 204" in new IfsTest with Test {
-      lazy val taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+      def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
       willPut(
         url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}",
@@ -75,9 +75,9 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
-    protected val taxYear: TaxYear
+    protected def taxYear: TaxYear
 
     protected val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody(Some("2020-01-01"), Some("2020-01-31"), ukProperty = ukProperty)

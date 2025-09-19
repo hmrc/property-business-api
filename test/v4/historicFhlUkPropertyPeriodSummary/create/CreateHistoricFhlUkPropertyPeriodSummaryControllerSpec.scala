@@ -23,14 +23,14 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit._
+import shared.models.audit.*
 import shared.models.auth.UserDetails
 import shared.models.domain.Nino
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request._
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.*
 import v4.historicFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricFhlUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -85,7 +85,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateHistoricFhlUkPropertyPeriodSummaryController(
+    protected val controller: CreateHistoricFhlUkPropertyPeriodSummaryController = new CreateHistoricFhlUkPropertyPeriodSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory,

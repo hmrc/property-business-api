@@ -45,7 +45,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryConnector @Inject() (val http
 
     request match {
       case def1: Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
 
         val downstreamUri = DesUri[Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponse](
           s"income-tax/nino/$nino/uk-properties/other/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}")

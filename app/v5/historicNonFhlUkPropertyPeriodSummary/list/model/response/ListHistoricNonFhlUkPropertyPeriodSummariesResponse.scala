@@ -16,7 +16,7 @@
 
 package v5.historicNonFhlUkPropertyPeriodSummary.list.model.response
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import v5.historicNonFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 
 sealed trait ListHistoricNonFhlUkPropertyPeriodSummariesResponse {

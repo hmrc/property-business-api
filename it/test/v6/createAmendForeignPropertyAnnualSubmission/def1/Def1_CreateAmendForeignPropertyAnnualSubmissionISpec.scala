@@ -16,23 +16,19 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def1
 
-import shared.models.errors._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{
-  RuleBothAllowancesSuppliedError,
-  RuleBuildingNameNumberError,
-  RuleDuplicateCountryCodeError,
-  RulePropertyIncomeAllowanceError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.DefaultBodyReadables.readableAsString
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
-import shared.services._
 
 class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def1_Fixtures {
 
@@ -469,7 +465,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           BAD_REQUEST,
           RuleBuildingNameNumberError.copy(paths = Some(List("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(args => (validationErrorTest).tupled(args))
     }
 
     "downstream service error" when {
@@ -510,7 +506,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

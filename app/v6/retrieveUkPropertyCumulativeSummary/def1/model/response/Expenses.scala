@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyCumulativeSummary.def1.model.response
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 case class Expenses(premisesRunningCosts: Option[BigDecimal],
                     repairsAndMaintenance: Option[BigDecimal],
@@ -52,6 +52,6 @@ object Expenses {
       } and
       (JsPath \ "ukOtherRentARoom").readNullable[RentARoomExpenses] and
       (JsPath \ "consolidatedExpenses").readNullable[BigDecimal]
-  )(Expenses.apply _)
+  )(Expenses.apply)
 
 }

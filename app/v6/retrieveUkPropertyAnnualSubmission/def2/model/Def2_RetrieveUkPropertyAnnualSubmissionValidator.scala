@@ -16,13 +16,13 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def2.model
 
+import cats.data.Validated
+import cats.implicits.*
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import shared.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits._
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
-import v6.retrieveUkPropertyAnnualSubmission.model.request._
+import v6.retrieveUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
@@ -34,6 +34,6 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, 
       ResolveNino(nino),
       ResolveBusinessId(businessId),
       ResolveTaxYear(taxYear)
-    ).mapN(Def2_RetrieveUkPropertyAnnualSubmissionRequestData)
+    ).mapN(Def2_RetrieveUkPropertyAnnualSubmissionRequestData.apply)
 
 }

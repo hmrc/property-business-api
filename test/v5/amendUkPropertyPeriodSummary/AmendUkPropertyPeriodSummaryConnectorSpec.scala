@@ -23,7 +23,7 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v5.amendUkPropertyPeriodSummary.model.request._
+import v5.amendUkPropertyPeriodSummary.model.request.*
 
 import scala.concurrent.Future
 
@@ -86,7 +86,8 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test { _: ConnectorTest =>
+  trait Test {
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 
@@ -102,14 +103,16 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
-        url = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
+        url =
+          url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
         body = requestBody
       ).returns(Future.successful(outcome))
     }
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
-        url = url"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
+        url =
+          url"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
         body = requestBody
       ).returns(Future.successful(outcome))
     }

@@ -24,7 +24,7 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v4.retrieveForeignPropertyPeriodSummary.model.request._
+import v4.retrieveForeignPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject
 
@@ -43,6 +43,6 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidator @Inject() (nino: String
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId)
-    ).mapN(Def1_RetrieveForeignPropertyPeriodSummaryRequestData)
+    ).mapN(Def1_RetrieveForeignPropertyPeriodSummaryRequestData.apply)
 
 }

@@ -16,11 +16,11 @@
 
 package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import shared.controllers.RequestContext
-import shared.models.errors._
-import shared.services.{BaseService, ServiceOutcome}
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
+import shared.controllers.RequestContext
+import shared.models.errors.*
+import shared.services.{BaseService, ServiceOutcome}
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionResponse
 

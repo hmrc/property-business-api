@@ -16,10 +16,10 @@
 
 package v4.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import cats.implicits._
+import cats.implicits.*
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import shared.controllers.RequestContext
-import shared.models.errors._
+import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v4.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse

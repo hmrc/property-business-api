@@ -17,14 +17,14 @@
 package v5.historicFhlUkPropertyPeriodSummary.retrieve.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolvePeriodId
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
+import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request._
+import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request.*
 
 import javax.inject.Inject
 
@@ -38,6 +38,6 @@ class Def1_RetrieveHistoricFhlUkPeriodSummaryValidator @Inject() (nino: String, 
     (
       ResolveNino(nino),
       resolvePeriodId(periodId)
-    ).mapN(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData)
+    ).mapN(Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData.apply)
 
 }

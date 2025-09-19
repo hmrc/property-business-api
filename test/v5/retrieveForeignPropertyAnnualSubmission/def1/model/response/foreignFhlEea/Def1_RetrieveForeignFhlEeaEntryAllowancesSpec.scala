@@ -18,7 +18,6 @@ package v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFh
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v5.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.RetrieveForeignFhlEeaAllowances
 
 class Def1_RetrieveForeignFhlEeaEntryAllowancesSpec extends UnitSpec {
 

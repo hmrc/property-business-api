@@ -18,14 +18,14 @@ package v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.controllers.validators.Validator
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request._
-import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request._
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.*
+import v4.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 
 class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 
@@ -207,7 +207,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
           ("/annualAllowances/otherCapitalAllowance", zero, max),
           ("/annualAllowances/costOfReplacingDomesticGoods", zero, max),
           ("/annualAllowances/propertyIncomeAllowance", zero, 1000: BigDecimal)
-        ).foreach((testWith _).tupled)
+        ).foreach((testWith).tupled)
       }
 
       "given an empty body" in new SetupConfig {

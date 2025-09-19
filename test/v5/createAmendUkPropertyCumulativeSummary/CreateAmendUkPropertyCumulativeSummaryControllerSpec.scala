@@ -83,7 +83,7 @@ class CreateAmendUkPropertyCumulativeSummaryControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    protected val controller = new CreateAmendUkPropertyCumulativeSummaryController(
+    protected val controller: CreateAmendUkPropertyCumulativeSummaryController = new CreateAmendUkPropertyCumulativeSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateAmendUkPropertyCumulativeSummaryService,

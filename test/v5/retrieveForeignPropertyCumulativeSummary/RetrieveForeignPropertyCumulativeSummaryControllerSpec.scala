@@ -73,7 +73,7 @@ class RetrieveForeignPropertyCumulativeSummaryControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new RetrieveForeignPropertyCumulativeSummaryController(
+    protected val controller: RetrieveForeignPropertyCumulativeSummaryController = new RetrieveForeignPropertyCumulativeSummaryController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyCumulativeSummaryValidatorFactory,

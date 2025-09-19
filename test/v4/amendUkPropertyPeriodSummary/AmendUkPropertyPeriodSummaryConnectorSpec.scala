@@ -23,18 +23,18 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.amendUkPropertyPeriodSummary.model.request._
+import v4.amendUkPropertyPeriodSummary.model.request.*
 
 import scala.concurrent.Future
 
 class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino: String = "AA123456A"
-  private val businessId: String = "XAIS12345678910"
+  private val nino: String         = "AA123456A"
+  private val businessId: String   = "XAIS12345678910"
   private val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
   private val preTysTaxYear = TaxYear.fromMtd("2022-23")
-  private val tysTaxYear = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
 
   "AmendUkPropertyPeriodSummaryConnector" when {
     val outcome = Right(ResponseWrapper(correlationId, ()))
@@ -88,7 +88,7 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 
@@ -104,14 +104,16 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
-        url = url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
+        url =
+          url"$baseUrl/income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId",
         body = requestBody
       ).returns(Future.successful(outcome))
     }
 
     protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
       willPut(
-        url = url"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
+        url =
+          url"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
         body = requestBody
       ).returns(Future.successful(outcome))
     }

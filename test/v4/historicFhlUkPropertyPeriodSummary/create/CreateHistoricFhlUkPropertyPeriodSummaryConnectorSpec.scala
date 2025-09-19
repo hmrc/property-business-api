@@ -20,7 +20,10 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.Nino
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody, Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData}
+import v4.historicFhlUkPropertyPeriodSummary.create.model.request.{
+  Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
+  Def1_CreateHistoricFhlUkPropertyPeriodSummaryRequestData
+}
 
 import scala.concurrent.Future
 
@@ -43,7 +46,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpe
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     protected val connector = new CreateHistoricFhlUkPropertyPeriodSummaryConnector(
       http = mockHttpClient,

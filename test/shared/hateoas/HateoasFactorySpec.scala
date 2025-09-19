@@ -17,7 +17,7 @@
 package shared.hateoas
 
 import cats.Functor
-import shared.config.{SharedAppConfig, MockSharedAppConfig}
+import shared.config.{MockSharedAppConfig, SharedAppConfig}
 import shared.hateoas.Method.GET
 import shared.utils.UnitSpec
 
@@ -29,8 +29,6 @@ class HateoasFactorySpec extends UnitSpec with MockSharedAppConfig {
   private case class Response(foo: String)
 
   private case class ListResponse[A](items: Seq[A])
-
-  private case class NestedListResponse[A](field: String, items: Seq[A])
 
   private case class Data1(id: String) extends HateoasData
 

@@ -18,7 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.create.def1
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
+import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue
@@ -45,11 +45,11 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(nino: String, bo
     (
       ResolveNino(nino),
       resolveJson(body)
-    ).mapN(Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
 
   private def validateBusinessRules(parsed: Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] = {
-    import parsed.body._
+    import parsed.body.*
 
     val validatedDates = ResolveFromAndToDates((fromDate, toDate))
 
@@ -66,7 +66,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(nino: String, bo
   }
 
   private def validateIncome(income: UkNonFhlPropertyIncome): Validated[Seq[MtdError], Unit] = {
-    import income._
+    import income.*
 
     val valuesWithPaths = List(
       (periodAmount, "/income/periodAmount"),
@@ -87,7 +87,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(nino: String, bo
   }
 
   private def validateExpenses(expenses: UkNonFhlPropertyExpenses): Validated[Seq[MtdError], Unit] = {
-    import expenses._
+    import expenses.*
 
     val valuesWithPaths = List(
       (premisesRunningCosts, "/expenses/premisesRunningCosts"),

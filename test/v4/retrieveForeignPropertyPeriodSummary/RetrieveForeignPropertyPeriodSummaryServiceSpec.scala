@@ -19,12 +19,12 @@ package v4.retrieveForeignPropertyPeriodSummary
 import common.models.domain.SubmissionId
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import shared.controllers.EndpointLogContext
-import shared.models.domain._
-import shared.models.errors._
+import shared.models.domain.*
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v4.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
+import v4.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult}
 import v4.retrieveForeignPropertyPeriodSummary.model.request.{
   Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
   RetrieveForeignPropertyPeriodSummaryRequestData
@@ -97,7 +97,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_CORRELATION_ID"  -> InternalError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

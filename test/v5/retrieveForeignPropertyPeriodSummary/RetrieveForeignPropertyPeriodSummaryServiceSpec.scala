@@ -24,7 +24,7 @@ import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v5.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryConnector.{ForeignResult, NonForeignResult}
+import v5.retrieveForeignPropertyPeriodSummary.model.{ForeignResult, NonForeignResult}
 import v5.retrieveForeignPropertyPeriodSummary.model.request.{
   Def1_RetrieveForeignPropertyPeriodSummaryRequestData,
   RetrieveForeignPropertyPeriodSummaryRequestData
@@ -97,7 +97,7 @@ class RetrieveForeignPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "INVALID_CORRELATION_ID"  -> InternalError
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

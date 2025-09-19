@@ -81,7 +81,7 @@ class ListHistoricNonFhlUkPropertyPeriodSummariesControllerSpec
 
   trait Test extends ControllerTest {
 
-    protected val controller = new ListHistoricNonFhlUkPropertyPeriodSummariesController(
+    protected val controller: ListHistoricNonFhlUkPropertyPeriodSummariesController = new ListHistoricNonFhlUkPropertyPeriodSummariesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockListHistoricNonFhlUkPropertyPeriodSummariesValidatorFactory,

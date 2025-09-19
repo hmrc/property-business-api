@@ -17,7 +17,7 @@
 package v4.createAmendForeignPropertyAnnualSubmission
 
 import config.MockPropertyBusinessConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.controllers.validators.Validator
 import shared.utils.UnitSpec
 import v4.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator

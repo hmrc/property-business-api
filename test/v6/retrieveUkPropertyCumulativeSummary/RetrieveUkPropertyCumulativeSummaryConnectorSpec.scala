@@ -24,16 +24,17 @@ import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveUkPropertyCumulativeSummaryResponse, UkProperty}
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
+import v6.retrieveUkPropertyCumulativeSummary.model.{UkResult, NonUkResult, Result}
 
 import scala.concurrent.Future
 
 class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
-  private val nino = "AA123456A"
+  private val nino       = "AA123456A"
   private val businessId = "someBusinessId"
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     val connector: RetrieveUkPropertyCumulativeSummaryConnector =
       new RetrieveUkPropertyCumulativeSummaryConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
@@ -57,7 +58,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, RetrieveUkPropertyCumulativeSummaryConnector.UkResult(response)))
+          Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
 
@@ -70,7 +71,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, RetrieveUkPropertyCumulativeSummaryConnector.NonUkResult))
+          Right(ResponseWrapper(correlationId, NonUkResult))
       }
     }
 
@@ -83,7 +84,7 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, RetrieveUkPropertyCumulativeSummaryConnector.NonUkResult))
+          Right(ResponseWrapper(correlationId, NonUkResult))
       }
     }
   }

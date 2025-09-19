@@ -22,8 +22,8 @@ import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request._
-import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.response._
+import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.request.*
+import v5.historicFhlUkPropertyPeriodSummary.retrieve.model.response.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +38,7 @@ class RetrieveHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: H
       correlationId: String): Future[DownstreamOutcome[RetrieveHistoricFhlUkPropertyPeriodSummaryResponse]] = {
     request match {
       case def1: Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData =>
-        import def1._
+        import def1.*
 
         val downstreamUri = DesUri[Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryResponse](
           s"income-tax/nino/$nino/uk-properties/furnished-holiday-lettings/periodic-summary-detail?from=${periodId.from}&to=${periodId.to}")

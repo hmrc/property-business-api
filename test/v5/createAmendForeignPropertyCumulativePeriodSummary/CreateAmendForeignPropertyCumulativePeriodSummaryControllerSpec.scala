@@ -87,6 +87,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       service = mockCreateAmendForeignPropertyCumulativePeriodSummaryService,
+      auditService = mockAuditService,
       validatorFactory = mockCreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory,
       cc = cc,
       idGenerator = mockIdGenerator

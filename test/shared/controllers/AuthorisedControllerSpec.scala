@@ -35,7 +35,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConf
   private val nino  = "AA123456A"
   private val mtdId = "X123567890"
 
-  "Calling an actionBuilder" when {
+  "Calling an action" when {
 
     "the user is authorised" should {
       "return a 200" in new Test {
@@ -58,7 +58,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConf
 
         MockedEnrolmentsAuthService
           .authoriseAgent(mtdId)
-          .returns(Future.successful(Right(UserDetails("", "Agent", Some("arn")))))
+          .returns(Future.successful(Right(UserDetails(mtdId, "Agent", Some("arn")))))
 
         val result: Future[Result] = controller.action(nino)(fakeGetRequest)
         status(result) shouldBe OK
@@ -71,7 +71,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConf
 
         MockedEnrolmentsAuthService
           .authoriseAgent(mtdId, supportingAgentAccessAllowed = true)
-          .returns(Future.successful(Right(UserDetails("", "Agent", Some("arn")))))
+          .returns(Future.successful(Right(UserDetails(mtdId, "Agent", Some("arn")))))
 
         val result: Future[Result] = controller.action(nino)(fakeGetRequest)
         status(result) shouldBe OK

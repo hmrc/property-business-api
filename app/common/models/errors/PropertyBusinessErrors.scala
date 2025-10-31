@@ -21,6 +21,8 @@ import shared.models.errors.MtdError
 
 object SubmissionIdFormatError extends MtdError("FORMAT_SUBMISSION_ID", "The provided Submission ID is invalid", BAD_REQUEST)
 
+object PropertyIdFormatError extends MtdError("FORMAT_PROPERTY_ID", "The provided property ID is invalid", BAD_REQUEST)
+
 object RuleTypeOfBusinessIncorrectError
     extends MtdError("RULE_TYPE_OF_BUSINESS_INCORRECT", "The businessId is for a different type of business", BAD_REQUEST)
 

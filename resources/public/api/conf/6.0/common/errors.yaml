@@ -52,6 +52,24 @@ components:
         code: FORMAT_DATE
         message: The supplied date format is not valid
 
+    formatPropertyName:
+      description: The provided property name is invalid.
+      value:
+        code: FORMAT_PROPERTY_NAME
+        message: The provided property name is invalid
+
+    formatEndDate:
+      description: The provided end date is invalid.
+      value:
+        code: FORMAT_END_DATE
+        message: The provided end date is invalid
+
+    formatEndReason:
+      description: The provided end reason is invalid.
+      value:
+        code: FORMAT_END_REASON
+        message: The provided end reason is invalid
+
     formatString:
       description: One or more strings have been added with the incorrect format.
       value:
@@ -226,6 +244,36 @@ components:
       value:
         code: RULE_DUPLICATE_COUNTRY_CODE
         message: You cannot supply the same country code for multiple properties
+
+    ruleDuplicatePropertyName:
+      description: Foreign property name already exists for the same country.
+      value:
+        code: RULE_DUPLICATE_PROPERTY_NAME
+        message: Foreign property name already exists for the same country
+
+    rulePropertyOutsidePeriod:
+      description: Foreign property is not within the income source period.
+      value:
+        code: RULE_PROPERTY_OUTSIDE_PERIOD
+        message: Foreign property is not within the income source period
+
+    ruleEndDateAfterTaxYearEnd:
+      description: The end date is after the end of the tax year.
+      value:
+        code: RULE_END_DATE_AFTER_TAX_YEAR_END
+        message: The end date is after the end of the tax year
+
+    rulePropertyBusinessCeased:
+      description: Foreign property business income source has ceased.
+      value:
+        code: RULE_PROPERTY_BUSINESS_CEASED
+        message: Foreign property business income source has ceased
+
+    ruleMissingEndDetails:
+      description: End date and end reason must be supplied together.
+      value:
+        code: RULE_MISSING_END_DETAILS
+        message: End date and end reason must be supplied together
 
     ruleAdvanceSubmissionRequiresPeriodEndDate:
       description: To submit in advance, submission end date must be the end of the period.

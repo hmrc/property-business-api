@@ -1,0 +1,6 @@
+post:
+  $ref: "./foreign_property_details_create.yaml"
+  summary: Create Foreign Property Details {{#maybeTestOnly "6.0 foreign-property-details-create"}}{{/maybeTestOnly}}
+  security:
+    - User-Restricted:
+        - write:self-assessment

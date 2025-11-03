@@ -23,7 +23,7 @@
     },
     "endReason": {
       "type": "string",
-      "description": "Specifies the reason for ending the property record. A property with an end reason must always have an associated end date. Limited to the following possible values:",
+      "description": "Specifies the reason for ending the property record. A property with an end reason must always have an associated end date.",
       "enum":[
         "no-longer-renting-property-out",
         "disposal"

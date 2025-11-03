@@ -59,7 +59,7 @@ responses:
       application/json:
         schema:
           $ref: './schemas/foreign_property_details_create/def1/response.json'
-        example-response:
+        example:
           $ref: './examples/foreign_property_details_create/def1/response.json'
 
   "400":

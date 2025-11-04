@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "For TY 2026-27 onwards",
+  "description": "Create Foreign Property Details",
+  "type": "object",
+  "properties": {
+    "propertyName": {
+      "type": "string",
+      "description": "A customer-friendly name for the foreign property. This name must be unique for each country. Uniqueness checks ignore differences in letter case and any leading or trailing spaces.",
+      "example": "Bob & Bobby Co",
+      "pattern": "^.{1,105}$"
+    },
+    "countryCode": {
+      "type": "string",
+      "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
+      "example": "FRA"
+    },
+    "endDate": {
+      "type": "string",
+      "description": "The date on which income is no longer received from the property. The end date must not be later than the end of the relevant tax year. A property with an end date must always have an associated end reason.\n\n Must conform to the format `YYYY-MM-DD`",
+      "format": "date",
+      "example": "2026-08-24"
+    },
+    "endReason": {
+      "type": "string",
+      "description": "Specifies the reason for ending the property record. A property with an end reason must always have an associated end date.",
+      "enum":[
+        "no-longer-renting-property-out",
+        "disposal"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "propertyName",
+    "countryCode"
+  ]
+}

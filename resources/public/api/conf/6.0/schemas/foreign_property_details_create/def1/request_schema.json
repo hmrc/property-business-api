@@ -17,7 +17,7 @@
     },
     "endDate": {
       "type": "string",
-      "description": "The date on which income is no longer received from the property. The end date must not be later than the end of the relevant tax year. A property with an end date must always have an associated end reason. \n\n Must conform to the format `YYYY-MM-DD`",
+      "description": "The date on which income is no longer received from the property. The end date must not be later than the end of the relevant tax year. A property with an end date must always have an associated end reason.\n\n Must conform to the format `YYYY-MM-DD`",
       "format": "date",
       "example": "2026-08-24"
     },

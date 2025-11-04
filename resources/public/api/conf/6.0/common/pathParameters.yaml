@@ -21,7 +21,7 @@ components:
       name: taxYear
       in: path
       description: |
-        The tax year to which the data applies. The start year and end year must not span two tax years. The minimum tax year is 2026-27. No gaps are allowed, for example, 2026-28 is not valid. The foreign property must fall within the start and end dates of the associated foreign property income source, and the income source should not be ceased.
+        The tax year to which the data applies. The start year and end year must not span two tax years. The minimum tax year is 2026-27. No gaps are allowed, for example, 2026-28 is not valid. <p>The foreign property must fall within the start and end dates of the associated foreign property income source, and the income source should not be ceased.
       schema:
         type: string
         example: 2026-27

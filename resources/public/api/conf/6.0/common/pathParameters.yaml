@@ -21,8 +21,9 @@ components:
       name: taxYear
       in: path
       description: |
-        The tax year to which the data applies. The start year and end year must not span two tax years. The minimum tax year is 2026-27. No gaps are allowed, for example, 2026-28 is not valid.
-        
+        The tax year to which the data applies. The start year and end year must not span two tax years.
+        The minimum tax year is 2026-27. No gaps are allowed, for example, 2026-28 is not valid.
+
         The foreign property must fall within the start and end dates of the associated foreign property income source, and the income source should not be ceased.
       schema:
         type: string
@@ -78,4 +79,14 @@ components:
       schema:
         type: string
         example: 2017-04-06_2017-07-04
+      required: true
+    propertyId:
+      name: propertyId
+      in: path
+      description: |
+        A unique identifier for each foreign property.
+      schema:
+        type: string
+        format: uuid
+        example: 8e8b8450-dc1b-4360-8109-7067337b42cb
       required: true

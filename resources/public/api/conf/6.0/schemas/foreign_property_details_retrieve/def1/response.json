@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "For TY 2026-27 onwards",
+  "description": "Retrieve Foreign Property Details",
+  "type": "object",
+  "properties": {
+    "foreignPropertyDetails": {
+      "type": "array",
+      "description": "An array containing the details of foreign properties per country within the tax year. Any properties with an end date will not be shown in the subsequent tax year.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "submittedOn": {
+            "description": "The date the foreign property detail was submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-07-07T10:59:47.544Z"
+          },
+          "propertyId": {
+            "description": "A unique identifier for each foreign property.",
+            "type": "string",
+            "format": "uuid",
+            "example": "8e8b8450-dc1b-4360-8109-7067337b42cb"
+          },
+          "propertyName": {
+            "description": "A customer-friendly name for the foreign property. This name will be unique for each country.",
+            "type": "string",
+            "pattern": "^.{1,105}$",
+            "example": "Bob & Bobby Co",
+          },
+          "countryCode": {
+            "description": "A three-letter code that represents a country name.\n\nThis must be an ISO 3166-1 Alpha-3 value.",
+            "type": "string",
+            "example": "FRA"
+          },
+          "endDate": {
+            "description": "The date on which income is no longer received from the property. A property with an end date will always have an associated end reason. Properties with an end date will no longer appear on the list of properties to report against for any subsequent tax year.\n\nMust conform to the format: `YYYY-MM-DD`",
+            "format": "date",
+            "type": "string",
+            "example": "2026-08-24"
+          },
+          "endReason": {
+            "description": "Specifies the reason for ending the property record. A property with an end reason will always have an associated end date. Properties with an end reason will no longer appear on the list of properties to report against for any subsequent tax year.",
+            "type": "string",
+            "enum": [
+              "no-longer-renting-property-out",
+              "disposal",
+              "added-in-error",
+              "cessation"
+            ]
+          }
+        },
+        "required": [
+          "submittedOn",
+          "propertyId",
+          "propertyName",
+          "countryCode"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "foreignPropertyDetails"
+  ],
+  "additionalProperties": false
+}

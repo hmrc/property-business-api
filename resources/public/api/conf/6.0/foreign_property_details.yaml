@@ -1,3 +1,9 @@
+get:
+  $ref: "./foreign_property_details_retrieve.yaml"
+  summary: Retrieve Foreign Property Details {{#maybeTestOnly "6.0 foreign-property-details-retrieve"}}{{/maybeTestOnly}}
+  security:
+    - User-Restricted:
+        - read:self-assessment
 post:
   $ref: "./foreign_property_details_create.yaml"
   summary: Create Foreign Property Details {{#maybeTestOnly "6.0 foreign-property-details-create"}}{{/maybeTestOnly}}

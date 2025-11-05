@@ -21,6 +21,12 @@ components:
         code: FORMAT_BUSINESS_ID
         message: The provided Business ID is invalid
 
+    formatPropertyId:
+      description: The format of the supplied property ID field is not valid.
+      value:
+        code: FORMAT_PROPERTY_ID
+        message: The provided property ID is invalid
+
     ruleTaxYearNotSupported:
       description: |
         The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value.

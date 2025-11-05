@@ -17,16 +17,12 @@
 package v6.retrieveForeignPropertyDetails
 
 import cats.implicits.*
-//import cats.data.EitherT
-import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.PropertyIdFormatError
 import shared.controllers.RequestContext
 import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
 import shared.services.{BaseService, ServiceOutcome}
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
-import v6.retrieveForeignPropertyDetails.model.{ForeignResult, NonForeignResult, Result}
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,8 +30,7 @@ class RetrieveForeignPropertyDetailsService @Inject() (connector: RetrieveForeig
 
   def retrieveForeignPropertyDetails(request: RetrieveForeignPropertyDetailsRequestData)(implicit
       ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyDetailsResponse]] = {
-
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyDetailsResponse]] =
     connector.retrieveForeignPropertyDetails(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
 //    val result = EitherT(connector.retrieveForeignPropertyDetails(request))
@@ -47,7 +42,6 @@ class RetrieveForeignPropertyDetailsService @Inject() (connector: RetrieveForeig
 //
 //
 //    result.value
-  }
 
   private val downstreamErrorMap: Map[String, MtdError] =
     Map(

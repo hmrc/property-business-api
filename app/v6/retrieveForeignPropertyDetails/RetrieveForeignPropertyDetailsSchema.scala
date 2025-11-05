@@ -34,7 +34,7 @@ object RetrieveForeignPropertyDetailsSchema {
 
   case object Def1 extends RetrieveForeignPropertyDetailsSchema {
     type DownstreamResp = Def1_RetrieveForeignPropertyDetailsResponse
-    val connectorReads: Reads[DownstreamResp] = Def1_RetrieveForeignPropertyDetailsResponse.reads
+    val connectorReads: Reads[DownstreamResp] = Def1_RetrieveForeignPropertyDetailsResponse.format.reads(_)
   }
 
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveForeignPropertyDetailsSchema] =

@@ -18,8 +18,7 @@ package v6.retrieveForeignPropertyDetails.model.response
 
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil.writesFrom
-//import shared.utils.JsonWritesUtil.writesFrom
-//import v6.retrieveForeignPropertyDetails.def1.model.response.Def1_RetrieveForeignPropertyDetailsResponse
+import v6.retrieveForeignPropertyDetails.def1.model.response.Def1_RetrieveForeignPropertyDetailsResponse
 
 trait RetrieveForeignPropertyDetailsResponse {}
 

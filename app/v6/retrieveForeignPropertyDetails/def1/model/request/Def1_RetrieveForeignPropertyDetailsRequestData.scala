@@ -21,7 +21,7 @@ import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v6.retrieveForeignPropertyDetails.RetrieveForeignPropertyDetailsSchema
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 
-case class Def1_RetrieveForeignPropertyDetailsRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, propertyId: PropertyId)
+case class Def1_RetrieveForeignPropertyDetailsRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear, propertyId: Option[PropertyId])
     extends RetrieveForeignPropertyDetailsRequestData {
   override val schema: RetrieveForeignPropertyDetailsSchema = RetrieveForeignPropertyDetailsSchema.Def1
 }

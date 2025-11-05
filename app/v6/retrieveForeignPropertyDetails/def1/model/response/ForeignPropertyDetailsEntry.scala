@@ -16,30 +16,19 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import common.models.domain.PropertyId
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{Json, OWrites, Reads, __}
+//import common.models.domain.PropertyId
+import play.api.libs.json.{Json, OFormat}
 import shared.models.domain.Timestamp
 
-case class ForeignPropertyDetailsEntry(submittedOn: Timestamp,
-                                       propertyId: PropertyId,
-                                       propertyName: String,
-                                       countryCode: String,
-                                       endDate: Option[String],
-                                       endReason: Option[String])
+case class ForeignPropertyDetailsEntry(
+    submittedOn: Timestamp,
+    propertyId: Option[String],
+    propertyName: String,
+    countryCode: String,
+    endDate: Option[String],
+    endReason: Option[String]
+)
 
 object ForeignPropertyDetailsEntry {
-
-  implicit val writes: OWrites[Def1_RetrieveForeignPropertyDetailsResponse] =
-    Json.writes[Def1_RetrieveForeignPropertyDetailsResponse]
-
-  implicit val reads: Reads[Def1_RetrieveForeignPropertyDetailsResponse] = (
-    (__ \ "submittedOn").read[Timestamp] and
-      (__ \ "propertyId").read[PropertyId] and
-      (__ \ "propertyName").read[String] and
-      (__ \ "countryCode").read[String] and
-      (__ \ "endDate").readNullable[Seq[String]] and
-      (__ \ "endReason").readNullable[Seq[EndReason]]
-  )(Def1_RetrieveForeignPropertyDetailsResponse.apply)
-
+  implicit val format: OFormat[ForeignPropertyDetailsEntry] = Json.format[ForeignPropertyDetailsEntry]
 }

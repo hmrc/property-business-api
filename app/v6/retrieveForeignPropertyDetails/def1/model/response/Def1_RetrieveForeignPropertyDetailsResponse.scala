@@ -16,21 +16,16 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{Json, OWrites, Reads, __}
+import play.api.libs.json.{Json, OFormat}
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 
 case class Def1_RetrieveForeignPropertyDetailsResponse(
     foreignPropertyDetails: Seq[ForeignPropertyDetailsEntry]
-) extends RetrieveForeignPropertyDetailsResponse {}
+) extends RetrieveForeignPropertyDetailsResponse
 
 object Def1_RetrieveForeignPropertyDetailsResponse {
 
-  implicit val writes: OWrites[Def1_RetrieveForeignPropertyDetailsResponse] =
-    Json.writes[Def1_RetrieveForeignPropertyDetailsResponse]
-
-  implicit val reads: Reads[Def1_RetrieveForeignPropertyDetailsResponse] = (
-    (__ \ "foreignPropertyDetails").readNullable[Seq[ForeignPropertyDetailsEntry]]
-  )(Def1_RetrieveForeignPropertyDetailsResponse.apply)
+  implicit val format: OFormat[Def1_RetrieveForeignPropertyDetailsResponse] =
+    Json.format[Def1_RetrieveForeignPropertyDetailsResponse]
 
 }

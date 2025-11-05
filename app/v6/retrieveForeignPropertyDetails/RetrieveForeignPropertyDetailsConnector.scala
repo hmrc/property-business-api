@@ -16,23 +16,21 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import config.PropertyBusinessFeatureSwitches
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.HipUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
+import v6.retrieveForeignPropertyDetails.RetrieveForeignPropertyDetailsSchema.Def1.DownstreamResp
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
-import v6.retrieveForeignPropertyDetails.model.{ForeignResult, Result}
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignPropertyDetailsConnector @Inject() (val http: HttpClientV2)(implicit val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class RetrieveForeignPropertyDetailsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyDetails(request: RetrieveForeignPropertyDetailsRequestData)(implicit
       hc: HeaderCarrier,
@@ -40,20 +38,12 @@ class RetrieveForeignPropertyDetailsConnector @Inject() (val http: HttpClientV2)
       correlationId: String): Future[DownstreamOutcome[RetrieveForeignPropertyDetailsResponse]] = {
 
     import request.*
-    import schema.*
 
-    val downstreamUri: DownstreamUri[RetrieveForeignPropertyDetailsResponse] =
-      HipUri[RetrieveForeignPropertyDetailsResponse]
-      (s"/itsd/income-sources/${nino.value}/foreign-property-details/${businessId.businessId}?taxYear=${taxYear.asMtd}&propertyId=${propertyId.toString}")
-
-//    val queryParams = List(
-//      "taxYear"    -> taxYear.asMtd,
-//      "propertyId" -> propertyId.toString
-//    )
+    val downstreamUri: DownstreamUri[DownstreamResp] =
+      HipUri(
+        s"/itsd/income-sources/${nino.value}/foreign-property-details/${businessId.businessId}?taxYear=${taxYear.asMtd}&propertyId=${propertyId.toString}")
 
     get(uri = downstreamUri)
-//    get(uri = downstreamUri, queryParams = queryParams)
-//      .map(_.map(_.map { response => ForeignResult(response) }))
   }
 
 }

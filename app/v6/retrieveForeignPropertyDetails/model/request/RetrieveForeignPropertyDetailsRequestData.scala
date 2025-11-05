@@ -24,6 +24,6 @@ trait RetrieveForeignPropertyDetailsRequestData {
   val nino: Nino
   val businessId: BusinessId
   val taxYear: TaxYear
-  val propertyId: PropertyId
+  val propertyId: Option[PropertyId]
   val schema: RetrieveForeignPropertyDetailsSchema
 }

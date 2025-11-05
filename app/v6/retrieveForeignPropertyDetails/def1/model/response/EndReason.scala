@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.Format
 import shared.utils.enums.Enums
 
 enum EndReason(val fromDownstream: String) {
@@ -27,6 +27,14 @@ enum EndReason(val fromDownstream: String) {
 }
 
 object EndReason {
-  given Reads[EndReason]  = Enums.reads[EndReason](values, _.fromDownstream)
-  given Writes[EndReason] = Enums.writes
+  given Format[EndReason] = Enums.format(values)
 }
+
+//object EndReason {
+//  //given Reads[EndReason]  = Enums.reads[EndReason](values, _.fromDownstream)
+//  given Reads[EndReason]  = Enums.reads[EndReason](EndReason.values, _.fromDownstream)
+//
+//  //given Reads[EndReason]  = Enums.reads[EndReason](EndReason.values, (e: EndReason) => e.fromDownstream)
+//
+//  given Writes[EndReason] = Enums.writes
+//}

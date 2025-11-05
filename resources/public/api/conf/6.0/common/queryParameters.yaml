@@ -1,0 +1,12 @@
+components:
+  parameters:
+    propertyId:
+      name: propertyId
+      in: query
+      description: |
+        A unique identifier for each foreign property.
+      schema:
+        type: string
+        format: uuid
+        example: 8e8b8450-dc1b-4360-8109-7067337b42cb
+      required: false

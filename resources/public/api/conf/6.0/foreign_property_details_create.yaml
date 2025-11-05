@@ -15,8 +15,8 @@ description: |
   | DUPLICATE_PROPERTY_NAME         | Simulates the scenario where the foreign property name already exists for the same country.                 |
   | PROPERTY_OUTSIDE_PERIOD         | Simulates the scenario where the foreign property is not within the income source period.                   |
   | PROPERTY_BUSINESS_CEASED        | Simulates the scenario where the foreign property business income source has ceased.                        |
-  | STATEFUL                        | Performs a stateful create.                                                                                  |
   | OUTSIDE_AMENDMENT_WINDOW        | Simulates the scenario where request cannot be completed as it is outside the amendment window.             |
+  | STATEFUL                        | Performs a stateful create.                                                                                 |
 
 
 tags:
@@ -39,7 +39,7 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/foreign_property_details_create/def1/request_schema.json'
+        $ref: './schemas/foreign_property_details_create/def1/request.json'
       example:
         $ref: './examples/foreign_property_details_create/def1/request.json'
 

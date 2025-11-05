@@ -15,6 +15,9 @@ info:
     -  [Historic non-FHL UK Property Income and Expenses Period Summary](#tag/Historic-non-FHL-UK-Property-Income-and-Expenses-Period-Summary)
     -  [Foreign Property Income and Expenses Period Summary](#tag/Foreign-Property-Income-and-Expenses-Period-Summary)
     -  [Foreign Property Annual Submission](#tag/Foreign-Property-Annual-Submission)
+    {{#if (enabled 'foreign-property-details')}}
+    -  [Foreign Property Details](#tag/Foreign-Property-Details)
+    {{/if}}
     
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 

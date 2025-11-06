@@ -106,15 +106,17 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
           }
         }
 
+        val propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
+
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2025-26", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2024-25", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "BAD_BUSINESS_ID", "2025-26", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "BAD_BUSINESS_ID", "2025-26", "BAD_PROPERTY_ID", Status.BAD_REQUEST, PropertyIdFormatError)
+          ("AA1123A", "XAIS12345678910", "2026-27", propertyId, Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", propertyId, Status.BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", propertyId, Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", "BAD_PROPERTY_ID", Status.BAD_REQUEST, PropertyIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2025-26", propertyId, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XAIS12345678910", "2026-28", propertyId, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
     }
 
@@ -123,8 +125,13 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
-            override def setupStubs(): Unit =
-              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+            override def setupStubs(): Unit = DownstreamStub.onError(
+              DownstreamStub.GET,
+              downstreamUri,
+              queryParams,
+              downstreamStatus,
+              errorBody(downstreamCode)
+            )
 
             val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
@@ -143,7 +150,7 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
           (Status.NOT_IMPLEMENTED, "5000", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        input.foreach(args => (serviceErrorTest).tupled(args))
+        input.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

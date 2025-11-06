@@ -21,7 +21,7 @@ import shared.models.domain.Timestamp
 
 case class ForeignPropertyDetailsEntry(
     submittedOn: Timestamp,
-    propertyId: Option[String],
+    propertyId: String,
     propertyName: String,
     countryCode: String,
     endDate: Option[String],

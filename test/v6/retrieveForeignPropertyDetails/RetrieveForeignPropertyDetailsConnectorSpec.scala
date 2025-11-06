@@ -39,14 +39,14 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
     self: ConnectorTest =>
 
     val connector: RetrieveForeignPropertyDetailsConnector =
-      new RetrieveForeignPropertyDetailsConnector(http = mockHttpClient)
+      new RetrieveForeignPropertyDetailsConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
 
     val requestData: RetrieveForeignPropertyDetailsRequestData =
       Def1_RetrieveForeignPropertyDetailsRequestData(
         Nino(nino),
         BusinessId(businessId),
         TaxYear.fromMtd("2025-26"),
-        PropertyId(propertyId)
+        Some(PropertyId(propertyId))
       )
 
     def responseWith(foreignPropertyDetails: Seq[ForeignPropertyDetailsEntry]): Def1_RetrieveForeignPropertyDetailsResponse =
@@ -62,10 +62,12 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
         private val response = responseWith(
           Seq(
             ForeignPropertyDetailsEntry(
-              "2026-07-07T10:59:47.544Z",
+              Timestamp("2026-07-07T10:59:47.544Z"),
               propertyId,
               "Bob & Bobby Co",
-              "FRA"
+              "FRA",
+              None,
+              None
             )))
 
         willGet(url = url"$baseUrl/itsd/income-sources/$nino/foreign-property-details/$businessId") returns
@@ -75,6 +77,8 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
           Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
     }
+
+    // TODO: Test with None propertyId?
   }
 
 }

@@ -17,14 +17,14 @@
 package v6.retrieveForeignPropertyDetails
 
 import common.models.domain.PropertyId
-import common.models.errors.RuleTypeOfBusinessIncorrectError
+import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
-import v6.fixtures.retrieveForeignPropertyDetails.RetrieveForeignPropertyDetailsFixture.*
 import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
+import v6.retrieveForeignPropertyDetails.MockRetrieveForeignPropertyDetailsConnector
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.{ForeignResult, NonForeignResult}
 
@@ -36,10 +36,15 @@ class RetrieveForeignPropertyDetailsServiceSpec extends ServiceSpec with Def1_Re
 
   "RetrieveForeignPropertyDetailsService" when {
     "downstream call is successful" when {
-      MockRetrieveForeignPropertyDetailsConnector.retrieveForeignPropertyDetails(requestData) returns
-        Future.successful(Right(ResponseWrapper(correlationId, ForeignResult(fullDownstreamJson))))
+      MockRetrieveForeignPropertyDetailsConnector
+        .retrieveForeignPropertyDetails(requestData)
+        .returns(
+          Future.successful(Right(ResponseWrapper(correlationId, ForeignResult(fullDownstreamJson))))
+        )
 
-      await(service.retrieveForeignPropertyDetails(requestData)) shouldBe Right(ResponseWrapper(correlationId, fullDownstreamJson))
+      await(service.retrieveForeignPropertyDetails(requestData)).shouldBe(
+        Right(ResponseWrapper(correlationId, fullDownstreamJson))
+      )
     }
 
     "downstream call is unsuccessful" should {
@@ -47,8 +52,11 @@ class RetrieveForeignPropertyDetailsServiceSpec extends ServiceSpec with Def1_Re
 
         def serviceError(downStreamErrorCode: String, error: MtdError): Unit =
           s"a $downStreamErrorCode error is returned from the service" in new Test {
-            MockRetrieveForeignPropertyDetailsConnector.retrieveForeignPropertyDetails(requestData) returns
-              Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downStreamErrorCode)))))
+            MockRetrieveForeignPropertyDetailsConnector
+              .retrieveForeignPropertyDetails(requestData)
+              .returns(
+                Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downStreamErrorCode)))))
+              )
 
             await(service.retrieveForeignPropertyDetails(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
@@ -75,7 +83,7 @@ class RetrieveForeignPropertyDetailsServiceSpec extends ServiceSpec with Def1_Re
           Nino("AA123456A"),
           BusinessId("XAIS12345678910"),
           TaxYear.fromMtd("2025-26"),
-          PropertyId("8e8b8450-dc1b-4360-8109-7067337b42cb")
+          Some(PropertyId("8e8b8450-dc1b-4360-8109-7067337b42cb"))
         )
     }
   }

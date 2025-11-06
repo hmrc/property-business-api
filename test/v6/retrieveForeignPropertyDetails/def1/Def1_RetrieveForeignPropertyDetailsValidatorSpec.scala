@@ -35,13 +35,13 @@ class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
-  private val parsedPropertyId = PropertyId(propertyId)
+  private val parsedPropertyId = PropertyId(validPropertyId)
 
   private def validator(nino: String = validNino,
                         businessId: String = validBusinessId,
                         taxYear: String = validTaxYear,
                         propertyId: String = validPropertyId) =
-    new Def1_RetrieveForeignPropertyDetailsValidator(nino, businessId, taxYear, propertyId)
+    new Def1_RetrieveForeignPropertyDetailsValidator(nino, businessId, taxYear, Some(propertyId))
 
   "validator" should {
     "return the parsed domain object" when {
@@ -52,7 +52,7 @@ class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {
               parsedNino,
               parsedBusinessId,
               parsedTaxYear,
-              parsedPropertyId
+              Some(parsedPropertyId)
             ))
       }
     }

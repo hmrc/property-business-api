@@ -36,7 +36,7 @@ trait MockRetrieveForeignPropertyDetailsService extends TestSuite with MockFacto
         requestData: RetrieveForeignPropertyDetailsRequestData): CallHandler[Future[ServiceOutcome[RetrieveForeignPropertyDetailsResponse]]] =
       (
         mockRetrieveForeignPropertyDetailsService
-          .retrieveForeignProperty(_: RetrieveForeignPropertyDetailsRequestData)(
+          .retrieveForeignPropertyDetails(_: RetrieveForeignPropertyDetailsRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

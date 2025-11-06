@@ -28,13 +28,13 @@ class EndReason extends UnitSpec with Def1_RetrieveForeignPropertyDetailsFixture
 
     "read from valid JSON" should {
       "return the parsed object" in {
-        downstreamJson.as[EndReason] shouldBe endReason
+        downstreamJson.as[EndReason].shouldBe(endReason)
       }
     }
 
     "written JSON" should {
       "return the expected JSON" in {
-        Json.toJson(endReason) shouldBe mtdJson
+        Json.toJson(endReason).shouldBe(mtdJson)
       }
     }
   }

@@ -57,7 +57,7 @@ trait Def1_RetrieveForeignPropertyDetailsFixture {
   )
 
   val foreignPropertyDetailsEntry: ForeignPropertyDetailsEntry = ForeignPropertyDetailsEntry(
-    submittedOn = "2026-07-07T10:59:47.544Z",
+    submittedOn = Timestamp("2026-07-07T10:59:47.544Z"),
     propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb",
     propertyName = "Bob & Bobby Co",
     countryCode = "FRA",

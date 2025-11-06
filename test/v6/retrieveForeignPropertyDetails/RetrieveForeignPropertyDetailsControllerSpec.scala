@@ -46,7 +46,7 @@ class RetrieveForeignPropertyDetailsControllerSpec
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockRetrieveForeignPropertyService
+        MockRetrieveForeignPropertyDetailsService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponse))))
 
@@ -64,7 +64,7 @@ class RetrieveForeignPropertyDetailsControllerSpec
       "the service returns an error" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockRetrieveForeignPropertyService
+        MockRetrieveForeignPropertyDetailsService
           .retrieve(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
 
@@ -79,7 +79,7 @@ class RetrieveForeignPropertyDetailsControllerSpec
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveForeignPropertyDetailsValidatorFactory,
-      service = mockRetrieveForeignPropertyService,
+      service = mockRetrieveForeignPropertyDetailsService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -94,11 +94,11 @@ class RetrieveForeignPropertyDetailsControllerSpec
       validNino,
       businessId.businessId,
       taxYear.asMtd,
-      propertyId.propertyId
+      Some(propertyId.propertyId)
     )(fakeGetRequest)
 
     protected val requestData: RetrieveForeignPropertyDetailsRequestData =
-      Def1_RetrieveForeignPropertyDetailsRequestData(Nino(validNino), businessId, taxYear, propertyId)
+      Def1_RetrieveForeignPropertyDetailsRequestData(Nino(validNino), businessId, taxYear, Some(propertyId))
 
   }
 

@@ -27,7 +27,8 @@ class RetrieveForeignPropertyDetailsValidatorFactorySpec extends UnitSpec {
       nino = "ignoredNino",
       businessId = "ignored",
       taxYear = taxYear,
-      propertyId = "ignored")
+      propertyId = Some("ignored")
+    )
 
   "RetrieveForeignPropertyDetailsValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {

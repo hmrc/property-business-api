@@ -33,16 +33,6 @@ class RetrieveForeignPropertyDetailsService @Inject() (connector: RetrieveForeig
       ec: ExecutionContext): Future[ServiceOutcome[RetrieveForeignPropertyDetailsResponse]] =
     connector.retrieveForeignPropertyDetails(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 
-//    val result = EitherT(connector.retrieveForeignPropertyDetails(request))
-//      .leftMap(mapDownstreamErrors(downstreamErrorMap))
-//      .flatMap(connectorResultWrapper =>
-//        EitherT.fromEither(
-//          Right(ResponseWrapper[RetrieveForeignPropertyDetailsResponse](connectorResultWrapper.correlationId, connectorResultWrapper.responseData))))
-//
-//
-//
-//    result.value
-
   private val downstreamErrorMap: Map[String, MtdError] =
     Map(
       "1215" -> NinoFormatError,

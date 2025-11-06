@@ -16,7 +16,6 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-//import common.models.domain.PropertyId
 import play.api.libs.json.{Json, OFormat}
 import shared.models.domain.Timestamp
 

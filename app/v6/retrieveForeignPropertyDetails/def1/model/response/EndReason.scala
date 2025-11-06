@@ -29,12 +29,3 @@ enum EndReason(val fromDownstream: String) {
 object EndReason {
   given Format[EndReason] = Enums.format(values)
 }
-
-//object EndReason {
-//  //given Reads[EndReason]  = Enums.reads[EndReason](values, _.fromDownstream)
-//  given Reads[EndReason]  = Enums.reads[EndReason](EndReason.values, _.fromDownstream)
-//
-//  //given Reads[EndReason]  = Enums.reads[EndReason](EndReason.values, (e: EndReason) => e.fromDownstream)
-//
-//  given Writes[EndReason] = Enums.writes
-//}

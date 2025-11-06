@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.def1.model.response.{Def1_RetrieveForeignPropertyDetailsResponse, ForeignPropertyDetailsEntry}
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
-import v6.retrieveForeignPropertyDetails.model.{ForeignResult, NonForeignResult, Result}
+import v6.retrieveForeignPropertyDetails.model.ForeignResult
 
 import scala.concurrent.Future
 

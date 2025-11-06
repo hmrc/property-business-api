@@ -50,7 +50,7 @@ class RetrieveForeignPropertyDetailsControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, fullResponse))))
 
-        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = fullMtdJson)
+        runOkTest(expectedStatus = OK, maybeExpectedResponseBody = Some(fullMtdJson))
       }
     }
 

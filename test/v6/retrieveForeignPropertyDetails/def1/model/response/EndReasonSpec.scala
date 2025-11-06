@@ -20,21 +20,24 @@ import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
 import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
 
-class EndReason extends UnitSpec with Def1_RetrieveForeignPropertyDetailsFixture {
+class EndReasonSpec extends UnitSpec with Def1_RetrieveForeignPropertyDetailsFixture {
 
   "EndReason" when {
+
     val downstreamJson: JsValue = ((fullDownstreamJson \ "foreignPropertyDetails")(0) \ "endReason").get
     val mtdJson: JsValue        = ((fullMtdJson \ "foreignPropertyDetails")(0) \ "endReason").get
 
+    val endReason: EndReason = EndReason.`no-longer-renting-property-out`
+
     "read from valid JSON" should {
       "return the parsed object" in {
-        downstreamJson.as[EndReason].shouldBe(endReason)
+        downstreamJson.as[EndReason] shouldBe endReason
       }
     }
 
-    "written JSON" should {
+    "write to valid JSON" should {
       "return the expected JSON" in {
-        Json.toJson(endReason).shouldBe(mtdJson)
+        Json.toJson(endReason) shouldBe mtdJson
       }
     }
   }

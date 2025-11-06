@@ -17,17 +17,14 @@
 package v6.retrieveForeignPropertyDetails
 
 import common.models.domain.PropertyId
-import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.PropertyIdFormatError
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
-import v6.retrieveForeignPropertyDetails.MockRetrieveForeignPropertyDetailsConnector
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
-import v6.retrieveForeignPropertyDetails.model.{ForeignResult, NonForeignResult}
-
 import scala.concurrent.Future
 
 class RetrieveForeignPropertyDetailsServiceSpec extends ServiceSpec with Def1_RetrieveForeignPropertyDetailsFixture {
@@ -36,15 +33,17 @@ class RetrieveForeignPropertyDetailsServiceSpec extends ServiceSpec with Def1_Re
 
   "RetrieveForeignPropertyDetailsService" when {
     "downstream call is successful" when {
-      MockRetrieveForeignPropertyDetailsConnector
-        .retrieveForeignPropertyDetails(requestData)
-        .returns(
-          Future.successful(Right(ResponseWrapper(correlationId, ForeignResult(fullDownstreamJson))))
-        )
+      "using schema Def1" in new Test {
+        MockRetrieveForeignPropertyDetailsConnector
+          .retrieveForeignPropertyDetails(requestData)
+          .returns(
+            Future.successful(Right(ResponseWrapper(correlationId, fullResponse)))
+          )
 
-      await(service.retrieveForeignPropertyDetails(requestData)).shouldBe(
-        Right(ResponseWrapper(correlationId, fullDownstreamJson))
-      )
+        await(service.retrieveForeignPropertyDetails(requestData)).shouldBe(
+          Right(ResponseWrapper(correlationId, fullDownstreamJson))
+        )
+      }
     }
 
     "downstream call is unsuccessful" should {

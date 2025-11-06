@@ -21,18 +21,18 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
-import v6.retrieveForeignPropertyDetails.model.Result
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
-
+import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveForeignPropertyDetailsConnector extends TestSuite with MockFactory {
 
   val mockConnector: RetrieveForeignPropertyDetailsConnector = mock[RetrieveForeignPropertyDetailsConnector]
 
-  object MockRetrieveForeignPropertyConnector {
+  object MockRetrieveForeignPropertyDetailsConnector {
 
-    def retrieveForeignPropertyDetails(requestData: RetrieveForeignPropertyDetailsRequestData): CallHandler[Future[DownstreamOutcome[Result]]] =
+    def retrieveForeignPropertyDetails(
+        requestData: RetrieveForeignPropertyDetailsRequestData): CallHandler[Future[DownstreamOutcome[RetrieveForeignPropertyDetailsResponse]]] =
       (
         mockConnector
           .retrieveForeignPropertyDetails(_: RetrieveForeignPropertyDetailsRequestData)(

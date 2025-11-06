@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Create Foreign Property Details",
+  "description": "Create Foreign Property Details",
+  "type": "object",
+  "properties": {
+    "propertyId": {
+      "description": "A unique identifier generated for each foreign property.",
+      "type": "string",
+      "format": "uuid",
+      "example": "8e8b8450-dc1b-4360-8109-7067337b42cb"
+    }
+  },
+  "required": [
+    "propertyId"
+  ],
+  "additionalProperties": false
+}

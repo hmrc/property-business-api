@@ -40,12 +40,11 @@ class RetrieveForeignPropertyDetailsConnector @Inject() (val http: HttpClientV2,
     import request.*
 
     val downstreamUri: DownstreamUri[DownstreamResp] =
-      HipUri(s"/itsd/income-sources/${nino.value}/foreign-property-details/${businessId.businessId}")
+      HipUri(s"itsd/income-sources/${nino.value}/foreign-property-details/${businessId.businessId}")
 
-    val queryParams = List(
-      "taxYear"    -> taxYear.asMtd,
-      "propertyId" -> propertyId.toString
-    )
+    val queryParams =
+      List("taxYear" -> taxYear.asMtd) ++
+        propertyId.map(pid => "propertyId" -> pid.propertyId)
 
     get(uri = downstreamUri, queryParams = queryParams)
   }

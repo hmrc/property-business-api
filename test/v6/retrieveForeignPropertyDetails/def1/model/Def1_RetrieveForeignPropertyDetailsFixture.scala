@@ -19,6 +19,7 @@ package v6.retrieveForeignPropertyDetails.def1.model
 import play.api.libs.json.{JsValue, Json}
 import shared.models.domain.Timestamp
 import v6.retrieveForeignPropertyDetails.def1.model.response.*
+import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 
 trait Def1_RetrieveForeignPropertyDetailsFixture {
 
@@ -62,10 +63,14 @@ trait Def1_RetrieveForeignPropertyDetailsFixture {
     propertyName = "Bob & Bobby Co",
     countryCode = "FRA",
     endDate = Some("2026-08-24"),
-    endReason = Some("noLongerRentingPropertyOut")
+    endReason = Some(EndReason.`no-longer-renting-property-out`)
   )
 
   val fullResponse: Def1_RetrieveForeignPropertyDetailsResponse = Def1_RetrieveForeignPropertyDetailsResponse(
+    foreignPropertyDetails = Seq(foreignPropertyDetailsEntry)
+  )
+
+  val response: RetrieveForeignPropertyDetailsResponse = Def1_RetrieveForeignPropertyDetailsResponse(
     foreignPropertyDetails = Seq(foreignPropertyDetailsEntry)
   )
 

@@ -25,7 +25,6 @@ import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.def1.model.response.{Def1_RetrieveForeignPropertyDetailsResponse, ForeignPropertyDetailsEntry}
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
-import v6.retrieveForeignPropertyDetails.model.ForeignResult
 
 import scala.concurrent.Future
 
@@ -39,7 +38,7 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
 
   private val foreignPropertyDetailsEntry = ForeignPropertyDetailsEntry(
     Timestamp("2026-07-07T10:59:47.544Z"),
-    propertyId,
+    "8e8b8450-dc1b-4360-8109-7067337b42cb",
     "Bob & Bobby Co",
     "FRA",
     None,
@@ -86,7 +85,7 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
         )
 
         await(connector.retrieveForeignPropertyDetails(maximumRequestData)).shouldBe(
-          Right(ResponseWrapper(correlationId, ForeignResult(response)))
+          Right(ResponseWrapper(correlationId, response))
         )
       }
 
@@ -116,7 +115,7 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
         )
 
         await(connector.retrieveForeignPropertyDetails(minimumRequestData)).shouldBe(
-          Right(ResponseWrapper(correlationId, ForeignResult(response)))
+          Right(ResponseWrapper(correlationId, response))
         )
       }
     }

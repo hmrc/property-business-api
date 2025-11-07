@@ -41,8 +41,9 @@ object RetrieveForeignPropertyDetailsSchema {
     ResolveTaxYear(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyDetailsSchema] = {
-    if (taxYear < TaxYear.starting(2026)) Invalid(Seq(RuleTaxYearNotSupportedError))
-    else Valid(Def1)
+    if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def1) else Invalid(Seq(RuleTaxYearNotSupportedError))
+    // if (taxYear < TaxYear.starting(2026)) Invalid(Seq(RuleTaxYearNotSupportedError))
+    // else Valid(Def1)
   }
 
 }

@@ -16,24 +16,23 @@
 
 package v6.RetrieveForeignPropertyDetails
 
-import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.PropertyIdFormatError
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.domain.TaxYear
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
 
-class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyDetailsFixture {
+class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyDetailsFixture {
 
   private trait Test {
 
     val nino: String       = "AA123456A"
-    def taxYear: String    = "2025-26"
+    def taxYear: String    = "2026-27"
     val businessId: String = "XAIS12345678910"
     val propertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
@@ -41,12 +40,12 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
 
     def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$businessId"
     def queryParams: Map[String, String] = Map(
-      "taxYear"    -> TaxYear.fromMtd(taxYear).asTysDownstream,
+      "taxYear"    -> taxYear,
       "propertyId" -> propertyId
     )
 
     def stubDownstreamSuccess(): Unit =
-      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, queryParams, status = Status.OK, body = fullDownstreamJson)
+      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, queryParams, status = OK, body = fullDownstreamJson)
 
     def request(): WSRequest = {
       AuditStub.audit()
@@ -79,7 +78,7 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
 
         val response: WSResponse = await(request().get())
         response.json shouldBe responseBody
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
         response.header("X-CorrelationId") should not be empty
         response.header("Content-Type") shouldBe Some("application/json")
       }
@@ -109,12 +108,12 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
         val propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2026-27", propertyId, Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", propertyId, Status.BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", propertyId, Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", "BAD_PROPERTY_ID", Status.BAD_REQUEST, PropertyIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-26", propertyId, Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "XAIS12345678910", "2026-28", propertyId, Status.BAD_REQUEST, RuleTaxYearRangeInvalidError)
+          ("AA1123A", "XAIS12345678910", "2026-27", propertyId, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", propertyId, BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", propertyId, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XAIS12345678910", "2026-27", "BAD_PROPERTY_ID", BAD_REQUEST, PropertyIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2025-26", propertyId, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XAIS12345678910", "2026-28", propertyId, BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
         input.foreach(args => validationErrorTest.tupled(args))
       }
@@ -140,14 +139,14 @@ class Def1_RetrieveForeignPropertyDetailsISpec extends IntegrationBaseSpec with 
         }
 
         val input = List(
-          (Status.BAD_REQUEST, "1215", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "1007", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "1117", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "1244", Status.BAD_REQUEST, PropertyIdFormatError),
-          (Status.BAD_REQUEST, "1216", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.BAD_REQUEST, "UNMATCHED_STUB_ERROR", Status.BAD_REQUEST, RuleIncorrectGovTestScenarioError),
-          (Status.NOT_FOUND, "5010", Status.NOT_FOUND, NotFoundError),
-          (Status.NOT_IMPLEMENTED, "5000", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
+          (BAD_REQUEST, "1215", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "1007", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "1117", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "1244", BAD_REQUEST, PropertyIdFormatError),
+          (BAD_REQUEST, "1216", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "UNMATCHED_STUB_ERROR", BAD_REQUEST, RuleIncorrectGovTestScenarioError),
+          (NOT_FOUND, "5010", NOT_FOUND, NotFoundError),
+          (NOT_IMPLEMENTED, "5000", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
         input.foreach(args => serviceErrorTest.tupled(args))

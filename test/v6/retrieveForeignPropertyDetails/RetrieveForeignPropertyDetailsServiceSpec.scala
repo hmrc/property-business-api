@@ -37,11 +37,11 @@ class RetrieveForeignPropertyDetailsServiceSpec extends ServiceSpec with Def1_Re
         MockRetrieveForeignPropertyDetailsConnector
           .retrieveForeignPropertyDetails(requestData)
           .returns(
-            Future.successful(Right(ResponseWrapper(correlationId, fullResponse)))
+            Future.successful(Right(ResponseWrapper(correlationId, response)))
           )
 
         await(service.retrieveForeignPropertyDetails(requestData)).shouldBe(
-          Right(ResponseWrapper(correlationId, fullDownstreamJson))
+          Right(ResponseWrapper(correlationId, fullResponse))
         )
       }
     }

@@ -16,8 +16,10 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.json.{Json, OFormat}
+//import play.api.libs.json.{Json, OFormat, Reads}
+import play.api.libs.functional.syntax._
 import shared.models.domain.Timestamp
+import play.api.libs.json._
 
 case class ForeignPropertyDetailsEntry(
     submittedOn: Timestamp,
@@ -25,9 +27,26 @@ case class ForeignPropertyDetailsEntry(
     propertyName: String,
     countryCode: String,
     endDate: Option[String],
-    endReason: Option[String]
+    endReason: Option[EndReason]
 )
 
 object ForeignPropertyDetailsEntry {
-  implicit val format: OFormat[ForeignPropertyDetailsEntry] = Json.format[ForeignPropertyDetailsEntry]
+
+  implicit val writes: OWrites[ForeignPropertyDetailsEntry] = Json.writes[ForeignPropertyDetailsEntry]
+
+  given Reads[ForeignPropertyDetailsEntry] = (
+    (__ \ "submittedOn").read[Timestamp] and
+      (__ \ "propertyId").read[String] and
+      (__ \ "propertyName").read[String] and
+      (__ \ "countryCode").read[String] and
+      (__ \ "endDate").readNullable[String] and
+      (__ \ "endReason").readNullable[String].flatMap {
+        case Some(str) =>
+          EndReason.values.find(_.fromDownstream == str) match
+            case Some(reason) => Reads.pure(Some(reason))
+            case None         => Reads(_ => JsError(s"Invalid EndReason: $str"))
+        case None => Reads.pure(None)
+      }
+  )(ForeignPropertyDetailsEntry.apply)
+
 }

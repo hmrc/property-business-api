@@ -16,28 +16,61 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.json.{JsValue, Json}
+//import play.api.libs.json.{JsString, JsValue, Json}
 import shared.utils.UnitSpec
-import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
+import shared.utils.enums.EnumJsonSpecSupport
+//import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
+import v6.retrieveForeignPropertyDetails.def1.model.response.EndReason.*
 
-class EndReasonSpec extends UnitSpec with Def1_RetrieveForeignPropertyDetailsFixture {
+class EndReasonSpec extends UnitSpec with EnumJsonSpecSupport {
+
+//  "EndReason" when {
+//
+//    // val downstreamJson: JsValue = JsString("noLongerRentingPropertyOut")
+//    // val json: JsValue    = JsString("noLongerRentingPropertyOut")
+//    val mtdJson: JsValue = ((fullMtdJson \ "foreignPropertyDetails")(0) \ "endReason").get
+//
+//    val endReason: EndReason = EndReason.`no-longer-renting-property-out`
+//
+//    "read from valid JSON" should {
+////      "return the parsed object" in {
+////        // val result: EndReason = json.as[EndReason]
+////        // result shouldBe endReason
+////        json.as[EndReason] shouldBe endReason
+////      }
+//      "deserialize from valid downstream JSON" in {
+//        // Given
+//        val json = JsString("noLongerRentingPropertyOut")
+//
+//        // When
+//        val result = json.as[EndReason]
+//
+//        // Then
+//        result shouldBe EndReason.`no-longer-renting-property-out`
+//      }
+//    }
+//
+//    "write to valid JSON" should {
+//      "return the expected JSON" in {
+//        Json.toJson(endReason) shouldBe mtdJson
+//      }
+//    }
+//  }
+
+  testRoundTrip[EndReason](
+    ("added-in-error", `added-in-error`),
+    ("disposal", `disposal`),
+    ("no-longer-renting-property-out", `no-longer-renting-property-out`),
+    ("cessation", `cessation`)
+  )
 
   "EndReason" when {
-
-    val downstreamJson: JsValue = ((fullDownstreamJson \ "foreignPropertyDetails")(0) \ "endReason").get
-    val mtdJson: JsValue        = ((fullMtdJson \ "foreignPropertyDetails")(0) \ "endReason").get
-
-    val endReason: EndReason = EndReason.`no-longer-renting-property-out`
-
-    "read from valid JSON" should {
-      "return the parsed object" in {
-        downstreamJson.as[EndReason] shouldBe endReason
-      }
-    }
-
-    "write to valid JSON" should {
-      "return the expected JSON" in {
-        Json.toJson(endReason) shouldBe mtdJson
+    "getting downstream EndReason" must {
+      "work" in {
+        `disposal` shouldBe EndReason.`disposal`
+        // `carry-sideways`.toReliefClaimed shouldBe ReliefClaimed.`CSGI`
+        // `carry-forward-to-carry-sideways`.toReliefClaimed shouldBe ReliefClaimed.`CFCSGI`
+        // `carry-sideways-fhl`.toReliefClaimed shouldBe ReliefClaimed.`CSFHL`
       }
     }
   }

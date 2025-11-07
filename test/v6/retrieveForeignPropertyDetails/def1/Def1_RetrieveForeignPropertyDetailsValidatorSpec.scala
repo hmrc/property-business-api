@@ -91,7 +91,7 @@ class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {
             ErrorWrapper(
               correlationId,
               BadRequestError,
-              Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError, PropertyIdFormatError))
+              Some(List(BusinessIdFormatError, NinoFormatError, PropertyIdFormatError, TaxYearFormatError))
             )
           )
       }

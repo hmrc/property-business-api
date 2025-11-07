@@ -22,7 +22,7 @@ import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignProperty
 
 class Def1_RetrieveForeignPropertyDetailsResponseSpec extends UnitSpec with Def1_RetrieveForeignPropertyDetailsFixture {
 
-  "RetrieveForeignPropertyDetailsResponse" when {
+  "Def1_RetrieveForeignPropertyDetailsResponseSpec" when {
     "read from downstream JSON" should {
       "return the parsed object" in {
         fullDownstreamJson.as[Def1_RetrieveForeignPropertyDetailsResponse] shouldBe fullResponse

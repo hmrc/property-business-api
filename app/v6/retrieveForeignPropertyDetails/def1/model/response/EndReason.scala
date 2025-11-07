@@ -27,5 +27,7 @@ enum EndReason(val fromDownstream: String) {
 }
 
 object EndReason {
-  given Format[EndReason] = Enums.format(values)
+
+  given Format[EndReason]                        = Enums.format(values)
+  val parser: PartialFunction[String, EndReason] = Enums.parser[EndReason](values)
 }

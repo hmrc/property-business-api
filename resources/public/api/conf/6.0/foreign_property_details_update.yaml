@@ -43,8 +43,8 @@ requestBody:
         $ref: './examples/foreign_property_details_update/def1/request.json'
 
 responses:
-  "200":
-    description: Success
+  "204":
+    description: No Content
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'

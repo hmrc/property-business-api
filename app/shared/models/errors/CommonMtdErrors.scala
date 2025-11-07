@@ -29,9 +29,9 @@ object ToDateFormatError extends MtdError(code = "FORMAT_TO_DATE", message = "Th
 
 object FromDateFormatError extends MtdError(code = "FORMAT_FROM_DATE", message = "The fromDate format is invalid", BAD_REQUEST)
 
-object StartDateFormatError extends MtdError("FORMAT_START_DATE", "The provided Start date is invalid", BAD_REQUEST)
+object StartDateFormatError extends MtdError("FORMAT_START_DATE", "The provided start date is invalid", BAD_REQUEST)
 
-object EndDateFormatError extends MtdError("FORMAT_END_DATE", "The provided End date is invalid", BAD_REQUEST)
+object EndDateFormatError extends MtdError("FORMAT_END_DATE", "The provided end date is invalid", BAD_REQUEST)
 
 object DateFormatError extends MtdError(code = "FORMAT_DATE", message = "The supplied date format is not valid", BAD_REQUEST)
 

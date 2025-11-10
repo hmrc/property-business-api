@@ -16,7 +16,6 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-//import play.api.libs.json.{Json, OFormat, Reads}
 import play.api.libs.functional.syntax._
 import shared.models.domain.Timestamp
 import play.api.libs.json._
@@ -40,12 +39,8 @@ object ForeignPropertyDetailsEntry {
       (__ \ "propertyName").read[String] and
       (__ \ "countryCode").read[String] and
       (__ \ "endDate").readNullable[String] and
-      (__ \ "endReason").readNullable[String].flatMap {
-        case Some(str) =>
-          EndReason.values.find(_.fromDownstream == str) match
-            case Some(reason) => Reads.pure(Some(reason))
-            case None         => Reads(_ => JsError(s"Invalid EndReason: $str"))
-        case None => Reads.pure(None)
+      (__ \ "endReason").readNullable[String].map { maybeStr =>
+        maybeStr.flatMap(str => EndReason.values.find(_.fromDownstream == str))
       }
   )(ForeignPropertyDetailsEntry.apply)
 

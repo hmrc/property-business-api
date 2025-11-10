@@ -43,4 +43,5 @@ class RetrieveForeignPropertyDetailsService @Inject() (connector: RetrieveForeig
       "5010" -> NotFoundError,
       "5000" -> RuleTaxYearNotSupportedError
     )
+
 }

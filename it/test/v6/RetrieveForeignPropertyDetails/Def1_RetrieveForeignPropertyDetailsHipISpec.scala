@@ -37,13 +37,11 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
     val propertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
     val responseBody: JsValue = fullMtdJson
-
+    
+     val queryParams = Map("taxYear" -> "26-27", "propertyId" -> "8e8b8450-dc1b-4360-8109-7067337b42cb")
+    
     def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$businessId"
-    def queryParams: Map[String, String] = Map(
-      "taxYear"    -> taxYear,
-      "propertyId" -> propertyId
-    )
-
+    
     def stubDownstreamSuccess(): Unit =
       DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, queryParams, status = OK, body = fullDownstreamJson)
 
@@ -52,22 +50,24 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
       AuthStub.authorised()
       MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(s"/foreign/$nino/$businessId/details/$taxYear")
+      buildRequest(s"/foreign/$nino/$businessId/details/$taxYear").addQueryStringParameters("propertyId" -> "8e8b8450-dc1b-4360-8109-7067337b42cb")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }
-
+    
     def setupStubs(): Unit = ()
-
+    
     def errorBody(code: String): String =
       s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "message"
-         |}
-       """.stripMargin
+           [
+         |    {
+         |      "errorCode": "$code",
+         |      "errorDescription": "message"
+         |    }
+         |  ]
+          """.stripMargin
 
   }
 
@@ -98,23 +98,33 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
             override val businessId: String = requestBusinessId
             override val taxYear: String    = requestTaxYear
             override val propertyId: String = requestPropertyId
-
+            
+            override def request(): WSRequest = {
+              AuditStub.audit()
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+              setupStubs()
+              buildRequest(s"/foreign/$nino/$businessId/details/$taxYear").addQueryStringParameters("propertyId" -> propertyId)
+                .withHttpHeaders(
+                  (ACCEPT, "application/vnd.hmrc.6.0+json"),
+                  (AUTHORIZATION, "Bearer 123")
+                )
+            }
             val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
         }
-
-        val propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
-
+        
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2026-27", propertyId, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", propertyId, BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", propertyId, BAD_REQUEST, TaxYearFormatError),
+          ("AA1123A", "XAIS12345678910", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "XAIS12345678910", "2026-27", "BAD_PROPERTY_ID", BAD_REQUEST, PropertyIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-26", propertyId, BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "XAIS12345678910", "2026-28", propertyId, BAD_REQUEST, RuleTaxYearRangeInvalidError)
+          ("AA123456A", "XAIS12345678910", "2025-26", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XAIS12345678910", "2026-28", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
+
         input.foreach(args => validationErrorTest.tupled(args))
       }
     }
@@ -153,4 +163,5 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
       }
     }
   }
+
 }

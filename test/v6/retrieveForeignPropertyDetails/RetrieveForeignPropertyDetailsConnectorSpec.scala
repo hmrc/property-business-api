@@ -68,7 +68,7 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
         private val response = responseWith(Seq(foreignPropertyDetailsEntry))
 
         private val maximumRequestParams = List(
-          "taxYear"    -> taxYear,
+          "taxYear"    -> "26-27",
           "propertyId" -> propertyId
         )
 
@@ -99,7 +99,7 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
         private val response = responseWith(Seq(foreignPropertyDetailsEntry))
 
         private val minimumParams = List(
-          "taxYear" -> taxYear
+          "taxYear" -> "26-27"
         )
 
         val minimumRequestData: RetrieveForeignPropertyDetailsRequestData =

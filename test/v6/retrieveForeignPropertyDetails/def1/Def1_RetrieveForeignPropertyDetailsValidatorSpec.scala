@@ -68,16 +68,6 @@ class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {
           Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "given an incorrectly formatted tax year" in {
-        validator(taxYear = "invalidTaxYear").validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-
-      "given an invalid tax year range" in {
-        validator(taxYear = "2020-22").validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-
       "given an invalid property ID" in {
         validator(propertyId = "invalidPropertyId").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, PropertyIdFormatError))
@@ -91,7 +81,7 @@ class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {
             ErrorWrapper(
               correlationId,
               BadRequestError,
-              Some(List(BusinessIdFormatError, NinoFormatError, PropertyIdFormatError, TaxYearFormatError))
+              Some(List(BusinessIdFormatError, NinoFormatError, PropertyIdFormatError))
             )
           )
       }

@@ -17,16 +17,13 @@
 package v6.retrieveForeignPropertyDetails
 
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.Reads
-import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import shared.models.errors.MtdError
 import shared.schema.DownstreamReadable
 import v6.retrieveForeignPropertyDetails.def1.model.response.Def1_RetrieveForeignPropertyDetailsResponse
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
-
-import scala.math.Ordered.orderingToOrdered
 
 sealed trait RetrieveForeignPropertyDetailsSchema extends DownstreamReadable[RetrieveForeignPropertyDetailsResponse]
 
@@ -37,13 +34,7 @@ object RetrieveForeignPropertyDetailsSchema {
     val connectorReads: Reads[DownstreamResp] = Def1_RetrieveForeignPropertyDetailsResponse.format.reads(_)
   }
 
-  def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveForeignPropertyDetailsSchema] =
-    ResolveTaxYear(taxYearString) andThen schemaFor
-
-  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyDetailsSchema] = {
-    if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def1) else Invalid(Seq(RuleTaxYearNotSupportedError))
-    // if (taxYear < TaxYear.starting(2026)) Invalid(Seq(RuleTaxYearNotSupportedError))
-    // else Valid(Def1)
-  }
+  def schemaFor(taxYear: String): Validated[Seq[MtdError], RetrieveForeignPropertyDetailsSchema] =
+    ResolveTaxYearMinimum(TaxYear.fromMtd("2026-27"))(taxYear).map(_ => Def1)
 
 }

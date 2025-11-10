@@ -33,7 +33,7 @@ class RetrieveForeignPropertyDetailsSchemaSpec extends UnitSpec with ScalaCheckD
       }
 
       "use Def1 for tax years 2026-27 onwards" in {
-        forTaxYearsFrom(TaxYear.fromMtd("2025-26")) { taxYear =>
+        forTaxYearsFrom(TaxYear.fromMtd("2026-27")) { taxYear =>
           RetrieveForeignPropertyDetailsSchema.schemaFor(taxYear.asMtd) shouldBe Valid(RetrieveForeignPropertyDetailsSchema.Def1)
         }
       }

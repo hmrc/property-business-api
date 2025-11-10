@@ -37,11 +37,11 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
     val propertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
     val responseBody: JsValue = fullMtdJson
-    
-     val queryParams = Map("taxYear" -> "26-27", "propertyId" -> "8e8b8450-dc1b-4360-8109-7067337b42cb")
-    
+
+    val queryParams = Map("taxYear" -> "26-27", "propertyId" -> "8e8b8450-dc1b-4360-8109-7067337b42cb")
+
     def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$businessId"
-    
+
     def stubDownstreamSuccess(): Unit =
       DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, queryParams, status = OK, body = fullDownstreamJson)
 
@@ -56,9 +56,9 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
           (AUTHORIZATION, "Bearer 123")
         )
     }
-    
+
     def setupStubs(): Unit = ()
-    
+
     def errorBody(code: String): String =
       s"""
            [
@@ -98,7 +98,7 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
             override val businessId: String = requestBusinessId
             override val taxYear: String    = requestTaxYear
             override val propertyId: String = requestPropertyId
-            
+
             override def request(): WSRequest = {
               AuditStub.audit()
               AuthStub.authorised()
@@ -115,7 +115,7 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
             response.json shouldBe Json.toJson(expectedBody)
           }
         }
-        
+
         val input = List(
           ("AA1123A", "XAIS12345678910", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "BAD_BUSINESS_ID", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", BAD_REQUEST, BusinessIdFormatError),

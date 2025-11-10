@@ -80,10 +80,12 @@ class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
 
     def errorBody(code: String): String =
       s"""
+         | [
          |{
          |  "errorCode": "$code",
          |  "errorDescription": "hip message"
          |}
+         |]
            """.stripMargin
   }
 

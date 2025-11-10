@@ -193,13 +193,13 @@ class Def1_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
          |        }
          |     }
          |  },
-         |  "ukNonFhlProperty": {
+         |  "ukProperty": {
          |    "allowances": {
          |      "annualInvestmentAllowance": 678.45,
          |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
          |      "businessPremisesRenovationAllowance": 573.45,
          |      "otherCapitalAllowance": 452.34,
-         |      "costOfReplacingDomesticGoods": 567.34,
+         |      "costOfReplacingDomesticItems": 567.34,
          |      "propertyIncomeAllowance": 342.34,
          |      "electricChargePointAllowance": 454.34,
          |      "structuredBuildingAllowance": [
@@ -276,7 +276,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
         |         "zeroEmissionGoodsVehicleAllowance":456.34,
         |         "businessPremisesRenovationAllowance":573.45,
         |         "otherCapitalAllowance":452.34,
-        |         "costOfReplacingDomesticGoods":567.34,
+        |         "costOfReplacingDomesticItems":567.34,
         |         "propertyIncomeAllowance":342.34,
         |         "electricChargePointAllowance":454.34,
         |         "structuredBuildingAllowance":[
@@ -410,7 +410,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(s"/uk/$nino/$businessId/annual/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.4.0+json"),
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
         )
     }

@@ -34,7 +34,7 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
 
   private def requestBody(propertyName: String = "Bob & Bobby Co",
                           endDate: String = "2026-08-24",
-                          endReason: String = "disposal") =
+                          endReason: String = "disposal"): JsValue =
     Json.parse(s"""
                   |{
                   |    "propertyName": "$propertyName",
@@ -56,7 +56,7 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
             .thenReturn(status = NO_CONTENT, None)
         }
 
-        val response: WSResponse = await(request().put(requestBody))
+        val response: WSResponse = await(request().put(requestBody()))
         response.status shouldBe NO_CONTENT
         response.body shouldBe ""
         response.header("Content-Type") shouldBe None
@@ -84,8 +84,9 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
                                 requestTaxYear: String,
                                 requestBody: JsValue,
                                 expectedStatus: Int,
-                                expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+                                expectedBody: MtdError,
+                                scenario: Option[String]): Unit = {
+          s"validation fails with ${expectedBody.code} error ${scenario.getOrElse("")}" in new Test {
 
             override val nino: String = requestNino
             override val propertyId: String = requestPropertyId
@@ -109,29 +110,33 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
 
         val missingEndDateJson = Json.parse(
           s"""
+             |{
              |    "propertyName": "Bob & Bobby Co",
              |    "endReason": "disposal"
+             |}
              |""".stripMargin)
 
         val missingEndReasonJson = Json.parse(
           s"""
+             |{
              |    "propertyName": "Bob & Bobby Co",
              |    "endDate": "2026-08-24"
+             |}
              |""".stripMargin)
 
         val input = List(
-          ("AA1123A", validPropertyId, validTaxYear, requestBody, BAD_REQUEST, NinoFormatError),
-          (validNino, validPropertyId, "20267", requestBody, BAD_REQUEST, TaxYearFormatError),
-          (validNino, "8e8-db-60-89-706733*", validTaxYear, requestBody, BAD_REQUEST, PropertyIdFormatError),
-          (validNino, validPropertyId, "2026-28", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          (validNino, validPropertyId, "2025-26", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (validNino, validPropertyId, validTaxYear, requestBody(propertyName = "$"), BAD_REQUEST, PropertyNameFormatError),
-          (validNino, validPropertyId, validTaxYear, requestBody(endDate = "24-08-2026"), BAD_REQUEST, EndDateFormatError),
-          (validNino, validPropertyId, validTaxYear, requestBody(endReason = "invalid"), BAD_REQUEST, EndReasonFormatError),
-          (validNino, validPropertyId, validTaxYear, JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-          (validNino, validPropertyId, validTaxYear, requestBody(endDate = "2027-05-24"), BAD_REQUEST, RuleEndDateAfterTaxYearEndError),
-          (validNino, validPropertyId, validTaxYear, missingEndDateJson, BAD_REQUEST, RuleMissingEndDetailsError),
-          (validNino, validPropertyId, validTaxYear, missingEndReasonJson, BAD_REQUEST, RuleMissingEndDetailsError)
+          ("AA1123A", validPropertyId, validTaxYear, requestBody(), BAD_REQUEST, NinoFormatError, None),
+          (validNino, validPropertyId, "20267", requestBody(), BAD_REQUEST, TaxYearFormatError, None),
+          (validNino, "8e8-db-60-89-706733*", validTaxYear, requestBody(), BAD_REQUEST, PropertyIdFormatError, None),
+          (validNino, validPropertyId, "2026-28", requestBody(), BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
+          (validNino, validPropertyId, "2025-26", requestBody(), BAD_REQUEST, RuleTaxYearNotSupportedError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody(propertyName = ""), BAD_REQUEST, PropertyNameFormatError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody(endDate = "24-08-2026"), BAD_REQUEST, EndDateFormatError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody(endReason = "invalid"), BAD_REQUEST, EndReasonFormatError, None),
+          (validNino, validPropertyId, validTaxYear, JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody(endDate = "2027-05-24"), BAD_REQUEST, RuleEndDateAfterTaxYearEndError, None),
+          (validNino, validPropertyId, validTaxYear, missingEndDateJson, BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end date")),
+          (validNino, validPropertyId, validTaxYear, missingEndReasonJson, BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end reason"))
         )
         input.foreach(args => validationErrorTest.tupled(args))
       }
@@ -148,7 +153,7 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
             DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
-          val response: WSResponse = await(request().put(requestBody))
+          val response: WSResponse = await(request().put(requestBody()))
           response.json shouldBe Json.toJson(expectedBody)
           response.status shouldBe expectedStatus
         }
@@ -177,13 +182,13 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
   private trait Test {
 
     val nino: String = "AA999999A"
-    private val propertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
+    val propertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
-    private def mtdTaxYear: String = "2026-27"
+    def mtdTaxYear: String = "2026-27"
 
     def setupStubs(): StubMapping
 
-    def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$propertyId?taxYear=26-27"
+    def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$propertyId"
 
     def request(): WSRequest = {
       setupStubs()

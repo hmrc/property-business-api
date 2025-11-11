@@ -22,19 +22,18 @@ import v6.retrieveForeignPropertyDetails.def1.model.response.EndReason.*
 
 class EndReasonSpec extends UnitSpec with EnumJsonSpecSupport {
 
-  testRoundTrip[EndReason](
-    ("added-in-error", `added-in-error`),
-    ("disposal", `disposal`),
-    ("no-longer-renting-property-out", `no-longer-renting-property-out`),
-    ("cessation", `cessation`)
+  testDeserialization(
+    ("noLongerRentingPropertyOut", `no-longer-renting-property-out`),
+    ("disposal", disposal),
+    ("addedInError", `added-in-error`),
+    ("cessation", cessation)
   )
 
-  "EndReason" when {
-    "getting downstream EndReason" must {
-      "work" in {
-        `disposal` shouldBe EndReason.`disposal`
-      }
-    }
-  }
+  testSerialization(
+    (`no-longer-renting-property-out`, "no-longer-renting-property-out"),
+    (disposal, "disposal"),
+    (`added-in-error`, "added-in-error"),
+    (cessation, "cessation")
+  )
 
 }

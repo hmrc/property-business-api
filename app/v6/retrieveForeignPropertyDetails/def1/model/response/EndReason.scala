@@ -16,18 +16,17 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.json.Format
+import play.api.libs.json.{Reads, Writes}
 import shared.utils.enums.Enums
 
 enum EndReason(val fromDownstream: String) {
   case `no-longer-renting-property-out` extends EndReason("noLongerRentingPropertyOut")
-  case `disposal`                       extends EndReason("disposal")
+  case disposal                         extends EndReason("disposal")
   case `added-in-error`                 extends EndReason("addedInError")
-  case `cessation`                      extends EndReason("cessation")
+  case cessation                        extends EndReason("cessation")
 }
 
 object EndReason {
-
-  given Format[EndReason]                        = Enums.format(values)
-  val parser: PartialFunction[String, EndReason] = Enums.parser[EndReason](values)
+  given Reads[EndReason]  = Enums.readsFrom(values, _.fromDownstream)
+  given Writes[EndReason] = Enums.writes
 }

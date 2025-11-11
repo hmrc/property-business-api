@@ -88,7 +88,7 @@ class RetrieveForeignPropertyDetailsControllerSpec
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns true
 
     protected def callController(): Future[Result] = controller.handleRequest(
       validNino,

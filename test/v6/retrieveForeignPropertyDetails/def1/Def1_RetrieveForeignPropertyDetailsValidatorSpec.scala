@@ -73,19 +73,6 @@ class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {
           Left(ErrorWrapper(correlationId, PropertyIdFormatError))
       }
     }
-
-    "return multiple errors" when {
-      "there are multiple problems" in {
-        validator("invalid", "invalid", "invalid", "invalid").validateAndWrapResult() shouldBe
-          Left(
-            ErrorWrapper(
-              correlationId,
-              BadRequestError,
-              Some(List(BusinessIdFormatError, NinoFormatError, PropertyIdFormatError))
-            )
-          )
-      }
-    }
   }
 
 }

@@ -16,7 +16,6 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.functional.syntax._
 import shared.models.domain.Timestamp
 import play.api.libs.json._
 
@@ -30,18 +29,5 @@ case class ForeignPropertyDetailsEntry(
 )
 
 object ForeignPropertyDetailsEntry {
-
-  implicit val writes: OWrites[ForeignPropertyDetailsEntry] = Json.writes[ForeignPropertyDetailsEntry]
-
-  given Reads[ForeignPropertyDetailsEntry] = (
-    (__ \ "submittedOn").read[Timestamp] and
-      (__ \ "propertyId").read[String] and
-      (__ \ "propertyName").read[String] and
-      (__ \ "countryCode").read[String] and
-      (__ \ "endDate").readNullable[String] and
-      (__ \ "endReason").readNullable[String].map { maybeStr =>
-        maybeStr.flatMap(str => EndReason.values.find(_.fromDownstream == str))
-      }
-  )(ForeignPropertyDetailsEntry.apply)
-
+  implicit val format: OFormat[ForeignPropertyDetailsEntry] = Json.format[ForeignPropertyDetailsEntry]
 }

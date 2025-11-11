@@ -59,12 +59,6 @@ class RetrieveForeignPropertyDetailsConnectorSpec extends ConnectorSpec {
   "RetrieveForeignPropertyDetailsConnector" when {
     "the request is made and FOREIGN property data is returned" should {
       "return ForeignResult for Some propertyId" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig
-          .anyNumberOfTimes()
-          .returns(
-            Configuration("passIntentHeader.enabled" -> false)
-          )
-
         private val response = responseWith(Seq(foreignPropertyDetailsEntry))
 
         private val maximumRequestParams = List(

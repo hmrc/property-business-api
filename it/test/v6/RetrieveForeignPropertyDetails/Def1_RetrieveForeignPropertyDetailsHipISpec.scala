@@ -38,7 +38,7 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
 
     val responseBody: JsValue = fullMtdJson
 
-    val queryParams = Map("taxYear" -> "26-27", "propertyId" -> "8e8b8450-dc1b-4360-8109-7067337b42cb")
+    val queryParams = Map("taxYear" -> "26-27", "propertyId" -> propertyId)
 
     def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$businessId"
 
@@ -50,7 +50,7 @@ class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec wi
       AuthStub.authorised()
       MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(s"/foreign/$nino/$businessId/details/$taxYear").addQueryStringParameters("propertyId" -> "8e8b8450-dc1b-4360-8109-7067337b42cb")
+      buildRequest(s"/foreign/$nino/$businessId/details/$taxYear").addQueryStringParameters("propertyId" -> propertyId)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")

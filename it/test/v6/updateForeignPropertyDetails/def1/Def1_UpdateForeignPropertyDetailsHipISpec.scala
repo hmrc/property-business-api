@@ -29,20 +29,11 @@ import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.services.*
 import shared.support.IntegrationBaseSpec
+import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.{def1_UpdateForeignPropertyDetailsMtdJson => requestBody}
 
 class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  private def requestBody(propertyName: String = "Bob & Bobby Co",
-                          endDate: String = "2026-08-24",
-                          endReason: String = "disposal"): JsValue =
-    Json.parse(s"""
-                  |{
-                  |    "propertyName": "$propertyName",
-                  |    "endDate": "$endDate",
-                  |    "endReason": "$endReason"
-                  |}""".stripMargin)
-
-  "calling the create and amend endpoint" should {
+  "calling update endpoint" should {
 
     "return a 204 status" when {
 
@@ -52,11 +43,11 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
           DownstreamStub
-            .when(method = DownstreamStub.PUT, uri = downstreamUri)
+            .when(method = DownstreamStub.PUT, uri = downstreamUri, downstreamQueryParams)
             .thenReturn(status = NO_CONTENT, None)
         }
 
-        val response: WSResponse = await(request().put(requestBody()))
+        val response: WSResponse = await(request().put(requestBody))
         response.status shouldBe NO_CONTENT
         response.body shouldBe ""
         response.header("Content-Type") shouldBe None
@@ -125,16 +116,16 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
              |""".stripMargin)
 
         val input = List(
-          ("AA1123A", validPropertyId, validTaxYear, requestBody(), BAD_REQUEST, NinoFormatError, None),
-          (validNino, validPropertyId, "20267", requestBody(), BAD_REQUEST, TaxYearFormatError, None),
-          (validNino, "8e8-db-60-89-706733*", validTaxYear, requestBody(), BAD_REQUEST, PropertyIdFormatError, None),
-          (validNino, validPropertyId, "2026-28", requestBody(), BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
-          (validNino, validPropertyId, "2025-26", requestBody(), BAD_REQUEST, RuleTaxYearNotSupportedError, None),
-          (validNino, validPropertyId, validTaxYear, requestBody(propertyName = ""), BAD_REQUEST, PropertyNameFormatError, None),
-          (validNino, validPropertyId, validTaxYear, requestBody(endDate = "24-08-2026"), BAD_REQUEST, EndDateFormatError, None),
-          (validNino, validPropertyId, validTaxYear, requestBody(endReason = "invalid"), BAD_REQUEST, EndReasonFormatError, None),
+          ("AA1123A", validPropertyId, validTaxYear, requestBody, BAD_REQUEST, NinoFormatError, None),
+          (validNino, validPropertyId, "20267", requestBody, BAD_REQUEST, TaxYearFormatError, None),
+          (validNino, "8e8-db-60-89-706733*", validTaxYear, requestBody, BAD_REQUEST, PropertyIdFormatError, None),
+          (validNino, validPropertyId, "2026-28", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
+          (validNino, validPropertyId, "2025-26", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody.update("/propertyName", JsString("")), BAD_REQUEST, PropertyNameFormatError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody.update("/endDate", JsString("24-08-2026")), BAD_REQUEST, EndDateFormatError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody.update("/endReason", JsString("invalid")), BAD_REQUEST, EndReasonFormatError, None),
           (validNino, validPropertyId, validTaxYear, JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
-          (validNino, validPropertyId, validTaxYear, requestBody(endDate = "2027-05-24"), BAD_REQUEST, RuleEndDateAfterTaxYearEndError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody.update("/endDate", JsString("2027-05-24")), BAD_REQUEST, RuleEndDateAfterTaxYearEndError, None),
           (validNino, validPropertyId, validTaxYear, missingEndDateJson, BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end date")),
           (validNino, validPropertyId, validTaxYear, missingEndReasonJson, BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end reason"))
         )
@@ -150,10 +141,10 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
             AuditStub.audit()
             AuthStub.authorised()
             MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamCode))
           }
 
-          val response: WSResponse = await(request().put(requestBody()))
+          val response: WSResponse = await(request().put(requestBody))
           response.json shouldBe Json.toJson(expectedBody)
           response.status shouldBe expectedStatus
         }
@@ -187,6 +178,10 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
     def mtdTaxYear: String = "2026-27"
 
     def setupStubs(): StubMapping
+
+    def downstreamTaxYear: String = "26-27"
+
+    def downstreamQueryParams: Map[String, String] = Map("taxYear" -> downstreamTaxYear)
 
     def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$propertyId"
 

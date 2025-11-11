@@ -68,6 +68,19 @@ class EnumsSpec extends UnitSpec with Inspectors {
       }
     }
 
+    "read using default Show" in {
+      val enumReads: Reads[Enum] = Enums.reads(values)
+
+      enumReads.reads(JsString("enum-one")) shouldBe JsSuccess(`enum-one`)
+      enumReads.reads(JsString("unknown")) shouldBe a[JsError]
+    }
+
+    "write using default Show" in {
+      val enumWrites: Writes[Enum] = Enums.writes[Enum]
+
+      enumWrites.writes(`enum-two`) shouldBe JsString("enum-two")
+    }
+
     "allow roundtrip" in {
       forAll(values.toList) { value =>
         val foo: Foo[Enum] = Foo(value)
@@ -89,23 +102,30 @@ class EnumsSpec extends UnitSpec with Inspectors {
       }
 
       object Enum2 {
-        given Show[Enum2] = Show.show[Enum2](_.altName)
+        val reads: Reads[Enum2] = Enums.readsFrom[Enum2](values, _.altName)
 
-        given Format[Enum2] = Enums.format(values)
+        val writes: Writes[Enum2] = {
+          given Show[Enum2] = Show.show(_.altName)
+          Enums.writes[Enum2]
+        }
+
+        given Format[Enum2] = Format(reads, writes)
       }
 
       import Enum2.*
 
-      val json: JsValue = Json.parse(
-        """
+      def json(value: String): JsValue = Json.parse(
+        s"""
           |{
-          | "someField": "one"
+          |   "someField": "$value"
           |}
         """.stripMargin
       )
 
-      json.as[Foo[Enum2]] shouldBe Foo(`enum-one`)
-      Json.toJson(Foo[Enum2](`enum-one`)) shouldBe json
+      values.toList.foreach { value =>
+        json(value.altName).as[Foo[Enum2]] shouldBe Foo(value)
+        Json.toJson(Foo(value)) shouldBe json(value.altName)
+      }
     }
 
     "detects badly formatted values" in {

@@ -16,15 +16,15 @@
 
 package v6.createForeignPropertyDetails.def1.model.request
 
-import play.api.libs.json.Format
-import shared.utils.enums.Enums
+import shared.utils.UnitSpec
+import shared.utils.enums.EnumJsonSpecSupport
+import v6.createForeignPropertyDetails.def1.model.request.EndReason.*
 
-enum EndReason(val toDownstream: String) {
-  case `no-longer-renting-property-out` extends EndReason("noLongerRentingPropertyOut")
-  case disposal                         extends EndReason("disposal")
-}
+class EndReasonSpec extends UnitSpec with EnumJsonSpecSupport {
 
-object EndReason {
-  given Format[EndReason]                        = Enums.format(values)
-  val parser: PartialFunction[String, EndReason] = Enums.parser(values)
+  testRoundTrip[EndReason](
+    ("no-longer-renting-property-out", `no-longer-renting-property-out`),
+    ("disposal", disposal)
+  )
+
 }

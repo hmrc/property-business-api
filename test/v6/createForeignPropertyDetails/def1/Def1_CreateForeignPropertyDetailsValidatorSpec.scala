@@ -228,73 +228,64 @@ class Def1_CreateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed an empty body" in {
-        val invalidBody = JsObject.empty
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, JsObject.empty).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
       }
 
       "passed a body without property name" in {
-        val invalidBody = bodyWithoutPropertyName
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithoutPropertyName).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/propertyName")))
       }
 
       "passed a body without country code" in {
-        val invalidBody = bodyWithoutCountryCode
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithoutCountryCode).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/countryCode")))
       }
 
       "passed a body with an endDate but no endReason" in {
-        val invalidBody = bodyWithMissingEndReason
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithMissingEndReason).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleMissingEndDetailsError))
       }
 
       "passed a body with an endReason but no endDate" in {
-        val invalidBody = bodyWithMissingEndDate
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithMissingEndDate).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleMissingEndDetailsError))
       }
 
       "passed a body with an invalid propertyName" in {
-        val invalidBody = bodyWithInvalidPropertyName
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithInvalidPropertyName).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, PropertyNameFormatError))
       }
 
       "passed a body with an invalid countryCode" in {
-        val invalidBody = bodyWithInvalidCountryCode
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithInvalidCountryCode).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, CountryCodeFormatError))
       }
 
       "passed a body with an invalid endDate" in {
-        val invalidBody = bodyWithInvalidEndDate
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithInvalidEndDate).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, EndDateFormatError))
       }
 
       "passed a body with an invalid endReason" in {
-        val invalidBody = bodyWithInvalidEndReason
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+          validator(validNino, validBusinessId, validTaxYear, bodyWithInvalidEndReason).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, EndReasonFormatError))
       }

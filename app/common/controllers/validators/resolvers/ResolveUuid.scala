@@ -21,13 +21,14 @@ import cats.data.Validated.{Invalid, Valid}
 import shared.controllers.validators.resolvers.ResolverSupport
 import shared.models.errors.MtdError
 
-import java.util.UUID
-import scala.util.Try
+import scala.util.matching.Regex
 
 object ResolveUuid extends ResolverSupport {
 
+  private val uuidRegex: Regex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$".r
+
   private def resolver[T](error: MtdError, toType: String => T): Resolver[String, T] = value =>
-    if (Try(UUID.fromString(value)).isSuccess) Valid(toType(value)) else Invalid(List(error))
+    if (uuidRegex.matches(value)) Valid(toType(value)) else Invalid(List(error))
 
   def apply[T](value: String, error: MtdError)(toType: String => T): Validated[Seq[MtdError], T] =
     resolver(error, toType)(value)

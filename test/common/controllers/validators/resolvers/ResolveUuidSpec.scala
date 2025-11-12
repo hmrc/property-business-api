@@ -54,7 +54,7 @@ class ResolveUuidSpec extends UnitSpec {
     }
 
     "return the expected error" when {
-      val invalidUuid: String = "not-a-uuid"
+      val invalidUuid: String = "4557ecb5-fd32"
 
       "given a non-UUID string" in {
         val result: Validated[Seq[MtdError], PropertyId] = ResolveUuid(invalidUuid, PropertyIdFormatError)(PropertyId.apply)

@@ -20,19 +20,21 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import com.neovisionaries.i18n.CountryCode
 import shared.controllers.validators.resolvers.ResolveParsedCountryCode.permittedCustomCodes
-import shared.models.errors.{CountryCodeFormatError, MtdError, RuleCountryCodeError}
+import shared.models.errors.*
 
 case class ResolveParsedCountryCode(path: String) {
 
+  private def addPathIfPresent(error: MtdError): MtdError = if (path.nonEmpty) error.withPath(path) else error
+
   def apply(value: String): Validated[List[MtdError], String] = {
     if (value.length != 3) {
-      Invalid(List(CountryCodeFormatError.withPath(path)))
+      Invalid(List(addPathIfPresent(CountryCodeFormatError)))
     } else if (permittedCustomCodes.contains(value)) {
       Valid(value)
     } else {
       Option(CountryCode.getByAlpha3Code(value)) match {
         case Some(_) => Valid(value)
-        case None    => Invalid(List(RuleCountryCodeError.withPath(path)))
+        case None    => Invalid(List(addPathIfPresent(RuleCountryCodeError)))
       }
     }
   }

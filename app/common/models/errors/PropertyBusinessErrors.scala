@@ -23,6 +23,24 @@ object SubmissionIdFormatError extends MtdError("FORMAT_SUBMISSION_ID", "The pro
 
 object PropertyIdFormatError extends MtdError("FORMAT_PROPERTY_ID", "The provided property ID is invalid", BAD_REQUEST)
 
+object PropertyNameFormatError extends MtdError("FORMAT_PROPERTY_NAME", "The provided property name is invalid", BAD_REQUEST)
+
+object EndReasonFormatError extends MtdError("FORMAT_END_REASON", "The provided end reason is invalid", BAD_REQUEST)
+
+object RuleDuplicatePropertyNameError
+    extends MtdError("RULE_DUPLICATE_PROPERTY_NAME", "Foreign property name already exists for the same country", BAD_REQUEST)
+
+object RulePropertyOutsidePeriodError
+    extends MtdError("RULE_PROPERTY_OUTSIDE_PERIOD", "Foreign property is not within the income source period", BAD_REQUEST)
+
+object RuleEndDateAfterTaxYearEndError
+    extends MtdError("RULE_END_DATE_AFTER_TAX_YEAR_END", "The end date is after the end of the tax year", BAD_REQUEST)
+
+object RulePropertyBusinessCeasedError
+    extends MtdError("RULE_PROPERTY_BUSINESS_CEASED", "Foreign property business income source has ceased", BAD_REQUEST)
+
+object RuleMissingEndDetailsError extends MtdError("RULE_MISSING_END_DETAILS", "End date and end reason must be supplied together", BAD_REQUEST)
+
 object RuleTypeOfBusinessIncorrectError
     extends MtdError("RULE_TYPE_OF_BUSINESS_INCORRECT", "The businessId is for a different type of business", BAD_REQUEST)
 

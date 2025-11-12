@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package v6.updateForeignPropertyDetails.model.request
+package v6.updateForeignPropertyDetails.def1.model.request
 
-import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.*
-import v6.updateForeignPropertyDetails.def1.model.request.Def1_UpdateForeignPropertyDetailsRequestBody
+import play.api.libs.json.Json
+import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.{
+  def1_UpdateForeignPropertyDetailsMtdJson,
+  def1_UpdateForeignPropertyDetailsModel,
+  def1_UpdateForeignPropertyDetailsDownstreamJson
+}
 
-class UpdateForeignPropertyDetailsRequestBodySpec extends UnitSpec {
+class Def1_UpdateForeignPropertyDetailsRequestBodySpec extends UnitSpec {
 
   "reads" when {
-    "passed valid JSON" should {
+    "passed a valid JSON" should {
       "return a valid model" in {
         def1_UpdateForeignPropertyDetailsMtdJson.as[Def1_UpdateForeignPropertyDetailsRequestBody] shouldBe def1_UpdateForeignPropertyDetailsModel
       }

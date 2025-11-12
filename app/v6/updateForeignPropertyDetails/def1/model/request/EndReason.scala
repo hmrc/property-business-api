@@ -16,7 +16,6 @@
 
 package v6.updateForeignPropertyDetails.def1.model.request
 
-import play.api.libs.json.Format
 import shared.utils.enums.Enums
 
 enum EndReason(val toDownstream: String) {
@@ -26,6 +25,5 @@ enum EndReason(val toDownstream: String) {
 }
 
 object EndReason {
-  given Format[EndReason]                        = Enums.format(values)
   val parser: PartialFunction[String, EndReason] = Enums.parser(values)
 }

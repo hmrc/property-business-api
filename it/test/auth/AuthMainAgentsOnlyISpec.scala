@@ -29,7 +29,7 @@ import shared.support.IntegrationBaseSpec
 
 abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
 
-  /** The API's latest version, e.g. "1.0".
+  /** The API's latest version, e.g. "5.0".
     */
   protected val callingApiVersion: String
 

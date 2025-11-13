@@ -32,6 +32,8 @@ object Enums {
   def reads[E: ClassTag](values: Array[E])(using ev: Show[E] = Shows.toStringShow[E]): Reads[E] =
     summon[Reads[String]].collect(JsonValidationError(s"error.expected.$typeName"))(parser(values))
 
+  def readsFrom[E: ClassTag](values: Array[E], extractValue: E => String)(using ev: Show[E] = Show.show(extractValue)): Reads[E] = reads(values)
+
   private def typeName[E: ClassTag]: String = summon[ClassTag[E]].runtimeClass.getSimpleName
 
   def parser[E](values: Array[E])(using ev: Show[E] = Shows.toStringShow[E]): PartialFunction[String, E] =

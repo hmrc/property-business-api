@@ -12,6 +12,8 @@ GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v6.retrie
 
 GET        /foreign/:nino/:businessId/cumulative/:taxYear              v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
 
+GET        /foreign/:nino/:businessId/details/:taxYear                 v6.retrieveForeignPropertyDetails.RetrieveForeignPropertyDetailsController.handleRequest(nino: String, businessId: String, taxYear: String, propertyId: Option[String])
+
 GET        /:nino/:businessId/period/:taxYear                          v6.propertyPeriodSummary.list.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v6.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
@@ -19,6 +21,7 @@ GET        /foreign/:nino/:businessId/annual/:taxYear                  v6.retrie
 DELETE     /:nino/:businessId/annual/:taxYear                          v6.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /foreign/:nino/:propertyId/details/:taxYear                v6.updateForeignPropertyDetails.UpdateForeignPropertyDetailsController.handleRequest(nino: String, propertyId: String, taxYear: String)
+POST        /foreign/:nino/:businessId/details/:taxYear                v6.createForeignPropertyDetails.CreateForeignPropertyDetailsController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v6.createAmendHistoricFhlUkPropertyAnnualSubmission.CreateAmendHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)
 GET        /uk/annual/furnished-holiday-lettings/:nino/:taxYear       v6.retrieveHistoricFhlUkPropertyAnnualSubmission.RetrieveHistoricFhlUkPropertyAnnualSubmissionController.handleRequest(nino: String, taxYear: String)

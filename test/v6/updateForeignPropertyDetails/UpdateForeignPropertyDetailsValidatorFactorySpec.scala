@@ -17,7 +17,7 @@
 package v6.updateForeignPropertyDetails
 
 import play.api.libs.json.{JsObject, Json}
-import shared.controllers.validators.Validator
+import shared.controllers.validators.{Validator, AlwaysErrorsValidator}
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
 import v6.updateForeignPropertyDetails.def1.Def1_UpdateForeignPropertyDetailsValidator
@@ -33,7 +33,7 @@ class UpdateForeignPropertyDetailsValidatorFactorySpec extends UnitSpec with Jso
 
   "UpdateForeignPropertyDetailsValidatorFactory" when {
     "given a valid tax year" should {
-      "return the Validator for schema definition 1" in {
+      "return the Validator for schema Def_1" in {
 
         val requestBody: JsObject = Json.obj(
           "propertyName" -> "Bob & Bobby Co",
@@ -45,6 +45,22 @@ class UpdateForeignPropertyDetailsValidatorFactorySpec extends UnitSpec with Jso
           validatorFactory.validator(validNino, validPropertyId, validTaxYear, requestBody)
 
         result shouldBe a[Def1_UpdateForeignPropertyDetailsValidator]
+      }
+    }
+
+    "given a invalid tax year" should {
+      "return an error" in {
+
+        val requestBody: JsObject = Json.obj(
+          "propertyName" -> "Bob & Bobby Co",
+          "endDate"      -> "2026-08-24",
+          "endReason"    -> "no-longer-renting-property-out"
+        )
+
+        val result: Validator[UpdateForeignPropertyDetailsRequestData] =
+          validatorFactory.validator(validNino, validPropertyId, "BAD_TAX_YEAR", requestBody)
+
+        result shouldBe an[AlwaysErrorsValidator]
       }
     }
   }

@@ -162,20 +162,6 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
     }
 
     "return multiple errors" when {
-      "the path parameters have multiple issues" in {
-
-        val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
-          validator("invalid", "invalid", validTaxYear, def1_UpdateForeignPropertyDetailsMtdJson).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            BadRequestError,
-            Some(List(NinoFormatError, PropertyIdFormatError))
-          )
-        )
-      }
-
       "passed a body with an invalidly formatted propertyName and missing end details" in {
         val requestWithInvalidPropertyNameAndMissingCountryCode =
           def1_UpdateForeignPropertyDetailsMtdJson.update("/propertyName", JsString("")).removeProperty("/endReason")

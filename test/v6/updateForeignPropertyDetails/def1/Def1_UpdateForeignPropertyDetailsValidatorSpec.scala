@@ -151,6 +151,14 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
 
         result shouldBe Left(ErrorWrapper(correlationId, EndReasonFormatError))
       }
+
+      "passed a body with an endDate after end of tax year" in {
+        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.update("/endDate", JsString("2027-08-24"))
+        val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
+          validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleEndDateAfterTaxYearEndError))
+      }
     }
 
     "return multiple errors" when {

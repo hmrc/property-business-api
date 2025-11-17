@@ -34,25 +34,33 @@ object Def1_UpdateForeignPropertyDetailsFixtures {
   )
 
   val def1_UpdateForeignPropertyDetailsDownstreamJson: JsValue = Json.parse(
-    """{
-      |   "propertyName": "Bob & Bobby Co",
-      |   "endDate": "2026-08-24",
-      |   "endReason": "noLongerRentingPropertyOut"
-      |}""".stripMargin
+    """
+      |{
+      |  "foreignPropertyDetails": {
+      |    "propertyName": "Bob & Bobby Co",
+      |    "endDate": "2026-08-24",
+      |    "endReason": "noLongerRentingPropertyOut"
+      |  }
+      |}
+    """.stripMargin
   )
 
   val def1_UpdateForeignPropertyDetailsMtdJson: JsValue = Json.parse(
-    """{
-      |   "propertyName": "Bob & Bobby Co",
-      |   "endDate": "2026-08-24",
-      |   "endReason": "no-longer-renting-property-out"
-      |}""".stripMargin
+    """
+      |{
+      |  "propertyName": "Bob & Bobby Co",
+      |  "endDate": "2026-08-24",
+      |  "endReason": "no-longer-renting-property-out"
+      |}
+    """.stripMargin
   )
 
   val def1_UpdateForeignPropertyDetailsMinimumMtdJson: JsValue = Json.parse(
-    """{
-      |   "propertyName": "Bob & Bobby Co"
-      |}""".stripMargin
+    """
+      |{
+      |  "propertyName": "Bob & Bobby Co"
+      |}
+    """.stripMargin
   )
 
 }

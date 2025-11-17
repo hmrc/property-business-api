@@ -30,21 +30,27 @@ trait Def1_CreateForeignPropertyDetailsFixtures {
   )
 
   val def1_CreateForeignPropertyDetailsWriteJson: JsValue = Json.parse(
-    """{
-      |"propertyName": "Bob & Bobby Co",
-      |"countryCode": "FRA",
-      |"endDate": "2026-08-24",
-      |"endReason": "noLongerRentingPropertyOut"
-      |}""".stripMargin
+    """
+      |{
+      |  "foreignPropertyDetails": {
+      |    "propertyName": "Bob & Bobby Co",
+      |    "countryCode": "FRA",
+      |    "endDate": "2026-08-24",
+      |    "endReason": "noLongerRentingPropertyOut"
+      |  }
+      |}
+    """.stripMargin
   )
 
   val def1_CreateForeignPropertyDetailsReadJson: JsValue = Json.parse(
-    """{
-      |"propertyName": "Bob & Bobby Co",
-      |"countryCode": "FRA",
-      |"endDate": "2026-08-24",
-      |"endReason": "no-longer-renting-property-out"
-      |}""".stripMargin
+    """
+      |{
+      |  "propertyName": "Bob & Bobby Co",
+      |  "countryCode": "FRA",
+      |  "endDate": "2026-08-24",
+      |  "endReason": "no-longer-renting-property-out"
+      |}
+    """.stripMargin
   )
 
   val def1_CreateForeignPropertyDetailsResponseModel: Def1_CreateForeignPropertyDetailsResponse = Def1_CreateForeignPropertyDetailsResponse(
@@ -52,9 +58,11 @@ trait Def1_CreateForeignPropertyDetailsFixtures {
   )
 
   val def1_CreateForeignPropertyDetailsResponseJson: JsValue = Json.parse(
-    """{
-      |"propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb"
-      |}""".stripMargin
+    """
+      |{
+      |  "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb"
+      |}
+    """.stripMargin
   )
 
 }

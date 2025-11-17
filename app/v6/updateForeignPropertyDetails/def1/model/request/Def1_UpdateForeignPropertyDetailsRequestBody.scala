@@ -28,9 +28,9 @@ object Def1_UpdateForeignPropertyDetailsRequestBody {
   implicit val reads: Reads[Def1_UpdateForeignPropertyDetailsRequestBody] = Json.reads[Def1_UpdateForeignPropertyDetailsRequestBody]
 
   implicit val writes: OWrites[Def1_UpdateForeignPropertyDetailsRequestBody] = (
-    (JsPath \ "propertyName").write[String] and
-      (JsPath \ "endDate").writeNullable[String] and
-      (JsPath \ "endReason").writeNullable[String].contramap[Option[String]](_.map(EndReason.parser(_).toDownstream))
+    (JsPath \ "foreignPropertyDetails" \ "propertyName").write[String] and
+      (JsPath \ "foreignPropertyDetails" \ "endDate").writeNullable[String] and
+      (JsPath \ "foreignPropertyDetails" \ "endReason").writeNullable[String].contramap[Option[String]](_.map(EndReason.parser(_).toDownstream))
   )(o => Tuple.fromProductTyped(o))
 
 }

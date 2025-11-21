@@ -184,6 +184,42 @@ class StandardDownstreamHttpParserSpec extends UnitSpec {
     """.stripMargin
   )
 
+  val singleHipErrorsJson: JsValue = Json.parse(
+    """
+      |{
+      |   "origin": "HoD",
+      |   "response": {
+      |      "failures": [
+      |         {
+      |            "type": "CODE",
+      |            "reason": "MESSAGE"
+      |         }
+      |      ]
+      |   }
+      |}
+      |""".stripMargin
+  )
+
+  val multipleHipErrorsJson: JsValue = Json.parse(
+    """
+      |{
+      |   "origin": "HoD",
+      |   "response": {
+      |      "failures": [
+      |         {
+      |            "type": "CODE 1",
+      |            "reason": "MESSAGE"
+      |         },
+      |         {
+      |            "type": "CODE 2",
+      |            "reason": "MESSAGE"
+      |         }
+      |      ]
+      |   }
+      |}
+      |""".stripMargin
+  )
+
   val malformedErrorJson: JsValue = Json.parse(
     """
       |{
@@ -205,6 +241,22 @@ class StandardDownstreamHttpParserSpec extends UnitSpec {
 
         "be able to parse multiple errors" in {
           val httpResponse = HttpResponse(responseCode, multipleErrorsJson.toString(), Map("CorrelationId" -> List(correlationId)))
+
+          httpReads.read(method, url, httpResponse) shouldBe {
+            Left(ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("CODE 1"), DownstreamErrorCode("CODE 2")))))
+          }
+        }
+
+        "be able to parse single HIP errors" in {
+          val httpResponse = HttpResponse(responseCode, singleHipErrorsJson.toString(), Map("CorrelationId" -> List(correlationId)))
+
+          httpReads.read(method, url, httpResponse) shouldBe {
+            Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("CODE"))))
+          }
+        }
+
+        "be able to parse multiple HIP errors" in {
+          val httpResponse = HttpResponse(responseCode, multipleHipErrorsJson.toString(), Map("CorrelationId" -> List(correlationId)))
 
           httpReads.read(method, url, httpResponse) shouldBe {
             Left(ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode("CODE 1"), DownstreamErrorCode("CODE 2")))))

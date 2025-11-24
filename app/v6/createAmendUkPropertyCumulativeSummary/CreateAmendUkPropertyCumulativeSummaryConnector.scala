@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyCumulativeSummary
 
 import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
-import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.DownstreamUri.{IfsUri, HipUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,7 +40,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpC
 
     val downstreamUri: DownstreamUri[Unit] = {
       if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1961")) {
-        HipUri[Unit](s"/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}")
+        HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}")
       } else {
         IfsUri[Unit](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
       }

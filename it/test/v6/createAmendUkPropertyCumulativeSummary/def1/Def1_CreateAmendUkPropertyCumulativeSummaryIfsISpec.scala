@@ -31,8 +31,11 @@ import shared.models.utils.JsonErrorValidators
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1961.enabled" -> false) ++ super.servicesConfig
+  
   val validRequestBodyJson: JsValue = Json.parse(
     """
       |{
@@ -384,7 +387,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSp
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (UNPROCESSABLE_ENTITY, "EARLY_DATA_SUBMISSION_NOT_ACCEPTED", BAD_REQUEST, RuleEarlyDataSubmissionNotAcceptedError),
-          (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
+          (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "SUBMITTED_TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)

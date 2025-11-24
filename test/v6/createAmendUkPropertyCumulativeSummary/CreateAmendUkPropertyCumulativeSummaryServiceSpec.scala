@@ -108,7 +108,7 @@ class CreateAmendUkPropertyCumulativeSummaryServiceSpec extends ServiceSpec with
           "TAX_YEAR_NOT_SUPPORTED"             -> RuleTaxYearNotSupportedError,
           "SUBMITTED_TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
           "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
-          "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
+          "DUPLICATE_COUNTRY_CODE"             -> InternalError,
           "SERVER_ERROR"                       -> InternalError,
           "SERVICE_UNAVAILABLE"                -> InternalError
         )

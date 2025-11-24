@@ -20,12 +20,13 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
+import play.api.Configuration
 import v6.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
+class CreateAmendUkPropertyCumulativeSummaryConnectorIfsSpec extends ConnectorSpec {
 
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
@@ -76,7 +77,6 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
 
   trait Test {
     self: ConnectorTest =>
-
     protected def taxYear: TaxYear
 
     protected val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =
@@ -84,6 +84,8 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
 
     protected val requestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(nino, taxYear, businessId, requestBody)
+
+    MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> false))
 
     protected val connector: CreateAmendUkPropertyCumulativeSummaryConnector = new CreateAmendUkPropertyCumulativeSummaryConnector(
       http = mockHttpClient,

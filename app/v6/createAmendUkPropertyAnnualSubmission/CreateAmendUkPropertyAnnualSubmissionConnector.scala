@@ -42,7 +42,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
     import request.*
 
     lazy val downstreamUri1804: DownstreamUri[Unit] =
-      if (taxYear.year >= 2025 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1804")) {
+      if (taxYear.year >= 2026 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1804")) {
         HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
       } else {
         IfsUri(s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")

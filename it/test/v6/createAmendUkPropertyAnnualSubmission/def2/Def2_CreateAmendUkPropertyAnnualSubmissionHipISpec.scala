@@ -35,7 +35,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
     val nino: String          = "TC663795B"
     val businessId: String    = "XAIS12345678910"
     val correlationId: String = "X-123"
-    
+
     def taxYear: String = "2025-26"
     def downstreamTaxYear: String = "25-26"
     def downstreamUri: String = s"/itsa/income-tax/v1/$downstreamTaxYear/business/property/annual/$nino/$businessId"
@@ -95,7 +95,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
     def setupStubs(): StubMapping
 
     def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
-    
+
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
@@ -104,7 +104,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
           (AUTHORIZATION, "Bearer 123")
         )
     }
-    
+
       def errorBody(code: String): String =
         s"""
            |{
@@ -121,11 +121,11 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
               """.stripMargin
 
   }
-  
+
   "Calling the amend uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
-      
+
       "any valid request is made with a Tax Year Specific tax year" in new Test {
 
         override def setupStubs(): StubMapping = {

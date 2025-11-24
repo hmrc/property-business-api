@@ -80,11 +80,13 @@ class CreateAmendUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         )
 
         val extraTysErrors = List(
-          "MISSING_EXPENSES" -> InternalError,
-          "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+          "MISSING_EXPENSES"         -> InternalError,
+          "FIELD_CONFLICT"           -> RulePropertyIncomeAllowanceError,
+          "INVALID_CORRELATION_ID"   -> InternalError,
+          "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
       }
     }
   }

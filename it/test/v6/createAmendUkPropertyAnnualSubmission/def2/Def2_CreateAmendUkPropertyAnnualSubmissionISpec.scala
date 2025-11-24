@@ -31,6 +31,9 @@ import shared.support.IntegrationBaseSpec
 
 class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1804.enabled" -> false) ++ super.servicesConfig
+
   private trait Test {
     val nino: String          = "TC663795B"
     val businessId: String    = "XAIS12345678910"
@@ -652,7 +655,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           ("AA123456A", "XAIS12345678910", "2025-26", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
           ("AA123456A", "XAIS12345678910", "2025-26", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -694,7 +697,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

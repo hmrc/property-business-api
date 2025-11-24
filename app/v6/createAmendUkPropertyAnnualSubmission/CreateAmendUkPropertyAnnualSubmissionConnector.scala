@@ -50,8 +50,7 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
 
     lazy val downstreamUri1597: DownstreamUri[Unit] =
       IfsUri(
-        s"income-tax/business/property/annual" +
-          s"?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}"
+        s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}"
       )
 
     val downstreamUri: DownstreamUri[Unit] =

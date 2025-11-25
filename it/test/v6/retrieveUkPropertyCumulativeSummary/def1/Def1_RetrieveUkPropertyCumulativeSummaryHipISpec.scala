@@ -25,10 +25,17 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.domain.TaxYear
 import shared.models.errors.*
 import shared.services.*
+import shared.config.MockSharedAppConfig
 import shared.support.IntegrationBaseSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
-class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveUkPropertyCumulativeSummaryFixture {
+class Def1_RetrieveUkPropertyCumulativeSummaryHipISpec
+  extends IntegrationBaseSpec
+    with Def1_RetrieveUkPropertyCumulativeSummaryFixture
+    with MockSharedAppConfig{
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1962.enabled" -> true) ++ super.servicesConfig
 
   private trait Test {
 
@@ -38,7 +45,7 @@ class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec 
 
     val responseBody: JsValue = fullMtdJson
 
-    def downstreamUri: String = s"/income-tax/${TaxYear.fromMtd(taxYear).asTysDownstream}/business/property/periodic/$nino/$businessId"
+    def downstreamUri: String = s"/itsa/income-tax/v1/${TaxYear.fromMtd(taxYear).asTysDownstream}/business/periodic/property/$nino/$businessId"
 
     def stubDownstreamSuccess(): Unit =
       DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, status = Status.OK, body = fullDownstreamJson)
@@ -60,8 +67,15 @@ class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec 
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "message"
+         |         }
+         |      ]
+         |   }
          |}
        """.stripMargin
 
@@ -88,11 +102,11 @@ class Def1_RetrieveUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec 
             downstreamUri,
             status = Status.OK,
             body = Json.parse("""{
-              |  "submittedOn": "2025-06-17T10:53:38.000Z",
-              |  "fromDate": "2024-01-29",
-              |  "toDate": "2025-03-29",
-              |  "foreignProperty": { }
-              |}""".stripMargin)
+                                |  "submittedOn": "2025-06-17T10:53:38.000Z",
+                                |  "fromDate": "2024-01-29",
+                                |  "toDate": "2025-03-29",
+                                |  "foreignProperty": { }
+                                |}""".stripMargin)
           )
 
         val response: WSResponse = await(request().get())

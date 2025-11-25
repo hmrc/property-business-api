@@ -48,9 +48,10 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
   }
 
   "RetrieveUkPropertyCumulativeSummaryConnector" when {
-    "the request is made and UK property data is returned" should {
+    "the request is made and UK property data is returned (HIP disabled)" should {
       "return UkResult" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
+          Configuration("passIntentHeader.enabled" -> false, "ifs_hip_migration_1962.enabled" -> false)
 
         private val response = responseWith(Some(UkProperty(None, None)))
 
@@ -62,9 +63,25 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
       }
     }
 
+    "the request is made and UK property data is returned (HIP enabled)" should {
+      "return UkResult" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
+          Configuration("passIntentHeader.enabled" -> false, "ifs_hip_migration_1962.enabled" -> true)
+
+        private val response = responseWith(Some(UkProperty(None, None)))
+
+        willGet(url = url"$baseUrl/itsa/income-tax/v1/25-26/business/periodic/property/$nino/$businessId") returns
+          Future.successful(Right(ResponseWrapper(correlationId, response)))
+
+        await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
+          Right(ResponseWrapper(correlationId, UkResult(response)))
+      }
+    }
+
     "the request is made and non-UK property data is returned (e.g. because the businessId is for a foreign property)" should {
       "return NonUkResult" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
+          Configuration("passIntentHeader.enabled" -> false, "ifs_hip_migration_1962.enabled" -> false)
         private val response = responseWith(None)
 
         willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
@@ -77,7 +94,8 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
     "isPassIntentHeader feature switch is on" must {
       "pass UK_PROPERTY intent" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> true)
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
+          Configuration("passIntentHeader.enabled" -> true, "ifs_hip_migration_1962.enabled" -> false)
         private val response = responseWith(None)
 
         willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,8 +54,10 @@ class CreateAmendUkPropertyAnnualSubmissionService @Inject() (connector: CreateA
     )
 
     val extraTysErrors = Map(
-      "MISSING_EXPENSES" -> InternalError,
-      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+      "MISSING_EXPENSES"         -> InternalError,
+      "FIELD_CONFLICT"           -> RulePropertyIncomeAllowanceError,
+      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
+      "INVALID_CORRELATION_ID"   -> InternalError
     )
 
     errors ++ extraTysErrors

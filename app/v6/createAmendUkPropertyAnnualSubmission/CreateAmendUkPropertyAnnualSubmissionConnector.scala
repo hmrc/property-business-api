@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,10 @@
 package v6.createAmendUkPropertyAnnualSubmission
 
 import play.api.http.Status.NO_CONTENT
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{SharedAppConfig, ConfigFeatureSwitches}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import shared.models.domain.TaxYear
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
@@ -42,12 +41,20 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
 
     import request.*
 
-    val downstreamUri = taxYear match {
-      case ty if ty.year >= TaxYear.tysTaxYear.year =>
-        IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
-      case _ =>
-        IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
-    }
+    lazy val downstreamUri1804: DownstreamUri[Unit] =
+      if (taxYear.year >= 2026 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1804")) {
+        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
+      } else {
+        IfsUri(s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
+      }
+
+    lazy val downstreamUri1597: DownstreamUri[Unit] =
+      IfsUri(
+        s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}"
+      )
+
+    val downstreamUri: DownstreamUri[Unit] =
+      if (taxYear.useTaxYearSpecificApi) downstreamUri1804 else downstreamUri1597
 
     put(body, downstreamUri)
   }

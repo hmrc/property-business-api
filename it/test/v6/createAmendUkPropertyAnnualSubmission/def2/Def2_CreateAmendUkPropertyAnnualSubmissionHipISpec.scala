@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,20 +29,17 @@ import shared.models.errors.*
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1804.enabled" -> false) ++ super.servicesConfig
+class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBaseSpec {
 
   private trait Test {
     val nino: String          = "TC663795B"
     val businessId: String    = "XAIS12345678910"
     val correlationId: String = "X-123"
 
-    def taxYear: String
-    def downstreamTaxYear: String
-    def downstreamUri: String
-
+    def taxYear: String = "2025-26"
+    def downstreamTaxYear: String = "25-26"
+    def downstreamUri: String = s"/itsa/income-tax/v1/$downstreamTaxYear/business/property/annual/$nino/$businessId"
+    
     val requestBodyJson: JsValue = Json.parse(
       """
         |{
@@ -99,8 +96,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
 
     def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
 
-    def baseUri: String = s"/income-tax/business/property/annual"
-
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
@@ -110,44 +105,28 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         )
     }
 
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "code": "$code",
-         |  "reason": "ifs message"
-         |}
-       """.stripMargin
+      def errorBody(code: String): String =
+        s"""
+           |{
+           |  "origin": "HoD",
+           |  "response": {
+           |    "failures": [
+           |      {
+           |        "type": "$code",
+           |        "reason": "message"
+           |      }
+           |    ]
+           |  }
+           |}
+              """.stripMargin
 
-  }
-
-  private trait TysIfsTest extends Test {
-    def taxYear: String                            = "2025-26"
-    def downstreamTaxYear: String                  = "25-26"
-    def downstreamQueryParams: Map[String, String] = Map()
-
-    override def downstreamUri: String = baseUri + s"/$downstreamTaxYear/$nino/$businessId"
   }
 
   "Calling the amend uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new TysIfsTest {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
-        }
-
-        val response: WSResponse = await(request().put(requestBodyJson))
-        response.status shouldBe OK
-        response.body shouldBe ""
-        response.header("X-CorrelationId").nonEmpty shouldBe true
-      }
-
-      "any valid request is made with a Tax Year Specific tax year" in new TysIfsTest {
+      "any valid request is made with a Tax Year Specific tax year" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -164,7 +143,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
     }
 
     "return a 400 with multiple errors" when {
-      "all field validations fail on the request body" in new TysIfsTest {
+      "all field validations fail on the request body" in new Test {
 
         val allInvalidFieldsRequestBodyJson: JsValue = Json.parse("""
             |{
@@ -624,7 +603,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new TysIfsTest {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String             = requestNino
             override val businessId: String       = requestBusinessId
@@ -655,12 +634,12 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           ("AA123456A", "XAIS12345678910", "2025-26", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
           ("AA123456A", "XAIS12345678910", "2025-26", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
         )
-        input.foreach(args => validationErrorTest.tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysIfsTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -678,9 +657,9 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
         val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -697,7 +676,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
           (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

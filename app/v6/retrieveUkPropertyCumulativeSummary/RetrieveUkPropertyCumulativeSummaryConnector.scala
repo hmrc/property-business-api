@@ -17,8 +17,9 @@
 package v6.retrieveUkPropertyCumulativeSummary
 
 import config.PropertyBusinessFeatureSwitches
+import shared.config.ConfigFeatureSwitches
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -43,8 +44,11 @@ class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClie
 
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("UK_PROPERTY") else None
 
-    val downstreamUri: DownstreamUri[DownstreamResp] =
+    val downstreamUri = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1962")) {
+      HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}")
+    } else {
       IfsUri[DownstreamResp](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
+    }
 
     get(uri = downstreamUri, maybeIntent = maybeIntent)
       .map(_.map(_.map { response => if (response.hasUkData) UkResult(response) else NonUkResult }))

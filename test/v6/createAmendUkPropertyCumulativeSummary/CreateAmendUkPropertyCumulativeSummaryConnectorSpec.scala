@@ -26,7 +26,7 @@ import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkProp
 
 import scala.concurrent.Future
 
-class CreateAmendUkPropertyCumulativeSummaryConnectorIfsSpec extends ConnectorSpec {
+class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
 
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
@@ -59,7 +59,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorIfsSpec extends ConnectorSp
     )
   )
 
-  "connector" must {
+  "connector, when configured for IFS" must {
     "post a body and return 204" in new IfsTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
@@ -67,6 +67,26 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorIfsSpec extends ConnectorSp
         url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}",
         body = requestBody
       ) returns Future.successful(Right(ResponseWrapper(correlationId, ())))
+
+      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> false))
+
+      val result: DownstreamOutcome[Unit] =
+        await(connector.createAmendUkPropertyCumulativeSummary(requestData))
+      result shouldBe Right(ResponseWrapper(correlationId, ()))
+    }
+
+  }
+
+  "connector, when configured for HIP" must {
+    "post a body and return 204" in new HipTest with Test {
+      def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+      willPut(
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}",
+        body = requestBody
+      ) returns Future.successful(Right(ResponseWrapper(correlationId, ())))
+
+      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> true))
 
       val result: DownstreamOutcome[Unit] =
         await(connector.createAmendUkPropertyCumulativeSummary(requestData))
@@ -84,8 +104,6 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorIfsSpec extends ConnectorSp
 
     protected val requestData: CreateAmendUkPropertyCumulativeSummaryRequestData =
       Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(nino, taxYear, businessId, requestBody)
-
-    MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> false))
 
     protected val connector: CreateAmendUkPropertyCumulativeSummaryConnector = new CreateAmendUkPropertyCumulativeSummaryConnector(
       http = mockHttpClient,

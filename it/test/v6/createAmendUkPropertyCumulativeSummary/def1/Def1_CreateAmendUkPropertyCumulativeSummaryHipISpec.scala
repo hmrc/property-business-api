@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendUkPropertyCumulativeSummary
+package v6.createAmendUkPropertyCumulativeSummary.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
@@ -31,7 +31,7 @@ import shared.models.utils.JsonErrorValidators
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class CreateAmendUkPropertyCumulativeSummaryHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateAmendUkPropertyCumulativeSummaryHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   val validRequestBodyJson: JsValue = Json.parse(
     """
@@ -116,8 +116,6 @@ class CreateAmendUkPropertyCumulativeSummaryHipISpec extends IntegrationBaseSpec
 
     def downstreamTaxYear: String = "25-26"
 
-    def downstreamQueryParams: Map[String, String] = Map()
-
     override def downstreamUri: String = s"/itsa/income-tax/v1/$downstreamTaxYear/business/periodic/property/$nino/$businessId"
   }
 
@@ -131,7 +129,7 @@ class CreateAmendUkPropertyCumulativeSummaryHipISpec extends IntegrationBaseSpec
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))

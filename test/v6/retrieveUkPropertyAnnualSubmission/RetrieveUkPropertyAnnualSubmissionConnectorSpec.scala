@@ -215,7 +215,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
       willGet(
-        url = url"$baseUrl/income-tax/v1/${taxYear.drop(2)}/business/property/annual/$nino/$businessId"
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.drop(2)}/business/property/annual/$nino/$businessId"
       ).returns(Future.successful(outcome))
     }
 

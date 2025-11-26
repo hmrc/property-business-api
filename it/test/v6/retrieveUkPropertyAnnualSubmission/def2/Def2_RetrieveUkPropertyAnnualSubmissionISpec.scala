@@ -29,9 +29,6 @@ import shared.support.IntegrationBaseSpec
 
 class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
-//  override def servicesConfig: Map[String, Any] =
-//    Map("feature-switch.ifs_hip_migration_1805.enabled" -> true) ++ super.servicesConfig
-
   "calling the retrieve uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
@@ -213,7 +210,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
     val downstreamResponseBodyHip: JsValue = Json.parse(
       s"""
         |{
-        |   "submittedOn":"2020-06-17T10:59:47.544Z",
+        |   "submittedOn":"2020-06-17T10:53:38.000Z",
         |   "ukOtherProperty":{
         |      "ukOtherPropertyAnnualAllowances":{
         |         "annualInvestmentAllowance":678.45,
@@ -221,6 +218,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
         |         "businessPremisesRenovationAllowance":573.45,
         |         "otherCapitalAllowance":452.34,
         |         "costOfReplacingDomesticItems":567.34,
+        |         "propertyIncomeAllowance":342.34,
         |         "structuredBuildingAllowance":[
         |            {
         |               "amount":234.34,
@@ -257,7 +255,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
         |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,
         |         "nonResidentLandlord":true,
         |         "rentARoom":{
-        |            "joinLyLet":true
+        |            "jointlyLet":true
         |         }
         |      }
         |   }

@@ -27,24 +27,13 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
+class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec {
 
-  "calling the retrieve uk property annual submission endpoint" should {
+  "calling the retrieve uk property annual submission IFS endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid IFS request is made" in new IfsTest {
-        override def setupStubs(): StubMapping =
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBody)
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe OK
-        response.json shouldBe responseBody
-        response.header("X-CorrelationId").nonEmpty shouldBe true
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
-
-      "any valid HIP request is made" in new HipTest {
+      "any valid request is made" in new Test {
         override def setupStubs(): StubMapping =
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBody)
 
@@ -64,28 +53,11 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
 
-          s"IFS validation fails with ${expectedBody.code} error" in new IfsTest {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String       = requestNino
+            override val nino: String = requestNino
             override val businessId: String = requestBusinessId
-            override val taxYear: String    = requestTaxYear
-
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(requestNino)
-            }
-
-            val response: WSResponse = await(request().get())
-            response.status shouldBe expectedStatus
-            response.json shouldBe Json.toJson(expectedBody)
-          }
-
-          s"HIP validation fails with ${expectedBody.code} error" in new HipTest {
-
-            override val nino: String       = requestNino
-            override val businessId: String = requestBusinessId
-            override val taxYear: String    = requestTaxYear
+            override val taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -111,17 +83,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"IFS downstream returns an $downstreamCode error and status $downstreamStatus" in new IfsTest {
-
-            override def setupStubs(): StubMapping =
-              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
-
-            val response: WSResponse = await(request().get())
-            response.status shouldBe expectedStatus
-            response.json shouldBe Json.toJson(expectedBody)
-          }
-
-          s"HIP downstream returns an $downstreamCode error and status $downstreamStatus" in new HipTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping =
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
@@ -149,16 +111,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
       }
 
-      "IFS downstream returns no UK properties" in new IfsTest {
-        override def setupStubs(): StubMapping =
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBodyNoUkProperties)
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe BAD_REQUEST
-        response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrectError)
-      }
-
-      "HIP downstream returns no UK properties" in new HipTest {
+      "downstream returns no UK properties" in new Test {
         override def setupStubs(): StubMapping =
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBodyNoUkProperties)
 
@@ -170,69 +123,52 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
   }
 
   private trait Test {
-    val nino: String       = "AA123456A"
+    val nino: String = "AA123456A"
     val businessId: String = "XAIS12345678910"
-    def taxYear: String
+
+    def taxYear: String = "2023-24"
+
+    def downstreamUri: String = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
 
     def errorBody(code: String): String =
-        s"""
-           |{
-           |  "origin": "HoD",
-           |  "response": {
-           |    "failures": [
-           |      {
-           |        "type": "$code",
-           |        "reason": "message"
-           |      }
-           |    ]
-           |  }
-           |}
+      s"""
+         |{
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "$code",
+         |        "reason": "message"
+         |      }
+         |    ]
+         |  }
+         |}
               """.stripMargin
 
     val downstreamResponseBodyNoUkProperties: JsValue = Json.parse(
       s"""
-        |{
-        |  "submittedOn":"2022-06-17T10:53:38.000Z",
-        |  "foreignProperty": [
-        |    {
-        |      "countryCode": "FRA",
-        |      "adjustments": {
-        |        "privateUseAdjustment": 100.25,
-        |        "balancingCharge": 100.25
-        |      },
-        |      "allowances": {
-        |        "annualInvestmentAllowance": 100.25,
-        |        "costOfReplacingDomesticItems": 100.25,
-        |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-        |        "propertyAllowance": 100.25,
-        |        "otherCapitalAllowance": 100.25,
-        |        "structureAndBuildingAllowance": 100.25,
-        |        "electricChargePointAllowance": 100.25
-        |      }
-        |    }
-        |  ]
-        |}
+         |{
+         |  "submittedOn":"2022-06-17T10:53:38.000Z",
+         |  "foreignProperty": [
+         |    {
+         |      "countryCode": "FRA",
+         |      "adjustments": {
+         |        "privateUseAdjustment": 100.25,
+         |        "balancingCharge": 100.25
+         |      },
+         |      "allowances": {
+         |        "annualInvestmentAllowance": 100.25,
+         |        "costOfReplacingDomesticItems": 100.25,
+         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+         |        "propertyAllowance": 100.25,
+         |        "otherCapitalAllowance": 100.25,
+         |        "structureAndBuildingAllowance": 100.25,
+         |        "electricChargePointAllowance": 100.25
+         |      }
+         |    }
+         |  ]
+         |}
        """.stripMargin)
-
-    def setupStubs(): StubMapping
-    def downstreamUri: String
-
-    def request(): WSRequest = {
-      AuthStub.authorised()
-      MtdIdLookupStub.ninoFound(nino)
-      setupStubs()
-      buildRequest(s"/uk/$nino/$businessId/annual/$taxYear")
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.6.0+json"),
-          (AUTHORIZATION, "Bearer 123")
-        )
-    }
-  }
-
-  private trait IfsTest extends Test {
-    def taxYear: String                            = "2023-24"
-    def downstreamUri: String                      = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
-    def downstreamQueryParams: Map[String, String] = Map.empty
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -387,122 +323,19 @@ class Def2_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
         |}
        """.stripMargin
     )
-  }
 
-  private trait HipTest extends Test {
-    def taxYear: String       = "2025-26"
-    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/business/property/annual/$nino/$businessId"
+    def setupStubs(): StubMapping
 
-    val responseBody: JsValue = Json.parse(
-      s"""
-        |{
-        |   "submittedOn":"2020-06-17T10:53:38.000Z",
-        |   "ukProperty":{
-        |      "allowances":{
-        |         "annualInvestmentAllowance":678.45,
-        |         "businessPremisesRenovationAllowance":573.45,
-        |         "otherCapitalAllowance":452.34,
-        |         "costOfReplacingDomesticItems":567.34,
-        |         "propertyIncomeAllowance":342.34,
-        |         "structuredBuildingAllowance":[
-        |            {
-        |               "amount":234.34,
-        |               "firstYear":{
-        |                  "qualifyingDate":"2020-03-29",
-        |                  "qualifyingAmountExpenditure":3434.45
-        |               },
-        |               "building":{
-        |                  "name":"Plaza",
-        |                  "number":"1",
-        |                  "postcode":"TF3 4EH"
-        |               }
-        |            }
-        |         ],
-        |         "enhancedStructuredBuildingAllowance":[
-        |            {
-        |               "amount":234.45,
-        |               "firstYear":{
-        |                  "qualifyingDate":"2020-05-29",
-        |                  "qualifyingAmountExpenditure":453.34
-        |               },
-        |               "building":{
-        |                  "name":"Plaza 2",
-        |                  "number":"2",
-        |                  "postcode":"TF3 4ER"
-        |               }
-        |            }
-        |         ],
-        |         "zeroEmissionsCarAllowance":454.34
-        |      },
-        |      "adjustments":{
-        |         "balancingCharge":565.34,
-        |         "privateUseAdjustment":533.54,
-        |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,
-        |         "nonResidentLandlord":true,
-        |         "rentARoom":{
-        |            "jointlyLet":true
-        |         }
-        |      }
-        |   }
-        |}
-       """.stripMargin
-    )
-
-    val downstreamResponseBody: JsValue = Json.parse(
-      s"""
-        |{
-        |   "submittedOn":"2020-06-17T10:53:38.000Z",
-        |   "ukOtherProperty":{
-        |      "ukOtherPropertyAnnualAllowances":{
-        |         "annualInvestmentAllowance":678.45,
-        |         "zeroEmissionGoodsVehicleAllowance":456.34,
-        |         "businessPremisesRenovationAllowance":573.45,
-        |         "otherCapitalAllowance":452.34,
-        |         "costOfReplacingDomesticItems":567.34,
-        |         "propertyIncomeAllowance":342.34,
-        |         "structuredBuildingAllowance":[
-        |            {
-        |               "amount":234.34,
-        |               "firstYear":{
-        |                  "qualifyingDate":"2020-03-29",
-        |                  "qualifyingAmountExpenditure":3434.45
-        |               },
-        |               "building":{
-        |                  "name":"Plaza",
-        |                  "number":"1",
-        |                  "postCode":"TF3 4EH"
-        |               }
-        |            }
-        |         ],
-        |         "enhancedStructuredBuildingAllowance":[
-        |            {
-        |               "amount":234.45,
-        |               "firstYear":{
-        |                  "qualifyingDate":"2020-05-29",
-        |                  "qualifyingAmountExpenditure":453.34
-        |               },
-        |               "building":{
-        |                  "name":"Plaza 2",
-        |                  "number":"2",
-        |                  "postCode":"TF3 4ER"
-        |               }
-        |            }
-        |         ],
-        |         "zeroEmissionsCarAllowance":454.34
-        |      },
-        |      "ukOtherPropertyAnnualAdjustments":{
-        |         "balancingCharge":565.34,
-        |         "privateUseAdjustment":533.54,
-        |         "businessPremisesRenovationAllowanceBalancingCharges":563.34,
-        |         "nonResidentLandlord":true,
-        |         "rentARoom":{
-        |            "jointlyLet":true
-        |         }
-        |      }
-        |   }
-        |}
-       """.stripMargin
-    )
+    def request(): WSRequest = {
+      AuthStub.authorised()
+      MtdIdLookupStub.ninoFound(nino)
+      setupStubs()
+      buildRequest(s"/uk/$nino/$businessId/annual/$taxYear")
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.6.0+json"),
+          (AUTHORIZATION, "Bearer 123")
+        )
+    }
   }
 
 }

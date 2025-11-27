@@ -20,6 +20,7 @@ import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
+import play.api.Configuration
 import v6.createAmendUkPropertyCumulativeSummary.def1.model.request._
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
@@ -58,7 +59,7 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
     )
   )
 
-  "connector" must {
+  "connector, when configured for IFS" must {
     "post a body and return 204" in new IfsTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
@@ -66,6 +67,26 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
         url = url"$baseUrl/income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}",
         body = requestBody
       ) returns Future.successful(Right(ResponseWrapper(correlationId, ())))
+
+      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> false))
+
+      val result: DownstreamOutcome[Unit] =
+        await(connector.createAmendUkPropertyCumulativeSummary(requestData))
+      result shouldBe Right(ResponseWrapper(correlationId, ()))
+    }
+
+  }
+
+  "connector, when configured for HIP" must {
+    "post a body and return 204" in new HipTest with Test {
+      def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+      willPut(
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}",
+        body = requestBody
+      ) returns Future.successful(Right(ResponseWrapper(correlationId, ())))
+
+      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> true))
 
       val result: DownstreamOutcome[Unit] =
         await(connector.createAmendUkPropertyCumulativeSummary(requestData))
@@ -76,7 +97,6 @@ class CreateAmendUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec 
 
   trait Test {
     self: ConnectorTest =>
-
     protected def taxYear: TaxYear
 
     protected val requestBody: Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody =

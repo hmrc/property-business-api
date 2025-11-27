@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import shared.models.outcomes.ResponseWrapper
@@ -39,14 +39,19 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
     import request.*
     import schema.*
 
-    val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
-      case taxYear if taxYear.useTaxYearSpecificApi =>
+    lazy val downstreamUri1805: (DownstreamUri[DownstreamResp], Seq[(String, String)]) =
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1805") && taxYear.year >= 2026) {
+        (HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"), Nil)
+      } else {
         (IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
-      case _ =>
-        (
-          IfsUri[DownstreamResp]("income-tax/business/property/annual"),
-          List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd))
-    }
+      }
+
+    lazy val downstreamUri1598: (DownstreamUri[DownstreamResp], Seq[(String, String)]) = (
+      IfsUri[DownstreamResp]("income-tax/business/property/annual"),
+      List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
+    )
+
+    val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) downstreamUri1805 else downstreamUri1598
 
     val response = get(downstreamUri, queryParams)
 

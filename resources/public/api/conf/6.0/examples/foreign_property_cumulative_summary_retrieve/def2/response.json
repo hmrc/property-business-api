@@ -1,0 +1,33 @@
+{
+  "submissionId": "4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
+  "submittedOn": "2026-07-17T10:59:47.544Z",
+  "fromDate": "2026-04-06",
+  "toDate": "2026-07-05",
+  "deletedOn": "2025-11-17T16:41:48.638Z",
+  "foreignProperty": [
+    {
+      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 440.31
+        },
+        "foreignTaxCreditRelief": false,
+        "premiumsOfLeaseGrantAmount": 950.48,
+        "otherPropertyIncomeAmount": 802.49,
+        "foreignTaxPaidOrDeducted": 734.18,
+        "specialWithholdingTaxOrUkTaxPaid": 85.47
+      },
+      "expenses": {
+        "premisesRunningCostsAmount": -4929.5,
+        "repairsAndMaintenanceAmount": -54.3,
+        "financialCostsAmount": 2090.35,
+        "professionalFeesAmount": -90.2,
+        "travelCostsAmount": 560.99,
+        "costOfServicesAmount": -100.83,
+        "residentialFinancialCostAmount": 857.78,
+        "broughtFwdResidentialFinancialCostAmount": 600.1,
+        "otherAmount": 334.64
+      }
+    }
+  ]
+}

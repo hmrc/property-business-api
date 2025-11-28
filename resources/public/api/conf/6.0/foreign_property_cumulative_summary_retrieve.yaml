@@ -50,8 +50,8 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
           # {{#if (enabled 'foreign-property-r19-property-id')}}
+          oneOf:
             - $ref: './schemas/foreign_property_cumulative_summary_retrieve/def1/response.json'
             - $ref: './schemas/foreign_property_cumulative_summary_retrieve/def2/response.json'
           # {{else}}

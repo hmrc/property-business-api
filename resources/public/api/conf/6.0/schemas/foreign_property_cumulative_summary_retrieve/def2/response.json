@@ -1,24 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For TY 2025-26",
+  "title": "For TY 2026-27 and onwards {{#unless (releasedInProduction 'foreign-property-r19-property-id')}}[Test Only] {{/unless}}",
   "type": "object",
   "properties": {
     "submittedOn": {
       "type": "string",
       "description": "The date the foreign property were submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
-      "example": "2025-07-07T10:59:47.544Z",
+      "example": "2026-07-07T10:59:47.544Z",
       "format": "date-time"
     },
     "fromDate": {
       "type": "string",
       "description": "The first day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD.",
-      "example": "2025-04-06",
+      "example": "2026-04-06",
       "format": "date"
     },
     "toDate": {
       "type": "string",
       "description": "The last day that the income and expenses period summary covers. Must conform to the format YYYY-MM-DD.",
-      "example": "2025-07-05",
+      "example": "2026-07-05",
       "format": "date"
     },
     "foreignProperty": {
@@ -28,10 +28,11 @@
         "type": "object",
         "title": "foreignPropertyEntry",
         "properties": {
-          "countryCode": {
+          "propertyId": {
+            "description": "A unique identifier for each foreign property.",
             "type": "string",
-            "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
-            "example": "FRA"
+            "format": "uuid",
+            "example": "8e8b8450-dc1b-4360-8109-7067337b42cb"
           },
           "income": {
             "type": "object",
@@ -181,7 +182,7 @@
           }
         },
         "required": [
-          "countryCode"
+          "propertyId"
         ],
         "additionalProperties": false
       }

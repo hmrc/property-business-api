@@ -8,19 +8,16 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
-  |---------------------------------------|------------------------------------------------------------------------|
-  | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
-  | FOREIGN_PROPERTY                      | Simulates the scenario with Foreign properties.                        |
-  | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a Foreign property with all other allowances.|
-  | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a Foreign property with property allowance.  |
-  | FOREIGN_PROPERTY_FHL                  | Simulates the scenario with Foreign FHL properties.                    |
-  | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
-  | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
-  | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.        |
-  | STATEFUL                              | Performs a stateful retrieve.                                          |
-
-
+  | Tax Year       | Header Value (Gov-Test-Scenario)      | Scenario                                                               |
+  |----------------|---------------------------------------|------------------------------------------------------------------------|
+  | All            | N/A - DEFAULT                         | Simulates the scenario where no data is found.                         |
+  | All            | FOREIGN_PROPERTY                      | Simulates the scenario with Foreign properties.                        |
+  | All            | FOREIGN_ALL_OTHER_ALLOWANCES          | Simulates the scenario of a Foreign property with all other allowances.|
+  | All            | FOREIGN_PROPERTY_ALLOWANCE            | Simulates the scenario of a Foreign property with property allowance.  |
+  | Before 2025-26 | FOREIGN_FHL_ALL_OTHER_ALLOWANCES      | Simulates the scenario of a FHL property with all other allowances.    |
+  | Before 2025-26 | FOREIGN_FHL_PROPERTY_ALLOWANCE        | Simulates the scenario of a FHL property with property allowance.      |
+  | Before 2026-27 | UK_PROPERTY                           | Simulates the scenario where the type of business is incorrect.        |
+  | All            | STATEFUL                              | Performs a stateful retrieve.                                          |
 
 tags:
   - Annual Submissions
@@ -29,6 +26,9 @@ parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
   - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
+# {{#if (enabled 'foreign-property-r19-property-id')}}
+  - $ref: './common/queryParameters.yaml#/components/parameters/propertyIdFrom2026'
+# {{/if}}
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
@@ -55,23 +55,30 @@ responses:
           oneOf:
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def2/response.json'
+          # {{#if (enabled 'foreign-property-r19-property-id')}}
+            - $ref: './schemas/foreign_property_annual_submission_retrieve/def3/response.json'
+          # {{/if}}
         examples:
-          all-other-allowances-response:
-            description: All Other Allowances Response Pre 25-26
+          All Other Allowances Response for TY 2024-25 and before:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
-          property-allowance-response:
-            description: Property Allowance Response Pre 25-26
+          Property Allowance Response for TY 2024-25 and before:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def1/property_allowance_response.json'
-          25/26-all-other-allowances-response:
-            description: All Other Allowances Response 25-26 Onwards
+          All Other Allowances Response for TY 2025-26:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
-          25/26-property-allowance-response:
-            description: Property Allowance Response 25-26 Onwards
+          Property Allowance Response for TY 2025-26:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def2/property_allowance_response.json'
+        # {{#if (enabled 'foreign-property-r19-property-id')}}
+          All Other Allowances Response for TY 2026-27 and after:
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def3/all_other_allowances_response.json'
+          Property Allowance Response for TY 2026-27 and after:
+            value:
+              $ref: './examples/foreign_property_annual_submission_retrieve/def3/property_allowance_response.json'
+        # {{/if}}
 
   "400":
     description: Bad request
@@ -95,6 +102,10 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatBusinessId'
           FORMAT_TAX_YEAR:
             $ref: './common/errors.yaml#/components/examples/formatTaxYear'
+        # {{#if (enabled 'foreign-property-r19-property-id')}}
+          FORMAT_PROPERTY_ID:
+            $ref: './common/errors.yaml#/components/examples/formatPropertyId'
+        # {{/if}}
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_TAX_YEAR_RANGE_INVALID:

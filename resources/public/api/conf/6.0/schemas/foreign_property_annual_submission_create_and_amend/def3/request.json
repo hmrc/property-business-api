@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For TY 2025-26",
+  "title": "For TY 2026-27 and after {{#unless (releasedInProduction 'foreign-property-r19-property-id')}}[Test Only] {{/unless}}",
   "type": "object",
   "properties": {
     "foreignProperty": {
@@ -9,10 +9,10 @@
       "items": {
         "type": "object",
         "properties": {
-          "countryCode": {
+          "propertyId": {
             "type": "string",
-            "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
-            "example": "FRA"
+            "description": "A unique identifier for each foreign property.",
+            "example": "8e8b8450-dc1b-4360-8109-7067337b42cb"
           },
           "adjustments": {
             "type": "object",
@@ -153,7 +153,7 @@
           }
         },
         "additionalProperties": false,
-        "required": ["countryCode"]
+        "required": ["propertyId"]
       },
       "additionalProperties": false
     }

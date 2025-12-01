@@ -127,6 +127,10 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
           RULE_DUPLICATE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCodePeriodics'
+          # {{#if (enabled 'foreign-property-r19-property-id')}}
+          RULE_PROPERTY_ID_MISMATCH:
+            $ref: './common/errors.yaml#/components/examples/rulePropertyIdMismatch'
+          # {{/if}}
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
           RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE:

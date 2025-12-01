@@ -251,6 +251,13 @@ components:
         code: RULE_DUPLICATE_COUNTRY_CODE
         message: You cannot supply the same country code for multiple properties
 
+    rulePropertyIdMismatch:
+      description: |
+        The supplied property ID is not associated with the income source on record.
+      value:
+        code: RULE_PROPERTY_ID_MISMATCH
+        message: The supplied property ID is not valid for this income source
+
     ruleDuplicatePropertyName:
       description: The foreign property name already exists for the same country.
       value:

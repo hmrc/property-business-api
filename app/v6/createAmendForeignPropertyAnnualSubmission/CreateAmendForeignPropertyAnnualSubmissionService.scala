@@ -20,6 +20,7 @@ import cats.implicits.*
 import common.models.errors.{
   RuleDuplicateCountryCodeError,
   RuleOutsideAmendmentWindowError,
+  RulePropertyIdMismatch,
   RulePropertyIncomeAllowanceError,
   RuleTypeOfBusinessIncorrectError
 }
@@ -51,7 +52,6 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
       "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
       "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
       "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
-      "MISSING_ALLOWANCES"          -> InternalError,
       "INVALID_PAYLOAD"             -> InternalError,
       "INVALID_CORRELATIONID"       -> InternalError,
       "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
@@ -61,8 +61,12 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
     )
 
     val extraTysErrors = Map(
-      "MISSING_EXPENSES" -> InternalError,
-      "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
+      "MISSING_EXPENSES"         -> InternalError,
+      "FIELD_CONFLICT"           -> RulePropertyIncomeAllowanceError,
+      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
+      "PROPERTY_ID_DO_NOT_MATCH" -> RulePropertyIdMismatch,
+      "INVALID_CORRELATION_ID"   -> InternalError,
+      "MISSING_ALLOWANCES"       -> InternalError
     )
 
     errors ++ extraTysErrors

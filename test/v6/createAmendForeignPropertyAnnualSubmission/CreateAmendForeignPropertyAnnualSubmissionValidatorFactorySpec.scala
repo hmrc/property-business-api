@@ -22,6 +22,7 @@ import shared.controllers.validators.AlwaysErrorsValidator
 import shared.utils.UnitSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v6.createAmendForeignPropertyAnnualSubmission.def2.Def2_CreateAmendForeignPropertyAnnualSubmissionValidator
+import v6.createAmendForeignPropertyAnnualSubmission.def3.Def3_CreateAmendForeignPropertyAnnualSubmissionValidator
 
 class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
@@ -40,6 +41,12 @@ class CreateAmendForeignPropertyAnnualSubmissionValidatorFactorySpec extends Uni
     "given a request corresponding to a Def2 schema" should {
       "return a Def2 validator" in new SetupConfig {
         validatorFor("2025-26") shouldBe a[Def2_CreateAmendForeignPropertyAnnualSubmissionValidator]
+      }
+    }
+
+    "given a request corresponding to a Def3 schema" should {
+      "return a Def3 validator" in new SetupConfig {
+        validatorFor("2026-27") shouldBe a[Def3_CreateAmendForeignPropertyAnnualSubmissionValidator]
       }
     }
 

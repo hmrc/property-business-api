@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyAnnualSubmission.def2.model.request
+package v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_Fixtures
 
-class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends UnitSpec with Def2_Fixtures {
+class Def3_Create_Amend_ForeignAdjustmentsSpec extends UnitSpec with Def3_Fixtures {
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson
-          .as[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody] shouldBe def2_createAmendForeignPropertyAnnualSubmissionRequestBody
+        def3_foreignAdjustmentsMtdJson.as[Def3_Create_Amend_ForeignAdjustments] shouldBe def3_foreignAdjustments
       }
     }
   }
@@ -33,8 +33,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBodySpec extends Uni
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(
-          def2_createAmendForeignPropertyAnnualSubmissionRequestBody) shouldBe def2_createAmendForeignPropertyAnnualSubmissionRequestBodyDownstreamJson
+        Json.toJson(def3_foreignAdjustments) shouldBe def3_foreignAdjustmentsDownstreamJson
       }
     }
   }

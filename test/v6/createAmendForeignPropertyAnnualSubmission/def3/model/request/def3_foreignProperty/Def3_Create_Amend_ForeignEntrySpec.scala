@@ -14,67 +14,67 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty
+package v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_Fixtures
 
-class Def2_Create_Amend_ForeignEntrySpec extends UnitSpec with Def2_Fixtures {
+class Def3_Create_Amend_ForeignEntrySpec extends UnitSpec with Def3_Fixtures {
 
-  private val allowancesOnly = Def2_Create_Amend_ForeignEntry(
-    countryCode = "GER",
-    allowances = Some(def2_foreignAllowances),
+  private val allowancesOnly = Def3_Create_Amend_ForeignEntry(
+    propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb",
+    allowances = Some(def3_foreignAllowances),
     adjustments = None
   )
 
   private val allowancesOnlyMtdJson = Json.parse(s"""
      |{
-     |   "countryCode": "GER",
-     |   "allowances": $def2_foreignAllowancesMtdJson
+     |   "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+     |   "allowances": $def3_foreignAllowancesMtdJson
      |}
      |""".stripMargin)
 
   private val allowancesOnlyDownstreamJson = Json.parse(s"""
     |{
-    |   "countryCode": "GER",
-    |   "allowances": $def2_foreignAllowancesDownstreamJson
+    |   "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+    |   "allowances": $def3_foreignAllowancesDownstreamJson
     |}
     |""".stripMargin)
 
-  private val adjustmentsOnly = Def2_Create_Amend_ForeignEntry(
-    countryCode = "GER",
+  private val adjustmentsOnly = Def3_Create_Amend_ForeignEntry(
+    propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb",
     allowances = None,
-    adjustments = Some(def2_foreignAdjustments)
+    adjustments = Some(def3_foreignAdjustments)
   )
 
   private val adjustmentsOnlyMtdJson = Json.parse(s"""
     |{
-    |   "countryCode": "GER",
-    |   "adjustments": $def2_foreignAdjustmentsMtdJson
+    |   "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+    |   "adjustments": $def3_foreignAdjustmentsMtdJson
     |}""".stripMargin)
 
   private val adjustmentsOnlyDownstreamJson = Json.parse(s"""
    |{
-   |   "countryCode": "GER",
-   |   "adjustments": $def2_foreignAdjustmentsDownstreamJson
+   |   "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+   |   "adjustments": $def3_foreignAdjustmentsDownstreamJson
    |}
    |""".stripMargin)
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        def2_foreignEntryMtdJson.as[Def2_Create_Amend_ForeignEntry] shouldBe def2_foreignEntry
+        def3_foreignEntryMtdJson.as[Def3_Create_Amend_ForeignEntry] shouldBe def3_foreignEntry
       }
     }
     "passed valid mtd JSON with allowances only" should {
       "return the model" in {
-        allowancesOnlyMtdJson.as[Def2_Create_Amend_ForeignEntry] shouldBe allowancesOnly
+        allowancesOnlyMtdJson.as[Def3_Create_Amend_ForeignEntry] shouldBe allowancesOnly
       }
     }
     "passed valid mtd JSON with adjustments only" should {
       "return the model" in {
-        adjustmentsOnlyMtdJson.as[Def2_Create_Amend_ForeignEntry] shouldBe adjustmentsOnly
+        adjustmentsOnlyMtdJson.as[Def3_Create_Amend_ForeignEntry] shouldBe adjustmentsOnly
       }
     }
   }
@@ -82,7 +82,7 @@ class Def2_Create_Amend_ForeignEntrySpec extends UnitSpec with Def2_Fixtures {
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(def2_foreignEntry) shouldBe def2_foreignEntryDownstreamJson
+        Json.toJson(def3_foreignEntry) shouldBe def3_foreignEntryDownstreamJson
       }
     }
     "passed a model with allowances only" should {

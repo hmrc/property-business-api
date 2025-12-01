@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyAnnualSubmission.def2
+package v6.createAmendForeignPropertyAnnualSubmission.def3
 
 import cats.data.Validated
 import cats.implicits.*
@@ -23,20 +23,21 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
-  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
-  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.{
+  Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData
 }
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.Singleton
 
 @Singleton
-class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def3_CreateAmendForeignPropertyAnnualSubmissionValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
 
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody]
-  private val rulesValidator = new Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator()
+  private val resolveJson    = new ResolveNonEmptyJsonObject[request.Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody]
+  private val rulesValidator = new Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator()
 
   def validate: Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionRequestData] =
     (
@@ -44,7 +45,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino: String, bus
       ResolveBusinessId(businessId),
       resolveJson(body)
     ).mapN { (validNino, validBusinessId, validJson) =>
-      Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+      Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData(
         nino = validNino,
         businessId = validBusinessId,
         taxYear = TaxYear.fromMtd(taxYear),

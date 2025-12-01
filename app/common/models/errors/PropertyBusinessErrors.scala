@@ -147,3 +147,10 @@ object RuleEarlyDataSubmissionNotAcceptedError
       "Cannot submit data more than 10 days before end of period",
       BAD_REQUEST
     )
+
+object RulePropertyIdMismatch
+    extends MtdError(
+      "RULE_PROPERTY_ID_MISMATCH",
+      "The supplied property ID is not valid for this income source",
+      BAD_REQUEST
+    )

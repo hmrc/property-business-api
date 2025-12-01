@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty
+package v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_Fixtures
 
-class Def2_Create_Amend_ForeignAllowancesSpec extends UnitSpec with Def2_Fixtures {
+class Def3_Create_Amend_ForeignAllowancesSpec extends UnitSpec with Def3_Fixtures {
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        def2_foreignAllowancesMtdJson.as[Def2_Create_Amend_ForeignAllowances] shouldBe def2_foreignAllowances
+        def3_foreignAllowancesMtdJson.as[Def3_Create_Amend_ForeignAllowances] shouldBe def3_foreignAllowances
       }
     }
   }
@@ -33,7 +33,7 @@ class Def2_Create_Amend_ForeignAllowancesSpec extends UnitSpec with Def2_Fixture
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(def2_foreignAllowances) shouldBe def2_foreignAllowancesDownstreamJson
+        Json.toJson(def3_foreignAllowances) shouldBe def3_foreignAllowancesDownstreamJson
       }
     }
   }

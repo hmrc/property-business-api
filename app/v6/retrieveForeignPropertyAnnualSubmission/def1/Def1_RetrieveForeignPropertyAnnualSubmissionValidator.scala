@@ -18,9 +18,8 @@ package v6.retrieveForeignPropertyAnnualSubmission.def1
 
 import cats.data.Validated
 import cats.implicits.*
-import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.*
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
@@ -28,17 +27,19 @@ import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignP
 
 import javax.inject.Inject
 
-class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)(implicit
-    config: PropertyBusinessConfig)
+class Def1_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
-
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveBusinessId(businessId),
-      resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveForeignPropertyAnnualSubmissionRequestData.apply)
+      ResolveBusinessId(businessId)
+    ).mapN { (validNino, validBusinessId) =>
+      Def1_RetrieveForeignPropertyAnnualSubmissionRequestData(
+        nino = validNino,
+        businessId = validBusinessId,
+        taxYear = TaxYear.fromMtd(taxYear)
+      )
+    }
 
 }

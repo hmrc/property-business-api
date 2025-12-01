@@ -20,6 +20,7 @@ import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil.writesFrom
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def2.model.response.Def2_RetrieveForeignPropertyAnnualSubmissionResponse
+import v6.retrieveForeignPropertyAnnualSubmission.def3.model.response.Def3_RetrieveForeignPropertyAnnualSubmissionResponse
 
 trait RetrieveForeignPropertyAnnualSubmissionResponse {
   def hasForeignData: Boolean
@@ -32,6 +33,8 @@ object RetrieveForeignPropertyAnnualSubmissionResponse {
       implicitly[OWrites[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]].writes(def1)
     case def2: Def2_RetrieveForeignPropertyAnnualSubmissionResponse =>
       implicitly[OWrites[Def2_RetrieveForeignPropertyAnnualSubmissionResponse]].writes(def2)
+    case def3: Def3_RetrieveForeignPropertyAnnualSubmissionResponse =>
+      implicitly[OWrites[Def3_RetrieveForeignPropertyAnnualSubmissionResponse]].writes(def3)
   }
 
 }

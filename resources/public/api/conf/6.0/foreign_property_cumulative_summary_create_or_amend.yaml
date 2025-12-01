@@ -58,6 +58,9 @@ requestBody:
         Full expenses request for TY 2026-27 and onwards:
           value:
             $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def2/request.json'
+        Consolidated expenses request for TY 2026-27 and onwards:
+          value:
+            $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def2/consolidated_request.json'
         # {{/if}}
         Full expenses request for TY 2025-26:
           value:

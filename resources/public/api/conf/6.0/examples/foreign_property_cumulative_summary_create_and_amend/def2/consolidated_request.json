@@ -1,0 +1,24 @@
+{
+  "fromDate": "2026-04-06",
+  "toDate": "2026-07-05",
+  "foreignProperty": [
+    {
+      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+      "income": {
+        "rentIncome": {
+          "rentAmount": 4882.23
+        },
+        "foreignTaxCreditRelief": false,
+        "premiumsOfLeaseGrant": 884.72,
+        "otherPropertyIncome": 7713.09,
+        "foreignTaxPaidOrDeducted": 884.12,
+        "specialWithholdingTaxOrUkTaxPaid": 847.72
+      },
+      "expenses": {
+        "consolidatedExpenses": 3992.93,
+        "residentialFinancialCost": 879.28,
+        "broughtFwdResidentialFinancialCost": 846.13
+      }
+    }
+  ]
+}

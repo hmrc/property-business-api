@@ -20,10 +20,10 @@ description: |
   | 2025-26 onwards    | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the start/end date not accepted for annual/latent submission.               |
   | 2025-26 onwards    | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of period.      |
   | 2025-26 onwards    | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window.          |
-  | 2025-26 only       | DUPLICATE_COUNTRY_CODE                      | Simulates the scenario where the same country code has been submitted more twice.	                    |
   | 2025-26 onwards    | ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE | Simulates the scenario for advance submission where the end date must be the end of the period.          |
   | 2025-26 onwards    | SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS   | Simulates the scenario where the submission end date cannot be earlier than existing submission.         |
   | 2025-26 onwards    | START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE  | Simulates the scenario where the start date does not align with the reporting type.                      |
+  | 2025-26 only       | DUPLICATE_COUNTRY_CODE                      | Simulates the scenario where the same country code has been submitted more twice.	                    |
   {{~#if (enabled 'foreign-property-r19-property-id')}}
   |2026-27 onwards | PROPERTY_ID_MISMATCH                            | Simulates the scenario where the supplied property ID is not associated with the income source on record.|
   {{~/if}}

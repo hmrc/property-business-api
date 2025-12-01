@@ -62,6 +62,9 @@ responses:
           Full expenses response for TY 2026-27 and onwards:
             value:
               $ref: './examples/foreign_property_cumulative_summary_retrieve/def2/response.json'
+          Consolidated expenses response for TY 2026-27 and onwards:
+            value:
+              $ref: './examples/foreign_property_cumulative_summary_retrieve/def2/consolidated_response.json'
           # {{/if}}
           Full expenses response for TY 2025-26:
             value:

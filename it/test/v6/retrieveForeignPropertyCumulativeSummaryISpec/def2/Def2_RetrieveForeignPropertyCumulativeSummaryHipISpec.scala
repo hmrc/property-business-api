@@ -40,8 +40,6 @@ class Def2_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
     val responseBody: JsValue = fullMtdJson
 
     val queryParams = Map("propertyId" -> propertyId)
-//    private val queryParams: Option[(String, String)] = propertyId.map(pid => "propertyId" -> pid.propertyId)
-
     def downstreamUri: String = s"/itsa/income-tax/v1/26-27/business/periodic/foreign-property/$nino/$businessId"
     println("downstream uri " + downstreamUri)
     def stubDownstreamSuccess(): Unit =
@@ -133,7 +131,7 @@ class Def2_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
           ("AA123456A", "XAIS12345678910", "2024-25", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "BAD_BUSINESS_ID", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, BusinessIdFormatError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
     }
 
@@ -164,7 +162,7 @@ class Def2_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
           (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError)
         )
 
-        input.foreach(args => (serviceErrorTest).tupled(args))
+        input.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

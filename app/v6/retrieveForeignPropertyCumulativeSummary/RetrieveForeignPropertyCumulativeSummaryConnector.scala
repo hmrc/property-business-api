@@ -41,10 +41,6 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
     import request.*
     import schema.*
 
-//    val queryParams: (String, String) = propertyId.map(pid => "propertyId" -> pid.propertyId)
-
-//    val queryParams = propertyId.map(id => s"?propertyId=$id").getOrElse("")
-
     val queryParams: Seq[(String, String)] =
       propertyId.map(pid => "propertyId" -> pid.propertyId).toSeq
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
@@ -52,7 +48,6 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
     val downstreamUri: DownstreamUri[DownstreamResp] = {
       if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1962")) {
         if (taxYear.year >= 2027) {
-          println("query params " + queryParams)
           HipUri[DownstreamResp](
             s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/foreign-property/${nino.value}/${businessId.businessId}")
         } else {

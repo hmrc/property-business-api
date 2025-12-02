@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,11 @@ class RetrieveForeignPropertyAnnualSubmissionController @Inject() (
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveForeignPropertyAnnualSubmissionController", endpointName = "retrieveForeignPropertyAnnualSubmission")
 
-  def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
+  def handleRequest(nino: String, businessId: String, taxYear: String, propertyId: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, businessId, taxYear)
+      val validator = validatorFactory.validator(nino, businessId, taxYear, propertyId)
 
       val requestHandler =
         RequestHandler

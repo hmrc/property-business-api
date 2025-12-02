@@ -21,16 +21,16 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
-import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea._
-import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty._
+import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.*
+import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.*
 import v6.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
-import v6.retrieveForeignPropertyAnnualSubmission.model.request._
-import v6.retrieveForeignPropertyAnnualSubmission.model.response._
+import v6.retrieveForeignPropertyAnnualSubmission.model.request.*
+import v6.retrieveForeignPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -98,7 +98,7 @@ class RetrieveForeignPropertyAnnualSubmissionControllerSpec
 
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear)(fakeRequest)
+    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId, taxYear, None)(fakeRequest)
 
     protected val requestData: RetrieveForeignPropertyAnnualSubmissionRequestData =
       Def1_RetrieveForeignPropertyAnnualSubmissionRequestData(Nino(validNino), BusinessId(businessId), TaxYear.fromMtd(taxYear))

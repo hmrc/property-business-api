@@ -14,31 +14,36 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyAnnualSubmission.def2
+package v6.retrieveForeignPropertyAnnualSubmission.def3
 
 import cats.data.Validated
 import cats.implicits.*
+import common.controllers.validators.resolvers.ResolveUuid
+import common.models.domain.PropertyId
+import common.models.errors.PropertyIdFormatError
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.retrieveForeignPropertyAnnualSubmission.def2.request.Def2_RetrieveForeignPropertyAnnualSubmissionRequestData
+import v6.retrieveForeignPropertyAnnualSubmission.def3.request.Def3_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.Inject
 
-class Def2_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
+class Def3_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, propertyId: Option[String])
     extends Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] {
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveBusinessId(businessId)
-    ).mapN { (validNino, validBusinessId) =>
-      Def2_RetrieveForeignPropertyAnnualSubmissionRequestData(
+      ResolveBusinessId(businessId),
+      ResolveUuid(propertyId, PropertyIdFormatError)(PropertyId.apply)
+    ).mapN { (validNino, validBusinessId, validPropertyId) =>
+      Def3_RetrieveForeignPropertyAnnualSubmissionRequestData(
         nino = validNino,
         businessId = validBusinessId,
-        taxYear = TaxYear.fromMtd(taxYear)
+        taxYear = TaxYear.fromMtd(taxYear),
+        propertyId = validPropertyId
       )
     }
 

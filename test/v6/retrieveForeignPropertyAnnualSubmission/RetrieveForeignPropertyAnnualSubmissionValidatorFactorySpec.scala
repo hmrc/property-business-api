@@ -17,34 +17,45 @@
 package v6.retrieveForeignPropertyAnnualSubmission
 
 import config.MockPropertyBusinessConfig
-import shared.controllers.validators.Validator
+import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
 import shared.utils.UnitSpec
 import v6.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
+import v6.retrieveForeignPropertyAnnualSubmission.def2.Def2_RetrieveForeignPropertyAnnualSubmissionValidator
+import v6.retrieveForeignPropertyAnnualSubmission.def3.Def3_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
 class RetrieveForeignPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
-  private val validNino       = "AA123456A"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2021-22"
-  private val validTysTaxYear = "2023-24"
+  private def validatorFor(taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
+    new RetrieveForeignPropertyAnnualSubmissionValidatorFactory().validator(
+      nino = "ignoredNino",
+      businessId = "ignoredBusinessId",
+      taxYear = taxYear,
+      propertyId = None
+    )
 
-  private val validatorFactory = new RetrieveForeignPropertyAnnualSubmissionValidatorFactory
-
-  "validator" should {
-    "return the parsed domain object" when {
-      "passed a valid request" in new SetupConfig {
-        val result: Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
-          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
-
-        result shouldBe a[Def1_RetrieveForeignPropertyAnnualSubmissionValidator]
+  "RetrieveForeignPropertyAnnualSubmissionValidatorFactory" when {
+    "given a request corresponding to a Def1 schema" should {
+      "return a Def1 validator" in new SetupConfig {
+        validatorFor("2024-25") shouldBe a[Def1_RetrieveForeignPropertyAnnualSubmissionValidator]
       }
+    }
 
-      "passed the minimum supported taxYear" in new SetupConfig {
-        val result: Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] =
-          validatorFactory.validator(validNino, validBusinessId, validTaxYear)
-        result shouldBe a[Def1_RetrieveForeignPropertyAnnualSubmissionValidator]
+    "given a request corresponding to a Def2 schema" should {
+      "return a Def2 validator" in new SetupConfig {
+        validatorFor("2025-26") shouldBe a[Def2_RetrieveForeignPropertyAnnualSubmissionValidator]
+      }
+    }
 
+    "given a request corresponding to a Def3 schema" should {
+      "return a Def3 validator" in new SetupConfig {
+        validatorFor("2026-27") shouldBe a[Def3_RetrieveForeignPropertyAnnualSubmissionValidator]
+      }
+    }
+
+    "given a request where no valid schema could be determined" should {
+      "return a validator returning the errors" in new SetupConfig {
+        validatorFor("BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
       }
     }
   }

@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import shared.models.outcomes.ResponseWrapper
@@ -40,18 +40,33 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
     import request.*
     import schema.*
 
+    lazy val downstreamUriForTy2627Onwards: DownstreamUri[DownstreamResp] =
+      HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/foreign-property/annual/$nino/$businessId")
+
+    lazy val downstreamUri1805: DownstreamUri[DownstreamResp] =
+      if (taxYear.year == 2026 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1805")) {
+        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
+      } else {
+        IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
+      }
+
+    lazy val downstreamUri1598: DownstreamUri[DownstreamResp] = IfsUri[DownstreamResp]("income-tax/business/property/annual")
+
+    val queryParamsTy2627Onwards: Seq[(String, String)] = propertyId.toSeq.map(pid => "propertyId" -> pid.propertyId)
+
+    val queryParams1598: Seq[(String, String)] = List(
+      "taxableEntityId" -> nino.nino,
+      "incomeSourceId"  -> businessId.businessId,
+      "taxYear"         -> taxYear.asMtd
+    )
+
     val (downstreamUri, queryParams): (DownstreamUri[DownstreamResp], Seq[(String, String)]) = taxYear match {
-      case taxYear if taxYear.useTaxYearSpecificApi =>
-        (IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
-      case _ =>
-        (
-          IfsUri[DownstreamResp]("income-tax/business/property/annual"),
-          List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd))
+      case ty if ty.year >= 2027          => downstreamUriForTy2627Onwards -> queryParamsTy2627Onwards
+      case ty if ty.useTaxYearSpecificApi => downstreamUri1805             -> Nil
+      case _                              => downstreamUri1598             -> queryParams1598
     }
 
-    val response = get(downstreamUri, queryParams)
-
-    response.map {
+    get(downstreamUri, queryParams).map {
       case Right(ResponseWrapper(corId, resp)) if resp.hasForeignData => Right(ResponseWrapper(corId, ForeignResult(resp)))
       case Right(ResponseWrapper(corId, _))                           => Right(ResponseWrapper(corId, NonForeignResult))
       case Left(e)                                                    => Left(e)

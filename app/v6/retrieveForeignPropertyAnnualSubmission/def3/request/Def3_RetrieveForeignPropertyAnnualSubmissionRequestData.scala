@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyAnnualSubmission.model.request
+package v6.retrieveForeignPropertyAnnualSubmission.def3.request
 
 import common.models.domain.PropertyId
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema
+import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
-trait RetrieveForeignPropertyAnnualSubmissionRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
-  val propertyId: Option[PropertyId]
-  val schema: RetrieveForeignPropertyAnnualSubmissionSchema
+case class Def3_RetrieveForeignPropertyAnnualSubmissionRequestData(
+    nino: Nino,
+    businessId: BusinessId,
+    taxYear: TaxYear,
+    propertyId: Option[PropertyId]
+) extends RetrieveForeignPropertyAnnualSubmissionRequestData {
+
+  val schema: RetrieveForeignPropertyAnnualSubmissionSchema = RetrieveForeignPropertyAnnualSubmissionSchema.Def3
+
 }

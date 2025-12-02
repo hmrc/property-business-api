@@ -19,9 +19,10 @@ package v6.retrieveForeignPropertyAnnualSubmission
 import cats.data.Validated.{Invalid, Valid}
 import config.PropertyBusinessConfig
 import shared.controllers.validators.Validator
-import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema.{Def1, Def2}
+import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema.{Def1, Def2, Def3}
 import v6.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.def2.Def2_RetrieveForeignPropertyAnnualSubmissionValidator
+import v6.retrieveForeignPropertyAnnualSubmission.def3.Def3_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -29,11 +30,15 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveForeignPropertyAnnualSubmissionValidatorFactory @Inject() (implicit config: PropertyBusinessConfig) {
 
-  def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] = {
+  def validator(nino: String,
+                businessId: String,
+                taxYear: String,
+                propertyId: Option[String]): Validator[RetrieveForeignPropertyAnnualSubmissionRequestData] = {
 
-    RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
+    RetrieveForeignPropertyAnnualSubmissionSchema.schemaFor(taxYear) match {
       case Valid(Def1)     => new Def1_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
       case Valid(Def2)     => new Def2_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+      case Valid(Def3)     => new Def3_RetrieveForeignPropertyAnnualSubmissionValidator(nino, businessId, taxYear, propertyId)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }

@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyAnnualSubmission.model.request
+package v6.retrieveForeignPropertyAnnualSubmission.def3.model.response
 
-import common.models.domain.PropertyId
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-trait RetrieveForeignPropertyAnnualSubmissionRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
-  val propertyId: Option[PropertyId]
-  val schema: RetrieveForeignPropertyAnnualSubmissionSchema
+case class RetrieveBuilding(name: Option[String], number: Option[String], postcode: String)
+
+object RetrieveBuilding {
+  implicit val writes: OWrites[RetrieveBuilding] = Json.writes[RetrieveBuilding]
+
+  implicit val reads: Reads[RetrieveBuilding] = (
+    (JsPath \ "name").readNullable[String] and
+      (JsPath \ "number").readNullable[String] and
+      (JsPath \ "postCode").read[String]
+  )(RetrieveBuilding.apply)
+
 }

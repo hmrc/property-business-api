@@ -10,13 +10,3 @@ components:
         format: uuid
         example: 8e8b8450-dc1b-4360-8109-7067337b42cb
       required: false
-    propertyIdFrom2026:
-      name: propertyId
-      in: query
-      description: |
-          A unique identifier for each foreign property.<strong> This parameter is only supported for tax years 2026-27 onwards.</strong>
-      schema:
-        type: string
-        format: uuid
-        example: 8e8b8450-dc1b-4360-8109-7067337b42cb
-        required: false

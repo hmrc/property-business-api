@@ -19,6 +19,7 @@ package v6.retrieveForeignPropertyCumulativeSummary
 import cats.data.Validated.{Invalid, Valid}
 import shared.controllers.validators.Validator
 import v6.retrieveForeignPropertyCumulativeSummary.def1.Def1_RetrieveForeignPropertyCumulativeSummaryValidator
+import v6.retrieveForeignPropertyCumulativeSummary.def2.Def2_RetrieveForeignPropertyCumulativeSummaryValidator
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -26,10 +27,17 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class RetrieveForeignPropertyCumulativeSummaryValidatorFactory @Inject() {
 
-  def validator(nino: String, businessId: String, taxYear: String): Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] =
+  def validator(nino: String,
+                businessId: String,
+                taxYear: String,
+                propertyId: Option[String]): Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] =
     RetrieveForeignPropertyCumulativeSummarySchema.schemaFor(taxYear) match {
       case Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def1) =>
         new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear)
+
+      case Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def2) =>
+        new Def2_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear, propertyId)
+
       case Invalid(errors) => Validator.returningErrors(errors)
     }
 

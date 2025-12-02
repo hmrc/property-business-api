@@ -19,16 +19,27 @@ package v6.retrieveForeignPropertyCumulativeSummary
 import shared.controllers.validators.AlwaysErrorsValidator
 import shared.utils.UnitSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def1.Def1_RetrieveForeignPropertyCumulativeSummaryValidator
+import v6.retrieveForeignPropertyCumulativeSummary.def2.Def2_RetrieveForeignPropertyCumulativeSummaryValidator
 
 class RetrieveForeignPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec {
 
   private def validatorFor(taxYear: String) =
-    new RetrieveForeignPropertyCumulativeSummaryValidatorFactory().validator(nino = "ignoredNino", businessId = "ignored", taxYear = taxYear)
+    new RetrieveForeignPropertyCumulativeSummaryValidatorFactory().validator(
+      nino = "ignoredNino",
+      businessId = "ignored",
+      taxYear = taxYear,
+      propertyId = Some("ignored"))
 
   "RetrieveForeignPropertyBsasValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {
       "return a Def1 validator" in {
         validatorFor("2025-26") shouldBe a[Def1_RetrieveForeignPropertyCumulativeSummaryValidator]
+      }
+    }
+
+    "given a request corresponding to a Def2 schema" should {
+      "return a Def2 validator" in {
+        validatorFor("2026-27") shouldBe a[Def2_RetrieveForeignPropertyCumulativeSummaryValidator]
       }
     }
 

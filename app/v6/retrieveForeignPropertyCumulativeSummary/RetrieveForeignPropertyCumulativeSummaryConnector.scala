@@ -17,8 +17,8 @@
 package v6.retrieveForeignPropertyCumulativeSummary
 
 import config.PropertyBusinessFeatureSwitches
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,12 +41,29 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
     import request.*
     import schema.*
 
+//    val queryParams: (String, String) = propertyId.map(pid => "propertyId" -> pid.propertyId)
+
+//    val queryParams = propertyId.map(id => s"?propertyId=$id").getOrElse("")
+
+    val queryParams: Seq[(String, String)] =
+      propertyId.map(pid => "propertyId" -> pid.propertyId).toSeq
     val maybeIntent = if (PropertyBusinessFeatureSwitches().isPassIntentEnabled) Some("FOREIGN_PROPERTY") else None
 
-    val downstreamUri: DownstreamUri[DownstreamResp] =
-      IfsUri[DownstreamResp](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
+    val downstreamUri: DownstreamUri[DownstreamResp] = {
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1962")) {
+        if (taxYear.year >= 2027) {
+          println("query params " + queryParams)
+          HipUri[DownstreamResp](
+            s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/foreign-property/${nino.value}/${businessId.businessId}")
+        } else {
+          HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}")
+        }
+      } else {
+        IfsUri[DownstreamResp](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
+      }
+    }
 
-    get(uri = downstreamUri, maybeIntent = maybeIntent)
+    get(uri = downstreamUri, queryParams, maybeIntent = maybeIntent)
       .map(_.map(_.map { response => if (response.hasForeignData) ForeignResult(response) else NonForeignResult }))
   }
 

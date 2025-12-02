@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummary.def1.model.request
+package v6.retrieveForeignPropertyCumulativeSummary.def2.model.request
 
 import common.models.domain.PropertyId
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummarySchema
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
-case class Def1_RetrieveForeignPropertyCumulativeSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
+case class Def2_RetrieveForeignPropertyCumulativeSummaryRequestData(nino: Nino,
+                                                                    businessId: BusinessId,
+                                                                    taxYear: TaxYear,
+                                                                    propertyId: Option[PropertyId])
     extends RetrieveForeignPropertyCumulativeSummaryRequestData {
-  val propertyId: Option[PropertyId]                                  = None
-  override val schema: RetrieveForeignPropertyCumulativeSummarySchema = RetrieveForeignPropertyCumulativeSummarySchema.Def1
+  override val schema: RetrieveForeignPropertyCumulativeSummarySchema = RetrieveForeignPropertyCumulativeSummarySchema.Def2
 }

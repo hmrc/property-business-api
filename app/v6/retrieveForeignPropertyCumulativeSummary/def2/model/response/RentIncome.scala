@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummary.model.request
+package v6.retrieveForeignPropertyCumulativeSummary.def2.model.response
 
-import common.models.domain.PropertyId
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummarySchema
+import play.api.libs.json.{Json, OFormat}
 
-trait RetrieveForeignPropertyCumulativeSummaryRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
-  val propertyId: Option[PropertyId]
-  val schema: RetrieveForeignPropertyCumulativeSummarySchema
+case class RentIncome(rentAmount: Option[BigDecimal])
+
+object RentIncome {
+  implicit val format: OFormat[RentIncome] = Json.format[RentIncome]
 }

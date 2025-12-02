@@ -40,11 +40,11 @@ class RetrieveForeignPropertyCumulativeSummaryController @Inject() (
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveForeignPropertyCumulativeSummaryController", endpointName = endpointName)
 
-  def handleRequest(nino: String, businessId: String, taxYear: String): Action[AnyContent] =
+  def handleRequest(nino: String, businessId: String, taxYear: String, propertyId: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, businessId, taxYear)
+      val validator = validatorFactory.validator(nino, businessId, taxYear, propertyId)
 
       val requestHandler =
         RequestHandler

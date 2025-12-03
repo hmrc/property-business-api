@@ -50,9 +50,6 @@ object RetrieveForeignPropertyCumulativeSummarySchema {
     if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def2)
     else if (taxYear == TaxYear.fromMtd("2025-26")) Valid(Def1)
     else Invalid(Seq(RuleTaxYearNotSupportedError))
-//    if (taxYear < TaxYear.starting(2025)) Invalid(Seq(RuleTaxYearNotSupportedError))
-//    else if (taxYear >= TaxYear.starting(2026)) Valid(Def2)
-//    else Valid(Def1)
   }
 
 }

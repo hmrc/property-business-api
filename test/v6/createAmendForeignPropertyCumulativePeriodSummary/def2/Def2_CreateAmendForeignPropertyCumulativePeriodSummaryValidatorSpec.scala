@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
+package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
+import common.models.errors.*
 import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.*
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
+class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2025-26"
 
-  private val validFromDate    = "2025-03-29"
-  private val validToDate      = "2026-03-29"
-  private val validCountryCode = "AFG"
+  private val validFromDate   = "2025-03-29"
+  private val validToDate     = "2026-03-29"
+  private val validPropertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
-  private def entryWith(countryCode: String) = Json.parse(s"""
+  private def entryWith(propertyId: String) = Json.parse(s"""
        |{
-       |         "countryCode": "$countryCode",
+       |         "propertyId": "$propertyId",
        |         "income":{
        |            "rentIncome":{
        |               "rentAmount":381.21
@@ -63,7 +63,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
        |}
        |""".stripMargin)
 
-  private val entry = entryWith(countryCode = validCountryCode)
+  private val entry = entryWith(propertyId = validPropertyId)
 
   private def bodyWith(Entries: JsValue*) = Json.parse(s"""
        |{
@@ -87,7 +87,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
   private def entryConsolidated = Json.parse(s"""
        |{
-       |     "countryCode":"$validCountryCode",
+       |     "propertyId":"$validPropertyId",
        |     "income":{
        |        "rentIncome":{
        |           "rentAmount":381.21
@@ -118,7 +118,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
        |{
        |  "foreignProperty": [
        |    {
-       |      "countryCode": "$validCountryCode",
+       |      "propertyId": "$validPropertyId",
        |      "income": {
        |        "rentIncome": {
        |          "rentAmount": 381.21
@@ -180,7 +180,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
   )
 
   private val parsedForeignPropertyEntry = ForeignProperty(
-    countryCode = validCountryCode,
+    propertyId = validPropertyId,
     income = Some(parsedForeignPropertyIncome),
     expenses = Some(parsedCreateForeignPropertyExpenses)
   )
@@ -188,13 +188,13 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
   private val parsedForeignPropertyEntryConsolidated =
     parsedForeignPropertyEntry.copy(expenses = Some(parsedCreateForeignPropertyExpensesConsolidated))
 
-  private val parsedBody = Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
+  private val parsedBody = Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
     fromDate = Some(validFromDate),
     toDate = Some(validToDate),
     foreignProperty = Seq(parsedForeignPropertyEntry)
   )
 
-  private val emptyDateParsedBody = Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
+  private val emptyDateParsedBody = Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
     fromDate = None,
     toDate = None,
     foreignProperty = Seq(parsedForeignPropertyEntry)
@@ -203,14 +203,14 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
   private val parsedBodyConsolidated = parsedBody.copy(foreignProperty = Seq(parsedForeignPropertyEntryConsolidated))
 
   private val parsedBodyMinimalForeign =
-    Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
+    Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
       fromDate = None,
       toDate = None,
       foreignProperty = Seq(parsedForeignPropertyEntry.copy(income = Some(parsedForeignPropertyIncomeMinimal), expenses = None))
     )
 
   private def validator(nino: String, businessId: String, taxYear: String, body: JsValue) =
-    new Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino, businessId, taxYear, body)
+    new Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino, businessId, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
@@ -220,7 +220,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           validator(validNino, validBusinessId, validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Right(
-          Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
+          Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
       "passed a valid request with consolidated expenses" in {
@@ -229,7 +229,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           validator(validNino, validBusinessId, validTaxYear, validBodyConsolidated).validateAndWrapResult()
 
         result shouldBe Right(
-          Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
+          Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyConsolidated))
       }
 
       "passed a valid request with minimal foreignProperty" in {
@@ -238,7 +238,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           validator(validNino, validBusinessId, validTaxYear, validBodyMinimal).validateAndWrapResult()
 
         result shouldBe Right(
-          Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeign))
+          Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeign))
       }
 
       "passed the minimum supported taxYear" in {
@@ -246,7 +246,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         val taxYearString = "2025-26"
         validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
           Right(
-            Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
+            Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
               parsedNino,
               parsedBusinessId,
               TaxYear.fromMtd(taxYearString),
@@ -257,7 +257,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         val taxYearString = "2025-26"
         validator(validNino, validBusinessId, taxYearString, emptyDatesBody).validateAndWrapResult() shouldBe
           Right(
-            Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
+            Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
               parsedNino,
               parsedBusinessId,
               TaxYear.fromMtd(taxYearString),
@@ -289,7 +289,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignProperty/0/countryCode")))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/foreignProperty/0/propertyId")))
       }
 
       "passed a body with a foreignProperty entry containing an empty expenses object" in {
@@ -475,47 +475,34 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           ))
       }
 
-      "passed a body containing an invalid country code" in {
+      "passed a body containing a foreignProperty entry with an invalid propertyId format" in {
 
-        val invalidBody = bodyWith(entryWith("JUY"))
+        val invalidBody: JsValue = bodyWith(entry.update("/propertyId", JsString("invalid-uuid")))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleCountryCodeError.withPath("/foreignProperty/0/countryCode")))
+        result shouldBe Left(ErrorWrapper(correlationId, PropertyIdFormatError.withPath("/foreignProperty/0/propertyId")))
       }
 
-      "passed a body containing a multiple invalid country codes" in {
+      "passed a body containing multiple foreignProperty entries with an invalid propertyId format" in {
 
-        val invalidBody = bodyWith(entryWith("ABC"), entryWith("DEF"))
+        val entryInvalidPropertyId1: JsValue = entryWith("invalid-uuid-1")
+        val entryInvalidPropertyId2: JsValue = entryWith("invalid-uuid-2")
+        val invalidBody: JsValue             = bodyWith(entryInvalidPropertyId1, entryInvalidPropertyId2)
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
-          ErrorWrapper(correlationId, RuleCountryCodeError.withPaths(List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
-      }
-
-      "passed a body containing an invalidly formatted country code" in {
-
-        val invalidBody = bodyWith(entryWith("12345678"))
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, CountryCodeFormatError.withPath("/foreignProperty/0/countryCode")))
-
-      }
-
-      "passed a body containing a multiple invalidly formatted country codes" in {
-
-        val invalidBody = bodyWith(entryWith("12345678"), entryWith("34567890"))
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(correlationId, CountryCodeFormatError.withPaths(List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
+          ErrorWrapper(
+            correlationId,
+            PropertyIdFormatError.withPaths(
+              List(
+                "/foreignProperty/0/propertyId",
+                "/foreignProperty/1/propertyId"
+              ))
+          ))
       }
 
       "passed a body containing both foreignProperty expenses" in {
@@ -530,9 +517,11 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
       "passed a body containing multiple sub-objects with both expenses" in {
 
-        val entryWithBothExpenses0 = entryWith("AFG").update("/expenses/consolidatedExpenses", JsNumber(100.00))
-        val entryWithBothExpenses1 = entryWith("ZWE").update("/expenses/consolidatedExpenses", JsNumber(100.00))
-        val invalidBody =
+        val entryWithBothExpenses0: JsValue =
+          entryWith("8e8b8450-dc1b-4360-8109-7067337b42cb").update("/expenses/consolidatedExpenses", JsNumber(100.00))
+        val entryWithBothExpenses1: JsValue =
+          entryWith("8e8b8450-dc1b-4360-8109-7067337b42cc").update("/expenses/consolidatedExpenses", JsNumber(100.00))
+        val invalidBody: JsValue =
           bodyWith(entryWithBothExpenses0, entryWithBothExpenses1).update("/foreignFhlEea/expenses/consolidatedExpenses", JsNumber(100.00))
 
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =

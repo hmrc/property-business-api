@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryService @Inject() (connec
     "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
     "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
     "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
+    "PROPERTY_ID_MISMATCH"               -> RulePropertyIdMismatchError,
     "SERVER_ERROR"                       -> InternalError,
     "SERVICE_UNAVAILABLE"                -> InternalError
   )

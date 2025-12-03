@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,49 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.TaxYear
-import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import shared.models.errors.*
 import shared.utils.UnitSpec
+import v6.createAmendForeignPropertyCumulativePeriodSummary.CreateAmendForeignPropertyCumulativePeriodSummarySchema.*
 
-class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
+class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec
+    extends UnitSpec
+    with ScalaCheckDrivenPropertyChecks
+    with TaxYearPropertyCheckSupport {
 
   "schema lookup" when {
-    "a tax year is present" should {
+    "a valid tax year is supplied" should {
       "use Def1 for tax year 2025-26" in {
         val taxYear = TaxYear.fromMtd("2025-26")
-        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor(taxYear.asMtd) shouldBe Valid(
-          CreateAmendForeignPropertyCumulativePeriodSummarySchema.Def1)
+        schemaFor(taxYear.asMtd) shouldBe Valid(Def1)
+      }
+
+      "use Def2 for tax years 2026-27 onwards" in {
+        forTaxYearsFrom(TaxYear.fromMtd("2026-27")) { taxYear =>
+          schemaFor(taxYear.asMtd) shouldBe Valid(Def2)
+        }
       }
     }
 
-    "an invalid tax year is present" should {
-      "return a RuleTaxYearNotSupportedError" in {
-        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2024-25") shouldBe Invalid(Seq(RuleTaxYearNotSupportedError))
+    "handle errors" when {
+      "an invalid tax year is supplied" should {
+        "disallow tax years prior to 2025-26 and return RuleTaxYearNotSupportedError" in {
+          forTaxYearsBefore(TaxYear.fromMtd("2025-26")) { taxYear =>
+            schemaFor(taxYear.asMtd) shouldBe Invalid(Seq(RuleTaxYearNotSupportedError))
+          }
+        }
       }
-      "return a TaxYearFormatError" in {
-        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("NotATaxYear") shouldBe Invalid(Seq(TaxYearFormatError))
+
+      "the tax year format is invalid" should {
+        "return a TaxYearFormatError" in {
+          schemaFor("NotATaxYear") shouldBe Invalid(Seq(TaxYearFormatError))
+        }
       }
-      "return a RuleTaxYearRangeInvalidError" in {
-        CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor("2020-99") shouldBe Invalid(Seq(RuleTaxYearRangeInvalidError))
+
+      "the tax year range is invalid" should {
+        "return a RuleTaxYearRangeInvalidError" in {
+          schemaFor("2020-99") shouldBe Invalid(Seq(RuleTaxYearRangeInvalidError))
+        }
       }
     }
   }

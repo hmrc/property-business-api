@@ -16,13 +16,7 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import common.models.errors.{
-  RuleDuplicateCountryCodeError,
-  RuleOutsideAmendmentWindowError,
-  RulePropertyIdMismatch,
-  RulePropertyIncomeAllowanceError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.*
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
@@ -33,7 +27,7 @@ import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
 }
-import v6.createAmendForeignPropertyAnnualSubmission.model.request._
+import v6.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -89,9 +83,9 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
           "MISSING_EXPENSES"         -> InternalError,
           "FIELD_CONFLICT"           -> RulePropertyIncomeAllowanceError,
           "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-          "PROPERTY_ID_DO_NOT_MATCH" -> RulePropertyIdMismatch,
+          "PROPERTY_ID_DO_NOT_MATCH" -> RulePropertyIdMismatchError,
           "INVALID_CORRELATION_ID"   -> InternalError,
-          "MISSING_ALLOWANCES"       -> InternalError,
+          "MISSING_ALLOWANCES"       -> InternalError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))

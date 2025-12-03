@@ -17,13 +17,7 @@
 package v6.createAmendForeignPropertyAnnualSubmission
 
 import cats.implicits.*
-import common.models.errors.{
-  RuleDuplicateCountryCodeError,
-  RuleOutsideAmendmentWindowError,
-  RulePropertyIdMismatch,
-  RulePropertyIncomeAllowanceError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.*
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
@@ -64,7 +58,7 @@ class CreateAmendForeignPropertyAnnualSubmissionService @Inject() (connector: Cr
       "MISSING_EXPENSES"         -> InternalError,
       "FIELD_CONFLICT"           -> RulePropertyIncomeAllowanceError,
       "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
-      "PROPERTY_ID_DO_NOT_MATCH" -> RulePropertyIdMismatch,
+      "PROPERTY_ID_DO_NOT_MATCH" -> RulePropertyIdMismatchError,
       "INVALID_CORRELATION_ID"   -> InternalError,
       "MISSING_ALLOWANCES"       -> InternalError
     )

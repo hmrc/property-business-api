@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
-import common.models.errors._
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import common.models.errors.*
+import shared.models.domain.*
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
 import scala.concurrent.Future
 
 class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
     extends ServiceSpec
-    with MockCreateAmendForeignPropertyCumulativePeriodSummaryConnector
-    with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
+    with MockCreateAmendForeignPropertyCumulativePeriodSummaryConnector {
 
   implicit override val correlationId: String = "X-123"
 
@@ -66,7 +65,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
           result shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
-      val errors = List(
+      val errors: Seq[(String, MtdError)] = List(
         "INVALID_TAXABLE_ENTITY_ID"          -> NinoFormatError,
         "INVALID_INCOME_SOURCE_ID"           -> BusinessIdFormatError,
         "INVALID_PAYLOAD"                    -> InternalError,
@@ -86,11 +85,12 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
         "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
         "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
         "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
+        "PROPERTY_ID_MISMATCH"               -> RulePropertyIdMismatchError,
         "SERVER_ERROR"                       -> InternalError,
         "SERVICE_UNAVAILABLE"                -> InternalError
       )
 
-      errors.foreach((serviceError).tupled)
+      errors.foreach(serviceError.tupled)
     }
   }
 

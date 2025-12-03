@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model
+package v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model
 
 import play.api.libs.json.{JsValue, Json}
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.*
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.*
 
-object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
+object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
   private val foreignPropertyIncome = Some(
     PropertyIncome(
@@ -60,24 +60,24 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
     ))
 
   private val regularForeignProperty = Seq(
-    ForeignProperty(countryCode = "FRA", income = foreignPropertyIncome, expenses = regularForeignPropertyExpenses))
+    ForeignProperty(propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb", income = foreignPropertyIncome, expenses = regularForeignPropertyExpenses))
 
   private val consolidatedForeignProperty = Seq(
     ForeignProperty(
-      countryCode = "FRA",
+      propertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb",
       income = foreignPropertyIncome,
       expenses = consolidatedForeignPropertyExpenses
     ))
 
-  val regularExpensesRequestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
-    Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
+  val regularExpensesRequestBody: Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
+    Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
       fromDate = Some("2025-01-01"),
       toDate = Some("2026-01-31"),
       foreignProperty = regularForeignProperty
     )
 
-  val consolidatedExpensesRequestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
-    Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
+  val consolidatedExpensesRequestBody: Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
+    Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
       fromDate = Some("2025-01-01"),
       toDate = Some("2026-01-31"),
       foreignProperty = consolidatedForeignProperty
@@ -89,7 +89,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
       |   "toDate": "2026-01-31",
       |   "foreignProperty": [
       |      {
-      |         "countryCode": "FRA",
+      |         "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
       |         "income":{
       |            "rentIncome":{
       |               "rentAmount": 1000.99
@@ -123,7 +123,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
       |   "toDate": "2026-01-31",
       |   "foreignProperty": [
       |      {
-      |         "countryCode": "FRA",
+      |         "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
       |         "income":{
       |            "rentIncome":{
       |               "rentAmount": 1000.99
@@ -150,7 +150,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
       |  "toDate": "2026-01-31",
       |  "foreignProperty": [
       |    {
-      |      "countryCode": "FRA",
+      |      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
       |      "income": {
       |        "rentIncome": {
       |          "rentAmount": 1000.99
@@ -185,7 +185,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
       |  "toDate": "2026-01-31",
       |  "foreignProperty": [
       |    {
-      |      "countryCode": "FRA",
+      |      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
       |      "income": {
       |        "rentIncome": {
       |          "rentAmount": 1000.99

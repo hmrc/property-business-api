@@ -257,11 +257,11 @@ components:
         code: RULE_DUPLICATE_PROPERTY_NAME
         message: Foreign property name already exists for the same country
 
-    rulePropertyOutsidePeriod:
-      description: The foreign property must be within the start and end dates (tax years) of the foreign property income source.
+    ruleTaxYearBeforeBusinessStart:
+      description: The requested tax year is before the first tax year in which the Foreign Property business was reported.
       value:
-        code: RULE_PROPERTY_OUTSIDE_PERIOD
-        message: Foreign property is not within the income source period
+        code: RULE_TAX_YEAR_BEFORE_BUSINESS_START
+        message: Foreign property cannot be reported for a tax year before the first tax year of the business
 
     ruleEndDateAfterTaxYearEnd:
       description: The end date is after the end of the tax year.

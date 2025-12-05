@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
+package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
@@ -31,7 +31,7 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   private def invalidEntryWithConsolidatedExpenses() =
     Json.parse(s"""
@@ -55,8 +55,8 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
   private def requestBodyWith(entries: JsValue*) =
     Json.parse(
       s"""{
-         |    "fromDate": "2025-01-01",
-         |    "toDate": "2026-01-31",
+         |    "fromDate": "2025-04-06",
+         |    "toDate": "2025-07-05",
          |    "foreignProperty": ${JsArray(entries)}
          |}
          |""".stripMargin
@@ -150,7 +150,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             "2025-26",
             requestBodyWith(invalidEntryWithConsolidatedExpenses()),
             BAD_REQUEST,
-            RuleBothExpensesSuppliedError.copy(paths = Some(List("/foreignProperty/0/expenses"))),
+            RuleBothExpensesSuppliedError.withPath("/foreignProperty/0/expenses"),
             None
           ),
           ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
@@ -189,7 +189,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             "2025-26",
             requestBodyWith(entryWith("France")),
             BAD_REQUEST,
-            CountryCodeFormatError.copy(paths = Some(List("/foreignProperty/0/countryCode"))),
+            CountryCodeFormatError.withPath("/foreignProperty/0/countryCode"),
             None
           ),
           (
@@ -198,11 +198,11 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             "2025-26",
             requestBodyWith(entryWith("QQQ")),
             BAD_REQUEST,
-            RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode"))),
+            RuleCountryCodeError.withPath("/foreignProperty/0/countryCode"),
             None
           )
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -246,7 +246,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        errors.foreach(args => (serviceErrorTest).tupled(args))
+        errors.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }
@@ -257,7 +257,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
 
     def mtdTaxYear: String = "2025-26"
     def setupStubs(): StubMapping
-    def downstreamUri: String = s"/income-tax/25-26/business/property/periodic/$nino/$businessId"
+    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/business/periodic/property/$nino/$businessId"
 
     def request(): WSRequest = {
       setupStubs()
@@ -271,8 +271,15 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
     def errorBody(code: String): String =
       s"""
          |{
-         |   "code": "$code",
-         |   "reason": "downstream message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "error message"
+         |         }
+         |      ]
+         |   }
          |}
        """.stripMargin
 

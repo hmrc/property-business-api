@@ -151,7 +151,7 @@ object RuleEarlyDataSubmissionNotAcceptedError
       BAD_REQUEST
     )
 
-object RulePropertyIdMismatch
+object RulePropertyIdMismatchError
     extends MtdError(
       "RULE_PROPERTY_ID_MISMATCH",
       "The supplied property ID is not valid for this income source",

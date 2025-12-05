@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary.model.request
+package v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures.*
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody.*
 
-class CreateAmendForeignPropertyCumulativePeriodSummaryRequestBodySpec
-    extends UnitSpec
-    with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
+class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBodySpec extends UnitSpec {
 
   "reads" when {
     "passed valid JSON with regular expenses" should {
       "return a valid model" in {
-        regularMtdRequestJson.as[Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody] shouldBe regularExpensesRequestBody
+        regularMtdRequestJson.as[Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody] shouldBe regularExpensesRequestBody
       }
     }
 
     "passed valid JSON with consolidated expenses" should {
       "return a valid model" in {
-        consolidatedMtdRequestJson.as[Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody] shouldBe consolidatedExpensesRequestBody
+        consolidatedMtdRequestJson.as[Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody] shouldBe consolidatedExpensesRequestBody
       }
     }
   }

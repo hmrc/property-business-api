@@ -23,11 +23,11 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
@@ -41,8 +41,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryControllerSpec
     with MockMtdIdLookupService
     with MockCreateAmendForeignPropertyCumulativePeriodSummaryService
     with MockCreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory
-    with MockIdGenerator
-    with Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
+    with MockIdGenerator {
 
   private val taxYear                            = "2025-26"
   private val businessId                         = "XAIS12345678910"

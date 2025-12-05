@@ -349,7 +349,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionHipISpec extends Integratio
 
       val extraTysErrors = List(
         (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError),
-        (UNPROCESSABLE_ENTITY, "PROPERTY_ID_DO_NOT_MATCH", BAD_REQUEST, RulePropertyIdMismatch),
+        (UNPROCESSABLE_ENTITY, "PROPERTY_ID_DO_NOT_MATCH", BAD_REQUEST, RulePropertyIdMismatchError),
         (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
       )
 

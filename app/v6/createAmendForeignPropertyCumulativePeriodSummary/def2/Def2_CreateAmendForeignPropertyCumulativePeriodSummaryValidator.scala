@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
+package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
 import cats.data.Validated
 import cats.implicits.*
@@ -23,17 +23,18 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
-  Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,
-  Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.{
+  Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,
+  Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 }
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.*
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] {
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody]()
 
   override def validate: Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
     (
@@ -41,7 +42,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: Stri
       ResolveBusinessId(businessId),
       resolveJson(body)
     ).mapN((validNino, validBusinessId, validBody) =>
-      Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
+      Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
         validNino,
         validBusinessId,
         TaxYear.fromMtd(taxYear),

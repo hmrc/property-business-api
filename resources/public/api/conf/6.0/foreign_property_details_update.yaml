@@ -12,7 +12,7 @@ description: |
   | N/A - DEFAULT                   | Simulates success response.                                                                                 |
   | NOT_FOUND                       | Simulates the scenario where no data is found.                                                              |
   | DUPLICATE_PROPERTY_NAME         | Simulates the scenario where the foreign property name already exists for the same country.                 |
-  | PROPERTY_OUTSIDE_PERIOD         | Simulates the scenario where the foreign property is not within the income source period.                   |
+  | TAX_YEAR_BEFORE_BUSINESS_START  | Simulates the scenario where the requested tax year is before the first tax year in which the foreign property business was reported. |
   | PROPERTY_BUSINESS_CEASED        | Simulates the scenario where the foreign property business income source has ceased.                        |
   | OUTSIDE_AMENDMENT_WINDOW        | Simulates the scenario where request cannot be completed as it is outside the amendment window.             |
   | STATEFUL                        | Performs a stateful update.                                                                                 |
@@ -91,8 +91,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupportedMinMax'
           RULE_DUPLICATE_PROPERTY_NAME:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicatePropertyName'
-          RULE_PROPERTY_OUTSIDE_PERIOD:
-            $ref: './common/errors.yaml#/components/examples/rulePropertyOutsidePeriod'
+          RULE_TAX_YEAR_BEFORE_BUSINESS_START:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearBeforeBusinessStart'
           RULE_END_DATE_AFTER_TAX_YEAR_END:
             $ref: './common/errors.yaml#/components/examples/ruleEndDateAfterTaxYearEnd'
           RULE_PROPERTY_BUSINESS_CEASED:

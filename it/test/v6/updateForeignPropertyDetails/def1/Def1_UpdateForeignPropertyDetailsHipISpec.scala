@@ -158,7 +158,7 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
         (BAD_REQUEST, "1216", INTERNAL_SERVER_ERROR, InternalError),
         (NOT_FOUND, "5010", NOT_FOUND, NotFoundError),
         (UNPROCESSABLE_ENTITY, "1245", BAD_REQUEST, RuleDuplicatePropertyNameError),
-        (UNPROCESSABLE_ENTITY, "1246", BAD_REQUEST, RulePropertyOutsidePeriodError),
+        (UNPROCESSABLE_ENTITY, "1246", BAD_REQUEST, RuleTaxYearBeforeBusinessStartError),
         (UNPROCESSABLE_ENTITY, "1247", BAD_REQUEST, RuleEndDateAfterTaxYearEndError),
         (UNPROCESSABLE_ENTITY, "1248", BAD_REQUEST, RulePropertyBusinessCeasedError),
         (UNPROCESSABLE_ENTITY, "1249", BAD_REQUEST, RuleMissingEndDetailsError),

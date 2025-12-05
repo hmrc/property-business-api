@@ -17,7 +17,7 @@
 package v6.retrieveForeignPropertyCumulativeSummary
 
 import cats.data.EitherT
-import common.models.errors.RuleTypeOfBusinessIncorrectError
+import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import shared.controllers.RequestContext
 import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
@@ -51,7 +51,9 @@ class RetrieveForeignPropertyCumulativeSummaryService @Inject() (connector: Retr
       "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
       "NOT_FOUND"                 -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "SERVICE_UNAVAILABLE"       -> InternalError,
+      "INVALID_PROPERTY_ID"       -> PropertyIdFormatError,
+      "INVALID_INCOME_SOURCE_ID"  -> BusinessIdFormatError
     )
 
   private def validateBusinessType(resultWrapper: ResponseWrapper[Result]) =

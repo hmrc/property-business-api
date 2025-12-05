@@ -32,9 +32,15 @@ class RetrieveForeignPropertyCumulativeSummarySchemaSpec extends UnitSpec with S
         }
       }
 
-      "use Def1 for tax years 2025-26 onwards" in {
-        forTaxYearsFrom(TaxYear.fromMtd("2025-26")) { taxYear =>
-          RetrieveForeignPropertyCumulativeSummarySchema.schemaFor(taxYear.asMtd) shouldBe Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def1)
+      "use Def1 for tax years 2025-26 only" in {
+        val taxYear = TaxYear.ending(2026)
+
+        RetrieveForeignPropertyCumulativeSummarySchema.schemaFor(taxYear.asMtd) shouldBe Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def1)
+      }
+
+      "use Def2 for tax years 2026-27 onwards" in {
+        forTaxYearsFrom(TaxYear.fromMtd("2026-27")) { taxYear =>
+          RetrieveForeignPropertyCumulativeSummarySchema.schemaFor(taxYear.asMtd) shouldBe Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def2)
         }
       }
     }

@@ -18,7 +18,7 @@ package v6.retrieveForeignPropertyCumulativeSummary
 
 import common.models.errors.RuleTypeOfBusinessIncorrectError
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult}

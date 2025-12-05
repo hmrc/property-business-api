@@ -19,6 +19,7 @@ package v6.retrieveForeignPropertyCumulativeSummary.model.response
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil.writesFrom
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response.Def1_RetrieveForeignPropertyCumulativeSummaryResponse
+import v6.retrieveForeignPropertyCumulativeSummary.def2.model.response.Def2_RetrieveForeignPropertyCumulativeSummaryResponse
 
 trait RetrieveForeignPropertyCumulativeSummaryResponse {
   def hasForeignData: Boolean
@@ -29,6 +30,9 @@ object RetrieveForeignPropertyCumulativeSummaryResponse {
   implicit val writes: OWrites[RetrieveForeignPropertyCumulativeSummaryResponse] = writesFrom {
     case def1: Def1_RetrieveForeignPropertyCumulativeSummaryResponse =>
       implicitly[OWrites[Def1_RetrieveForeignPropertyCumulativeSummaryResponse]].writes(def1)
+
+    case def2: Def2_RetrieveForeignPropertyCumulativeSummaryResponse =>
+      implicitly[OWrites[Def2_RetrieveForeignPropertyCumulativeSummaryResponse]].writes(def2)
   }
 
 }

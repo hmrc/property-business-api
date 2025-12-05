@@ -26,6 +26,6 @@ trait MockRetrieveForeignPropertyCumulativeSummaryValidatorFactory extends MockV
     mock[RetrieveForeignPropertyCumulativeSummaryValidatorFactory]
 
   def validator(): CallHandler[Validator[RetrieveForeignPropertyCumulativeSummaryRequestData]] =
-    (mockRetrieveForeignPropertyCumulativeSummaryValidatorFactory.validator(_: String, _: String, _: String)).expects(*, *, *)
+    (mockRetrieveForeignPropertyCumulativeSummaryValidatorFactory.validator(_: String, _: String, _: String, _: Option[String])).expects(*, *, *, *)
 
 }

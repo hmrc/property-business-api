@@ -18,7 +18,8 @@ package v6.createAmendForeignPropertyAnnualSubmission
 
 import cats.data.Validated
 import cats.data.Validated.Valid
-import shared.controllers.validators.resolvers.ResolveTaxYear
+import config.PropertyBusinessConfig
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 
@@ -32,17 +33,18 @@ object CreateAmendForeignPropertyAnnualSubmissionSchema {
 
   case object Def2 extends CreateAmendForeignPropertyAnnualSubmissionSchema
 
-  private val preTysSchema = Def1
+  case object Def3 extends CreateAmendForeignPropertyAnnualSubmissionSchema
 
-  def schemaFor(maybeTaxYear: Option[String]): Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionSchema] =
-    maybeTaxYear match {
-      case Some(taxYearString) => ResolveTaxYear(taxYearString) andThen schemaFor
-      case None                => Valid(preTysSchema)
+  def schemaFor(taxYearString: String)(implicit
+      config: PropertyBusinessConfig): Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionSchema] =
+    ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))(taxYearString) andThen schemaFor
+
+  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionSchema] = Valid {
+    taxYear match {
+      case ty if ty >= TaxYear.fromMtd("2026-27") => Def3
+      case ty if ty == TaxYear.fromMtd("2025-26") => Def2
+      case _                                      => Def1
     }
-
-  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionSchema] = {
-    if (taxYear < TaxYear.starting(2025)) Valid(Def1)
-    else Valid(Def2)
   }
 
 }

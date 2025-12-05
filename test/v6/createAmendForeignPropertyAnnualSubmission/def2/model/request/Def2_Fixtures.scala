@@ -23,92 +23,90 @@ import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_for
   Def2_Create_Amend_ForeignEntry
 }
 
-trait Def2_Fixtures extends StructuredBuildingAllowanceFixture {
+trait Def2_Fixtures extends Def2_StructuredBuildingAllowanceFixture {
 
-  val foreignAdjustments: Def2_Create_Amend_ForeignAdjustments =
+  val def2_foreignAdjustments: Def2_Create_Amend_ForeignAdjustments =
     Def2_Create_Amend_ForeignAdjustments(
       privateUseAdjustment = Some(1.25),
       balancingCharge = Some(2.25)
     )
 
-  val foreignAdjustmentsMtdJson: JsValue = Json.parse("""
+  val def2_foreignAdjustmentsMtdJson: JsValue = Json.parse("""
       |{
       |    "privateUseAdjustment":1.25,
       |    "balancingCharge":2.25
       |}
       |""".stripMargin)
 
-  val foreignAdjustmentsDownstreamJson: JsValue = foreignAdjustmentsMtdJson
+  val def2_foreignAdjustmentsDownstreamJson: JsValue = def2_foreignAdjustmentsMtdJson
 
-  val foreignAllowances: Def2_Create_Amend_ForeignAllowances =
+  val def2_foreignAllowances: Def2_Create_Amend_ForeignAllowances =
     Def2_Create_Amend_ForeignAllowances(
       annualInvestmentAllowance = Some(1.25),
       costOfReplacingDomesticItems = Some(2.25),
       otherCapitalAllowance = Some(4.25),
       zeroEmissionsCarAllowance = Some(6.25),
-      propertyIncomeAllowance = Some(7.25),
-      structuredBuildingAllowance = Some(List(structuredBuildingAllowance))
+      propertyIncomeAllowance = None,
+      structuredBuildingAllowance = Some(List(def2_structuredBuildingAllowance))
     )
 
-  val foreignAllowancesMtdJson: JsValue = Json.parse(s"""
+  val def2_foreignAllowancesMtdJson: JsValue = Json.parse(s"""
       |{
       |    "annualInvestmentAllowance":1.25,
       |    "costOfReplacingDomesticItems":2.25,
       |    "otherCapitalAllowance":4.25,
       |    "zeroEmissionsCarAllowance":6.25,
-      |    "propertyIncomeAllowance":7.25,
-      |    "structuredBuildingAllowance": [$structuredBuildingAllowanceMtdJson]
+      |    "structuredBuildingAllowance": [$def2_structuredBuildingAllowanceMtdJson]
       |}
       |""".stripMargin)
 
-  val foreignAllowancesDownstreamJson: JsValue = Json.parse(s"""
+  val def2_foreignAllowancesDownstreamJson: JsValue = Json.parse(s"""
       |{
       |    "annualInvestmentAllowance":1.25,
       |    "costOfReplacingDomesticItems":2.25,
       |    "otherCapitalAllowance":4.25,
       |    "zeroEmissionsCarAllowance":6.25,
-      |    "propertyAllowance":7.25,
-      |    "structuredBuildingAllowance": [$structuredBuildingAllowanceDownstreamJson]
+      |    "structuredBuildingAllowance": [$def2_structuredBuildingAllowanceDownstreamJson]
       |}
       |""".stripMargin)
 
-  val foreignEntry: Def2_Create_Amend_ForeignEntry =
+  val def2_foreignEntry: Def2_Create_Amend_ForeignEntry =
     Def2_Create_Amend_ForeignEntry(
-      countryCode = "GER",
-      adjustments = Some(foreignAdjustments),
-      allowances = Some(foreignAllowances)
+      countryCode = "IND",
+      adjustments = Some(def2_foreignAdjustments),
+      allowances = Some(def2_foreignAllowances)
     )
 
-  val foreignEntryMtdJson: JsValue = Json.parse(s"""
+  val def2_foreignEntryMtdJson: JsValue = Json.parse(s"""
       |{
-      |   "countryCode":"GER",
-      |   "adjustments": $foreignAdjustmentsMtdJson,
-      |   "allowances": $foreignAllowancesMtdJson
+      |   "countryCode":"IND",
+      |   "adjustments": $def2_foreignAdjustmentsMtdJson,
+      |   "allowances": $def2_foreignAllowancesMtdJson
       |}
       |""".stripMargin)
 
-  val foreignEntryDownstreamJson: JsValue = Json.parse(s"""
+  val def2_foreignEntryDownstreamJson: JsValue = Json.parse(s"""
      |{
-     |   "countryCode":"GER",
-     |   "adjustments": $foreignAdjustmentsDownstreamJson,
-     |   "allowances": $foreignAllowancesDownstreamJson
+     |   "countryCode":"IND",
+     |   "adjustments": $def2_foreignAdjustmentsDownstreamJson,
+     |   "allowances": $def2_foreignAllowancesDownstreamJson
      |}
      |""".stripMargin)
 
   val def2_createAmendForeignPropertyAnnualSubmissionRequestBody: Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody(
-      foreignProperty = List(foreignEntry)
+      foreignProperty = List(def2_foreignEntry)
     )
 
   val def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson: JsValue = Json.parse(s"""
       |{
-      |   "foreignProperty":[ $foreignEntryMtdJson ]
+      |   "foreignProperty":[ $def2_foreignEntryMtdJson ]
       |}
       |""".stripMargin)
 
   val def2_createAmendForeignPropertyAnnualSubmissionRequestBodyDownstreamJson: JsValue = Json.parse(s"""
       |{
-      |   "foreignProperty":[ $foreignEntryDownstreamJson ]
+      |   "foreignProperty":[ $def2_foreignEntryDownstreamJson ]
       |}
       |""".stripMargin)
 

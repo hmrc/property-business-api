@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import org.scalamock.handlers.CallHandler
+import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -26,38 +26,96 @@ import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData,
   Def1_Fixtures
 }
+import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
+  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData,
+  Def2_Fixtures
+}
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.{
+  Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
+  Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData,
+  Def3_Fixtures
+}
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with Def1_Fixtures {
+class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec with Def1_Fixtures with Def2_Fixtures with Def3_Fixtures {
 
   private val nino: String       = "AA123456A"
   private val businessId: String = "XAIS12345678910"
 
-  private val preTysTaxYear = TaxYear.fromMtd("2020-21")
-  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+  "CreateAmendForeignPropertyAnnualSubmissionConnector" should {
+    "return a 204 response" when {
 
-  "CreateAmendForeignPropertyAnnualSubmissionConnector" must {
+      val outcome = Right(ResponseWrapper(correlationId, ()))
 
-    val outcome = Right(ResponseWrapper(correlationId, ()))
+      "a request is made for tax year 2021-22" in new IfsTest with Test {
 
-    "put a body and return a 204" in new IfsTest with Test {
-      def taxYear: TaxYear = preTysTaxYear
+        def taxYear: TaxYear = TaxYear.fromMtd("2021-22")
 
-      stubHttpResponse(outcome)
+        willPut(
+          url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2021-22",
+          body = createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
 
-      val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
-      result shouldBe outcome
-    }
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
 
-    "put a body and return a 204 for a TYS tax year" in new IfsTest with Test {
-      def taxYear: TaxYear = tysTaxYear
+      "a request is made for tax year 2023-24" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-      stubTysHttpResponse(outcome)
+        willPut(
+          url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
+          body = def2_createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
 
-      val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
-      result shouldBe outcome
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a request is made for tax year 2025-26 (HIP disabled)" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        willPut(
+          url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
+          body = def2_createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a request is made for tax year 2025-26 (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          body = def2_createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a request is made for tax year 2026-27" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2026-27")
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/foreign-property/annual/$nino/$businessId",
+          body = def3_createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
     }
   }
 
@@ -71,24 +129,25 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
       appConfig = mockSharedAppConfig
     )
 
-    private val requestBody: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
-      Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody(None, None)
-
-    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequestData =
-      Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(Nino(nino), BusinessId(businessId), taxYear, requestBody)
-
-    protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
-      willPut(
-        url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=2020-21",
-        body = requestBody
-      ).returns(Future.successful(outcome))
-    }
-
-    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
-      willPut(
-        url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId",
-        body = requestBody
-      ).returns(Future.successful(outcome))
+    protected val request: CreateAmendForeignPropertyAnnualSubmissionRequestData = taxYear.year match {
+      case ty if ty >= 2027 =>
+        Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+          Nino(nino),
+          BusinessId(businessId),
+          taxYear,
+          def3_createAmendForeignPropertyAnnualSubmissionRequestBody)
+      case ty if ty >= 2024 =>
+        Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+          Nino(nino),
+          BusinessId(businessId),
+          taxYear,
+          def2_createAmendForeignPropertyAnnualSubmissionRequestBody)
+      case _ =>
+        Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+          Nino(nino),
+          BusinessId(businessId),
+          taxYear,
+          createAmendForeignPropertyAnnualSubmissionRequestBody)
     }
 
   }

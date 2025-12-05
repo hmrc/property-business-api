@@ -30,41 +30,10 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
 
-class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def2_Fixtures {
+class Def2_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec with Def2_Fixtures {
 
-  val requestBodyJson: JsValue = Json.parse("""
-      |{
-      |   "foreignProperty":[
-      |      {
-      |         "countryCode":"IND",
-      |         "adjustments":{
-      |            "privateUseAdjustment":1.25,
-      |            "balancingCharge":2.25
-      |         },
-      |         "allowances":{
-      |            "annualInvestmentAllowance":1.25,
-      |            "costOfReplacingDomesticItems":2.25,
-      |            "otherCapitalAllowance":4.25,
-      |            "zeroEmissionsCarAllowance":6.25,
-      |            "structuredBuildingAllowance":[
-      |               {
-      |                  "amount":3000.3,
-      |                  "firstYear":{
-      |                     "qualifyingDate":"2020-01-01",
-      |                     "qualifyingAmountExpenditure":3000.4
-      |                  },
-      |                  "building":{
-      |                     "name":"house name",
-      |                     "number":"house number",
-      |                     "postcode":"GF49JH"
-      |                  }
-      |               }
-      |            ]
-      |         }
-      |      }
-      |   ]
-      |}
-      |""".stripMargin)
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1804.enabled" -> false) ++ super.servicesConfig
 
   val invalidFieldsTypeRequestBodyJson: JsValue = Json.parse("""
       |{
@@ -233,7 +202,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestBodyJson))
+        val response: WSResponse = await(request().put(def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson))
         response.status shouldBe OK
         response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
@@ -248,7 +217,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request().put(requestBodyJson))
+        val response: WSResponse = await(request().put(def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson))
         response.status shouldBe OK
         response.body shouldBe ""
         response.header("X-CorrelationId").nonEmpty shouldBe true
@@ -357,10 +326,10 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
       }
 
       val input = List(
-        ("AA1123A", "XAIS12345678910", "2025-26", requestBodyJson, BAD_REQUEST, NinoFormatError),
-        ("AA123456A", "XAIS12345678910", "202362-23", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2025-26", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
-        ("AA123456A", "XAIS12345678910", "2021-24", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+        ("AA1123A", "XAIS12345678910", "2025-26", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, NinoFormatError),
+        ("AA123456A", "XAIS12345678910", "202362-23", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, TaxYearFormatError),
+        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2025-26", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, BusinessIdFormatError),
+        ("AA123456A", "XAIS12345678910", "2021-24", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
         (
           "AA123456A",
           "XAIS12345678910",
@@ -413,7 +382,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
             DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
           }
 
-          val response: WSResponse = await(request().put(requestBodyJson))
+          val response: WSResponse = await(request().put(def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson))
           response.status shouldBe expectedStatus
           response.json shouldBe Json.toJson(expectedBody)
         }
@@ -421,7 +390,6 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
 
       val errors = List(
         (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-        (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
         (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
         (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),

@@ -23,9 +23,9 @@ import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_for
   Def2_Create_Amend_StructuredBuildingAllowance
 }
 
-trait StructuredBuildingAllowanceFixture {
+trait Def2_StructuredBuildingAllowanceFixture {
 
-  val structuredBuildingAllowance: Def2_Create_Amend_StructuredBuildingAllowance =
+  val def2_structuredBuildingAllowance: Def2_Create_Amend_StructuredBuildingAllowance =
     Def2_Create_Amend_StructuredBuildingAllowance(
       3000.30,
       Some(
@@ -40,7 +40,7 @@ trait StructuredBuildingAllowanceFixture {
       )
     )
 
-  val structuredBuildingAllowanceMtdJson: JsValue = Json.parse("""
+  val def2_structuredBuildingAllowanceMtdJson: JsValue = Json.parse("""
       |{
       |  "amount": 3000.30,
       |  "firstYear": {
@@ -55,7 +55,7 @@ trait StructuredBuildingAllowanceFixture {
       |}
       |""".stripMargin)
 
-  val structuredBuildingAllowanceDownstreamJson: JsValue = Json.parse("""
+  val def2_structuredBuildingAllowanceDownstreamJson: JsValue = Json.parse("""
       |{
       |  "amount": 3000.30,
       |  "firstYear": {

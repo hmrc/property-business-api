@@ -25,7 +25,7 @@ class Def2_Create_Amend_ForeignAdjustmentsSpec extends UnitSpec with Def2_Fixtur
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignAdjustmentsMtdJson.as[Def2_Create_Amend_ForeignAdjustments] shouldBe foreignAdjustments
+        def2_foreignAdjustmentsMtdJson.as[Def2_Create_Amend_ForeignAdjustments] shouldBe def2_foreignAdjustments
       }
     }
   }
@@ -33,7 +33,7 @@ class Def2_Create_Amend_ForeignAdjustmentsSpec extends UnitSpec with Def2_Fixtur
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignAdjustments) shouldBe foreignAdjustmentsDownstreamJson
+        Json.toJson(def2_foreignAdjustments) shouldBe def2_foreignAdjustmentsDownstreamJson
       }
     }
   }

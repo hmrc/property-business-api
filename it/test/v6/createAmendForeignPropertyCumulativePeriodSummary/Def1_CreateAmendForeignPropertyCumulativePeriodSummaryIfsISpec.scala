@@ -58,8 +58,8 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
   private def requestBodyWith(entries: JsValue*) =
     Json.parse(
       s"""{
-         |    "fromDate": "2025-01-01",
-         |    "toDate": "2026-01-31",
+         |    "fromDate": "2025-04-06",
+         |    "toDate": "2025-07-05",
          |    "foreignProperty": ${JsArray(entries)}
          |}
          |""".stripMargin

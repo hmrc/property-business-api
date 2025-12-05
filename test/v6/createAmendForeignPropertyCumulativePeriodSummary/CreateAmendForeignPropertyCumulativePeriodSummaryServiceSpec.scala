@@ -85,7 +85,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryServiceSpec
         "OUTSIDE_AMENDMENT_WINDOW"           -> RuleOutsideAmendmentWindowError,
         "EARLY_DATA_SUBMISSION_NOT_ACCEPTED" -> RuleEarlyDataSubmissionNotAcceptedError,
         "DUPLICATE_COUNTRY_CODE"             -> RuleDuplicateCountryCodeError,
-        "PROPERTY_ID_MISMATCH"               -> RulePropertyIdMismatchError,
+        "PROPERTY_ID_DO_NOT_MATCH"           -> RulePropertyIdMismatchError,
         "SERVER_ERROR"                       -> InternalError,
         "SERVICE_UNAVAILABLE"                -> InternalError
       )

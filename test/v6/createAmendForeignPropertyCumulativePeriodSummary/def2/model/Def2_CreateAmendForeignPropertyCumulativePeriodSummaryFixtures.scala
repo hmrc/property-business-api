@@ -71,22 +71,22 @@ object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
   val regularExpensesRequestBody: Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
     Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
-      fromDate = Some("2025-01-01"),
-      toDate = Some("2026-01-31"),
+      fromDate = Some("2026-04-06"),
+      toDate = Some("2026-07-05"),
       foreignProperty = regularForeignProperty
     )
 
   val consolidatedExpensesRequestBody: Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
     Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
-      fromDate = Some("2025-01-01"),
-      toDate = Some("2026-01-31"),
+      fromDate = Some("2026-04-06"),
+      toDate = Some("2026-07-05"),
       foreignProperty = consolidatedForeignProperty
     )
 
   val regularMtdRequestJson: JsValue = Json.parse(
     """{
-      |   "fromDate": "2025-01-01",
-      |   "toDate": "2026-01-31",
+      |   "fromDate": "2026-04-06",
+      |   "toDate": "2026-07-05",
       |   "foreignProperty": [
       |      {
       |         "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
@@ -119,8 +119,8 @@ object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
   val consolidatedMtdRequestJson: JsValue = Json.parse(
     """{
-      |   "fromDate": "2025-01-01",
-      |   "toDate": "2026-01-31",
+      |   "fromDate": "2026-04-06",
+      |   "toDate": "2026-07-05",
       |   "foreignProperty": [
       |      {
       |         "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
@@ -146,8 +146,8 @@ object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
   val regularDownstreamRequestJson: JsValue = Json.parse(
     """
       |{
-      |  "fromDate": "2025-01-01",
-      |  "toDate": "2026-01-31",
+      |  "fromDate": "2026-04-06",
+      |  "toDate": "2026-07-05",
       |  "foreignProperty": [
       |    {
       |      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
@@ -181,8 +181,8 @@ object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
   val consolidatedDownstreamRequestJson: JsValue = Json.parse(
     """
       |{
-      |  "fromDate": "2025-01-01",
-      |  "toDate": "2026-01-31",
+      |  "fromDate": "2026-04-06",
+      |  "toDate": "2026-07-05",
       |  "foreignProperty": [
       |    {
       |      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",

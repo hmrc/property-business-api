@@ -55,8 +55,8 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends Int
   private def requestBodyWith(entries: JsValue*) =
     Json.parse(
       s"""{
-         |    "fromDate": "2026-01-01",
-         |    "toDate": "2027-01-31",
+         |    "fromDate": "2026-04-06",
+         |    "toDate": "2026-07-05",
          |    "foreignProperty": ${JsArray(entries)}
          |}
          |""".stripMargin
@@ -232,7 +232,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends Int
           (UNPROCESSABLE_ENTITY, "START_END_DATE_NOT_ACCEPTED", BAD_REQUEST, RuleStartAndEndDateNotAllowedError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (UNPROCESSABLE_ENTITY, "EARLY_DATA_SUBMISSION_NOT_ACCEPTED", BAD_REQUEST, RuleEarlyDataSubmissionNotAcceptedError),
-          (UNPROCESSABLE_ENTITY, "PROPERTY_ID_MISMATCH", BAD_REQUEST, RulePropertyIdMismatchError),
+          (UNPROCESSABLE_ENTITY, "PROPERTY_ID_DO_NOT_MATCH", BAD_REQUEST, RulePropertyIdMismatchError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )

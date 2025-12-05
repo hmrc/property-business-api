@@ -71,22 +71,22 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
   val regularExpensesRequestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
     Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
-      fromDate = Some("2025-01-01"),
-      toDate = Some("2026-01-31"),
+      fromDate = Some("2025-04-06"),
+      toDate = Some("2025-07-05"),
       foreignProperty = regularForeignProperty
     )
 
   val consolidatedExpensesRequestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
     Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody(
-      fromDate = Some("2025-01-01"),
-      toDate = Some("2026-01-31"),
+      fromDate = Some("2025-04-06"),
+      toDate = Some("2025-07-05"),
       foreignProperty = consolidatedForeignProperty
     )
 
   val regularMtdRequestJson: JsValue = Json.parse(
     """{
-      |   "fromDate": "2025-01-01",
-      |   "toDate": "2026-01-31",
+      |   "fromDate": "2025-04-06",
+      |   "toDate": "2025-07-05",
       |   "foreignProperty": [
       |      {
       |         "countryCode": "FRA",
@@ -119,8 +119,8 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
 
   val consolidatedMtdRequestJson: JsValue = Json.parse(
     """{
-      |   "fromDate": "2025-01-01",
-      |   "toDate": "2026-01-31",
+      |   "fromDate": "2025-04-06",
+      |   "toDate": "2025-07-05",
       |   "foreignProperty": [
       |      {
       |         "countryCode": "FRA",
@@ -146,8 +146,8 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
   val regularDownstreamRequestJson: JsValue = Json.parse(
     """
       |{
-      |  "fromDate": "2025-01-01",
-      |  "toDate": "2026-01-31",
+      |  "fromDate": "2025-04-06",
+      |  "toDate": "2025-07-05",
       |  "foreignProperty": [
       |    {
       |      "countryCode": "FRA",
@@ -181,8 +181,8 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures {
   val consolidatedDownstreamRequestJson: JsValue = Json.parse(
     """
       |{
-      |  "fromDate": "2025-01-01",
-      |  "toDate": "2026-01-31",
+      |  "fromDate": "2025-04-06",
+      |  "toDate": "2025-07-05",
       |  "foreignProperty": [
       |    {
       |      "countryCode": "FRA",

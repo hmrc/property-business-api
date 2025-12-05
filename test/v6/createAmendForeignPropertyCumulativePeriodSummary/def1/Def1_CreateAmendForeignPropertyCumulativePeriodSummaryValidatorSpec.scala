@@ -32,8 +32,8 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2025-26"
 
-  private val validFromDate    = "2025-03-29"
-  private val validToDate      = "2026-03-29"
+  private val validFromDate    = "2025-04-06"
+  private val validToDate      = "2025-07-05"
   private val validCountryCode = "AFG"
 
   private def entryWith(countryCode: String) = Json.parse(s"""
@@ -241,26 +241,13 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeign))
       }
 
-      "passed the minimum supported taxYear" in {
-
-        val taxYearString = "2025-26"
-        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
-          Right(
-            Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
-              parsedNino,
-              parsedBusinessId,
-              TaxYear.fromMtd(taxYearString),
-              parsedBody))
-      }
-
       "passed a request with no 'from' and 'to' dates" in {
-        val taxYearString = "2025-26"
-        validator(validNino, validBusinessId, taxYearString, emptyDatesBody).validateAndWrapResult() shouldBe
+        validator(validNino, validBusinessId, validTaxYear, emptyDatesBody).validateAndWrapResult() shouldBe
           Right(
             Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
               parsedNino,
               parsedBusinessId,
-              TaxYear.fromMtd(taxYearString),
+              TaxYear.fromMtd(validTaxYear),
               emptyDateParsedBody))
       }
     }

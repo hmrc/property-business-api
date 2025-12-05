@@ -18,7 +18,7 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
 import common.models.errors.*
 import play.api.libs.json.*
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import shared.models.domain.*
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
@@ -30,10 +30,10 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2025-26"
+  private val validTaxYear    = "2026-27"
 
-  private val validFromDate   = "2025-03-29"
-  private val validToDate     = "2026-03-29"
+  private val validFromDate   = "2026-04-06"
+  private val validToDate     = "2026-07-05"
   private val validPropertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
   private def entryWith(propertyId: String) = Json.parse(s"""
@@ -241,26 +241,13 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeign))
       }
 
-      "passed the minimum supported taxYear" in {
-
-        val taxYearString = "2025-26"
-        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
-          Right(
-            Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
-              parsedNino,
-              parsedBusinessId,
-              TaxYear.fromMtd(taxYearString),
-              parsedBody))
-      }
-
       "passed a request with no 'from' and 'to' dates" in {
-        val taxYearString = "2025-26"
-        validator(validNino, validBusinessId, taxYearString, emptyDatesBody).validateAndWrapResult() shouldBe
+        validator(validNino, validBusinessId, validTaxYear, emptyDatesBody).validateAndWrapResult() shouldBe
           Right(
             Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
               parsedNino,
               parsedBusinessId,
-              TaxYear.fromMtd(taxYearString),
+              TaxYear.fromMtd(validTaxYear),
               emptyDateParsedBody))
       }
     }

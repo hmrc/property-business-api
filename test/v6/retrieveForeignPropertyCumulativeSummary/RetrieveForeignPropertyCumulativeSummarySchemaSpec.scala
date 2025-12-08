@@ -32,7 +32,7 @@ class RetrieveForeignPropertyCumulativeSummarySchemaSpec extends UnitSpec with S
         }
       }
 
-      "use Def1 for tax years 2025-26 only" in {
+      "use Def1 for tax year 2025-26 only" in {
         val taxYear = TaxYear.ending(2026)
 
         RetrieveForeignPropertyCumulativeSummarySchema.schemaFor(taxYear.asMtd) shouldBe Valid(RetrieveForeignPropertyCumulativeSummarySchema.Def1)

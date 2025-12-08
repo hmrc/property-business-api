@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ class Def2_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpe
 
   private val validNino       = "AA123456A"
   private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2025-26"
+  private val validTaxYear    = "2026-27"
   private val validPropertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
   private val parsedNino       = Nino(validNino)
@@ -37,11 +37,8 @@ class Def2_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpe
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
   private val parsedPropertyId = PropertyId(validPropertyId)
 
-  private def validator(nino: String = validNino,
-                        businessId: String = validBusinessId,
-                        taxYear: String = validTaxYear,
-                        propertyId: String = validPropertyId) =
-    new Def2_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear, Some(propertyId))
+  private def validator(nino: String = validNino, businessId: String = validBusinessId, propertyId: String = validPropertyId) =
+    new Def2_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, validTaxYear, Some(propertyId))
 
   "validator" should {
     "return the parsed domain object" when {

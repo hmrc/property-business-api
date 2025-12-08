@@ -33,8 +33,8 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpe
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private def validator(nino: String = validNino, businessId: String = validBusinessId, taxYear: String = validTaxYear) =
-    new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear)
+  private def validator(nino: String = validNino, businessId: String = validBusinessId) =
+    new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, validTaxYear)
 
   "validator" should {
     "return the parsed domain object" when {

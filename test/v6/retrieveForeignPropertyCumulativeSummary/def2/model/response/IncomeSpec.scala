@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package v6.retrieveForeignPropertyCumulativeSummary.def2.model.response
 
 import play.api.libs.json.{JsValue, Json}
 import shared.utils.UnitSpec
-import v6.retrieveForeignPropertyCumulativeSummary.def2.model.Def2_RetrieveForeignPropertyCumulativeSummaryFixture
+import v6.retrieveForeignPropertyCumulativeSummary.def2.model.Def2_RetrieveForeignPropertyCumulativeSummaryFixture.*
 
-class IncomeSpec extends UnitSpec with Def2_RetrieveForeignPropertyCumulativeSummaryFixture {
+class IncomeSpec extends UnitSpec {
 
   "Income" when {
     val downstreamJson: JsValue = ((fullDownstreamJson \ "foreignProperty")(0) \ "income").get

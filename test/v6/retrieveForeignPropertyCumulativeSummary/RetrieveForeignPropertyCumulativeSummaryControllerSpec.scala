@@ -16,7 +16,6 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import common.models.domain.PropertyId
 import play.api.Configuration
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
@@ -39,7 +38,6 @@ class RetrieveForeignPropertyCumulativeSummaryControllerSpec
 
   private val businessId = BusinessId("XAIS12345678910")
   private val taxYear    = TaxYear.fromMtd("2022-23")
-  private val propertyId = PropertyId("8e8b8450-dc1b-4360-8109-7067337b42cb")
 
   "RetrieveForeignPropertyCumulativeSummaryController" should {
     "return (OK) 200 status" when {
@@ -91,7 +89,7 @@ class RetrieveForeignPropertyCumulativeSummaryControllerSpec
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
-      controller.handleRequest(validNino, businessId.businessId, taxYear.asMtd, Some(propertyId.propertyId))(fakeGetRequest)
+      controller.handleRequest(validNino, businessId.businessId, taxYear.asMtd, None)(fakeGetRequest)
 
     protected val requestData: RetrieveForeignPropertyCumulativeSummaryRequestData =
       Def1_RetrieveForeignPropertyCumulativeSummaryRequestData(Nino(validNino), businessId, taxYear)

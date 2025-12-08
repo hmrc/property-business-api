@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,44 +14,42 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummaryISpec.def1
+package v6.retrieveForeignPropertyCumulativeSummary.def2
 
-import common.models.errors.RuleTypeOfBusinessIncorrectError
+import common.models.errors.PropertyIdFormatError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
+import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.domain.TaxYear
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
+import v6.retrieveForeignPropertyCumulativeSummary.def2.model.Def2_RetrieveForeignPropertyCumulativeSummaryFixture.*
 
-class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
+class Def2_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBaseSpec{
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1962.enabled" -> false) ++ super.servicesConfig
-    
   private trait Test {
 
     val nino: String       = "AA123456A"
-    def taxYear: String    = "2025-26"
+    def taxYear: String    = "2026-27"
     val businessId: String = "XAIS12345678910"
+    val propertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
     val responseBody: JsValue = fullMtdJson
 
-    def downstreamUri: String = s"/income-tax/${TaxYear.fromMtd(taxYear).asTysDownstream}/business/property/periodic/$nino/$businessId"
-
+    val queryParams = Map("propertyId" -> propertyId)
+    def downstreamUri: String = s"/itsa/income-tax/v1/26-27/business/periodic/foreign-property/$nino/$businessId"
     def stubDownstreamSuccess(): Unit =
-      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, status = Status.OK, body = fullDownstreamJson)
+      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, queryParams, status = Status.OK, body = fullDownstreamJson)
 
     def request(): WSRequest = {
       AuditStub.audit()
       AuthStub.authorised()
       MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(s"/foreign/$nino/$businessId/cumulative/$taxYear")
+      buildRequest(s"/foreign/$nino/$businessId/cumulative/$taxYear").addQueryStringParameters("propertyId" -> propertyId)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
@@ -63,8 +61,15 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationB
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "error message"
+         |         }
+         |      ]
+         |   }
          |}
        """.stripMargin
 
@@ -83,32 +88,12 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationB
       }
     }
 
-    "return a 400 status code with RULE_TYPE_OF_BUSINESS_INCORRECT error" when {
-      "downstream successfully returns a uk property result" in new Test {
-        override def setupStubs(): Unit =
-          DownstreamStub.onSuccess(
-            DownstreamStub.GET,
-            downstreamUri,
-            status = Status.OK,
-            body = Json.parse("""{
-              |  "submittedOn": "2025-06-17T10:53:38.000Z",
-              |  "fromDate": "2024-01-29",
-              |  "toDate": "2025-03-29",
-              |  "ukProperty": { }
-              |}""".stripMargin)
-          )
-
-        val response: WSResponse = await(request().get())
-        response.json shouldBe Json.toJson(RuleTypeOfBusinessIncorrectError)
-        response.status shouldBe Status.BAD_REQUEST
-      }
-    }
-
     "return validation error according to spec" when {
       "validation error" when {
         def validationErrorTest(requestNino: String,
                                 requestBusinessId: String,
                                 requestTaxYear: String,
+                                requestPropertyId: String,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
           s"validation fails with ${expectedBody.code} error" in new Test {
@@ -116,6 +101,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationB
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
             override val taxYear: String    = requestTaxYear
+            override val propertyId: String = requestPropertyId
 
             val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
@@ -124,13 +110,14 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationB
         }
 
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2025-26", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-27", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2024-25", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "BAD_BUSINESS_ID", "2025-26", Status.BAD_REQUEST, BusinessIdFormatError)
+          ("AA1123A", "XAIS12345678910", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS12345678910", "BAD_TAX_YEAR", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XAIS12345678910", "2026-27", "BAD_PROPERTY_ID", BAD_REQUEST, PropertyIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2025-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2024-25", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "BAD_BUSINESS_ID", "2026-27", "8e8b8450-dc1b-4360-8109-7067337b42cb", Status.BAD_REQUEST, BusinessIdFormatError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
     }
 
@@ -140,7 +127,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationB
           s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): Unit =
-              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, queryParams, downstreamStatus, errorBody(downstreamCode))
 
             val response: WSResponse = await(request().get())
             response.status shouldBe expectedStatus
@@ -151,16 +138,17 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationB
         val input = List(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "UNMATCHED_STUB_ERROR", Status.BAD_REQUEST, RuleIncorrectGovTestScenarioError),
           (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           (Status.NOT_FOUND, "NOT_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
-          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
+          (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.BAD_REQUEST, "INVALID_PROPERTY_ID", Status.BAD_REQUEST, PropertyIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError)
         )
 
-        input.foreach(args => (serviceErrorTest).tupled(args))
+        input.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

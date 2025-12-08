@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummaryISpec.def1
+package v6.retrieveForeignPropertyCumulativeSummary.def1
 
 import common.models.errors.RuleTypeOfBusinessIncorrectError
 import play.api.http.HeaderNames.ACCEPT
@@ -22,13 +22,17 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.domain.TaxYear
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
-class Def1_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
+class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1962.enabled" -> false) ++ super.servicesConfig
+    
   private trait Test {
 
     val nino: String       = "AA123456A"
@@ -37,7 +41,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
 
     val responseBody: JsValue = fullMtdJson
 
-    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/business/periodic/property/$nino/$businessId"
+    def downstreamUri: String = s"/income-tax/${TaxYear.fromMtd(taxYear).asTysDownstream}/business/property/periodic/$nino/$businessId"
 
     def stubDownstreamSuccess(): Unit =
       DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, status = Status.OK, body = fullDownstreamJson)
@@ -59,15 +63,8 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
     def errorBody(code: String): String =
       s"""
          |{
-         |   "origin": "HoD",
-         |   "response": {
-         |      "failures": [
-         |         {
-         |            "type": "$code",
-         |            "reason": "error message"
-         |         }
-         |      ]
-         |   }
+         |  "code": "$code",
+         |  "reason": "message"
          |}
        """.stripMargin
 
@@ -133,7 +130,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
           ("AA123456A", "XAIS12345678910", "2024-25", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "BAD_BUSINESS_ID", "2025-26", Status.BAD_REQUEST, BusinessIdFormatError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
     }
 
@@ -163,7 +160,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryHipISpec extends IntegrationB
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        input.foreach(args => (serviceErrorTest).tupled(args))
+        input.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

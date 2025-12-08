@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.def2.model.response
 
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{Json, OWrites, Reads, __}
+import play.api.libs.json.{Json, OWrites, OFormat, Reads}
 import shared.models.domain.Timestamp
 import v6.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
@@ -32,14 +31,7 @@ case class Def2_RetrieveForeignPropertyCumulativeSummaryResponse(
 
 object Def2_RetrieveForeignPropertyCumulativeSummaryResponse {
 
-  implicit val writes: OWrites[Def2_RetrieveForeignPropertyCumulativeSummaryResponse] =
-    Json.writes[Def2_RetrieveForeignPropertyCumulativeSummaryResponse]
-
-  implicit val reads: Reads[Def2_RetrieveForeignPropertyCumulativeSummaryResponse] = (
-    (__ \ "submittedOn").read[Timestamp] and
-      (__ \ "fromDate").read[String] and
-      (__ \ "toDate").read[String] and
-      (__ \ "foreignProperty").read[Seq[ForeignPropertyEntry]]
-  )(Def2_RetrieveForeignPropertyCumulativeSummaryResponse.apply)
+  implicit val format: OFormat[Def2_RetrieveForeignPropertyCumulativeSummaryResponse] =
+    Json.format[Def2_RetrieveForeignPropertyCumulativeSummaryResponse]
 
 }

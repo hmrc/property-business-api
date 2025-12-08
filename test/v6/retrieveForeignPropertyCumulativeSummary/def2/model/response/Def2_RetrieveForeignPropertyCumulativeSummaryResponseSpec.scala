@@ -18,9 +18,9 @@ package v6.retrieveForeignPropertyCumulativeSummary.def2.model.response
 
 import play.api.libs.json.Json
 import shared.utils.UnitSpec
-import v6.retrieveForeignPropertyCumulativeSummary.def2.model.Def2_RetrieveForeignPropertyCumulativeSummaryFixture
+import v6.retrieveForeignPropertyCumulativeSummary.def2.model.Def2_RetrieveForeignPropertyCumulativeSummaryFixture.*
 
-class Def2_RetrieveForeignPropertyCumulativeSummaryResponseSpec extends UnitSpec with Def2_RetrieveForeignPropertyCumulativeSummaryFixture {
+class Def2_RetrieveForeignPropertyCumulativeSummaryResponseSpec extends UnitSpec {
 
   "RetrieveForeignPropertyCumulativeSummaryResponse" when {
     "read from downstream JSON" should {

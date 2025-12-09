@@ -82,9 +82,8 @@ class RetrieveForeignPropertyCumulativeSummaryConnectorSpec extends ConnectorSpe
       }
     }
 
-    "the request is made and FOREIGN property data is returned for HIP enabled for TYS 26-27" should {
+    "the request is made and FOREIGN property data is returned for TYS 26-27" should {
       "return ForeignResult" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1962.enabled" -> true))
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("passIntentHeader.enabled" -> false)
 
         override val requestData: RetrieveForeignPropertyCumulativeSummaryRequestData =

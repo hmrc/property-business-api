@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummary.model.request
+package v6.retrieveForeignPropertyCumulativeSummary.def2.model.response
 
-import common.models.domain.PropertyId
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummarySchema
+import play.api.libs.json.{Json, OFormat}
 
-trait RetrieveForeignPropertyCumulativeSummaryRequestData {
-  val nino: Nino
-  val businessId: BusinessId
-  val taxYear: TaxYear
-  val propertyId: Option[PropertyId]
-  val schema: RetrieveForeignPropertyCumulativeSummarySchema
+case class ForeignPropertyEntry(propertyId: String, income: Option[Income], expenses: Option[Expenses])
+
+object ForeignPropertyEntry {
+  implicit val format: OFormat[ForeignPropertyEntry] = Json.format[ForeignPropertyEntry]
 }

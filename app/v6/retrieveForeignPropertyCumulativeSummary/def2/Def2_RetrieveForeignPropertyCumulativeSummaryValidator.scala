@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,34 +14,40 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummary.def1
+package v6.retrieveForeignPropertyCumulativeSummary.def2
 
 import cats.data.Validated
+import cats.implicits.catsSyntaxTuple3Semigroupal
+import common.controllers.validators.resolvers.ResolveUuid
+import common.models.domain.PropertyId
+import common.models.errors.PropertyIdFormatError
 import shared.controllers.validators.Validator
-import cats.implicits.catsSyntaxTuple2Semigroupal
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
+import v6.retrieveForeignPropertyCumulativeSummary.def2.model.request.Def2_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
 import javax.inject.Inject
 
-class Def1_RetrieveForeignPropertyCumulativeSummaryValidator @Inject() (
+class Def2_RetrieveForeignPropertyCumulativeSummaryValidator @Inject() (
     nino: String,
     businessId: String,
-    taxYear: String
+    taxYear: String,
+    propertyId: Option[String]
 ) extends Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] {
 
   override def validate: Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummaryRequestData] =
     (
       ResolveNino(nino),
-      ResolveBusinessId(businessId)
-    ).mapN { (validNino, validBusinessId) =>
-      Def1_RetrieveForeignPropertyCumulativeSummaryRequestData.apply(
+      ResolveBusinessId(businessId),
+      ResolveUuid(propertyId, PropertyIdFormatError)(PropertyId.apply)
+    ).mapN { (validNino, validBusinessId, validPropertyId) =>
+      Def2_RetrieveForeignPropertyCumulativeSummaryRequestData.apply(
         nino = validNino,
         businessId = validBusinessId,
-        taxYear = TaxYear.fromMtd(taxYear)
+        taxYear = TaxYear.fromMtd(taxYear),
+        propertyId = validPropertyId
       )
     }
 

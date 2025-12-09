@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyCumulativeSummaryISpec.def1
+package v6.retrieveForeignPropertyCumulativeSummary.def1
 
 import common.models.errors.RuleTypeOfBusinessIncorrectError
 import play.api.http.HeaderNames.ACCEPT
@@ -28,8 +28,11 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
-class Def1_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
+class Def1_RetrieveForeignPropertyCumulativeSummaryIfsISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1962.enabled" -> false) ++ super.servicesConfig
+    
   private trait Test {
 
     val nino: String       = "AA123456A"
@@ -127,7 +130,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBase
           ("AA123456A", "XAIS12345678910", "2024-25", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "BAD_BUSINESS_ID", "2025-26", Status.BAD_REQUEST, BusinessIdFormatError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
     }
 
@@ -157,7 +160,7 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryISpec extends IntegrationBase
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        input.foreach(args => (serviceErrorTest).tupled(args))
+        input.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

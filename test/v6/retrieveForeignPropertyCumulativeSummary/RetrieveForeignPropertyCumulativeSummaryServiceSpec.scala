@@ -16,9 +16,9 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import common.models.errors.RuleTypeOfBusinessIncorrectError
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, PropertyIdFormatError}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult}
@@ -72,10 +72,12 @@ class RetrieveForeignPropertyCumulativeSummaryServiceSpec extends ServiceSpec wi
           "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
           "NOT_FOUND"                 -> NotFoundError,
           "SERVER_ERROR"              -> InternalError,
-          "SERVICE_UNAVAILABLE"       -> InternalError
+          "SERVICE_UNAVAILABLE"       -> InternalError,
+          "INVALID_PROPERTY_ID"       -> PropertyIdFormatError,
+          "INVALID_INCOME_SOURCE_ID"  -> BusinessIdFormatError
         )
 
-        errorMap.foreach(args => (serviceError).tupled(args))
+        errorMap.foreach(args => serviceError.tupled(args))
       }
     }
 

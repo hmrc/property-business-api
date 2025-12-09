@@ -20,7 +20,8 @@ import cats.data.Validated
 import cats.implicits.*
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
+import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
   Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
@@ -41,8 +42,14 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionValidator(nino: String, bus
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN { (validNino, validBusinessId, validJson) =>
+      Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+        nino = validNino,
+        businessId = validBusinessId,
+        taxYear = TaxYear.fromMtd(taxYear),
+        body = validJson
+      )
+    } andThen rulesValidator.validateBusinessRules
 
 }

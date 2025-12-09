@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
-import shared.controllers.validators.resolvers.ResolveTaxYear
+import cats.data.Validated.Valid
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import shared.models.errors.MtdError
 
 import scala.math.Ordered.orderingToOrdered
 
@@ -28,13 +28,12 @@ sealed trait CreateAmendForeignPropertyCumulativePeriodSummarySchema
 
 object CreateAmendForeignPropertyCumulativePeriodSummarySchema {
   case object Def1 extends CreateAmendForeignPropertyCumulativePeriodSummarySchema
+  case object Def2 extends CreateAmendForeignPropertyCumulativePeriodSummarySchema
 
   def schemaFor(taxYear: String): Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummarySchema] =
-    ResolveTaxYear(taxYear) andThen schemaFor
+    ResolveTaxYearMinimum(TaxYear.fromMtd("2025-26"))(taxYear) andThen schemaFor
 
-  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummarySchema] = {
-    if (taxYear < TaxYear.starting(2025)) Invalid(Seq(RuleTaxYearNotSupportedError))
-    else Valid(Def1)
-  }
+  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummarySchema] =
+    if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def2) else Valid(Def1)
 
 }

@@ -10,14 +10,14 @@ PUT       /foreign/:nino/:businessId/cumulative/:taxYear              v6.createA
 PUT        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v6.amendForeignPropertyPeriodSummary.AmendForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, submissionId: String)
 GET        /foreign/:nino/:businessId/period/:taxYear/:submissionId    v6.retrieveForeignPropertyPeriodSummary.RetrieveForeignPropertyPeriodSummaryController.handleRequest(nino: String, businessId: String, taxYear: String,submissionId: String)
 
-GET        /foreign/:nino/:businessId/cumulative/:taxYear              v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryController.handleRequest(nino: String, businessId: String, taxYear: String)
+GET        /foreign/:nino/:businessId/cumulative/:taxYear              v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummaryController.handleRequest(nino: String, businessId: String, taxYear: String, propertyId: Option[String])
 
 GET        /foreign/:nino/:businessId/details/:taxYear                 v6.retrieveForeignPropertyDetails.RetrieveForeignPropertyDetailsController.handleRequest(nino: String, businessId: String, taxYear: String, propertyId: Option[String])
 
 GET        /:nino/:businessId/period/:taxYear                          v6.propertyPeriodSummary.list.ListPropertyPeriodSummariesController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /foreign/:nino/:businessId/annual/:taxYear                  v6.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
-GET        /foreign/:nino/:businessId/annual/:taxYear                  v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
+GET        /foreign/:nino/:businessId/annual/:taxYear                  v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String, propertyId: Option[String])
 DELETE     /:nino/:businessId/annual/:taxYear                          v6.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionController.handleRequest(nino: String, businessId: String, taxYear: String)
 
 PUT        /foreign/:nino/:propertyId/details/:taxYear                v6.updateForeignPropertyDetails.UpdateForeignPropertyDetailsController.handleRequest(nino: String, propertyId: String, taxYear: String)

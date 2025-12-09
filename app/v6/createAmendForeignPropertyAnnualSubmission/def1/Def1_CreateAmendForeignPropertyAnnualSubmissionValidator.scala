@@ -18,7 +18,6 @@ package v6.createAmendForeignPropertyAnnualSubmission.def1
 
 import cats.data.Validated
 import cats.implicits.*
-import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.*
@@ -33,21 +32,24 @@ import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendFo
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(implicit
-    config: PropertyBusinessConfig)
+class Def1_CreateAmendForeignPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendForeignPropertyAnnualSubmissionRequestData] {
-
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody]
   private val rulesValidator = new Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator()
 
-  def validate: Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+  def validate: Validated[Seq[MtdError], Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN { (validNino, validBusinessId, validJson) =>
+      Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData(
+        nino = validNino,
+        businessId = validBusinessId,
+        taxYear = TaxYear.fromMtd(taxYear),
+        body = validJson
+      )
+    } andThen rulesValidator.validateBusinessRules
 
 }

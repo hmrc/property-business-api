@@ -25,7 +25,7 @@ class Def2_Create_Amend_ForeignAllowancesSpec extends UnitSpec with Def2_Fixture
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignAllowancesMtdJson.as[Def2_Create_Amend_ForeignAllowances] shouldBe foreignAllowances
+        def2_foreignAllowancesMtdJson.as[Def2_Create_Amend_ForeignAllowances] shouldBe def2_foreignAllowances
       }
     }
   }
@@ -33,7 +33,7 @@ class Def2_Create_Amend_ForeignAllowancesSpec extends UnitSpec with Def2_Fixture
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignAllowances) shouldBe foreignAllowancesDownstreamJson
+        Json.toJson(def2_foreignAllowances) shouldBe def2_foreignAllowancesDownstreamJson
       }
     }
   }

@@ -19,6 +19,7 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary.model.request
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil.writesFrom
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody
 
 trait CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody
 
@@ -27,6 +28,8 @@ object CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody {
   implicit val writes: OWrites[CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody] = writesFrom {
     case def1: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =>
       implicitly[OWrites[Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody]].writes(def1)
+    case def2: Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =>
+      implicitly[OWrites[Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody]].writes(def2)
   }
 
 }

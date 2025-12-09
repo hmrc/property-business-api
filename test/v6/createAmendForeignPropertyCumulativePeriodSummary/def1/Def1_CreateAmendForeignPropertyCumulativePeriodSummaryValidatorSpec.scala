@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.utils.UnitSpec
-import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request._
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
 class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extends UnitSpec with JsonErrorValidators {
@@ -32,8 +32,8 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2025-26"
 
-  private val validFromDate    = "2025-03-29"
-  private val validToDate      = "2026-03-29"
+  private val validFromDate    = "2025-04-06"
+  private val validToDate      = "2025-07-05"
   private val validCountryCode = "AFG"
 
   private def entryWith(countryCode: String) = Json.parse(s"""
@@ -241,26 +241,13 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimalForeign))
       }
 
-      "passed the minimum supported taxYear" in {
-
-        val taxYearString = "2025-26"
-        validator(validNino, validBusinessId, taxYearString, validBody).validateAndWrapResult() shouldBe
-          Right(
-            Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
-              parsedNino,
-              parsedBusinessId,
-              TaxYear.fromMtd(taxYearString),
-              parsedBody))
-      }
-
       "passed a request with no 'from' and 'to' dates" in {
-        val taxYearString = "2025-26"
-        validator(validNino, validBusinessId, taxYearString, emptyDatesBody).validateAndWrapResult() shouldBe
+        validator(validNino, validBusinessId, validTaxYear, emptyDatesBody).validateAndWrapResult() shouldBe
           Right(
             Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
               parsedNino,
               parsedBusinessId,
-              TaxYear.fromMtd(taxYearString),
+              TaxYear.fromMtd(validTaxYear),
               emptyDateParsedBody))
       }
     }
@@ -280,22 +267,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           validator(validNino, "invalid", validTaxYear, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
-      }
-
-      "passed an invalidly formatted tax year" in {
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "invalid", validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-
-      "passed a tax year with an invalid range" in {
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator(validNino, validBusinessId, "2025-27", validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
       }
 
       "passed a body with an empty foreignProperty entry" in {
@@ -568,19 +539,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
     }
 
     "return multiple errors" when {
-      "the path parameters have multiple issues" in {
-
-        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-          validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            BadRequestError,
-            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
-          )
-        )
-      }
 
       "passed a body with an invalidly formatted toDate and a missing fromDate" in {
         val requestWithInvalidToDateAndMissingFromDate = validBody.update("/toDate", JsString("2024")).removeProperty("/fromDate")

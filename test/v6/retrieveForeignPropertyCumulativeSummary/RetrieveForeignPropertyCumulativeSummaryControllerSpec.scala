@@ -20,11 +20,11 @@ import play.api.Configuration
 import play.api.mvc.Result
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
-import v6.retrieveForeignPropertyCumulativeSummary.model.request._
+import v6.retrieveForeignPropertyCumulativeSummary.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -88,7 +88,8 @@ class RetrieveForeignPropertyCumulativeSummaryControllerSpec
 
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
-    protected def callController(): Future[Result] = controller.handleRequest(validNino, businessId.businessId, taxYear.asMtd)(fakeGetRequest)
+    protected def callController(): Future[Result] =
+      controller.handleRequest(validNino, businessId.businessId, taxYear.asMtd, None)(fakeGetRequest)
 
     protected val requestData: RetrieveForeignPropertyCumulativeSummaryRequestData =
       Def1_RetrieveForeignPropertyCumulativeSummaryRequestData(Nino(validNino), businessId, taxYear)

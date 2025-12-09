@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@ import cats.data.Validated
 import cats.implicits.*
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYear}
+import shared.controllers.validators.resolvers.*
+import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
@@ -34,12 +35,16 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: Stri
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody]()
 
-  def validate: Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+  override def validate: Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData.apply) andThen validateBusinessRules
+    ).mapN((validNino, validBusinessId, validBody) =>
+      Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
+        validNino,
+        validBusinessId,
+        TaxYear.fromMtd(taxYear),
+        validBody)) andThen validateBusinessRules
 
 }

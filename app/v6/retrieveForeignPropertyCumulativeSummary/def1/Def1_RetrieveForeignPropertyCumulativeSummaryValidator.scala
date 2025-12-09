@@ -17,9 +17,10 @@
 package v6.retrieveForeignPropertyCumulativeSummary.def1
 
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple3Semigroupal
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import cats.implicits.catsSyntaxTuple2Semigroupal
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
@@ -32,11 +33,16 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryValidator @Inject() (
     taxYear: String
 ) extends Validator[RetrieveForeignPropertyCumulativeSummaryRequestData] {
 
-  def validate: Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummaryRequestData] =
+  override def validate: Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummaryRequestData] =
     (
       ResolveNino(nino),
-      ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveForeignPropertyCumulativeSummaryRequestData.apply)
+      ResolveBusinessId(businessId)
+    ).mapN { (validNino, validBusinessId) =>
+      Def1_RetrieveForeignPropertyCumulativeSummaryRequestData.apply(
+        nino = validNino,
+        businessId = validBusinessId,
+        taxYear = TaxYear.fromMtd(taxYear)
+      )
+    }
 
 }

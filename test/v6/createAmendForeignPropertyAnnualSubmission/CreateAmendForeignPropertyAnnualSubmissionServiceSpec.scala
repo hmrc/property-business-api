@@ -16,15 +16,10 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import common.models.errors.{
-  RuleDuplicateCountryCodeError,
-  RuleOutsideAmendmentWindowError,
-  RulePropertyIncomeAllowanceError,
-  RuleTypeOfBusinessIncorrectError
-}
+import common.models.errors.*
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,7 +27,7 @@ import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
 }
-import v6.createAmendForeignPropertyAnnualSubmission.model.request._
+import v6.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -43,10 +38,10 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
   private val businessId       = BusinessId("XAIS12345678910")
   private val taxYear: TaxYear = TaxYear.fromMtd("2020-21")
 
-  implicit private val correlationId: String = "X-123"
+  private implicit val correlationId: String = "X-123"
 
-  "service" should {
-    "service call successful" when {
+  "CreateAmendForeignPropertyAnnualSubmissionService" when {
+    "service call successful" should {
       "return mapped result" in new Test {
         MockAmendForeignPropertyAnnualSubmissionConnector
           .amendForeignProperty(request)
@@ -55,43 +50,46 @@ class CreateAmendForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         await(service.createAmendForeignPropertyAnnualSubmission(request)) shouldBe Right(ResponseWrapper(correlationId, ()))
       }
     }
-  }
 
-  "unsuccessful" should {
-    "map errors according to spec" when {
-      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
-        s"a $downstreamErrorCode error is returned from the service" in new Test {
+    "service call unsuccessful" should {
+      "map errors according to spec" when {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
-          MockAmendForeignPropertyAnnualSubmissionConnector
-            .amendForeignProperty(request)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
+            MockAmendForeignPropertyAnnualSubmissionConnector
+              .amendForeignProperty(request)
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          await(service.createAmendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
-        }
+            await(service.createAmendForeignPropertyAnnualSubmission(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+          }
 
-      val errors = List(
-        "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
-        "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
-        "INVALID_TAX_YEAR"            -> TaxYearFormatError,
-        "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
-        "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
-        "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
-        "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
-        "MISSING_ALLOWANCES"          -> InternalError,
-        "INVALID_PAYLOAD"             -> InternalError,
-        "INVALID_CORRELATIONID"       -> InternalError,
-        "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
-        "SERVER_ERROR"                -> InternalError,
-        "SERVICE_UNAVAILABLE"         -> InternalError,
-        "OUTSIDE_AMENDMENT_WINDOW"    -> RuleOutsideAmendmentWindowError
-      )
+        val errors = List(
+          "INVALID_TAXABLE_ENTITY_ID"   -> NinoFormatError,
+          "INVALID_INCOMESOURCEID"      -> BusinessIdFormatError,
+          "INVALID_TAX_YEAR"            -> TaxYearFormatError,
+          "INCOMPATIBLE_PAYLOAD"        -> RuleTypeOfBusinessIncorrectError,
+          "TAX_YEAR_NOT_SUPPORTED"      -> RuleTaxYearNotSupportedError,
+          "BUSINESS_VALIDATION_FAILURE" -> RulePropertyIncomeAllowanceError,
+          "INCOME_SOURCE_NOT_FOUND"     -> NotFoundError,
+          "INVALID_PAYLOAD"             -> InternalError,
+          "INVALID_CORRELATIONID"       -> InternalError,
+          "DUPLICATE_COUNTRY_CODE"      -> RuleDuplicateCountryCodeError,
+          "SERVER_ERROR"                -> InternalError,
+          "SERVICE_UNAVAILABLE"         -> InternalError,
+          "OUTSIDE_AMENDMENT_WINDOW"    -> RuleOutsideAmendmentWindowError
+        )
 
-      val extraTysErrors = List(
-        "MISSING_EXPENSES" -> InternalError,
-        "FIELD_CONFLICT"   -> RulePropertyIncomeAllowanceError
-      )
+        val extraTysErrors = List(
+          "MISSING_EXPENSES"         -> InternalError,
+          "FIELD_CONFLICT"           -> RulePropertyIncomeAllowanceError,
+          "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
+          "PROPERTY_ID_DO_NOT_MATCH" -> RulePropertyIdMismatchError,
+          "INVALID_CORRELATION_ID"   -> InternalError,
+          "MISSING_ALLOWANCES"       -> InternalError
+        )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+      }
     }
   }
 

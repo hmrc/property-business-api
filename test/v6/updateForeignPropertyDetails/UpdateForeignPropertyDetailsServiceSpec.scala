@@ -72,7 +72,7 @@ class UpdateForeignPropertyDetailsServiceSpec extends ServiceSpec with MockUpdat
         "1216" -> InternalError,
         "5010" -> NotFoundError,
         "1245" -> RuleDuplicatePropertyNameError,
-        "1246" -> RulePropertyOutsidePeriodError,
+        "1246" -> RuleTaxYearBeforeBusinessStartError,
         "1247" -> RuleEndDateAfterTaxYearEndError,
         "1248" -> RulePropertyBusinessCeasedError,
         "1249" -> RuleMissingEndDetailsError,

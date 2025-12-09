@@ -16,6 +16,7 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.model.request
 
+import common.models.domain.PropertyId
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummarySchema
 
@@ -23,5 +24,6 @@ trait RetrieveForeignPropertyCumulativeSummaryRequestData {
   val nino: Nino
   val businessId: BusinessId
   val taxYear: TaxYear
+  val propertyId: Option[PropertyId]
   val schema: RetrieveForeignPropertyCumulativeSummarySchema
 }

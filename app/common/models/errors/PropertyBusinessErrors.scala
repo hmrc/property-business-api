@@ -30,8 +30,11 @@ object EndReasonFormatError extends MtdError("FORMAT_END_REASON", "The provided 
 object RuleDuplicatePropertyNameError
     extends MtdError("RULE_DUPLICATE_PROPERTY_NAME", "Foreign property name already exists for the same country", BAD_REQUEST)
 
-object RulePropertyOutsidePeriodError
-    extends MtdError("RULE_PROPERTY_OUTSIDE_PERIOD", "Foreign property is not within the income source period", BAD_REQUEST)
+object RuleTaxYearBeforeBusinessStartError
+    extends MtdError(
+      "RULE_TAX_YEAR_BEFORE_BUSINESS_START",
+      "Foreign property cannot be reported for a tax year before the first tax year of the business",
+      BAD_REQUEST)
 
 object RuleEndDateAfterTaxYearEndError
     extends MtdError("RULE_END_DATE_AFTER_TAX_YEAR_END", "The end date is after the end of the tax year", BAD_REQUEST)
@@ -145,5 +148,12 @@ object RuleEarlyDataSubmissionNotAcceptedError
     extends MtdError(
       "RULE_EARLY_DATA_SUBMISSION_NOT_ACCEPTED",
       "Cannot submit data more than 10 days before end of period",
+      BAD_REQUEST
+    )
+
+object RulePropertyIdMismatchError
+    extends MtdError(
+      "RULE_PROPERTY_ID_MISMATCH",
+      "The supplied property ID is not valid for this income source",
       BAD_REQUEST
     )

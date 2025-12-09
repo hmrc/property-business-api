@@ -16,11 +16,13 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.def1.model.request
 
+import common.models.domain.PropertyId
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import v6.retrieveForeignPropertyCumulativeSummary.RetrieveForeignPropertyCumulativeSummarySchema
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 
 case class Def1_RetrieveForeignPropertyCumulativeSummaryRequestData(nino: Nino, businessId: BusinessId, taxYear: TaxYear)
     extends RetrieveForeignPropertyCumulativeSummaryRequestData {
+  val propertyId: Option[PropertyId]                                  = None
   override val schema: RetrieveForeignPropertyCumulativeSummarySchema = RetrieveForeignPropertyCumulativeSummarySchema.Def1
 }

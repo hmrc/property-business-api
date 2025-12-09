@@ -20,6 +20,7 @@ import play.api.libs.json.*
 import shared.utils.JsonWritesUtil.writesFrom
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
 trait CreateAmendForeignPropertyAnnualSubmissionRequestBody
 
@@ -30,6 +31,8 @@ object CreateAmendForeignPropertyAnnualSubmissionRequestBody {
       implicitly[OWrites[Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody]].writes(def1)
     case def2: Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody =>
       implicitly[OWrites[Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody]].writes(def2)
+    case def3: Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody =>
+      implicitly[OWrites[Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody]].writes(def3)
   }
 
 }

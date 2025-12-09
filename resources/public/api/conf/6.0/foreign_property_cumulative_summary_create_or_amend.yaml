@@ -8,23 +8,25 @@ description: |
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Header Value (Gov_test-Scenario)            | Scenario                                                                                            |
-  |---------------------------------------------|-----------------------------------------------------------------------------------------------------|
-  | N/A - DEFAULT                               | Simulates success response.                                                                         |
-  | NOT_FOUND                                   | Simulates the scenario where no data is found.                                                      |
-  | TAX_YEAR_NOT_SUPPORTED                      | Simulates the scenario where the tax year is not supported.                                         |
-  | STATEFUL                                    | Performs a stateful create or update. The stateful submission process is determined by a user’s ITSA status and income source, which can be simulated using specific business IDs:<ul><li>Business IDs XFIS13579246801 and XFIS13579246802 represent users with an annual ITSA status or a latent income source.</li><li>All other business IDs represent users who are MTD Mandated or MTD Voluntary with a non-latent income source.</li></ul><strong>Note: This only supports standard cumulative quarterly updates where no commencementDate is present. Most business validation rule errors can be triggered, however due to testing limitations some edge cases are not supported.</strong>| 
-  | START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE | Simulates the scenario where the start date does not align to the commencement date.                |
-  | END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE    | Simulates the scenario where the end date does not align to the reporting type.                     |
-  | MISSING_SUBMISSION_DATES                    | Simulates the scenario where the submission start/end date not provided.	                          |
-  | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the start/end date not accepted for annual/latent submission.          |
-  | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of period. |
-  | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window.     |
-  | DUPLICATE_COUNTRY_CODE                      | Simulates the scenario where the same country code has been submitted more twice.	                  |
-  | ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE | Simulates the scenario for advance submission where the end date must be the end of the period.     |
-  | SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS   | Simulates the scenario where the submission end date cannot be earlier than existing submission.    |
-  | START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE  | Simulates the scenario where the start date does not align with the reporting type.                 |
-
+  |Tax Year            | Header Value (Gov_test-Scenario)            | Scenario                                                                                                 |
+  |--------------------|---------------------------------------------|----------------------------------------------------------------------------------------------------------|
+  | 2025-26 onwards    | N/A - DEFAULT                               | Simulates success response.                                                                              |
+  | 2025-26 onwards    | NOT_FOUND                                   | Simulates the scenario where no data is found.                                                           |
+  | 2025-26 onwards    | TAX_YEAR_NOT_SUPPORTED                      | Simulates the scenario where the tax year is not supported.                                              |
+  | 2025-26 onwards    | STATEFUL                                    | Performs a stateful create or update. The stateful submission process is determined by a user’s ITSA status and income source, which can be simulated using specific business IDs:<ul><li>Business IDs XFIS13579246801 and XFIS13579246802 represent users with an annual ITSA status or a latent income source.</li><li>All other business IDs represent users who are MTD Mandated or MTD Voluntary with a non-latent income source.</li></ul><strong>Note: This only supports standard cumulative quarterly updates where no commencementDate is present. Most business validation rule errors can be triggered, however due to testing limitations some edge cases are not supported.</strong>| 
+  | 2025-26 onwards    | START_DATE_NOT_ALIGNED_TO_COMMENCEMENT_DATE | Simulates the scenario where the start date does not align to the commencement date.                     |
+  | 2025-26 onwards    | END_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE    | Simulates the scenario where the end date does not align to the reporting type.                          |
+  | 2025-26 onwards    | MISSING_SUBMISSION_DATES                    | Simulates the scenario where the submission start/end date not provided.	                                |
+  | 2025-26 onwards    | START_AND_END_DATE_NOT_ALLOWED              | Simulates the scenario where the start/end date not accepted for annual/latent submission.               |
+  | 2025-26 onwards    | EARLY_DATA_SUBMISSION_NOT_ACCEPTED          | Simulates the scenario where individuals cannot submit data more than 10 days before end of period.      |
+  | 2025-26 onwards    | OUTSIDE_AMENDMENT_WINDOW                    | Simulates the scenario where request cannot be completed as it is outside the amendment window.          |
+  | 2025-26 onwards    | ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE | Simulates the scenario for advance submission where the end date must be the end of the period.          |
+  | 2025-26 onwards    | SUBMISSION_END_DATE_CANNOT_MOVE_BACKWARDS   | Simulates the scenario where the submission end date cannot be earlier than existing submission.         |
+  | 2025-26 onwards    | START_DATE_NOT_ALIGNED_WITH_REPORTING_TYPE  | Simulates the scenario where the start date does not align with the reporting type.                      |
+  | 2025-26 only       | DUPLICATE_COUNTRY_CODE                      | Simulates the scenario where the same country code has been submitted more twice.	                    |
+  {{~#if (enabled 'foreign-property-r19-property-id')}}
+  |2026-27 onwards | PROPERTY_ID_MISMATCH                            | Simulates the scenario where the supplied property ID is not associated with the income source on record.|
+  {{~/if}}
 tags:
   - Income and Expenses Period Summaries
 
@@ -44,12 +46,26 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/foreign_property_cumulative_summary_create_and_amend/def1/request.json'
+        # {{#if (enabled 'foreign-property-r19-property-id')}}
+        oneOf:
+          - $ref: './schemas/foreign_property_cumulative_summary_create_and_amend/def1/request.json'
+          - $ref: './schemas/foreign_property_cumulative_summary_create_and_amend/def2/request.json'
+        # {{else}}
+            $ref: './schemas/foreign_property_cumulative_summary_create_and_amend/def1/request.json'
+        # {{/if}}
       examples:
-        Full expenses request for TY 2025-26 and after:
+        # {{#if (enabled 'foreign-property-r19-property-id')}}
+        Full expenses request for TY 2026-27 and onwards:
+          value:
+            $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def2/request.json'
+        Consolidated expenses request for TY 2026-27 and onwards:
+          value:
+            $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def2/consolidated_request.json'
+        # {{/if}}
+        Full expenses request for TY 2025-26:
           value:
             $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def1/request.json'
-        Consolidated expenses request for TY 2025-26 and after:
+        Consolidated expenses request for TY 2025-26:
           value:
             $ref: './examples/foreign_property_cumulative_summary_create_and_amend/def1/consolidated_request.json'
 
@@ -88,6 +104,10 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatTaxYear'
           FORMAT_BUSINESS_ID:
             $ref: './common/errors.yaml#/components/examples/formatBusinessId'
+        # {{#if (enabled 'foreign-property-r19-property-id')}}
+          FORMAT_PROPERTY_ID:
+            $ref: './common/errors.yaml#/components/examples/formatPropertyId'
+        # {{/if}}
           RULE_TAX_YEAR_RANGE_INVALID:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
           RULE_TAX_YEAR_NOT_SUPPORTED:
@@ -110,6 +130,10 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
           RULE_DUPLICATE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCodePeriodics'
+          # {{#if (enabled 'foreign-property-r19-property-id')}}
+          RULE_PROPERTY_ID_MISMATCH:
+            $ref: './common/errors.yaml#/components/examples/rulePropertyIdMismatch'
+          # {{/if}}
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
           RULE_ADVANCE_SUBMISSION_REQUIRES_PERIOD_END_DATE:

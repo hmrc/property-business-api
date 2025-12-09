@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,14 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
+import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
+import v6.createAmendForeignPropertyCumulativePeriodSummary.CreateAmendForeignPropertyCumulativePeriodSummarySchema.{Def1, Def2}
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
+import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
 import javax.inject.Singleton
@@ -30,10 +34,21 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory {
   def validator(nino: String,
                 businessId: String,
                 taxYear: String,
-                body: JsValue): Validator[CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
-    CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor(taxYear) match {
-      case Valid(CreateAmendForeignPropertyCumulativePeriodSummarySchema.Def1) =>
+                body: JsValue): Validator[CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] = {
+
+    val schema: Validated[Seq[MtdError], CreateAmendForeignPropertyCumulativePeriodSummarySchema] =
+      CreateAmendForeignPropertyCumulativePeriodSummarySchema.schemaFor(taxYear)
+
+    schema match {
+      case Valid(Def1) =>
         new Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(
+          nino,
+          businessId,
+          taxYear,
+          body
+        )
+      case Valid(Def2) =>
+        new Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(
           nino,
           businessId,
           taxYear,
@@ -41,5 +56,6 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryValidatorFactory {
         )
       case Invalid(errors) => Validator.returningErrors(errors)
     }
+  }
 
 }

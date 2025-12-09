@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package v6.retrieveForeignPropertyAnnualSubmission.def2
 import cats.data.Validated
 import cats.implicits.*
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v6.retrieveForeignPropertyAnnualSubmission.def2.request.Def2_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
@@ -32,8 +33,13 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionValidator @Inject() (nino: Str
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear)
-    ).mapN(Def2_RetrieveForeignPropertyAnnualSubmissionRequestData.apply)
+      ResolveBusinessId(businessId)
+    ).mapN { (validNino, validBusinessId) =>
+      Def2_RetrieveForeignPropertyAnnualSubmissionRequestData(
+        nino = validNino,
+        businessId = validBusinessId,
+        taxYear = TaxYear.fromMtd(taxYear)
+      )
+    }
 
 }

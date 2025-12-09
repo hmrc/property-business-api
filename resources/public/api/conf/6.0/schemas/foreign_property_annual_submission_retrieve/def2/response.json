@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For TY 2025-26 and after",
+  "title": "For TY 2025-26",
   "type": "object",
   "properties": {
     "submittedOn": {

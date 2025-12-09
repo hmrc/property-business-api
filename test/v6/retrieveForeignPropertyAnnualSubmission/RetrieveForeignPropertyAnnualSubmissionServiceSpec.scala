@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import common.models.errors.RuleTypeOfBusinessIncorrectError
+import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,14 +34,14 @@ import scala.concurrent.Future
 
 class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
 
-  private val nino       = Nino("AA123456A")
-  private val businessId = BusinessId("XAIS12345678910")
-  private val taxYear    = TaxYear.fromMtd("2020-21")
+  private val nino: Nino             = Nino("AA123456A")
+  private val businessId: BusinessId = BusinessId("XAIS12345678910")
+  private val taxYear: TaxYear       = TaxYear.fromMtd("2020-21")
 
-  implicit private val correlationId: String = "X-123"
+  private implicit val correlationId: String = "X-123"
 
-  "service" should {
-    "service call successful" when {
+  "RetrieveForeignPropertyAnnualSubmissionService" when {
+    "call is successful" should {
       "return mapped result" in new Test {
         MockRetrieveForeignPropertyConnector
           .retrieveForeignProperty(requestData)
@@ -50,47 +50,47 @@ class RetrieveForeignPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         await(service.retrieveForeignProperty(requestData)) shouldBe Right(ResponseWrapper(correlationId, response))
       }
     }
-  }
 
-  "a non-foreign result is found" should {
-    "return a RULE_TYPE_OF_BUSINESS_INCORRECT error" in new Test {
-      MockRetrieveForeignPropertyConnector
-        .retrieveForeignProperty(requestData) returns Future.successful(Right(ResponseWrapper(correlationId, NonForeignResult)))
+    "a non-foreign result is found" should {
+      "return a RULE_TYPE_OF_BUSINESS_INCORRECT error" in new Test {
+        MockRetrieveForeignPropertyConnector
+          .retrieveForeignProperty(requestData) returns Future.successful(Right(ResponseWrapper(correlationId, NonForeignResult)))
 
-      await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrectError))
+        await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, RuleTypeOfBusinessIncorrectError))
+      }
     }
-  }
 
-  "unsuccessful" should {
-    "map errors according to spec" when {
+    "call is unsuccessful" should {
+      "map errors according to spec" when {
+        def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
+          s"a $downstreamErrorCode error is returned from the service" in new Test {
 
-      def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
-        s"a $downstreamErrorCode error is returned from the service" in new Test {
+            MockRetrieveForeignPropertyConnector
+              .retrieveForeignProperty(requestData)
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          MockRetrieveForeignPropertyConnector
-            .retrieveForeignProperty(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
+            await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+          }
 
-          await(service.retrieveForeignProperty(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
-        }
+        val errors: Seq[(String, MtdError)] = List(
+          "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+          "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+          "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
+          "INVALID_CORRELATIONID"     -> InternalError,
+          "NO_DATA_FOUND"             -> NotFoundError,
+          "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
+          "SERVER_ERROR"              -> InternalError,
+          "SERVICE_UNAVAILABLE"       -> InternalError
+        )
 
-      val errors = List(
-        "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-        "INVALID_INCOMESOURCEID"    -> BusinessIdFormatError,
-        "INVALID_CORRELATIONID"     -> InternalError,
-        "NO_DATA_FOUND"             -> NotFoundError,
-        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
-        "SERVER_ERROR"              -> InternalError,
-        "SERVICE_UNAVAILABLE"       -> InternalError
-      )
+        val extraTysErrors: Seq[(String, MtdError)] = List(
+          "INVALID_PROPERTY_ID"     -> PropertyIdFormatError,
+          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID"  -> InternalError
+        )
 
-      val extraTysErrors = List(
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_CORRELATION_ID"  -> InternalError
-      )
-
-      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
+      }
     }
   }
 

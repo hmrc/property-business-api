@@ -24,47 +24,47 @@ class Def2_Create_Amend_ForeignEntrySpec extends UnitSpec with Def2_Fixtures {
 
   private val allowancesOnly = Def2_Create_Amend_ForeignEntry(
     countryCode = "GER",
-    allowances = Some(foreignAllowances),
+    allowances = Some(def2_foreignAllowances),
     adjustments = None
   )
 
   private val allowancesOnlyMtdJson = Json.parse(s"""
      |{
      |   "countryCode": "GER",
-     |   "allowances": $foreignAllowancesMtdJson
+     |   "allowances": $def2_foreignAllowancesMtdJson
      |}
      |""".stripMargin)
 
   private val allowancesOnlyDownstreamJson = Json.parse(s"""
     |{
     |   "countryCode": "GER",
-    |   "allowances": $foreignAllowancesDownstreamJson
+    |   "allowances": $def2_foreignAllowancesDownstreamJson
     |}
     |""".stripMargin)
 
   private val adjustmentsOnly = Def2_Create_Amend_ForeignEntry(
     countryCode = "GER",
     allowances = None,
-    adjustments = Some(foreignAdjustments)
+    adjustments = Some(def2_foreignAdjustments)
   )
 
   private val adjustmentsOnlyMtdJson = Json.parse(s"""
     |{
     |   "countryCode": "GER",
-    |   "adjustments": $foreignAdjustmentsMtdJson
+    |   "adjustments": $def2_foreignAdjustmentsMtdJson
     |}""".stripMargin)
 
   private val adjustmentsOnlyDownstreamJson = Json.parse(s"""
    |{
    |   "countryCode": "GER",
-   |   "adjustments": $foreignAdjustmentsDownstreamJson
+   |   "adjustments": $def2_foreignAdjustmentsDownstreamJson
    |}
    |""".stripMargin)
 
   "reads" when {
     "passed valid mtd JSON" should {
       "return the model" in {
-        foreignEntryMtdJson.as[Def2_Create_Amend_ForeignEntry] shouldBe foreignEntry
+        def2_foreignEntryMtdJson.as[Def2_Create_Amend_ForeignEntry] shouldBe def2_foreignEntry
       }
     }
     "passed valid mtd JSON with allowances only" should {
@@ -82,7 +82,7 @@ class Def2_Create_Amend_ForeignEntrySpec extends UnitSpec with Def2_Fixtures {
   "writes" when {
     "passed a model" should {
       "return downstream JSON" in {
-        Json.toJson(foreignEntry) shouldBe foreignEntryDownstreamJson
+        Json.toJson(def2_foreignEntry) shouldBe def2_foreignEntryDownstreamJson
       }
     }
     "passed a model with allowances only" should {

@@ -33,8 +33,8 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpe
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private def validator(nino: String = validNino, businessId: String = validBusinessId, taxYear: String = validTaxYear) =
-    new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, taxYear)
+  private def validator(nino: String = validNino, businessId: String = validBusinessId) =
+    new Def1_RetrieveForeignPropertyCumulativeSummaryValidator(nino, businessId, validTaxYear)
 
   "validator" should {
     "return the parsed domain object" when {
@@ -53,30 +53,6 @@ class Def1_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpe
       "given an invalid business ID" in {
         validator(businessId = "invalidBusinessId").validateAndWrapResult() shouldBe
           Left(ErrorWrapper(correlationId, BusinessIdFormatError))
-      }
-
-      "given an incorrectly formatted tax year" in {
-        validator(taxYear = "invalidTaxYear").validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-
-      "given an invalid tax year range" in {
-        validator(taxYear = "2020-22").validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-
-    }
-
-    "return multiple errors" when {
-      "there are multiple problems" in {
-        validator("invalid", "invalid", "invalid").validateAndWrapResult() shouldBe
-          Left(
-            ErrorWrapper(
-              correlationId,
-              BadRequestError,
-              Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
-            )
-          )
       }
     }
   }

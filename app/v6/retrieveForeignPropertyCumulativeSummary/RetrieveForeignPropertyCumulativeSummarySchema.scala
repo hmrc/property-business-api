@@ -17,13 +17,14 @@
 package v6.retrieveForeignPropertyCumulativeSummary
 
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.Valid
 import play.api.libs.json.Reads
-import shared.controllers.validators.resolvers.ResolveTaxYear
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
 import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import shared.models.errors.MtdError
 import shared.schema.DownstreamReadable
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response.Def1_RetrieveForeignPropertyCumulativeSummaryResponse
+import v6.retrieveForeignPropertyCumulativeSummary.def2.model.response.Def2_RetrieveForeignPropertyCumulativeSummaryResponse
 import v6.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
 import scala.math.Ordered.orderingToOrdered
@@ -37,12 +38,16 @@ object RetrieveForeignPropertyCumulativeSummarySchema {
     val connectorReads: Reads[DownstreamResp] = Def1_RetrieveForeignPropertyCumulativeSummaryResponse.reads
   }
 
+  case object Def2 extends RetrieveForeignPropertyCumulativeSummarySchema {
+    type DownstreamResp = Def2_RetrieveForeignPropertyCumulativeSummaryResponse
+    val connectorReads: Reads[DownstreamResp] = Def2_RetrieveForeignPropertyCumulativeSummaryResponse.format.reads(_)
+  }
+
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummarySchema] =
-    ResolveTaxYear(taxYearString) andThen schemaFor
+    ResolveTaxYearMinimum(TaxYear.fromMtd("2025-26"))(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummarySchema] = {
-    if (taxYear < TaxYear.starting(2025)) Invalid(Seq(RuleTaxYearNotSupportedError))
-    else Valid(Def1)
+    if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def2) else Valid(Def1)
   }
 
 }

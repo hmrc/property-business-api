@@ -18,49 +18,51 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
-import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.*
 import play.api.libs.json.*
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.AUTHORIZATION
+import play.api.test.Helpers.*
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 
-class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  private def invalidEntryWithConsolidatedExpenses() =
-    Json.parse(s"""
-                  |{
-                  |    "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
-                  |    "expenses": {
-                  |        "premisesRunningCosts": 3123.21,
-                  |        "consolidatedExpenses": 1.23
-                  |    }
-                  |}""".stripMargin)
+  private val invalidEntryWithConsolidatedExpenses = Json.parse(
+    """
+      |{
+      |  "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+      |  "expenses": {
+      |    "premisesRunningCosts": 3123.21,
+      |    "consolidatedExpenses": 1.23
+      |  }
+      |}
+    """.stripMargin
+  )
 
-  private def entryWith(propertyId: String, premisesRunningCosts: BigDecimal = 3123.21) =
-    Json.parse(s"""
-                  |{
-                  |    "propertyId": "$propertyId",
-                  |    "expenses": {
-                  |        "premisesRunningCosts": $premisesRunningCosts
-                  |    }
-                  |}""".stripMargin)
+  private def entryWith(propertyId: String, premisesRunningCosts: BigDecimal = 3123.21) = Json.parse(
+    s"""
+      |{
+      |  "propertyId": "$propertyId",
+      |  "expenses": {
+      |    "premisesRunningCosts": $premisesRunningCosts
+      |  }
+      |}
+    """.stripMargin
+  )
 
-  private def requestBodyWith(entries: JsValue*) =
-    Json.parse(
-      s"""{
-         |    "fromDate": "2026-04-06",
-         |    "toDate": "2026-07-05",
-         |    "foreignProperty": ${JsArray(entries)}
-         |}
-         |""".stripMargin
-    )
+  private def requestBodyWith(entries: JsValue*) = Json.parse(
+    s"""
+      |{
+      |  "fromDate": "2026-04-06",
+      |  "toDate": "2026-07-05",
+      |  "foreignProperty": ${JsArray(entries)}
+      |}
+    """.stripMargin
+  )
 
   private val entry       = entryWith("8e8b8450-dc1b-4360-8109-7067337b42cb")
   private val requestBody = requestBodyWith(entry)
@@ -148,7 +150,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends Int
             "AA123456A",
             "XAIS12345678910",
             "2026-27",
-            requestBodyWith(invalidEntryWithConsolidatedExpenses()),
+            requestBodyWith(invalidEntryWithConsolidatedExpenses),
             BAD_REQUEST,
             RuleBothExpensesSuppliedError.withPath("/foreignProperty/0/expenses"),
             None
@@ -191,8 +193,21 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends Int
             BAD_REQUEST,
             PropertyIdFormatError.withPath("/foreignProperty/0/propertyId"),
             None
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2026-27",
+            requestBodyWith(entry, entry),
+            BAD_REQUEST,
+            RuleDuplicatePropertyIdError.forDuplicatedIdsAndPaths(
+              id = "8e8b8450-dc1b-4360-8109-7067337b42cb",
+              paths = List("/foreignProperty/0/propertyId", "/foreignProperty/1/propertyId")
+            ),
+            None
           )
         )
+
         input.foreach(args => validationErrorTest.tupled(args))
       }
 

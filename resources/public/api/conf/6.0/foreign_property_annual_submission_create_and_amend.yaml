@@ -143,6 +143,12 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
           RULE_DUPLICATE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCode'
+          # {{#if (enabled 'foreign-property-r19-property-id')}}
+          RULE_DUPLICATE_PROPERTY_ID:
+            $ref: './common/errors.yaml#/components/examples/ruleDuplicatePropertyId'
+          RULE_PROPERTY_ID_MISMATCH:
+            $ref: './common/errors.yaml#/components/examples/rulePropertyIdMismatch'
+          # {{/if}}
           RULE_PROPERTY_INCOME_ALLOWANCE:
             $ref: './common/errors.yaml#/components/examples/rulePropertyIncomeAllowance'
           RULE_INCORRECT_GOV_TEST_SCENARIO:

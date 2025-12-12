@@ -18,20 +18,18 @@ package v6.updateForeignPropertyDetails.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
-import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.*
 import play.api.libs.json.*
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.AUTHORIZATION
+import play.api.test.Helpers.*
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.{def1_UpdateForeignPropertyDetailsMtdJson => requestBody}
 
-class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_UpdateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   "calling update endpoint" should {
 
@@ -99,22 +97,6 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
         val validPropertyId: String = "8e8b8450-dc1b-4360-8109-7067337b42cb"
         val validTaxYear: String = "2026-27"
 
-        val missingEndDateJson = Json.parse(
-          s"""
-             |{
-             |    "propertyName": "Bob & Bobby Co",
-             |    "endReason": "disposal"
-             |}
-             |""".stripMargin)
-
-        val missingEndReasonJson = Json.parse(
-          s"""
-             |{
-             |    "propertyName": "Bob & Bobby Co",
-             |    "endDate": "2026-08-24"
-             |}
-             |""".stripMargin)
-
         val input = List(
           ("AA1123A", validPropertyId, validTaxYear, requestBody, BAD_REQUEST, NinoFormatError, None),
           (validNino, validPropertyId, "20267", requestBody, BAD_REQUEST, TaxYearFormatError, None),
@@ -125,10 +107,12 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
           (validNino, validPropertyId, validTaxYear, requestBody.update("/endDate", JsString("24-08-2026")), BAD_REQUEST, EndDateFormatError, None),
           (validNino, validPropertyId, validTaxYear, requestBody.update("/endReason", JsString("invalid")), BAD_REQUEST, EndReasonFormatError, None),
           (validNino, validPropertyId, validTaxYear, JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
+          (validNino, validPropertyId, validTaxYear, requestBody.update("/endDate", JsString("2026-03-31")), BAD_REQUEST, RuleEndDateBeforeTaxYearStartError, None),
           (validNino, validPropertyId, validTaxYear, requestBody.update("/endDate", JsString("2027-05-24")), BAD_REQUEST, RuleEndDateAfterTaxYearEndError, None),
-          (validNino, validPropertyId, validTaxYear, missingEndDateJson, BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end date")),
-          (validNino, validPropertyId, validTaxYear, missingEndReasonJson, BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end reason"))
+          (validNino, validPropertyId, validTaxYear, requestBody.removeProperty("/endDate"), BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end date")),
+          (validNino, validPropertyId, validTaxYear, requestBody.removeProperty("/endReason"), BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end reason"))
         )
+
         input.foreach(args => validationErrorTest.tupled(args))
       }
     }
@@ -179,9 +163,7 @@ class Def1_UpdateForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with
 
     def setupStubs(): StubMapping
 
-    def downstreamTaxYear: String = "26-27"
-
-    def downstreamQueryParams: Map[String, String] = Map("taxYear" -> downstreamTaxYear)
+    def downstreamQueryParams: Map[String, String] = Map("taxYear" -> "26-27")
 
     def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$propertyId"
 

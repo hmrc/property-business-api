@@ -131,6 +131,8 @@ responses:
           RULE_DUPLICATE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCodePeriodics'
           # {{#if (enabled 'foreign-property-r19-property-id')}}
+          RULE_DUPLICATE_PROPERTY_ID:
+            $ref: './common/errors.yaml#/components/examples/ruleDuplicatePropertyId'
           RULE_PROPERTY_ID_MISMATCH:
             $ref: './common/errors.yaml#/components/examples/rulePropertyIdMismatch'
           # {{/if}}

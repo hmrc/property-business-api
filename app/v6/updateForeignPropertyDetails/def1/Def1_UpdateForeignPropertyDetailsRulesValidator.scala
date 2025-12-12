@@ -18,7 +18,7 @@ package v6.updateForeignPropertyDetails.def1
 
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import common.models.errors.{EndReasonFormatError, PropertyNameFormatError, RuleEndDateAfterTaxYearEndError, RuleMissingEndDetailsError}
+import common.models.errors.*
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveStringPattern, ResolverSupport}
 import shared.models.domain.TaxYear
@@ -46,7 +46,13 @@ object Def1_UpdateForeignPropertyDetailsRulesValidator extends RulesValidator[De
   private def validateEndDate(endDate: Option[String], taxYear: TaxYear): Validated[Seq[MtdError], Unit] = {
     endDate.fold(valid) { date =>
       ResolveIsoDate(date, EndDateFormatError).andThen { parsedDate =>
-        if (parsedDate.isAfter(taxYear.endDate)) Invalid(List(RuleEndDateAfterTaxYearEndError)) else valid
+        if (parsedDate.isBefore(taxYear.startDate)) {
+          Invalid(List(RuleEndDateBeforeTaxYearStartError))
+        } else if (parsedDate.isAfter(taxYear.endDate)) {
+          Invalid(List(RuleEndDateAfterTaxYearEndError))
+        } else {
+          valid
+        }
       }
     }
   }

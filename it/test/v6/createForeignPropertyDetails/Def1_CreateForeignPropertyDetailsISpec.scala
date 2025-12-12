@@ -18,38 +18,34 @@ package v6.createForeignPropertyDetails
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
-import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status
-import play.api.http.Status.*
-import play.api.libs.json.{JsValue, Json}
-import play.api.test.Helpers.AUTHORIZATION
+import play.api.libs.json.*
+import play.api.test.Helpers.*
 import shared.models.utils.JsonErrorValidators
 import shared.support.IntegrationBaseSpec
 import shared.services.*
-import v6.createForeignPropertyDetails.def1.model.response.Def1_CreateForeignPropertyDetailsResponse
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import shared.models.errors.*
 
 class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  val validRequestBodyJson: JsValue = Json.parse(
-    """{
-      |"propertyName": "Bob & Bobby Co",
-      |"countryCode": "FRA",
-      |"endDate": "2026-08-24",
-      |"endReason": "no-longer-renting-property-out"
-      |}""".stripMargin
+  val requestBody: JsValue = Json.parse(
+    """
+      |{
+      |  "propertyName": "Bob & Bobby Co",
+      |  "countryCode": "FRA",
+      |  "endDate": "2026-08-24",
+      |  "endReason": "no-longer-renting-property-out"
+      |}
+    """.stripMargin
   )
 
-  val def1_CreateForeignPropertyDetailsResponseModel: Def1_CreateForeignPropertyDetailsResponse = Def1_CreateForeignPropertyDetailsResponse(
-    "8e8b8450-dc1b-4360-8109-7067337b42cb"
-  )
-
-  val def1_CreateForeignPropertyDetailsResponseJson: JsValue = Json.parse(
-    """{
-      |"propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb"
-      |}""".stripMargin
+  val responseBody: JsValue = Json.parse(
+    """
+      |{
+      |  "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb"
+      |}
+    """.stripMargin
   )
 
   private trait Test {
@@ -57,13 +53,13 @@ class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
     val businessId: String = "XAIS12345678910"
     val correlationId: String = "X-123"
 
-    def taxYear: String
+    def taxYear: String = "2026-27"
 
-    def downstreamTaxYear: String
+    def downstreamQueryParams: Map[String, String] =  Map("taxYear" -> "26-27")
 
-    def downstreamUri: String
+    def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$businessId"
 
-    val requestBodyJson: JsValue = validRequestBodyJson
+    val requestBodyJson: JsValue = requestBody
 
     def setupStubs(): StubMapping
 
@@ -80,41 +76,31 @@ class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
 
     def errorBody(code: String): String =
       s"""
-         | [
-         |{
-         |  "errorCode": "$code",
-         |  "errorDescription": "hip message"
-         |}
-         |]
-           """.stripMargin
-  }
-
-  private trait HipTest extends Test {
-    def taxYear: String = "2026-27"
-
-    def downstreamTaxYear: String = "26-27"
-
-    def downstreamQueryParams: Map[String, String] = Map("taxYear" -> downstreamTaxYear)
-
-    override def downstreamUri: String = s"/itsd/income-sources/$nino/foreign-property-details/$businessId"
+        |[
+        |  {
+        |    "errorCode": "$code",
+        |    "errorDescription": "string"
+        |  }
+        |]
+      """.stripMargin
   }
 
   "Calling the Create Foreign Property Details endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new HipTest {
+      "any valid request is made" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, def1_CreateForeignPropertyDetailsResponseJson)
+          DownstreamStub.onSuccess(DownstreamStub.POST, downstreamUri, downstreamQueryParams, OK, responseBody)
         }
 
         val response: WSResponse = await(request().post(requestBodyJson))
         response.status shouldBe OK
-        response.json shouldBe def1_CreateForeignPropertyDetailsResponseJson
+        response.json shouldBe responseBody
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -127,8 +113,9 @@ class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
                                 requestTaxYear: String,
                                 requestBody: JsValue,
                                 expectedStatus: Int,
-                                expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new HipTest {
+                                expectedBody: MtdError,
+                                scenario: Option[String]): Unit = {
+          s"validation fails with ${expectedBody.code} error ${scenario.getOrElse("")}" in new Test {
 
             override val nino: String = requestNino
             override val businessId: String = requestBusinessId
@@ -140,25 +127,40 @@ class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
               MtdIdLookupStub.ninoFound(nino)
             }
 
-            val response: WSResponse = await(request().post(requestBodyJson))
+            val response: WSResponse = await(request().post(requestBody))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
           }
         }
 
+        val validNino: String = "AA123456A"
+        val validBusinessId: String = "XAIS12345678910"
+        val validTaxYear: String = "2026-27"
+
         val input = List(
-          ("AA123", "XAIS12345678910", "2026-27", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "203100", "2026-27", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2020", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2020-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2019-20", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA1123A", validBusinessId, validTaxYear, requestBody, BAD_REQUEST, NinoFormatError, None),
+          (validNino, validBusinessId, "2020", requestBody, BAD_REQUEST, TaxYearFormatError, None),
+          (validNino, "203100", validTaxYear, requestBody, BAD_REQUEST, BusinessIdFormatError, None),
+          (validNino, validBusinessId, "2026-28", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
+          (validNino, validBusinessId, "2025-26", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/propertyName", JsString("")), BAD_REQUEST, PropertyNameFormatError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/countryCode", JsString("FRANCE")), BAD_REQUEST, CountryCodeFormatError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/endDate", JsString("24-08-2026")), BAD_REQUEST, EndDateFormatError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/endReason", JsString("invalid")), BAD_REQUEST, EndReasonFormatError, None),
+          (validNino, validBusinessId, validTaxYear, JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/countryCode", JsString("ABC")), BAD_REQUEST, RuleCountryCodeError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/endDate", JsString("2026-03-31")), BAD_REQUEST, RuleEndDateBeforeTaxYearStartError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.update("/endDate", JsString("2027-05-24")), BAD_REQUEST, RuleEndDateAfterTaxYearEndError, None),
+          (validNino, validBusinessId, validTaxYear, requestBody.removeProperty("/endDate"), BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end date")),
+          (validNino, validBusinessId, validTaxYear, requestBody.removeProperty("/endReason"), BAD_REQUEST, RuleMissingEndDetailsError, Some("for missing end reason"))
         )
+
         input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new HipTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()

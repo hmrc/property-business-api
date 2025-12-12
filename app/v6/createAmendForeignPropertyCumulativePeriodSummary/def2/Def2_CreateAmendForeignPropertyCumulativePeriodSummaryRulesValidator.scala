@@ -47,13 +47,23 @@ object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
   }
 
   private def validateForeignProperty(foreignProperty: Seq[request.ForeignProperty]): Validated[Seq[MtdError], Unit] = {
-    val zippedForeignProperties = foreignProperty.zipWithIndex
+    val zippedForeignProperties: Seq[(ForeignProperty, Int)] = foreignProperty.zipWithIndex
 
-    val validatedEntries = zippedForeignProperties
+    val validatedEntries: Validated[Seq[MtdError], Unit] = zippedForeignProperties
       .map { case (entry, index) => validateForeignPropertyEntry(entry, index) }
-      .traverse(identity)
+      .sequence
+      .andThen(_ => valid)
 
-    validatedEntries andThen (_ => valid)
+    val validatedPropertyIds: Seq[Validated[Seq[MtdError], Unit]] = zippedForeignProperties
+      .groupMap(_._1.propertyId) { case (_, index) =>
+        s"/foreignProperty/$index/propertyId"
+      }
+      .collect {
+        case (id, paths) if paths.size > 1 => Invalid(List(RuleDuplicatePropertyIdError.forDuplicatedIdsAndPaths(id, paths)))
+      }
+      .toSeq
+
+    (validatedPropertyIds :+ validatedEntries).sequence.andThen(_ => valid)
   }
 
   private def validateForeignPropertyEntry(entry: request.ForeignProperty, index: Int): Validated[Seq[MtdError], Unit] = {

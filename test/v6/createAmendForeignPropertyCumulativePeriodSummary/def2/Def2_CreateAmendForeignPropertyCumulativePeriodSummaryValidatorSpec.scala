@@ -36,51 +36,55 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
   private val validToDate     = "2026-07-05"
   private val validPropertyId = "8e8b8450-dc1b-4360-8109-7067337b42cb"
 
-  private def entryWith(propertyId: String) = Json.parse(s"""
-       |{
-       |         "propertyId": "$propertyId",
-       |         "income":{
-       |            "rentIncome":{
-       |               "rentAmount":381.21
-       |            },
-       |            "foreignTaxCreditRelief":true,
-       |            "premiumsOfLeaseGrant":884.72,
-       |            "otherPropertyIncome":7713.09,
-       |            "foreignTaxPaidOrDeducted":884.12,
-       |            "specialWithholdingTaxOrUkTaxPaid":847.72
-       |         },
-       |         "expenses":{
-       |            "premisesRunningCosts":129.35,
-       |            "repairsAndMaintenance":7490.32,
-       |            "financialCosts":5000.99,
-       |            "professionalFees":847.90,
-       |            "travelCosts":69.20,
-       |            "costOfServices":478.23,
-       |            "residentialFinancialCost":879.28,
-       |            "broughtFwdResidentialFinancialCost":846.13,
-       |            "other":138.92
-       |         }
-       |}
-       |""".stripMargin)
+  private def entryWith(propertyId: String) = Json.parse(
+    s"""
+      |{
+      |  "propertyId": "$propertyId",
+      |  "income": {
+      |    "rentIncome": {
+      |      "rentAmount": 381.21
+      |    },
+      |    "foreignTaxCreditRelief": true,
+      |    "premiumsOfLeaseGrant": 884.72,
+      |    "otherPropertyIncome": 7713.09,
+      |    "foreignTaxPaidOrDeducted": 884.12,
+      |    "specialWithholdingTaxOrUkTaxPaid": 847.72
+      |  },
+      |  "expenses": {
+      |    "premisesRunningCosts": 129.35,
+      |    "repairsAndMaintenance": 7490.32,
+      |    "financialCosts": 5000.99,
+      |    "professionalFees": 847.90,
+      |    "travelCosts": 69.20,
+      |    "costOfServices": 478.23,
+      |    "residentialFinancialCost": 879.28,
+      |    "broughtFwdResidentialFinancialCost": 846.13,
+      |    "other": 138.92
+      |  }
+      |}
+    """.stripMargin
+  )
 
   private val entry = entryWith(propertyId = validPropertyId)
 
-  private def bodyWith(Entries: JsValue*) = Json.parse(s"""
-       |{
-       |   "fromDate":"$validFromDate",
-       |   "toDate":"$validToDate",
-       |   "foreignProperty": ${JsArray(Entries)}
-       |}
-       |""".stripMargin)
+  private def bodyWith(Entries: JsValue*) = Json.parse(
+    s"""
+      |{
+      |  "fromDate": "$validFromDate",
+      |  "toDate": "$validToDate",
+      |  "foreignProperty": ${JsArray(Entries)}
+      |}
+    """.stripMargin
+  )
 
   private val validBody = bodyWith(entry)
 
   private def emptyDatesBodyWith(Entries: JsValue*) = Json.parse(
     s"""
-       |{
-       |   "foreignProperty": ${JsArray(Entries)}
-       |}
-       |""".stripMargin
+      |{
+      |   "foreignProperty": ${JsArray(Entries)}
+      |}
+    """.stripMargin
   )
 
   private val emptyDatesBody = emptyDatesBodyWith(entry)
@@ -462,6 +466,23 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           ))
       }
 
+      "passed a body with duplicated property IDs" in {
+        val invalidBody: JsValue = bodyWith(entry, entry)
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleDuplicatePropertyIdError.forDuplicatedIdsAndPaths(
+              id = "8e8b8450-dc1b-4360-8109-7067337b42cb",
+              paths = List("/foreignProperty/0/propertyId", "/foreignProperty/1/propertyId")
+            )
+          )
+        )
+      }
+
       "passed a body containing a foreignProperty entry with an invalid propertyId format" in {
 
         val invalidBody: JsValue = bodyWith(entry.update("/propertyId", JsString("invalid-uuid")))
@@ -505,7 +526,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
       "passed a body containing multiple sub-objects with both expenses" in {
 
         val entryWithBothExpenses0: JsValue =
-          entryWith("8e8b8450-dc1b-4360-8109-7067337b42cb").update("/expenses/consolidatedExpenses", JsNumber(100.00))
+          entryWith("5e8b8450-dc1b-4360-8109-7067337b42cb").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val entryWithBothExpenses1: JsValue =
           entryWith("8e8b8450-dc1b-4360-8109-7067337b42cc").update("/expenses/consolidatedExpenses", JsNumber(100.00))
         val invalidBody: JsValue =

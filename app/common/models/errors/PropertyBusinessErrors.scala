@@ -36,6 +36,9 @@ object RuleTaxYearBeforeBusinessStartError
       "Foreign property cannot be reported for a tax year before the first tax year of the business",
       BAD_REQUEST)
 
+object RuleEndDateBeforeTaxYearStartError
+    extends MtdError("RULE_END_DATE_BEFORE_TAX_YEAR_START", "The end date is before the start of the tax year", BAD_REQUEST)
+
 object RuleEndDateAfterTaxYearEndError
     extends MtdError("RULE_END_DATE_AFTER_TAX_YEAR_END", "The end date is after the end of the tax year", BAD_REQUEST)
 
@@ -157,3 +160,13 @@ object RulePropertyIdMismatchError
       "The supplied property ID is not valid for this income source",
       BAD_REQUEST
     )
+
+object RuleDuplicatePropertyIdError
+    extends MtdError("RULE_DUPLICATE_PROPERTY_ID", "You cannot supply the same property ID for multiple properties", BAD_REQUEST) {
+
+  def forDuplicatedIdsAndPaths(id: String, paths: Seq[String]): MtdError = copy(
+    message = s"The property ID '$id' is duplicated for multiple properties",
+    paths = Some(paths)
+  )
+
+}

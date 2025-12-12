@@ -47,7 +47,13 @@ object Def1_CreateForeignPropertyDetailsRulesValidator extends RulesValidator[De
   private def validateEndDate(endDate: Option[String], taxYear: TaxYear): Validated[Seq[MtdError], Unit] = {
     endDate.fold(valid) { date =>
       ResolveIsoDate(date, EndDateFormatError).andThen { parsedDate =>
-        if (parsedDate.isAfter(taxYear.endDate)) Invalid(List(RuleEndDateAfterTaxYearEndError)) else valid
+        if (parsedDate.isBefore(taxYear.startDate)) {
+          Invalid(List(RuleEndDateBeforeTaxYearStartError))
+        } else if (parsedDate.isAfter(taxYear.endDate)) {
+          Invalid(List(RuleEndDateAfterTaxYearEndError))
+        } else {
+          valid
+        }
       }
     }
   }

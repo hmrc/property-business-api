@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
-import common.models.errors.{PropertyIdFormatError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import common.models.errors.{PropertyIdFormatError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicatePropertyIdError}
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
 import shared.models.errors.*
@@ -60,13 +60,25 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   }
 
   private def validateForeignEntries(foreignEntries: Seq[Def3_Create_Amend_ForeignEntry]): Validated[Seq[MtdError], Unit] = {
-    foreignEntries.zipWithIndex.toList
+    val zippedForeignEntries: Seq[(Def3_Create_Amend_ForeignEntry, Int)] = foreignEntries.zipWithIndex
+
+    val validatedEntries: Validated[Seq[MtdError], Unit] = zippedForeignEntries
       .map { case (entry, index) =>
         validateForeignEntry(entry, index)
       }
       .sequence
       .andThen(_ => valid)
 
+    val validatedPropertyIds: Seq[Validated[Seq[MtdError], Unit]] = zippedForeignEntries
+      .groupMap(_._1.propertyId) { case (_, index) =>
+        s"/foreignProperty/$index/propertyId"
+      }
+      .collect {
+        case (id, paths) if paths.size > 1 => Invalid(List(RuleDuplicatePropertyIdError.forDuplicatedIdsAndPaths(id, paths)))
+      }
+      .toSeq
+
+    (validatedPropertyIds :+ validatedEntries).sequence.andThen(_ => valid)
   }
 
   private def validateForeignEntry(entry: Def3_Create_Amend_ForeignEntry, index: Int): Validated[Seq[MtdError], Unit] = {

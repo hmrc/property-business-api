@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def3
 
-import common.models.errors.{PropertyIdFormatError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import common.models.errors.*
 import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
@@ -42,28 +42,31 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
   private val validBusinessId = "XAIS12345678901"
   private val validTaxYear    = "2026-27"
 
-  private def entryWith(structuredBuildingAllowance: JsValue*) =
-    Json.parse(s"""
-                  |    {
-                  |      "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
-                  |      "adjustments": {
-                  |        "privateUseAdjustment": 1.25,
-                  |        "balancingCharge": 2.25
-                  |      },
-                  |      "allowances": {
-                  |        "annualInvestmentAllowance": 1.25,
-                  |        "costOfReplacingDomesticItems": 2.25,
-                  |        "otherCapitalAllowance": 4.25,
-                  |        "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowance)},
-                  |        "zeroEmissionsCarAllowance": 6.25
-                  |      }
-                  |    }""".stripMargin)
+  private def entryWith(structuredBuildingAllowance: JsValue*) = Json.parse(
+    s"""
+      |{
+      |  "propertyId": "5e8b8450-dc1b-4360-8109-7067337b42cb",
+      |  "adjustments": {
+      |    "privateUseAdjustment": 1.25,
+      |    "balancingCharge": 2.25
+      |  },
+      |  "allowances": {
+      |    "annualInvestmentAllowance": 1.25,
+      |    "costOfReplacingDomesticItems": 2.25,
+      |    "otherCapitalAllowance": 4.25,
+      |    "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowance)},
+      |    "zeroEmissionsCarAllowance": 6.25
+      |  }
+      |}
+    """.stripMargin
+  )
 
   private def bodyWith(nonFhlEntries: JsValue*) = Json.parse(
-    s"""{
-       |  "foreignProperty": ${JsArray(nonFhlEntries)}
-       |}
-       |""".stripMargin
+    s"""
+      |{
+      |  "foreignProperty": ${JsArray(nonFhlEntries)}
+      |}
+    """.stripMargin
   )
 
   private val parsedNino       = Nino(validNino)
@@ -72,9 +75,16 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
 
   private val parsedBodyWithUpdatedBuilding: Def3_Create_Amend_Building => Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody =
     (building: Def3_Create_Amend_Building) =>
-      def3_createAmendForeignPropertyAnnualSubmissionRequestBody.copy(foreignProperty = List(
-        def3_foreignEntry.copy(allowances =
-          Some(def3_foreignAllowances.copy(structuredBuildingAllowance = Some(List(def3_structuredBuildingAllowance.copy(building = building))))))))
+      def3_createAmendForeignPropertyAnnualSubmissionRequestBody.copy(
+        foreignProperty = List(
+          def3_foreignEntry.copy(
+            propertyId = "5e8b8450-dc1b-4360-8109-7067337b42cb",
+            allowances = Some(
+              def3_foreignAllowances.copy(
+                structuredBuildingAllowance = Some(List(def3_structuredBuildingAllowance.copy(building = building)))
+              ))
+          ))
+      )
 
   private val parsedBodyWithoutBuildingNumber = parsedBodyWithUpdatedBuilding(def3_building.copy(number = None))
 
@@ -261,7 +271,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
             bodyWith(entryWith(def3_structuredBuildingAllowanceMtdJson.removeProperty("/building/postcode"))),
             "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/postcode"
           )
-        ).foreach((testRuleIncorrectOrEmptyBodyWith).tupled)
+        ).foreach(testRuleIncorrectOrEmptyBodyWith.tupled)
       }
 
       "passed a request body with empty fields except for additional (non-schema) properties" in {
@@ -307,7 +317,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
             (
               bodyWith(entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingAmountExpenditure", badValue))),
               "/foreignProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure")
-          ).foreach((testValueFormatErrorWith).tupled)
+          ).foreach(testValueFormatErrorWith.tupled)
         }
 
         "propertyIncomeAllowance allowances is invalid" when {
@@ -315,7 +325,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
             (
               bodyWith(def3_propertyIncomeAllowanceRequestBodyMtdJson.update("/allowances/propertyIncomeAllowance", badValue)),
               "/foreignProperty/0/allowances/propertyIncomeAllowance")
-          ).foreach(p => (testForPropertyIncomeAllowance).tupled(p))
+          ).foreach(p => testForPropertyIncomeAllowance.tupled(p))
         }
 
         "propertyIncomeAllowance allowances is too large" when {
@@ -324,7 +334,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
             (
               bodyWith(def3_propertyIncomeAllowanceRequestBodyMtdJson.update("/allowances/propertyIncomeAllowance", bigValue)),
               "/foreignProperty/0/allowances/propertyIncomeAllowance")
-          ).foreach(p => (testForPropertyIncomeAllowance).tupled(p))
+          ).foreach(p => testForPropertyIncomeAllowance.tupled(p))
         }
       }
       "passed a request body with multiple fields containing invalid values" in {
@@ -342,110 +352,127 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
 
         result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPaths(List(path1, path2))))
       }
-    }
 
-    "passed a request body with a field containing an invalid string format" when {
-      val badStringValue = JsString("x" * 91)
+      "passed a request body with a field containing an invalid string format" when {
+        val badStringValue = JsString("x" * 91)
 
-      List(
-        (
-          bodyWith(def3_foreignEntryMtdJson, entryWith(def3_structuredBuildingAllowanceMtdJson.update("/building/postcode", badStringValue))),
-          "/foreignProperty/1/allowances/structuredBuildingAllowance/0/building/postcode"),
-        (
-          bodyWith(def3_foreignEntryMtdJson, entryWith(def3_structuredBuildingAllowanceMtdJson.update("/building/number", badStringValue))),
-          "/foreignProperty/1/allowances/structuredBuildingAllowance/0/building/number"),
-        (
-          bodyWith(def3_foreignEntryMtdJson, entryWith(def3_structuredBuildingAllowanceMtdJson.update("/building/name", badStringValue))),
-          "/foreignProperty/1/allowances/structuredBuildingAllowance/0/building/name")
-      ).foreach(p => (testStringFormatErrorWith).tupled(p))
-    }
+        List(
+          (
+            bodyWith(def3_foreignEntryMtdJson, entryWith(def3_structuredBuildingAllowanceMtdJson.update("/building/postcode", badStringValue))),
+            "/foreignProperty/1/allowances/structuredBuildingAllowance/0/building/postcode"),
+          (
+            bodyWith(def3_foreignEntryMtdJson, entryWith(def3_structuredBuildingAllowanceMtdJson.update("/building/number", badStringValue))),
+            "/foreignProperty/1/allowances/structuredBuildingAllowance/0/building/number"),
+          (
+            bodyWith(def3_foreignEntryMtdJson, entryWith(def3_structuredBuildingAllowanceMtdJson.update("/building/name", badStringValue))),
+            "/foreignProperty/1/allowances/structuredBuildingAllowance/0/building/name")
+        ).foreach(p => testStringFormatErrorWith.tupled(p))
+      }
 
-    "passed a request body with a field containing an invalid date format" when {
-      val invalidBody =
-        bodyWith(
-          def3_foreignEntryMtdJson,
-          entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingDate", JsString("9999-99-99"))))
+      "passed a request body with a field containing an invalid date format" when {
+        val invalidBody =
+          bodyWith(
+            def3_foreignEntryMtdJson,
+            entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingDate", JsString("9999-99-99"))))
 
-      testDateFormatErrorWith(
-        invalidBody,
-        "/foreignProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
-      )
-    }
+        testDateFormatErrorWith(
+          invalidBody,
+          "/foreignProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+        )
+      }
 
-    "passed a request body with a qualifyingDate before 1900" when {
-      val invalidBody =
-        bodyWith(
-          def3_foreignEntryMtdJson,
-          entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingDate", JsString("1899-01-01"))))
+      "passed a request body with a qualifyingDate before 1900" when {
+        val invalidBody =
+          bodyWith(
+            def3_foreignEntryMtdJson,
+            entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingDate", JsString("1899-01-01"))))
 
-      testDateFormatErrorWith(
-        invalidBody,
-        "/foreignProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
-      )
-    }
+        testDateFormatErrorWith(
+          invalidBody,
+          "/foreignProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+        )
+      }
 
-    "passed a request body with a qualifyingDate after 2100" when {
-      val invalidBody =
-        bodyWith(
-          def3_foreignEntryMtdJson,
-          entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingDate", JsString("2100-01-01"))))
+      "passed a request body with a qualifyingDate after 2100" when {
+        val invalidBody =
+          bodyWith(
+            def3_foreignEntryMtdJson,
+            entryWith(def3_structuredBuildingAllowanceMtdJson.update("/firstYear/qualifyingDate", JsString("2100-01-01"))))
 
-      testDateFormatErrorWith(
-        invalidBody,
-        "/foreignProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
-      )
-    }
+        testDateFormatErrorWith(
+          invalidBody,
+          "/foreignProperty/1/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
+        )
+      }
 
-    "passed a request body with an invalid propertyId" in {
-      val invalidBody = bodyWith(def3_foreignEntryMtdJson.update("/propertyId", JsString("1234")))
-      val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
-        validator(validNino, validBusinessId, invalidBody).validateAndWrapResult()
+      "passed a request body with an invalid propertyId" in {
+        val invalidBody = bodyWith(def3_foreignEntryMtdJson.update("/propertyId", JsString("1234")))
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validBusinessId, invalidBody).validateAndWrapResult()
 
-      result shouldBe Left(ErrorWrapper(correlationId, PropertyIdFormatError))
-    }
+        result shouldBe Left(ErrorWrapper(correlationId, PropertyIdFormatError))
+      }
 
-    "passed a request body with propertyIncomeAllowance and separate allowances for foreign Property" in {
-      val invalidBody = bodyWith(
-        def3_foreignEntryMtdJson
-          .update("/allowances/propertyIncomeAllowance", JsNumber(123.45))
-          .removeProperty("/adjustments/privateUseAdjustment"))
+      "passed a request body with duplicated property IDs" in {
+        val invalidBody = bodyWith(def3_foreignEntryMtdJson, def3_foreignEntryMtdJson)
 
-      val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
-        validator(validNino, validBusinessId, invalidBody).validateAndWrapResult()
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validBusinessId, invalidBody).validateAndWrapResult()
 
-      result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/foreignProperty/0/allowances")))
-    }
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleDuplicatePropertyIdError.forDuplicatedIdsAndPaths(
+              id = "8e8b8450-dc1b-4360-8109-7067337b42cb",
+              paths = List("/foreignProperty/0/propertyId", "/foreignProperty/1/propertyId")
+            )
+          )
+        )
+      }
 
-    val buildingAllowanceWithoutNameOrNumber =
-      def3_structuredBuildingAllowanceMtdJson
-        .removeProperty("/building/name")
-        .removeProperty("/building/number")
+      "passed a request body with propertyIncomeAllowance and separate allowances for foreign Property" in {
+        val invalidBody = bodyWith(
+          def3_foreignEntryMtdJson
+            .update("/allowances/propertyIncomeAllowance", JsNumber(123.45))
+            .removeProperty("/adjustments/privateUseAdjustment"))
 
-    val invalidBodyWithoutNameOrNumber = bodyWith(entryWith(buildingAllowanceWithoutNameOrNumber))
-    val invalidBodyWithoutNameOrNumberMultiple =
-      bodyWith(entryWith(buildingAllowanceWithoutNameOrNumber, buildingAllowanceWithoutNameOrNumber))
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validBusinessId, invalidBody).validateAndWrapResult()
 
-    "passed a request body where only the postcode is supplied in structuredBuildingAllowance" in {
-      val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
-        validator(validNino, validBusinessId, invalidBodyWithoutNameOrNumber).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/foreignProperty/0/allowances")))
+      }
 
-      result shouldBe Left(
-        ErrorWrapper(correlationId, RuleBuildingNameNumberError.withPath("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building")))
-    }
+      val buildingAllowanceWithoutNameOrNumber =
+        def3_structuredBuildingAllowanceMtdJson
+          .removeProperty("/building/name")
+          .removeProperty("/building/number")
 
-    "passed a request body where only the postcode is supplied for multiple buildings" in {
-      val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
-        validator(validNino, validBusinessId, invalidBodyWithoutNameOrNumberMultiple).validateAndWrapResult()
+      val invalidBodyWithoutNameOrNumber = bodyWith(entryWith(buildingAllowanceWithoutNameOrNumber))
+      val invalidBodyWithoutNameOrNumberMultiple =
+        bodyWith(entryWith(buildingAllowanceWithoutNameOrNumber, buildingAllowanceWithoutNameOrNumber))
 
-      result shouldBe Left(
-        ErrorWrapper(
-          correlationId,
-          RuleBuildingNameNumberError.withPaths(
-            List(
-              "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building",
-              "/foreignProperty/0/allowances/structuredBuildingAllowance/1/building"
-            ))
-        ))
+      "passed a request body where only the postcode is supplied in structuredBuildingAllowance" in {
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validBusinessId, invalidBodyWithoutNameOrNumber).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleBuildingNameNumberError.withPath("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building")))
+      }
+
+      "passed a request body where only the postcode is supplied for multiple buildings" in {
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
+          validator(validNino, validBusinessId, invalidBodyWithoutNameOrNumberMultiple).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleBuildingNameNumberError.withPaths(
+              List(
+                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building",
+                "/foreignProperty/0/allowances/structuredBuildingAllowance/1/building"
+              ))
+          ))
+      }
     }
   }
 

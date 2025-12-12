@@ -93,6 +93,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicatePropertyName'
           RULE_TAX_YEAR_BEFORE_BUSINESS_START:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearBeforeBusinessStart'
+          RULE_END_DATE_BEFORE_TAX_YEAR_START:
+            $ref: './common/errors.yaml#/components/examples/ruleEndDateBeforeTaxYearStart'
           RULE_END_DATE_AFTER_TAX_YEAR_END:
             $ref: './common/errors.yaml#/components/examples/ruleEndDateAfterTaxYearEnd'
           RULE_PROPERTY_BUSINESS_CEASED:

@@ -45,43 +45,26 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in {
-
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, def1_UpdateForeignPropertyDetailsMtdJson).validateAndWrapResult()
 
         result shouldBe Right(
-          Def1_UpdateForeignPropertyDetailsRequestData(parsedNino, parsedPropertyId, parsedTaxYear, def1_UpdateForeignPropertyDetailsModel))
-      }
-
-      "passed the minimum supported taxYear" in {
-
-        val taxYearString = "2026-27"
-        validator(validNino, validPropertyId, taxYearString, def1_UpdateForeignPropertyDetailsMtdJson).validateAndWrapResult() shouldBe
-          Right(
-            Def1_UpdateForeignPropertyDetailsRequestData(
-              parsedNino,
-              parsedPropertyId,
-              TaxYear.fromMtd(taxYearString),
-              def1_UpdateForeignPropertyDetailsModel))
+          Def1_UpdateForeignPropertyDetailsRequestData(parsedNino, parsedPropertyId, parsedTaxYear, def1_UpdateForeignPropertyDetailsModel)
+        )
       }
 
       "passed a request with no 'endDate' and 'endReason'" in {
-        val taxYearString = "2026-27"
-        validator(validNino, validPropertyId, taxYearString, def1_UpdateForeignPropertyDetailsMinimumMtdJson).validateAndWrapResult() shouldBe
-          Right(
-            Def1_UpdateForeignPropertyDetailsRequestData(
-              parsedNino,
-              parsedPropertyId,
-              TaxYear.fromMtd(taxYearString),
-              def1_UpdateForeignPropertyDetailsMinimumModel
-            )
-          )
+        val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
+          validator(validNino, validPropertyId, validTaxYear, def1_UpdateForeignPropertyDetailsMinimumMtdJson).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def1_UpdateForeignPropertyDetailsRequestData(parsedNino, parsedPropertyId, parsedTaxYear, def1_UpdateForeignPropertyDetailsMinimumModel)
+        )
       }
     }
 
     "return a single error" when {
       "passed an invalid nino" in {
-
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator("invalid nino", validPropertyId, validTaxYear, def1_UpdateForeignPropertyDetailsMtdJson).validateAndWrapResult()
 
@@ -89,7 +72,6 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed an invalid property id" in {
-
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, "invalid", validTaxYear, def1_UpdateForeignPropertyDetailsMtdJson).validateAndWrapResult()
 
@@ -97,7 +79,8 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed an empty body" in {
-        val invalidBody = JsObject.empty
+        val invalidBody: JsObject = JsObject.empty
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -105,7 +88,8 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed a body without property name" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.removeProperty("/propertyName")
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.removeProperty("/propertyName")
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -113,7 +97,8 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed a body with an endDate but no endReason" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.removeProperty("/endReason")
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.removeProperty("/endReason")
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -121,7 +106,8 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed a body with an endReason but no endDate" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.removeProperty("/endDate")
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.removeProperty("/endDate")
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -129,7 +115,8 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed a body with an invalid propertyName" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.update("/propertyName", JsString(""))
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.update("/propertyName", JsString(""))
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -137,7 +124,8 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed a body with an invalid endDate" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.update("/endDate", JsString("2342-56-1"))
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.update("/endDate", JsString("2342-56-1"))
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -145,15 +133,26 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
       }
 
       "passed a body with an invalid endReason" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.update("/endReason", JsString("Invalid"))
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.update("/endReason", JsString("Invalid"))
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, EndReasonFormatError))
       }
 
-      "passed a body with an endDate after end of tax year" in {
-        val invalidBody = def1_UpdateForeignPropertyDetailsMtdJson.update("/endDate", JsString("2027-08-24"))
+      "passed a body with an endDate that is before the start of the tax year" in {
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.update("/endDate", JsString("2026-04-05"))
+
+        val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
+          validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleEndDateBeforeTaxYearStartError))
+      }
+
+      "passed a body with an endDate that is after the end of the tax year" in {
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.update("/endDate", JsString("2027-04-06"))
+
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
           validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
@@ -163,11 +162,10 @@ class Def1_UpdateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
 
     "return multiple errors" when {
       "passed a body with an invalidly formatted propertyName and missing end details" in {
-        val requestWithInvalidPropertyNameAndMissingCountryCode =
-          def1_UpdateForeignPropertyDetailsMtdJson.update("/propertyName", JsString("")).removeProperty("/endReason")
+        val invalidBody: JsValue = def1_UpdateForeignPropertyDetailsMtdJson.update("/propertyName", JsString("")).removeProperty("/endReason")
 
         val result: Either[ErrorWrapper, UpdateForeignPropertyDetailsRequestData] =
-          validator(validNino, validPropertyId, validTaxYear, requestWithInvalidPropertyNameAndMissingCountryCode).validateAndWrapResult()
+          validator(validNino, validPropertyId, validTaxYear, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(PropertyNameFormatError, RuleMissingEndDetailsError))))
       }

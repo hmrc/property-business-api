@@ -251,6 +251,13 @@ components:
         code: RULE_DUPLICATE_COUNTRY_CODE
         message: You cannot supply the same country code for multiple properties
 
+    ruleDuplicatePropertyId:
+      description: |
+        You cannot supply the same property ID for multiple properties.
+      value:
+        code: RULE_DUPLICATE_PROPERTY_ID
+        message: The property ID '8e8b8450-dc1b-4360-8109-7067337b42cb' is duplicated for multiple properties
+
     rulePropertyIdMismatch:
       description: |
         The supplied property ID is not associated with the income source on record.
@@ -269,6 +276,12 @@ components:
       value:
         code: RULE_TAX_YEAR_BEFORE_BUSINESS_START
         message: Foreign property cannot be reported for a tax year before the first tax year of the business
+
+    ruleEndDateBeforeTaxYearStart:
+      description: The end date is before the start of the tax year.
+      value:
+        code: RULE_END_DATE_BEFORE_TAX_YEAR_START
+        message: The end date is before the start of the tax year
 
     ruleEndDateAfterTaxYearEnd:
       description: The end date is after the end of the tax year.

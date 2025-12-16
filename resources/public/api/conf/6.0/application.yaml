@@ -116,5 +116,5 @@ paths:
     $ref: "./uk_foreign_property_period_summaries_list.yaml"
   /individuals/business/property/foreign/{nino}/{businessId}/details/{taxYear}:
     $ref: "./foreign_property_details.yaml"
-  /individuals/business/property/foreign/{nino}/{propId}/details/{taxYear}:
+  /individuals/business/property/foreign/{nino}/details/{propId}/{taxYear}:
     $ref: "./foreign_property_details_update.yaml"

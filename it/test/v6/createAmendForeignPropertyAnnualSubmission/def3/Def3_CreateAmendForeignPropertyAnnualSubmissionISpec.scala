@@ -301,7 +301,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           "2026-27",
           formatPropertyIdErrorRequestJson,
           BAD_REQUEST,
-          PropertyIdFormatError),
+          PropertyIdFormatError.withPath("/foreignProperty/0/propertyId")),
         (
           "AA123456A",
           "XAIS12345678910",

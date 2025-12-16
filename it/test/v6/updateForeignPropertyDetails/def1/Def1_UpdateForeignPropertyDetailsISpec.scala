@@ -169,7 +169,7 @@ class Def1_UpdateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest(s"/foreign/$nino/$propertyId/details/$mtdTaxYear")
+      buildRequest(s"/foreign/$nino/details/$propertyId/$mtdTaxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")

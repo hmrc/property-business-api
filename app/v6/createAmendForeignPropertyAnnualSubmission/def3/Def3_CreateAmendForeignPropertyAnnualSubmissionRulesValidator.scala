@@ -83,7 +83,10 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
 
   private def validateForeignEntry(entry: Def3_Create_Amend_ForeignEntry, index: Int): Validated[Seq[MtdError], Unit] = {
     import entry.*
-    val validatedPropertyId = ResolveUuid(propertyId, PropertyIdFormatError)(PropertyId.apply)
+    val validatedPropertyId = ResolveUuid(
+      propertyId,
+      PropertyIdFormatError.withPath(s"/foreignProperty/$index/propertyId")
+    )(PropertyId.apply)
 
     val valuesWithPaths = List(
       (adjustments.flatMap(_.privateUseAdjustment), s"/foreignProperty/$index/adjustments/privateUseAdjustment"),

@@ -410,7 +410,7 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionValidatorSpec
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, PropertyIdFormatError))
+        result shouldBe Left(ErrorWrapper(correlationId, PropertyIdFormatError.withPath("/foreignProperty/0/propertyId")))
       }
 
       "passed a request body with duplicated property IDs" in {

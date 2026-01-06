@@ -76,6 +76,12 @@ object RuleHistoricTaxYearNotSupportedError
 object RuleBothExpensesSuppliedError
     extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time", BAD_REQUEST)
 
+object RuleBothExpensesSuppliedWithCountryCodesError
+    extends MtdError(
+      "RULE_BOTH_EXPENSES_SUPPLIED",
+      "Only one of either expenses or consolidatedExpenses can be supplied. A single expense type must be used for all country codes",
+      BAD_REQUEST)
+
 object RuleToDateBeforeFromDateError
     extends MtdError("RULE_TO_DATE_BEFORE_FROM_DATE", "The To date cannot be earlier than the From date", BAD_REQUEST)
 

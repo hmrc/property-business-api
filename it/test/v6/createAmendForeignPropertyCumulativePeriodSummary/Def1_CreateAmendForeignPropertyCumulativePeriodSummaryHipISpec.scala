@@ -150,7 +150,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends Int
             "2025-26",
             requestBodyWith(invalidEntryWithConsolidatedExpenses()),
             BAD_REQUEST,
-            RuleBothExpensesSuppliedError.withPath("/foreignProperty/0/expenses"),
+            RuleBothExpensesSuppliedWithCountryCodesError.withPath("/foreignProperty/0/expenses"),
             None
           ),
           ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),

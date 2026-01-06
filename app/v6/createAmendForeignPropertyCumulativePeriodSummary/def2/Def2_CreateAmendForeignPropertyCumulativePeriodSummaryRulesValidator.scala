@@ -105,7 +105,7 @@ object Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
       case _ =>
         expenses
           .flatMap(_.consolidatedExpenses)
-          .map(_ => Invalid(List(RuleBothExpensesSuppliedError.withPath(s"/foreignProperty/$index/expenses"))))
+          .map(_ => Invalid(List(RuleBothExpensesSuppliedWithCountryCodesError.withPath(s"/foreignProperty/$index/expenses"))))
           .getOrElse(valid)
     }
 

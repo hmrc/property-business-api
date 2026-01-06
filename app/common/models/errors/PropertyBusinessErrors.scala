@@ -76,10 +76,10 @@ object RuleHistoricTaxYearNotSupportedError
 object RuleBothExpensesSuppliedError
     extends MtdError("RULE_BOTH_EXPENSES_SUPPLIED", "Both Expenses and Consolidated Expenses must not be present at the same time", BAD_REQUEST)
 
-object RuleBothExpensesSuppliedWithCountryCodesError
+object RuleBothExpensesSuppliedWithForeignPropertyError
     extends MtdError(
       "RULE_BOTH_EXPENSES_SUPPLIED",
-      "Only one of either expenses or consolidatedExpenses can be supplied. A single expense type must be used for all country codes",
+      "Only one of either expenses or consolidatedExpenses can be supplied. A single expense type must be used for all foreign properties",
       BAD_REQUEST)
 
 object RuleToDateBeforeFromDateError

@@ -77,6 +77,13 @@ components:
         code: RULE_BOTH_ALLOWANCES_SUPPLIED
         message: Both allowances and property allowances must not be present at the same time
 
+    ruleBothAllowancesSuppliedWithForeignProperty:
+      description: |
+        Both allowances and property income allowance must not be present at the same time.
+      value:
+        code: RULE_BOTH_ALLOWANCES_SUPPLIED
+        message: Only one of either expenses or consolidatedExpenses can be supplied. A single expense type must be used for all foreign properties
+
     ruleBuildingNameNumber:
       description: One of building name or number must be supplied.
       value:

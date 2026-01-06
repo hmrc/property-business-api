@@ -19,7 +19,7 @@ package v5.createAmendForeignPropertyCumulativePeriodSummary.def1
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import common.models.errors.RuleBothExpensesSuppliedWithCountryCodesError
+import common.models.errors.RuleBothExpensesSuppliedWithForeignPropertyError
 import common.utils.DateValidator
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
@@ -96,7 +96,7 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
       case _ =>
         expenses
           .flatMap(_.consolidatedExpenses)
-          .map(_ => Invalid(List(RuleBothExpensesSuppliedWithCountryCodesError.withPath(s"/foreignProperty/$index/expenses"))))
+          .map(_ => Invalid(List(RuleBothExpensesSuppliedWithForeignPropertyError.withPath(s"/foreignProperty/$index/expenses"))))
           .getOrElse(valid)
     }
 

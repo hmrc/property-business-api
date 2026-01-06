@@ -115,7 +115,7 @@ responses:
           FORMAT_VALUE:
             $ref: './common/errors.yaml#/components/examples/formatValue'
           RULE_BOTH_EXPENSES_SUPPLIED:
-            $ref: './common/errors.yaml#/components/examples/ruleBothExpensesSupplied'
+            $ref: './common/errors.yaml#/components/examples/ruleBothAllowancesSuppliedWithForeignProperty'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
           FORMAT_FROM_DATE:

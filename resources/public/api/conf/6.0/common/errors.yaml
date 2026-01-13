@@ -119,6 +119,13 @@ components:
         code: RULE_BOTH_EXPENSES_SUPPLIED
         message: Both expenses and consolidatedExpenses can not be present at the same time
 
+    ruleBothExpensesSuppliedWithForeignProperty:
+      description: |
+        Both Expenses and Consolidated Expenses must not be present at the same time.
+      value:
+        code: RULE_BOTH_EXPENSES_SUPPLIED
+        message: Only one of either expenses or consolidatedExpenses can be supplied. A single expense type must be used for all foreign properties
+
     formatFromDate:
       description: The format of the supplied From date field is not valid.
       value:

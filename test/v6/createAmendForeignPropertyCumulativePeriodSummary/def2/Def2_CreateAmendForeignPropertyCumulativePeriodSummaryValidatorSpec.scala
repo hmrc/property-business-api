@@ -520,7 +520,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/foreignProperty/0/expenses")))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedWithForeignPropertyError.withPath("/foreignProperty/0/expenses")))
       }
 
       "passed a body containing multiple sub-objects with both expenses" in {
@@ -538,7 +538,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            RuleBothExpensesSuppliedError.withPaths(
+            RuleBothExpensesSuppliedWithForeignPropertyError.withPaths(
               List(
                 "/foreignProperty/0/expenses",
                 "/foreignProperty/1/expenses"

@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
+import common.models.errors.{RuleBothExpensesSuppliedWithForeignPropertyError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
 import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
@@ -512,7 +512,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedError.withPath("/foreignProperty/0/expenses")))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleBothExpensesSuppliedWithForeignPropertyError.withPath("/foreignProperty/0/expenses")))
       }
 
       "passed a body containing multiple sub-objects with both expenses" in {
@@ -528,7 +528,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            RuleBothExpensesSuppliedError.withPaths(
+            RuleBothExpensesSuppliedWithForeignPropertyError.withPaths(
               List(
                 "/foreignProperty/0/expenses",
                 "/foreignProperty/1/expenses"

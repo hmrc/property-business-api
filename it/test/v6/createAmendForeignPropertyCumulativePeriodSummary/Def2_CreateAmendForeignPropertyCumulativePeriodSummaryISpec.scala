@@ -152,7 +152,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             "2026-27",
             requestBodyWith(invalidEntryWithConsolidatedExpenses),
             BAD_REQUEST,
-            RuleBothExpensesSuppliedError.withPath("/foreignProperty/0/expenses"),
+            RuleBothExpensesSuppliedWithForeignPropertyError.withPath("/foreignProperty/0/expenses"),
             None
           ),
           ("AA123456A", "XAIS12345678910", "2026-27", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),

@@ -17,7 +17,7 @@ The Property Business API allows software packages to create, retrieve, amend an
 
 Run from the console using: `sbt run` (starts on port 7798 by default)
 
-Start the service manager profile: `sm2 --start MTDFB_PROPERTY_BUSINESS`
+Start the service manager(changed) profile: `sm2 --start MTDFB_PROPERTY_BUSINESS`
 
 ## Run Tests
 

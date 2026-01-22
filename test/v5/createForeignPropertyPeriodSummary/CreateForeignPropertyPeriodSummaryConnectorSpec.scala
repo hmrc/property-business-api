@@ -50,13 +50,13 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
 
     }
 
-    "post a valid body and return 200 with submissionId for a TYS tax year" in new IfsTest with Test {
+    "post a valid body and return 200 with submissionId for a TYS tax year" in new HipTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
       willPost(
-        url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/itsa/income-tax/v1/23-24/business/property/periodic/$nino/$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))
 

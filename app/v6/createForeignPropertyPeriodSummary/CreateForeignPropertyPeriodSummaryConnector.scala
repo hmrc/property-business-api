@@ -18,7 +18,7 @@ package v6.createForeignPropertyPeriodSummary
 
 import play.api.http.Status.OK
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -48,8 +48,8 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
         import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
-            IfsUri[CreateForeignPropertyPeriodSummaryResponse](
-              s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
+            HipUri[CreateForeignPropertyPeriodSummaryResponse](
+              s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
           } else {
             IfsUri[CreateForeignPropertyPeriodSummaryResponse](
               s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
@@ -59,8 +59,8 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
       case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
         import def2.*
-        val downstreamUri = IfsUri[CreateForeignPropertyPeriodSummaryResponse](
-          s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
+        val downstreamUri = HipUri[CreateForeignPropertyPeriodSummaryResponse](
+          s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
         post(body, downstreamUri)
     }
   }

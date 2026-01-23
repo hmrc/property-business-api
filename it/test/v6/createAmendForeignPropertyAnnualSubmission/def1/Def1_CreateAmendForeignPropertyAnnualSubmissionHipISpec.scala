@@ -409,7 +409,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionHipISpec extends Integratio
       val input = List(
         ("AA1123A", "XAIS12345678910", "2023-24", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "XAIS12345678910", "202362-23", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2023-24", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
+        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2024-25", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
         ("AA123456A", "XAIS12345678910", "2021-24", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "XAIS12345678910", "2018-19", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
         (
@@ -438,14 +438,14 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionHipISpec extends Integratio
         (
           "AA123456A",
           "XAIS12345678910",
-          "2023-24",
+          "2024-25",
           bothAllowancesSuppliedErrorRequestJson,
           BAD_REQUEST,
           RuleBothAllowancesSuppliedError.copy(paths = Some(List("/foreignFhlEea/allowances")))),
         (
           "AA123456A",
           "XAIS12345678910",
-          "2023-24",
+          "2024-25",
           ruleBuildingNameOrNumberErrorRequestJson,
           BAD_REQUEST,
           RuleBuildingNameNumberError.copy(paths = Some(List("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building"))))

@@ -16,12 +16,13 @@
 
 package v6.createForeignPropertyPeriodSummary
 
+import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.createForeignPropertyPeriodSummary.def1.model.Def1_CreateForeignPropertyPeriodSummaryFixtures
-import v6.createForeignPropertyPeriodSummary.model.request._
+import v6.createForeignPropertyPeriodSummary.model.request.*
 import v6.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -50,13 +51,13 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
 
     }
 
-    "post a valid body and return 200 with submissionId for a TYS tax year" in new IfsTest with Test {
+    "post a valid body and return 200 with submissionId for a TYS tax year" in new HipTest with Test {
       def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
       val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
       willPost(
-        url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/itsa/income-tax/v1/23-24/business/property/periodic/$nino/$businessId",
         body = requestBody
       ).returns(Future.successful(outcome))
 
@@ -82,6 +83,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with
 
     protected val response: CreateForeignPropertyPeriodSummaryResponse =
       CreateForeignPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+
+    MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1861.enabled" -> true))
 
   }
 

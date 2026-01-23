@@ -164,7 +164,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
           BusinessId(businessId),
           taxYear,
           def3_createAmendForeignPropertyAnnualSubmissionRequestBody)
-      case ty if ty >= 2026 =>
+      case ty if ty == 2026 =>
         Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(
           Nino(nino),
           BusinessId(businessId),

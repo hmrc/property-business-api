@@ -16,11 +16,12 @@
 
 package v6.createUkPropertyPeriodSummary
 
+import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.createUkPropertyPeriodSummary.model.request._
+import v6.createUkPropertyPeriodSummary.model.request.*
 import v6.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.Future
@@ -51,7 +52,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       result shouldBe outcome
     }
 
-    "post a body and return 200 with submissionId for TYS" in new IfsTest with Test {
+    "post a body and return 200 with submissionId for TYS" in new HipTest with Test {
       val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
       val requestDataDef1: CreateUkPropertyPeriodSummaryRequestData =
@@ -63,7 +64,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       )
 
       willPost(
-        url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/itsa/income-tax/v1/23-24/business/property/periodic/$nino/$businessId",
         body = requestBodyDef1
       ) returns Future.successful(outcome)
 
@@ -71,7 +72,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       result shouldBe outcome
     }
 
-    "post a body and return 200 with submissionId for TY24-25" in new IfsTest with Test {
+    "post a body and return 200 with submissionId for TY24-25" in new HipTest with Test {
       val taxYear: TaxYear = TaxYear.fromMtd("2024-25")
 
       val requestDataDef2: CreateUkPropertyPeriodSummaryRequestData =
@@ -83,7 +84,7 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       )
 
       willPost(
-        url = url"$baseUrl/income-tax/business/property/periodic/24-25?taxableEntityId=$nino&incomeSourceId=$businessId",
+        url = url"$baseUrl/itsa/income-tax/v1/24-25/business/property/periodic/$nino/$businessId",
         body = requestBodyDef2
       ) returns Future.successful(outcome)
 
@@ -103,6 +104,8 @@ class CreateUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected val response: CreateUkPropertyPeriodSummaryResponse = CreateUkPropertyPeriodSummaryResponse("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
     protected val outcome: Right[Nothing, ResponseWrapper[CreateUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
+
+    MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1861.enabled" -> true))
   }
 
 }

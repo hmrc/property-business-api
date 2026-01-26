@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
     import schema.*
 
     lazy val downstreamUri1805: (DownstreamUri[DownstreamResp], Seq[(String, String)]) =
-      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1805") && taxYear.year >= 2026) {
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1805")) {
         (HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"), Nil)
       } else {
         (IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)

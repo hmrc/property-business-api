@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkP
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.{RetrieveUkProperty => RetrieveUkPropertyDef2}
 import v6.retrieveUkPropertyAnnualSubmission.model.response.*
+import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
@@ -112,7 +113,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       "use the pre-TYS URL" in new IfsTest with Test {
         setIfsHipMigration1805Enabled(false)
 
-        def taxYear: String = "2019-20"
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
           responseWith(Some(ukFhlPropertyDef1), ukProperty = None)
@@ -120,7 +121,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
         willGet(
           url = url"$baseUrl/income-tax/business/property/annual",
-          parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear)
+          parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
@@ -129,21 +130,63 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "ifs_hip_migration_1805.enabled is true" must {
-      "use HIP downstream when tax year greater than or equal to 2025-26" in new StandardHipTest {
+      "use HIP downstream when tax year is 2025-26" in new HipTest with Test {
         setIfsHipMigration1805Enabled(true)
 
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        def responseWith(ukProperty: Option[RetrieveUkPropertyDef2]): Def2_RetrieveUkPropertyAnnualSubmissionResponse =
+          Def2_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2025-06-17T10:53:38Z"), ukProperty)
+
         val response: Def2_RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukProperty = Some(ukPropertyDef2))
+
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
-        stubHttpResponse(outcome)
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/25-26/business/property/annual/$nino/$businessId"
+        ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
-      "use IFS downstream when tax year less than 2025-26" in new StandardIfsTest {
-        testReturnUkResultWithFhlDetails(true)
+      "use HIP downstream when tax year is 2024-25" in new HipTest with Test {
+        setIfsHipMigration1805Enabled(true)
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
+          responseWith(Some(ukFhlPropertyDef1), ukProperty = None)
+
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
+
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/24-25/business/property/annual/$nino/$businessId"
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+      }
+
+      "use HIP downstream when tax year is 2023-24" in new HipTest with Test {
+        setIfsHipMigration1805Enabled(true)
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
+          responseWith(Some(ukFhlPropertyDef1), ukProperty = None)
+
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
+
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
     }
   }
@@ -151,15 +194,17 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   trait Test {
     self: ConnectorTest =>
 
-    protected def taxYear: String
+    protected def taxYear: TaxYear
 
     protected val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig
     )
 
-    protected val request: Def1_RetrieveUkPropertyAnnualSubmissionRequestData =
-      Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
+    protected val request: RetrieveUkPropertyAnnualSubmissionRequestData = taxYear.year match {
+      case year if year >= 2026 => Def2_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
+      case _                    => Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
+    }
 
     def responseWith(ukFhlProperty: Option[RetrieveUkFhlPropertyDef1],
                      ukProperty: Option[RetrieveUkPropertyDef1]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
@@ -172,7 +217,7 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   }
 
   trait StandardIfsTest extends IfsTest with Test {
-    protected def taxYear = "2023-24"
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
     def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
@@ -192,35 +237,6 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
       result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-    }
-
-  }
-
-  trait StandardHipTest extends HipTest {
-    self: ConnectorTest =>
-
-    protected def taxYear: String = "2025-26"
-
-    protected val connector: RetrieveUkPropertyAnnualSubmissionConnector = new RetrieveUkPropertyAnnualSubmissionConnector(
-      http = mockHttpClient,
-      appConfig = mockSharedAppConfig
-    )
-
-    protected val request: Def2_RetrieveUkPropertyAnnualSubmissionRequestData =
-      Def2_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, TaxYear.fromMtd(taxYear))
-
-    def responseWith(ukProperty: Option[RetrieveUkPropertyDef2]): Def2_RetrieveUkPropertyAnnualSubmissionResponse =
-      Def2_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp(f"${taxYear.take(4)}-06-17T10:53:38Z"), ukProperty)
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      willGet(
-        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.drop(2)}/business/property/annual/$nino/$businessId"
-      ).returns(Future.successful(outcome))
-    }
-
-    def setIfsHipMigration1805Enabled(ifsHipMigration1805Enabled: Boolean): Unit = {
-      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1805.enabled" -> ifsHipMigration1805Enabled)
     }
 
   }

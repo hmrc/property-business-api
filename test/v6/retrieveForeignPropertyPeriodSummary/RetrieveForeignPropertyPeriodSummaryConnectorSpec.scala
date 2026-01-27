@@ -16,6 +16,7 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
+import play.api.Configuration
 import common.models.domain.SubmissionId
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain._
@@ -75,10 +76,23 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
       }
 
-      "return a foreign result given a TYS tax year request" in new IfsTest with Test {
+      "return a foreign result given a TYS tax year request (HIP not enabled)" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> false)
         def taxYear: TaxYear = tysTaxYear
 
-        stubTysHttpResponse(outcome)
+        stubTysIfsHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+
+      "return a foreign result given a TYS tax year request (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> true)
+
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHipHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] =
           await(connector.retrieveForeignProperty(request))
@@ -86,7 +100,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "response has foreign non-FHL details" must {
+    "response has foreign non-FHL details " must {
 
       val downstreamResponse: RetrieveForeignPropertyPeriodSummaryResponse =
         responseWith(foreignFhlEea = None, foreignNonFhlProperty = Some(List(foreignNonFhlProperty)))
@@ -102,10 +116,23 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
       }
 
-      "return a foreign result given a TYS tax year request" in new IfsTest with Test {
+      "return a foreign result given a TYS tax year request (HIP not enabled)" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> false)
         def taxYear: TaxYear = tysTaxYear
 
-        stubTysHttpResponse(outcome)
+        stubTysIfsHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+
+      "return a foreign result given a TYS tax year request (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> true)
+
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHipHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] =
           await(connector.retrieveForeignProperty(request))
@@ -129,10 +156,23 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
       }
 
-      "return a foreign result given a TYS tax year request" in new IfsTest with Test {
+      "return a foreign result given a TYS tax year request (HIP not enabled)" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> false)
         def taxYear: TaxYear = tysTaxYear
 
-        stubTysHttpResponse(outcome)
+        stubTysIfsHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(downstreamResponse)))
+      }
+
+      "return a foreign result given a TYS tax year request (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> true)
+
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHipHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] =
           await(connector.retrieveForeignProperty(request))
@@ -155,10 +195,23 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
       }
 
-      "return a non-foreign result given a TYS tax year request" in new IfsTest with Test {
+      "return a non-foreign result given a TYS tax year request (HIP not enabled)" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> false)
         def taxYear: TaxYear = tysTaxYear
 
-        stubTysHttpResponse(outcome)
+        stubTysIfsHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
+      }
+
+      "return a non-foreign result given a TYS tax year request (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> true)
+
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHipHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] =
           await(connector.retrieveForeignProperty(request))
@@ -182,10 +235,23 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new IfsTest with Test {
+      "return the error given a TYS tax year request (HIP not enabled)" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> false)
         def taxYear: TaxYear = tysTaxYear
 
-        stubTysHttpResponse(outcome)
+        stubTysIfsHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Result] =
+          await(connector.retrieveForeignProperty(request))
+        result shouldBe outcome
+      }
+
+      "return the error given a TYS tax year request (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> true)
+
+        def taxYear: TaxYear = tysTaxYear
+
+        stubTysHipHttpResponse(outcome)
 
         val result: DownstreamOutcome[Result] =
           await(connector.retrieveForeignProperty(request))
@@ -217,9 +283,15 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
           "submissionId"    -> submissionId.submissionId)
       ).returns(Future.successful(outcome))
 
-    protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
+    protected def stubTysIfsHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
         url = url"$baseUrl/income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"
+      ).returns(Future.successful(outcome))
+
+    protected def stubTysHipHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
+      willGet(
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?submissionId=$submissionId",
+        parameters = List("submissionId" -> submissionId.submissionId)
       ).returns(Future.successful(outcome))
 
   }

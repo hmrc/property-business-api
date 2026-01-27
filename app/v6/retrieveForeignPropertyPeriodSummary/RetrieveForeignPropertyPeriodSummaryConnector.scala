@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
@@ -39,15 +39,29 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Result]] = {
 
+    import request.*
+
+//    val queryParams: Seq[(String, String)] =
+//      Seq("submissionId" -> submissionId.submissionId)
+
+    lazy val downstreamUri1862 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862") && taxYear.year <= 2025) {
+      HipUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
+        s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?submissionId=$submissionId")
+    } else {
+      IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
+        s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+    }
+
     request match {
       case def1: Def1_RetrieveForeignPropertyPeriodSummaryRequestData =>
         import def1.*
         val (downstreamUri, queryParams) =
           if (taxYear.useTaxYearSpecificApi) {
             (
-              IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
-                s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId"),
-              Nil
+              downstreamUri1862,
+              if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+                List("submissionId" -> submissionId.submissionId)
+              } else Nil
             )
           } else {
             (

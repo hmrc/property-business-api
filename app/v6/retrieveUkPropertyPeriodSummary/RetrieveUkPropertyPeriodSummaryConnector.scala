@@ -43,7 +43,7 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
         import def1.*
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          if (taxYear.year <= 2025 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
             HipUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
               s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" +
                 s"submissionId=$submissionId"
@@ -69,7 +69,7 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
         import def2.*
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          if (taxYear.year <= 2025 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
             HipUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
               s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" +
                 s"submissionId=$submissionId"

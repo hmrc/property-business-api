@@ -102,8 +102,8 @@ class Def2_RetrieveUkPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
             status = Status.OK,
             body = Json.parse(
               """{
-                |  "submittedOn": "2025-06-17T10:53:38.000Z",
-                |  "fromDate": "2024-01-29",
+                |  "submittedOn": "2023-06-17T10:53:38.000Z",
+                |  "fromDate": "2025-01-29",
                 |  "toDate": "2025-03-29",
                 |  "ukFhlProperty": { },
                 |  "ukOtherProperty": { }

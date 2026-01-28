@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.retrieveUkPropertyAnnualSubmission.def2
+package v6.retrieveUkPropertyAnnualSubmission.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.RuleTypeOfBusinessIncorrectError
@@ -27,18 +27,18 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec {
+class Def1_RetrieveUkPropertyAnnualSubmissionHipISpec extends IntegrationBaseSpec {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1805.enabled" -> false) ++ super.servicesConfig
-
-  "calling the retrieve uk property annual submission IFS endpoint" should {
+  "calling the retrieve uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
       "any valid request is made" in new Test {
-        override def setupStubs(): StubMapping =
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBody)
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBodyTys)
+        }
 
         val response: WSResponse = await(request().get())
         response.status shouldBe OK
@@ -58,9 +58,9 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
 
           s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String = requestNino
+            override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
-            override val taxYear: String = requestTaxYear
+            override val taxYear: String    = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -75,9 +75,9 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
         }
 
         val input = List(
-          ("AA123", "XAIS12345678910", "2022-23", BAD_REQUEST, NinoFormatError),
+          ("AA123", "XAIS12345678910", "2023-24", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "2020", BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "203100", "2022-23", BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "203100", "2024-25", BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2020-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
@@ -99,15 +99,13 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
 
         val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
-          (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
-          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         errors.foreach(args => serviceErrorTest.tupled(args))
@@ -115,8 +113,32 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
       }
 
       "downstream returns no UK properties" in new Test {
+        val downstreamResponseBody: JsValue = Json.parse("""
+            |{
+            |  "submittedOn":"2022-06-17T10:53:38.000Z",
+            |  "foreignProperty": [
+            |    {
+            |      "countryCode": "FRA",
+            |      "adjustments": {
+            |        "privateUseAdjustment": 100.25,
+            |        "balancingCharge": 100.25
+            |      },
+            |      "allowances": {
+            |        "annualInvestmentAllowance": 100.25,
+            |        "costOfReplacingDomesticItems": 100.25,
+            |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
+            |        "propertyAllowance": 100.25,
+            |        "otherCapitalAllowance": 100.25,
+            |        "structureAndBuildingAllowance": 100.25,
+            |        "electricChargePointAllowance": 100.25
+            |      }
+            |    }
+            |  ]
+            |}
+            |""".stripMargin)
+
         override def setupStubs(): StubMapping =
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBodyNoUkProperties)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponseBody)
 
         val response: WSResponse = await(request().get())
         response.status shouldBe BAD_REQUEST
@@ -126,52 +148,10 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
   }
 
   private trait Test {
-    val nino: String = "AA123456A"
+
+    val nino: String       = "AA123456A"
     val businessId: String = "XAIS12345678910"
-
-    def taxYear: String = "2023-24"
-
-    def downstreamUri: String = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
-
-    def errorBody(code: String): String =
-      s"""
-         |{
-         |  "origin": "HoD",
-         |  "response": {
-         |    "failures": [
-         |      {
-         |        "type": "$code",
-         |        "reason": "message"
-         |      }
-         |    ]
-         |  }
-         |}
-              """.stripMargin
-
-    val downstreamResponseBodyNoUkProperties: JsValue = Json.parse(
-      s"""
-         |{
-         |  "submittedOn":"2022-06-17T10:53:38.000Z",
-         |  "foreignProperty": [
-         |    {
-         |      "countryCode": "FRA",
-         |      "adjustments": {
-         |        "privateUseAdjustment": 100.25,
-         |        "balancingCharge": 100.25
-         |      },
-         |      "allowances": {
-         |        "annualInvestmentAllowance": 100.25,
-         |        "costOfReplacingDomesticItems": 100.25,
-         |        "zeroEmissionsGoodsVehicleAllowance": 100.25,
-         |        "propertyAllowance": 100.25,
-         |        "otherCapitalAllowance": 100.25,
-         |        "structureAndBuildingAllowance": 100.25,
-         |        "electricChargePointAllowance": 100.25
-         |      }
-         |    }
-         |  ]
-         |}
-       """.stripMargin)
+    def taxYear: String    = "2023-24"
 
     val responseBody: JsValue = Json.parse(
       s"""
@@ -249,8 +229,8 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
          |}
        """.stripMargin
     )
-
-    val downstreamResponseBody: JsValue = Json.parse(
+    
+    val downstreamResponseBodyTys: JsValue = Json.parse(
       """
         |{
         |   "submittedOn":"2022-06-17T10:53:38.000Z",
@@ -328,6 +308,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
     )
 
     def setupStubs(): StubMapping
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
 
     def request(): WSRequest = {
       AuthStub.authorised()
@@ -339,6 +320,21 @@ class Def2_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
           (AUTHORIZATION, "Bearer 123")
         )
     }
-  }
 
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "$code",
+         |        "reason": "message"
+         |      }
+         |    ]
+         |  }
+         |}
+         """.stripMargin
+
+  }
 }

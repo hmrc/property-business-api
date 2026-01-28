@@ -57,8 +57,9 @@ class RetrieveUkPropertyAnnualSubmissionService @Inject() (connector: RetrieveUk
 
     val extraTysErrors =
       Map(
-        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-        "INVALID_CORRELATION_ID"  -> InternalError
+        "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID"   -> InternalError,
+        "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError
       )
 
     errors ++ extraTysErrors

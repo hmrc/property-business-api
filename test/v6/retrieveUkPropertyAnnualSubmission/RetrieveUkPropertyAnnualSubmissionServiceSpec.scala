@@ -81,11 +81,12 @@ class RetrieveUkPropertyAnnualSubmissionServiceSpec extends UnitSpec {
         )
 
         val extraTysErrors = List(
-          "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-          "INVALID_CORRELATION_ID"  -> InternalError
+          "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
+          "INVALID_CORRELATION_ID"   -> InternalError,
+          "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
       }
     }
   }

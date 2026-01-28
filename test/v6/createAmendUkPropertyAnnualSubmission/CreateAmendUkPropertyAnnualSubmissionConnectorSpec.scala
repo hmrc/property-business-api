@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,39 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year on HIP" must {
+    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year 2023-24 on HIP" must {
+      "put a body and return a 204" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+
+        def taxYear: TaxYear = tysTaxYear
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          body = requestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendUkPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+    }
+
+    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year 2024-25 on HIP" must {
+      "put a body and return a 204" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          body = requestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendUkPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+    }
+
+    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year 2025-26 on HIP" must {
       "put a body and return a 204" in new HipTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
 

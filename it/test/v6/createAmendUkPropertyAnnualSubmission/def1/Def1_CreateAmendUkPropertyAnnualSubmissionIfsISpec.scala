@@ -29,7 +29,7 @@ import shared.models.errors.*
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
+class Def1_CreateAmendUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec {
 
   override def servicesConfig: Map[String, Any] =
     Map("feature-switch.ifs_hip_migration_1804.enabled" -> false) ++ super.servicesConfig
@@ -117,7 +117,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpe
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
+    private def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
 
     def baseUri: String = s"/income-tax/business/property/annual"
 

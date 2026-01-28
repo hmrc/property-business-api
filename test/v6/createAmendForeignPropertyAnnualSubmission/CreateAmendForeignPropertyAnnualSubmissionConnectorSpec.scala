@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,12 +64,12 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
       }
 
       "a request is made for tax year 2023-24" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         willPut(
           url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
-          body = def2_createAmendForeignPropertyAnnualSubmissionRequestBody
+          body = createAmendForeignPropertyAnnualSubmissionRequestBody
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
@@ -84,6 +84,34 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
         willPut(
           url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
           body = def2_createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a request is made for tax year 2023-24 (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          body = createAmendForeignPropertyAnnualSubmissionRequestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a request is made for tax year 2024-25 (HIP enabled)" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          body = createAmendForeignPropertyAnnualSubmissionRequestBody
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
@@ -136,7 +164,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
           BusinessId(businessId),
           taxYear,
           def3_createAmendForeignPropertyAnnualSubmissionRequestBody)
-      case ty if ty >= 2024 =>
+      case ty if ty == 2026 =>
         Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData(
           Nino(nino),
           BusinessId(businessId),

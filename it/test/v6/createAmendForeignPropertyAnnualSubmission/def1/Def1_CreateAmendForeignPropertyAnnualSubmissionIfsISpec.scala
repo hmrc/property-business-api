@@ -30,7 +30,10 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 
-class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def1_Fixtures {
+class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec with Def1_Fixtures {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1804.enabled" -> false) ++ super.servicesConfig
 
   val requestBodyJson: JsValue = Json.parse("""
       |{
@@ -465,7 +468,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
           BAD_REQUEST,
           RuleBuildingNameNumberError.copy(paths = Some(List("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building"))))
       )
-      input.foreach(args => (validationErrorTest).tupled(args))
+      input.foreach(args => validationErrorTest.tupled(args))
     }
 
     "downstream service error" when {
@@ -506,7 +509,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,9 +112,50 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         }
       }
 
-      "the request for tax year 2023-24 returns a response" which {
+      "the request for tax year returns a response" which {
+
+        "has only foreign fhl details for tax year 2024-25 (HIP enabled)" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> true))
+
+          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        }
+
+        "has only foreign fhl details for tax year 2023-24 (HIP enabled)" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> true))
+
+          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        }
+
         "has only foreign fhl details" in new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
 
           val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
 
@@ -133,6 +174,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         "has only foreign property details" in new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
+
           val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(None, Some(List(def1ForeignPropertyEntry)))
 
           val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
@@ -149,6 +192,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
         "has both foreign fhl and property details" in new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
 
           val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse =
             def1Response(Some(foreignFhlEeaEntry), Some(List(def1ForeignPropertyEntry)))
@@ -211,6 +256,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
       "the request for pre-2025-26 tax year returns a response with no foreign details" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
 
         val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(None, None)
 

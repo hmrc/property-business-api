@@ -26,7 +26,10 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
+class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1805.enabled" -> false) ++ super.servicesConfig
 
   "calling the retrieve foreign property annual submission endpoint" should {
 
@@ -83,7 +86,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
           ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -115,7 +118,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseS
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
 

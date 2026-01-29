@@ -41,48 +41,42 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
 
     import request.*
 
-//    val queryParams: Seq[(String, String)] =
-//      Seq("submissionId" -> submissionId.submissionId)
-
-    lazy val downstreamUri1862 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862") && taxYear.year <= 2025) {
+    lazy val downstreamUri1862 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
       HipUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
-        s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?submissionId=$submissionId")
+        s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
     } else {
       IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
         s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
     }
 
-    request match {
-      case def1: Def1_RetrieveForeignPropertyPeriodSummaryRequestData =>
-        import def1.*
-        val (downstreamUri, queryParams) =
-          if (taxYear.useTaxYearSpecificApi) {
-            (
-              downstreamUri1862,
-              if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
-                List("submissionId" -> submissionId.submissionId)
-              } else Nil
-            )
-          } else {
-            (
-              IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
-              List(
-                "taxableEntityId" -> nino.nino,
-                "taxYear"         -> taxYear.asMtd, // Note that MTD tax year format is used
-                "incomeSourceId"  -> businessId.businessId,
-                "submissionId"    -> submissionId.submissionId
-              )
-            )
-          }
-
-        val response = get(downstreamUri, queryParams)
-
-        response.map(_.map {
-          case ResponseWrapper(corId, resp) if foreignResult(resp) => ResponseWrapper(corId, ForeignResult(resp))
-          case ResponseWrapper(corId, _)                           => ResponseWrapper(corId, NonForeignResult)
-        })
-
+    val (downstreamUri, queryParams) = {
+      if (taxYear.useTaxYearSpecificApi) {
+        (
+          downstreamUri1862,
+          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+            List("submissionId" -> submissionId.submissionId)
+          } else Nil
+        )
+      } else {
+        (
+          IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),
+          List(
+            "taxableEntityId" -> nino.nino,
+            "taxYear"         -> taxYear.asMtd, // Note that MTD tax year format is used
+            "incomeSourceId"  -> businessId.businessId,
+            "submissionId"    -> submissionId.submissionId
+          )
+        )
+      }
     }
+
+    val response = get(downstreamUri, queryParams)
+
+    response.map(_.map {
+      case ResponseWrapper(corId, resp) if foreignResult(resp) => ResponseWrapper(corId, ForeignResult(resp))
+      case ResponseWrapper(corId, _)                           => ResponseWrapper(corId, NonForeignResult)
+    })
+
   }
 
   // The same API#1595 IF endpoint is used for both uk and foreign properties.

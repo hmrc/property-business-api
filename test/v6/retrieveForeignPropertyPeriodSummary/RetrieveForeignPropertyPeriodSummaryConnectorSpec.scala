@@ -290,7 +290,7 @@ class RetrieveForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
 
     protected def stubTysHipHttpResponse(outcome: DownstreamOutcome[RetrieveForeignPropertyPeriodSummaryResponse]): Unit =
       willGet(
-        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?submissionId=$submissionId",
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId",
         parameters = List("submissionId" -> submissionId.submissionId)
       ).returns(Future.successful(outcome))
 

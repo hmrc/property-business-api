@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import shared.models.outcomes.ResponseWrapper
@@ -43,8 +43,15 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
         import def1.*
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
-            s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+            HipUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
+              s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" +
+                s"submissionId=$submissionId"
+            )
+          } else {
+            IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
+              s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+          }
         } else {
           IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
             s"income-tax/business/property/periodic?" +
@@ -62,8 +69,15 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
         import def2.*
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
-            s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+            HipUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
+              s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" +
+                s"submissionId=$submissionId"
+            )
+          } else {
+            IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
+              s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
+          }
         } else {
           IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
             s"income-tax/business/property/periodic?" +

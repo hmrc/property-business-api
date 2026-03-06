@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ class PropertyBusinessApiDefinitionFactory @Inject() (protected val appConfig: S
         context = appConfig.apiGatewayContext,
         categories = List(mtdCategory),
         versions = List(
-          APIVersion(
-            version = Version5,
-            status = buildAPIStatus(Version5),
-            endpointsEnabled = appConfig.endpointsEnabled(Version5)
-          ),
           APIVersion(
             version = Version6,
             status = buildAPIStatus(Version6),

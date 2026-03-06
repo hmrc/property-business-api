@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockSharedA
   "definition" when {
     "called" should {
       "return a valid Definition case class" in {
-        List(Version5, Version6).foreach { version =>
+        List(Version6).foreach { version =>
           MockedSharedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
           MockedSharedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
           MockedSharedAppConfig.apiStatus(version) returns "BETA"
@@ -46,11 +46,6 @@ class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockSharedA
               context = "individuals/business/property",
               categories = List("INCOME_TAX_MTD"),
               versions = List(
-                APIVersion(
-                  version = Version5,
-                  status = BETA,
-                  endpointsEnabled = true
-                ),
                 APIVersion(
                   version = Version6,
                   status = BETA,

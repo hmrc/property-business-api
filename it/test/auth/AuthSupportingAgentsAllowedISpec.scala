@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import shared.support.IntegrationBaseSpec
 
 abstract class AuthSupportingAgentsAllowedISpec extends IntegrationBaseSpec {
 
-  /** The API's latest version, e.g. "5.0".
+  /** The API's latest version, e.g. "6.0".
     */
   protected val callingApiVersion: String
 

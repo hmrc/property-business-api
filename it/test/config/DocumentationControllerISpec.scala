@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import play.api.http.Status
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import shared.routing.{Version5, Version6}
+import shared.routing.*
 import shared.support.IntegrationBaseSpec
 
 import scala.util.Try
@@ -39,11 +39,6 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
        |         "INCOME_TAX_MTD"
        |      ],
        |      "versions":[
-       |         {
-       |            "version":"5.0",
-       |            "status":"DEPRECATED",
-       |            "endpointsEnabled":true
-       |         },
        |         {
        |            "version":"6.0",
        |            "status":"BETA",
@@ -64,35 +59,33 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
   }
 
   "an OAS documentation request" must {
-    List(Version5, Version6).foreach { version =>
-      s"return the documentation for $version" in {
-        val response = get(s"/api/conf/${version.name}/application.yaml")
+    s"return the documentation for $Version6" in {
+      val response = get(s"/api/conf/${Version6.name}/application.yaml")
 
-        val body         = response.body
-        val parserResult = Try(new OpenAPIV3Parser().readContents(body)).getOrElse(fail("openAPI couldn't read contents"))
+      val body         = response.body
+      val parserResult = Try(new OpenAPIV3Parser().readContents(body)).getOrElse(fail("openAPI couldn't read contents"))
 
-        val openAPI = Option(parserResult.getOpenAPI).getOrElse(fail("openAPI wasn't defined"))
+      val openAPI = Option(parserResult.getOpenAPI).getOrElse(fail("openAPI wasn't defined"))
 
-        openAPI.getOpenapi shouldBe "3.0.3"
-        withClue(s"If v${version.name} endpoints are enabled in application.conf, remove the [test only] from this test: ") {
-          openAPI.getInfo.getTitle shouldBe "Property Business (MTD)"
-        }
-
-        openAPI.getInfo.getVersion shouldBe version.toString
+      openAPI.getOpenapi shouldBe "3.0.3"
+      withClue(s"If v${Version6.name} endpoints are enabled in application.conf, remove the [test only] from this test: ") {
+        openAPI.getInfo.getTitle shouldBe "Property Business (MTD)"
       }
 
-      s"return the documentation with the correct accept header for version $version" in {
-        val response = get(s"/api/conf/${version.name}/common/headers.yaml")
-        val body     = response.body
+      openAPI.getInfo.getVersion shouldBe Version6.toString
+    }
 
-        val headerRegex = """(?s).*?application/vnd\.hmrc\.(\d+\.\d+)\+json.*?""".r
-        val header      = headerRegex.findFirstMatchIn(body)
-        header.isDefined shouldBe true
+    s"return the documentation with the correct accept header for version $Version6" in {
+      val response = get(s"/api/conf/${Version6.name}/common/headers.yaml")
+      val body     = response.body
 
-        val versionFromHeader = header.get.group(1)
-        versionFromHeader shouldBe version.name
+      val headerRegex = """(?s).*?application/vnd\.hmrc\.(\d+\.\d+)\+json.*?""".r
+      val header      = headerRegex.findFirstMatchIn(body)
+      header.isDefined shouldBe true
 
-      }
+      val versionFromHeader = header.get.group(1)
+      versionFromHeader shouldBe Version6.name
+
     }
   }
 

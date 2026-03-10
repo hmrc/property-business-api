@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,9 @@ import shared.routing.*
 import javax.inject.Inject
 
 // Add routes corresponding to available versions...
-case class PropertyBusinessVersionRoutingMap @Inject() (defaultRouter: Router, v5Router: v5.Routes, v6Router: v6.Routes) extends VersionRoutingMap {
+case class PropertyBusinessVersionRoutingMap @Inject() (defaultRouter: Router, v6Router: v6.Routes) extends VersionRoutingMap {
 
   val map: Map[Version, Router] = Map(
-    Version5 -> v5Router,
     Version6 -> v6Router
   )
 

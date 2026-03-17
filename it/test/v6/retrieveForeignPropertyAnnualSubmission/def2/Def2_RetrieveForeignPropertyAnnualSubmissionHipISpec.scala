@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,7 +201,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionHipISpec extends IntegrationBa
         |        "otherCapitalAllowance": 100.25,
         |        "zeroEmissionsCarAllowance": 100.25,
         |        "propertyAllowance": 100.25,
-        |        "structuredBuildingAllowance": [
+        |        "structureAndBuildingAllowance": [
         |          {
         |            "amount": 100.25,
         |            "firstYear": {

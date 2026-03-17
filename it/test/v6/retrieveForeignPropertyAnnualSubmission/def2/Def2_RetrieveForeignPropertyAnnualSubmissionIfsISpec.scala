@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
           ("AA123456A", "XAIS12345678910", "2023-24", Status.INTERNAL_SERVER_ERROR, InternalError),
           ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
@@ -108,7 +108,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
 
@@ -193,7 +193,7 @@ class Def2_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
                                                        |          "otherCapitalAllowance": 100.25,
                                                        |          "zeroEmissionsCarAllowance": 100.25,
                                                        |          "propertyAllowance": 100.25,
-                                                       |          "structuredBuildingAllowance": [
+                                                       |          "structureAndBuildingAllowance": [
                                                        |            {
                                                        |              "amount": 100.25,
                                                        |              "firstYear": {

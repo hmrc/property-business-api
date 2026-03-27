@@ -75,11 +75,8 @@ tags:
     description: Resources relating to Income and Expenses Period Summaries (including cumulative and List periods)
   - name: Historic Annual and Periodic Submissions
     description: Resources relating to Historic Annual and Periodic Submissions
-
-# {{#if (enabled 'foreign-property-details')}}
   - name: Foreign Property Details
     description: Resources relating to Foreign Property Details
-# {{/if}}
 
 paths:
   /individuals/business/property/uk/{nino}/{businessId}/annual/{taxYear}:

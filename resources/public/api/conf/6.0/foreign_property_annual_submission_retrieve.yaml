@@ -26,9 +26,7 @@ parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/businessId'
   - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
-# {{#if (enabled 'foreign-property-r19-property-id')}}
   - $ref: './common/queryParameters.yaml#/components/parameters/propertyIdFrom2026'
-# {{/if}}
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
@@ -55,9 +53,7 @@ responses:
           oneOf:
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def2/response.json'
-          # {{#if (enabled 'foreign-property-r19-property-id')}}
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def3/response.json'
-          # {{/if}}
         examples:
           All Other Allowances Response for TY 2024-25 and before:
             value:
@@ -71,14 +67,12 @@ responses:
           Property Allowance Response for TY 2025-26:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def2/property_allowance_response.json'
-        # {{#if (enabled 'foreign-property-r19-property-id')}}
           All Other Allowances Response for TY 2026-27 and after:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def3/all_other_allowances_response.json'
           Property Allowance Response for TY 2026-27 and after:
             value:
               $ref: './examples/foreign_property_annual_submission_retrieve/def3/property_allowance_response.json'
-        # {{/if}}
 
   "400":
     description: Bad request
@@ -102,10 +96,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatBusinessId'
           FORMAT_TAX_YEAR:
             $ref: './common/errors.yaml#/components/examples/formatTaxYear'
-        # {{#if (enabled 'foreign-property-r19-property-id')}}
           FORMAT_PROPERTY_ID:
             $ref: './common/errors.yaml#/components/examples/formatPropertyId'
-        # {{/if}}
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_TAX_YEAR_RANGE_INVALID:

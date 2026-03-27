@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "For TY 2026-27 and after {{#unless (releasedInProduction 'foreign-property-r19-property-id')}}[Test Only] {{/unless}}",
+  "title": "For TY 2026-27 and after",
   "type": "object",
   "properties": {
     "foreignProperty": {

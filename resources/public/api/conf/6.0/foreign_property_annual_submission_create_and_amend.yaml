@@ -19,9 +19,7 @@ description: |
   | 2025-26 onwards | PROPERTY_INCOME_ALLOWANCE       | Simulates the scenario where the propertyIncomeAllowance is submitted when privateUseAdjustment is supplied |
   | 2025-26 onwards | STATEFUL                        | Performs a stateful create or update.                                                                       |
   | 2025-26 onwards | OUTSIDE_AMENDMENT_WINDOW        | Simulates the scenario where request cannot be completed as it is outside the amendment window.             |
-  {{~#if (enabled 'foreign-property-r19-property-id')}}
   | 2026-27 onwards | PROPERTY_ID_MISMATCH            | Simulates the scenario where the supplied property ID is not associated with the income source on record.   |
-  {{~/if}}
 
 
 tags:
@@ -44,16 +42,10 @@ requestBody:
   content:
     application/json:
       schema:
-        # {{#if (enabled 'foreign-property-r19-property-id')}}
         oneOf:
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def2/request.json'
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def3/request.json'
-        # {{else}}
-        oneOf:
-          - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
-          - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def2/request.json'
-        # {{/if}}
       examples:
         all-other-allowances-request-TY-2024-25:
           description: All Other Allowances request for TY 2024-25 and before
@@ -71,7 +63,6 @@ requestBody:
           description: Property Allowance request for TY 2025-26
           value:
             $ref: './examples/foreign_property_annual_submission_create_and_amend/def2/property_allowance_request.json'
-        # {{#if (enabled 'foreign-property-r19-property-id')}}
         all-other-allowances-request-TY-2026-27:
           description: All Other Allowances request for TY 2026-27 and after
           value:
@@ -80,7 +71,6 @@ requestBody:
           description: Property Allowance request for TY 2026-27 and after
           value:
             $ref: './examples/foreign_property_annual_submission_create_and_amend/def3/property_allowance_request.json'
-        # {{/if}}
 responses:
   "200":
     description: Success
@@ -123,10 +113,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatString'
           FORMAT_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/formatCountryCode'
-          # {{#if (enabled 'foreign-property-r19-property-id')}}
           FORMAT_PROPERTY_ID:
             $ref: './common/errors.yaml#/components/examples/formatPropertyId'
-          # {{/if}}
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
           RULE_TAX_YEAR_RANGE_INVALID:
@@ -143,12 +131,10 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
           RULE_DUPLICATE_COUNTRY_CODE:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicateCountryCode'
-          # {{#if (enabled 'foreign-property-r19-property-id')}}
           RULE_DUPLICATE_PROPERTY_ID:
             $ref: './common/errors.yaml#/components/examples/ruleDuplicatePropertyId'
           RULE_PROPERTY_ID_MISMATCH:
             $ref: './common/errors.yaml#/components/examples/rulePropertyIdMismatch'
-          # {{/if}}
           RULE_PROPERTY_INCOME_ALLOWANCE:
             $ref: './common/errors.yaml#/components/examples/rulePropertyIncomeAllowance'
           RULE_INCORRECT_GOV_TEST_SCENARIO:

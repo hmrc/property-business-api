@@ -17,13 +17,11 @@
 package v6.retrieveForeignPropertyAnnualSubmission
 
 import common.models.domain.PropertyId
-import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.RetrieveForeignFhlEeaEntry
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.RetrieveForeignPropertyEntry as Def1_ForeignPropertyEntry
@@ -37,6 +35,7 @@ import v6.retrieveForeignPropertyAnnualSubmission.def3.fixture.Def3_RetrieveFore
 import v6.retrieveForeignPropertyAnnualSubmission.def3.model.response.Def3_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def3.request.Def3_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
+import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}
 
 import scala.concurrent.Future
 
@@ -61,156 +60,6 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
 
   "RetrieveForeignPropertyAnnualSubmissionConnector" should {
     "return a foreign result" when {
-      "the request for tax year 2026-27 onwards returns a response with foreign property details" in new HipTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2026-27")
-
-        val outcome: Right[Nothing, ResponseWrapper[Def3_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-          Right(ResponseWrapper(correlationId, def3Response))
-
-        willGet(
-          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/foreign-property/annual/$nino/$businessId",
-          parameters = List("propertyId" -> propertyId.propertyId)
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(def3Response)))
-      }
-
-      "the request for tax year 2025-26 returns a response with foreign property details" which {
-        val response: Def2_RetrieveForeignPropertyAnnualSubmissionResponse = def2Response(Some(List(def2ForeignPropertyEntry)))
-
-        val outcome: Right[Nothing, ResponseWrapper[Def2_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-          Right(ResponseWrapper(correlationId, response))
-
-        "is from HIP downstream when the feature switch is enabled" in new HipTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> true))
-
-          willGet(
-            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-
-        "is from IFS downstream when the feature switch is disabled" in new IfsTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
-
-          willGet(
-            url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-      }
-
-      "the request for tax year returns a response" which {
-
-        "has only foreign fhl details for tax year 2024-25 (HIP enabled)" in new HipTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> true))
-
-          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
-
-          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-            Right(ResponseWrapper(correlationId, response))
-
-          willGet(
-            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-
-        "has only foreign fhl details for tax year 2023-24 (HIP enabled)" in new HipTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> true))
-
-          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
-
-          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-            Right(ResponseWrapper(correlationId, response))
-
-          willGet(
-            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-
-        "has only foreign fhl details" in new IfsTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
-
-          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
-
-          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-            Right(ResponseWrapper(correlationId, response))
-
-          willGet(
-            url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-
-        "has only foreign property details" in new IfsTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
-
-          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(None, Some(List(def1ForeignPropertyEntry)))
-
-          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-            Right(ResponseWrapper(correlationId, response))
-
-          willGet(
-            url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-
-        "has both foreign fhl and property details" in new IfsTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
-
-          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse =
-            def1Response(Some(foreignFhlEeaEntry), Some(List(def1ForeignPropertyEntry)))
-
-          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-            Right(ResponseWrapper(correlationId, response))
-
-          willGet(
-            url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"
-          ).returns(Future.successful(outcome))
-
-          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
-        }
-      }
-
       "the request for pre-TYS tax year returns a response with foreign fhl and property details" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
@@ -232,6 +81,111 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
       }
+
+      "the request for tax year 2026-27 onwards returns a response with foreign property details" in new HipTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2026-27")
+
+        val outcome: Right[Nothing, ResponseWrapper[Def3_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, def3Response))
+
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/foreign-property/annual/$nino/$businessId",
+          parameters = List("propertyId" -> propertyId.propertyId)
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(def3Response)))
+      }
+
+      "the request for tax year 2025-26 returns a response with foreign property details" in new HipTest with Test {
+        val response: Def2_RetrieveForeignPropertyAnnualSubmissionResponse = def2Response(Some(List(def2ForeignPropertyEntry)))
+
+        val outcome: Right[Nothing, ResponseWrapper[Def2_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        willGet(url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
+          .returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+        result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+      }
+
+      "the request for tax year returns a response" which {
+
+        "has only foreign fhl details for tax year 2024-25" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        }
+
+        "has only foreign fhl details for tax year 2023-24" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(Some(foreignFhlEeaEntry), None)
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        }
+
+        "has only foreign property details for tax year 2023-24" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(None, Some(List(def1ForeignPropertyEntry)))
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        }
+
+        "has both foreign fhl and property details for tax year 2023-24" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse =
+            def1Response(Some(foreignFhlEeaEntry), Some(List(def1ForeignPropertyEntry)))
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
+
+          result shouldBe Right(ResponseWrapper(correlationId, ForeignResult(response)))
+        }
+      }
+
     }
 
     "return a non-foreign result" when {
@@ -243,29 +197,8 @@ class RetrieveForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec
         val outcome: Right[Nothing, ResponseWrapper[Def2_RetrieveForeignPropertyAnnualSubmissionResponse]] =
           Right(ResponseWrapper(correlationId, response))
 
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> true))
-
         willGet(
           url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))
-
-        result shouldBe Right(ResponseWrapper(correlationId, NonForeignResult))
-      }
-
-      "the request for pre-2025-26 tax year returns a response with no foreign details" in new IfsTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1805.enabled" -> false))
-
-        val response: Def1_RetrieveForeignPropertyAnnualSubmissionResponse = def1Response(None, None)
-
-        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveForeignPropertyAnnualSubmissionResponse]] =
-          Right(ResponseWrapper(correlationId, response))
-
-        willGet(
-          url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"
         ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveForeignProperty(request))

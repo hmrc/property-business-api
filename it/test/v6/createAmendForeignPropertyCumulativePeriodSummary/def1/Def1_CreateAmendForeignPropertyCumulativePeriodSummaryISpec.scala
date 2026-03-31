@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary
+package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
@@ -31,7 +31,7 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryHipISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
   private def invalidEntryWithConsolidatedExpenses() =
     Json.parse(s"""

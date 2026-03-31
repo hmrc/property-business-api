@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
@@ -41,22 +41,13 @@ class RetrieveForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpCli
 
     import request.*
 
-    lazy val downstreamUri1862 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
+    lazy val downstreamUri1862 =
       HipUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
         s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
-    } else {
-      IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse](
-        s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
-    }
 
     val (downstreamUri, queryParams) = {
       if (taxYear.useTaxYearSpecificApi) {
-        (
-          downstreamUri1862,
-          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
-            List("submissionId" -> submissionId.submissionId)
-          } else Nil
-        )
+        (downstreamUri1862, List("submissionId" -> submissionId.submissionId))
       } else {
         (
           IfsUri[Def1_RetrieveForeignPropertyPeriodSummaryResponse]("income-tax/business/property/periodic"),

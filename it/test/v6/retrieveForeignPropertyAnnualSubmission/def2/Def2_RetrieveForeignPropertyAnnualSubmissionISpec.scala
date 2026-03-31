@@ -24,7 +24,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class Def2_RetrieveForeignPropertyAnnualSubmissionHipISpec extends IntegrationBaseSpec {
+class Def2_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   "calling the retrieve foreign property annual submission endpoint" should {
     "return a 200 status code" when {

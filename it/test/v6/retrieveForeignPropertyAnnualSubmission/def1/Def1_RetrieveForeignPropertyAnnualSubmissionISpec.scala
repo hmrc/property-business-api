@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1805.enabled" -> false) ++ super.servicesConfig
+class Def1_RetrieveForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   "calling the retrieve foreign property annual submission endpoint" should {
 
@@ -47,7 +44,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made for TYS" in new Test with TysIfsTest {
+      "any valid request is made for TYS" in new Test with TysHipTest {
         override def setupStubs(): Unit =
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, Status.OK, downstreamResponseBody)
 
@@ -67,7 +64,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
                                 requestTaxYear: String,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test with NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new Test with TysHipTest{
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
@@ -80,10 +77,10 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
         }
 
         val input = List(
-          ("AA123", "XAIS12345678910", "2021-22", Status.BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "203100", "2021-22", Status.BAD_REQUEST, BusinessIdFormatError),
+          ("AA123", "XAIS12345678910", "2023-24", Status.BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "203100", "2023-24", Status.BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2020", Status.BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS12345678910", "2020-22", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2022-24", Status.BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", Status.BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
         input.foreach(args => validationErrorTest.tupled(args))
@@ -91,7 +88,7 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test with NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test with TysHipTest {
 
             override def setupStubs(): Unit =
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamCode))
@@ -107,22 +104,19 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
           (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.NOT_FOUND, "INVALID_INCOMESOURCEID", Status.BAD_REQUEST, BusinessIdFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATIONID", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.NOT_FOUND, "INVALID_INCOME_SOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.NOT_FOUND, "NO_DATA_FOUND", Status.NOT_FOUND, NotFoundError),
           (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           (Status.INTERNAL_SERVER_ERROR, "SERVER_ERROR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", Status.INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = List(
-          (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
+        errors.foreach(args => serviceErrorTest.tupled(args))
       }
     }
 
-    "the service response does not contain a foreign property" in new Test with NonTysTest {
+    "the service response does not contain a foreign property" in new Test with TysHipTest {
       override val downstreamResponseBody: JsValue = Json.parse(s"""
            |{
            |  "submittedOn": "2022-06-17T10:53:38.000Z",
@@ -272,13 +266,20 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
         )
     }
 
-    def errorBody(code: String): String =
+    def errorBody(`type`: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "message"
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "${`type`}",
+         |        "reason": "message"
+         |      }
+         |    ]
+         |  }
          |}
-       """.stripMargin
+      """.stripMargin
 
   }
 
@@ -295,10 +296,10 @@ class Def1_RetrieveForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBa
 
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
     def taxYear: String = "2023-24"
 
-    def downstreamUri: String = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
 
     def downstreamQueryParams: Map[String, String] = Map.empty
   }

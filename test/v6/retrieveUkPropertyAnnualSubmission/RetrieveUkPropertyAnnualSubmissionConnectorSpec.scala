@@ -16,8 +16,6 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import org.scalamock.handlers.CallHandler
-import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
@@ -31,163 +29,167 @@ import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.{Ret
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.{RetrieveUkProperty => RetrieveUkPropertyDef2}
-import v6.retrieveUkPropertyAnnualSubmission.model.response.*
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
 
 class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
-  private val nino       = Nino("AA123456A")
-  private val businessId = BusinessId("XAIS12345678910")
+  private val nino: Nino             = Nino("AA123456A")
+  private val businessId: BusinessId = BusinessId("XAIS12345678910")
+  private val timestamp: Timestamp   = Timestamp("2022-06-17T10:53:38Z")
 
-  private val ukFhlPropertyDef1 = RetrieveUkFhlPropertyDef1(None, None)
-  private val ukPropertyDef1    = RetrieveUkPropertyDef1(None, None)
-  private val ukPropertyDef2    = RetrieveUkPropertyDef2(None, None)
+  private val ukFhlPropertyDef1: RetrieveUkFhlPropertyDef1 = RetrieveUkFhlPropertyDef1(None, None)
+  private val ukPropertyDef1: RetrieveUkPropertyDef1       = RetrieveUkPropertyDef1(None, None)
+  private val ukPropertyDef2: RetrieveUkPropertyDef2       = RetrieveUkPropertyDef2(None, None)
 
-  "connector" when {
-    "response has uk fhl details" must {
-      "return a uk result" in new StandardIfsTest {
-        testReturnUkResultWithFhlDetails(false)
-      }
-    }
+  def def1Response(ukFhlProperty: Option[RetrieveUkFhlPropertyDef1],
+                   ukProperty: Option[RetrieveUkPropertyDef1]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
+    Def1_RetrieveUkPropertyAnnualSubmissionResponse(timestamp, ukFhlProperty, ukProperty)
 
-    "response has uk non-fhl details" must {
-      "return a uk result" in new StandardIfsTest {
-        setIfsHipMigration1805Enabled(false)
+  def def2Response(ukProperty: Option[RetrieveUkPropertyDef2]): Def2_RetrieveUkPropertyAnnualSubmissionResponse =
+    Def2_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2025-06-17T10:53:38Z"), ukProperty)
 
-        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukFhlProperty = None, ukProperty = Some(ukPropertyDef1))
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(outcome)
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-    }
-
-    "response has uk fhl and non-fhl details" must {
-      "return a uk result" in new StandardIfsTest {
-        setIfsHipMigration1805Enabled(false)
+  "RetrieveUkPropertyAnnualSubmissionConnector" should {
+    "return a uk result" when {
+      "the request for pre-TYS tax year returns a response with uk fhl and property details" in new IfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(ukFhlProperty = Some(ukFhlPropertyDef1), ukProperty = Some(ukPropertyDef1))
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
+          def1Response(Some(ukFhlPropertyDef1), Some(ukPropertyDef1))
 
-        stubHttpResponse(outcome)
+        val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveUkPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
+
+        willGet(
+          url = url"$baseUrl/income-tax/business/property/annual",
+          parameters = List(
+            "taxableEntityId" -> nino.nino,
+            "incomeSourceId"  -> businessId.businessId,
+            "taxYear"         -> taxYear.asMtd
+          )
+        ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
+
+      "the request for tax year 2025-26 returns a response with uk property details" in new HipTest with Test {
+        val response: Def2_RetrieveUkPropertyAnnualSubmissionResponse = def2Response(Some(ukPropertyDef2))
+
+        val outcome: Right[Nothing, ResponseWrapper[Def2_RetrieveUkPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        willGet(url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
+          .returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+      }
+
+      "the request for tax year returns a response" which {
+
+        "has only uk fhl details for tax year 2024-25" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
+
+          val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse = def1Response(Some(ukFhlPropertyDef1), None)
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveUkPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+          result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        }
+
+        "has only uk fhl details for tax year 2023-24" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse = def1Response(Some(ukFhlPropertyDef1), None)
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveUkPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+          result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        }
+
+        "has only uk property details for tax year 2023-24" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse = def1Response(None, Some(ukPropertyDef1))
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveUkPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+          result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        }
+
+        "has both uk fhl and property details for tax year 2023-24" in new HipTest with Test {
+          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+          val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
+            def1Response(Some(ukFhlPropertyDef1), Some(ukPropertyDef1))
+
+          val outcome: Right[Nothing, ResponseWrapper[Def1_RetrieveUkPropertyAnnualSubmissionResponse]] =
+            Right(ResponseWrapper(correlationId, response))
+
+          willGet(
+            url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+          ).returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+          result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
+        }
+      }
     }
 
-    "response has no details" must {
-      "return a non-uk result" in new StandardIfsTest {
-        setIfsHipMigration1805Enabled(false)
+    "return a non-uk result" when {
+      "the request for tax year 2025-26 returns a response with no uk details" in new HipTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
-        val response: RetrieveUkPropertyAnnualSubmissionResponse                                 = responseWith(None, None)
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
+        val response: Def2_RetrieveUkPropertyAnnualSubmissionResponse = def2Response(None)
 
-        stubHttpResponse(outcome)
+        val outcome: Right[Nothing, ResponseWrapper[Def2_RetrieveUkPropertyAnnualSubmissionResponse]] =
+          Right(ResponseWrapper(correlationId, response))
+
+        willGet(
+          url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+        ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
         result shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
       }
     }
 
-    "response is an error" must {
-      "return the error" in new StandardIfsTest {
-        setIfsHipMigration1805Enabled(false)
+    "return an error when downstream call fails" in new HipTest with Test {
+      def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
-        val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
-          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
+      val response: DownstreamErrors = DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
 
-        stubHttpResponse(outcome)
+      val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
+        Left(ResponseWrapper(correlationId, response))
 
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-      }
-    }
+      willGet(
+        url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"
+      ).returns(Future.successful(outcome))
 
-    "request is for a pre-TYS tax year" must {
-      "use the pre-TYS URL" in new IfsTest with Test {
-        setIfsHipMigration1805Enabled(false)
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
-
-        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(Some(ukFhlPropertyDef1), ukProperty = None)
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
-
-        willGet(
-          url = url"$baseUrl/income-tax/business/property/annual",
-          parameters = List("taxableEntityId" -> nino.nino, "incomeSourceId" -> businessId.businessId, "taxYear" -> taxYear.asMtd)
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-    }
-
-    "ifs_hip_migration_1805.enabled is true" must {
-      "use HIP downstream when tax year is 2025-26" in new HipTest with Test {
-        setIfsHipMigration1805Enabled(true)
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
-
-        def responseWith(ukProperty: Option[RetrieveUkPropertyDef2]): Def2_RetrieveUkPropertyAnnualSubmissionResponse =
-          Def2_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2025-06-17T10:53:38Z"), ukProperty)
-
-        val response: Def2_RetrieveUkPropertyAnnualSubmissionResponse = responseWith(ukProperty = Some(ukPropertyDef2))
-
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] =
-          Right(ResponseWrapper(correlationId, response))
-
-        willGet(
-          url = url"$baseUrl/itsa/income-tax/v1/25-26/business/property/annual/$nino/$businessId"
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-
-      "use HIP downstream when tax year is 2024-25" in new HipTest with Test {
-        setIfsHipMigration1805Enabled(true)
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
-
-        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(Some(ukFhlPropertyDef1), ukProperty = None)
-
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] =
-          Right(ResponseWrapper(correlationId, response))
-
-        willGet(
-          url = url"$baseUrl/itsa/income-tax/v1/24-25/business/property/annual/$nino/$businessId"
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-
-      "use HIP downstream when tax year is 2023-24" in new HipTest with Test {
-        setIfsHipMigration1805Enabled(true)
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-        val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-          responseWith(Some(ukFhlPropertyDef1), ukProperty = None)
-
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] =
-          Right(ResponseWrapper(correlationId, response))
-
-        willGet(
-          url = url"$baseUrl/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
+      val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
+      result shouldBe outcome
     }
   }
 
@@ -204,39 +206,6 @@ class RetrieveUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     protected val request: RetrieveUkPropertyAnnualSubmissionRequestData = taxYear.year match {
       case year if year >= 2026 => Def2_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
       case _                    => Def1_RetrieveUkPropertyAnnualSubmissionRequestData(nino, businessId, taxYear)
-    }
-
-    def responseWith(ukFhlProperty: Option[RetrieveUkFhlPropertyDef1],
-                     ukProperty: Option[RetrieveUkPropertyDef1]): Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-      Def1_RetrieveUkPropertyAnnualSubmissionResponse(Timestamp("2022-06-17T10:53:38Z"), ukFhlProperty, ukProperty)
-
-    def setIfsHipMigration1805Enabled(ifsHipMigration1805Enabled: Boolean): Unit = {
-      MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1805.enabled" -> ifsHipMigration1805Enabled)
-    }
-
-  }
-
-  trait StandardIfsTest extends IfsTest with Test {
-    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-    def stubHttpResponse(outcome: DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveUkPropertyAnnualSubmissionResponse]]]#Derived = {
-      willGet(
-        url = url"$baseUrl/income-tax/business/property/annual/23-24/$nino/$businessId"
-      ).returns(Future.successful(outcome))
-    }
-
-    def testReturnUkResultWithFhlDetails(setFeatureSwitch1805: Boolean): Unit = {
-      setIfsHipMigration1805Enabled(setFeatureSwitch1805)
-
-      val response: Def1_RetrieveUkPropertyAnnualSubmissionResponse =
-        responseWith(ukFhlProperty = Some(ukFhlPropertyDef1), ukProperty = None)
-      val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyAnnualSubmissionResponse]] = Right(ResponseWrapper(correlationId, response))
-
-      stubHttpResponse(outcome)
-
-      val result: DownstreamOutcome[Result] = await(connector.retrieveUkProperty(request))
-      result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
     }
 
   }

@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
@@ -40,11 +40,7 @@ class RetrieveUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClien
     import schema.*
 
     lazy val downstreamUri1805: (DownstreamUri[DownstreamResp], Seq[(String, String)]) =
-      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1805")) {
-        (HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"), Nil)
-      } else {
-        (IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId"), Nil)
-      }
+      (HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId"), Nil)
 
     lazy val downstreamUri1598: (DownstreamUri[DownstreamResp], Seq[(String, String)]) = (
       IfsUri[DownstreamResp]("income-tax/business/property/annual"),

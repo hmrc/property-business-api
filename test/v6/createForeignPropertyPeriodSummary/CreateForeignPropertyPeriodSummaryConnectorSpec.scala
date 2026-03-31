@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v6.createForeignPropertyPeriodSummary
 
-import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -50,26 +49,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         result shouldBe outcome
       }
 
-      "given a tax year 2023-24 and HIP is disabled" in new IfsTest with Test {
+      "given a tax year 2023-24" in new HipTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
-
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1861.enabled" -> false))
-
-        val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
-
-        willPost(
-          url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
-          body = requestBodyDef1
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = await(connector.createForeignProperty(requestDef1))
-        result shouldBe outcome
-      }
-
-      "given a tax year 2023-24 and HIP is enabled" in new HipTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
-
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1861.enabled" -> true))
 
         val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 
@@ -84,26 +65,8 @@ class CreateForeignPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "post a valid body and return 200 with submissionId for Def2" when {
-      "given a tax year 2023-24 and HIP is disabled" in new IfsTest with Test {
+      "given a tax year 2023-24" in new HipTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1861.enabled" -> false))
-
-        val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
-
-        willPost(
-          url = url"$baseUrl/income-tax/business/property/periodic/23-24?taxableEntityId=$nino&incomeSourceId=$businessId",
-          body = requestBodyDef2
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = await(connector.createForeignProperty(requestDef2))
-        result shouldBe outcome
-      }
-
-      "given a tax year 2023-24 and HIP is enabled" in new HipTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1861.enabled" -> true))
 
         val outcome: DownstreamOutcome[CreateForeignPropertyPeriodSummaryResponse] = Right(ResponseWrapper(correlationId, response))
 

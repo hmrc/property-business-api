@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v6.createForeignPropertyDetails
+package v6.createForeignPropertyDetails.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
 import play.api.libs.json.*
-import play.api.test.Helpers.*
-import shared.models.utils.JsonErrorValidators
-import shared.support.IntegrationBaseSpec
-import shared.services.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.*
 import shared.models.errors.*
+import shared.models.utils.JsonErrorValidators
+import shared.services.*
+import shared.support.IntegrationBaseSpec
 
 class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

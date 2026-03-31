@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package v6.retrieveForeignPropertyCumulativeSummary
 
 import config.PropertyBusinessFeatureSwitches
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
-import shared.connectors.DownstreamUri.{HipUri, IfsUri}
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.HipUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -48,11 +48,8 @@ class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: Htt
     lazy val downstreamUriForTy2627Onwards: DownstreamUri[DownstreamResp] = HipUri[DownstreamResp](
       s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/foreign-property/${nino.value}/${businessId.businessId}")
 
-    lazy val downstreamUri1962: DownstreamUri[DownstreamResp] = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1962")) {
+    lazy val downstreamUri1962: DownstreamUri[DownstreamResp] =
       HipUri[DownstreamResp](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/periodic/property/${nino.value}/${businessId.businessId}")
-    } else {
-      IfsUri[DownstreamResp](s"income-tax/${taxYear.asTysDownstream}/business/property/periodic/${nino.value}/${businessId.businessId}")
-    }
 
     val downstreamUri: DownstreamUri[DownstreamResp] = if (taxYear.year >= 2027) downstreamUriForTy2627Onwards else downstreamUri1962
 

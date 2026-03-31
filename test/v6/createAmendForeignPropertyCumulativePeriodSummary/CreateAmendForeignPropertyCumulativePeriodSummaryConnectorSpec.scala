@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
-import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -45,29 +44,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec extends Con
   "createAmendForeignProperty" when {
 
     "given a valid request (TYS)" should {
-      "return a success response when feature switch is disabled (IFS enabled)" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> false))
-
-        val requestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
-          Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures.regularExpensesRequestBody
-
-        val request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData =
-          Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(nino, businessId, taxYear, requestBody)
-
-        val outcome: DownstreamOutcome[Unit] = Right(ResponseWrapper(correlationId, response))
-
-        willPut(
-          url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId",
-          body = requestBody
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignProperty(request))
-        result shouldBe outcome
-      }
-
-      "return a success response when feature switch is enabled when the tax year is 2025-26 (HIP enabled)" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> true))
-
+      "return a success response when the tax year is 2025-26" in new HipTest with Test {
         val requestBody: Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =
           Def1_CreateAmendForeignPropertyCumulativePeriodSummaryFixtures.regularExpensesRequestBody
 
@@ -85,9 +62,7 @@ class CreateAmendForeignPropertyCumulativePeriodSummaryConnectorSpec extends Con
         result shouldBe outcome
       }
 
-      "return a success response when feature switch is enabled for tax years 2026-27 onwards (HIP enabled)" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1961.enabled" -> true))
-
+      "return a success response for tax years 2026-27 onwards" in new HipTest with Test {
         override def taxYear: TaxYear = TaxYear.fromMtd("2026-27")
 
         val requestBody: Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody =

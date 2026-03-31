@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,7 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_Fixtures
 
-class Def2_CreateAmendForeignPropertyAnnualSubmissionHipISpec extends IntegrationBaseSpec with Def2_Fixtures {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1804.enabled" -> true) ++ super.servicesConfig
+class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def2_Fixtures {
 
   val invalidFieldsTypeRequestBodyJson: JsValue = Json.parse("""
                                                                |{

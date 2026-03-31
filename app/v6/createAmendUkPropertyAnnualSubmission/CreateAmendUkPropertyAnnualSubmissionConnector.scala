@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyAnnualSubmission
 
 import play.api.http.Status.NO_CONTENT
-import shared.config.{SharedAppConfig, ConfigFeatureSwitches}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
@@ -42,16 +42,10 @@ class CreateAmendUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpCl
     import request.*
 
     lazy val downstreamUri1804: DownstreamUri[Unit] =
-      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1804")) {
-        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
-      } else {
-        IfsUri(s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
-      }
+      HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
 
     lazy val downstreamUri1597: DownstreamUri[Unit] =
-      IfsUri(
-        s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}"
-      )
+      IfsUri(s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
 
     val downstreamUri: DownstreamUri[Unit] =
       if (taxYear.useTaxYearSpecificApi) downstreamUri1804 else downstreamUri1597

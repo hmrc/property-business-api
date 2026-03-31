@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v6.createAmendUkPropertyAnnualSubmission.def2
+package v6.createAmendUkPropertyAnnualSubmission.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.*
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -29,23 +29,43 @@ import shared.models.errors.*
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBaseSpec {
+class Def1_CreateAmendUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   private trait Test {
     val nino: String          = "TC663795B"
     val businessId: String    = "XAIS12345678910"
     val correlationId: String = "X-123"
 
-    def taxYear: String = "2025-26"
-    def downstreamTaxYear: String = "25-26"
-    def downstreamUri: String = s"/itsa/income-tax/v1/$downstreamTaxYear/business/property/annual/$nino/$businessId"
-    
+    def taxYear: String
+    def downstreamTaxYear: String
+    def downstreamUri: String
+
     val requestBodyJson: JsValue = Json.parse(
       """
         |{
+        |  "ukFhlProperty": {
+        |    "allowances": {
+        |      "annualInvestmentAllowance": 1000.50,
+        |      "businessPremisesRenovationAllowance": 1000.60,
+        |      "otherCapitalAllowance": 1000.70,
+        |      "electricChargePointAllowance": 1000.80,
+        |      "zeroEmissionsCarAllowance": 1000.90
+        |    },
+        |    "adjustments": {
+        |      "privateUseAdjustment": 1000.20,
+        |      "balancingCharge": 1000.30,
+        |      "periodOfGraceAdjustment": true,
+        |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+        |      "nonResidentLandlord": true,
+        |      "rentARoom": {
+        |        "jointlyLet": true
+        |      }
+        |    }
+        |  },
         |  "ukProperty": {
         |    "allowances": {
         |      "annualInvestmentAllowance": 2000.50,
+        |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
         |      "businessPremisesRenovationAllowance": 2000.70,
         |      "otherCapitalAllowance": 2000.80,
         |      "costOfReplacingDomesticGoods": 2000.90,
@@ -94,7 +114,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
     def setupStubs(): StubMapping
 
-    def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
+    private def uri: String = s"/uk/$nino/$businessId/annual/$taxYear"
 
     def request(): WSRequest = {
       setupStubs()
@@ -105,28 +125,63 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
         )
     }
 
-      def errorBody(code: String): String =
-        s"""
-           |{
-           |  "origin": "HoD",
-           |  "response": {
-           |    "failures": [
-           |      {
-           |        "type": "$code",
-           |        "reason": "message"
-           |      }
-           |    ]
-           |  }
-           |}
+    def errorBody(code: String): String =
+      s"""
+         |{
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "$code",
+         |        "reason": "message"
+         |      }
+         |    ]
+         |  }
+         |}
               """.stripMargin
 
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String           = "2022-23"
+    def downstreamTaxYear: String = "2022-23"
+
+    def downstreamQueryParams: Map[String, String] = Map(
+      "taxableEntityId" -> nino,
+      "incomeSourceId"  -> businessId,
+      "taxYear"         -> taxYear
+    )
+
+    override def downstreamUri: String = "/income-tax/business/property/annual"
+  }
+
+  private trait TysHipTest extends Test {
+    def taxYear: String           = "2023-24"
+    def downstreamTaxYear: String = "23-24"
+
+    override def downstreamUri: String = s"/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
   }
 
   "Calling the amend uk property annual submission endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made with a Tax Year Specific tax year" in new Test {
+      "any valid request is made" in new NonTysTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, NO_CONTENT, JsObject.empty)
+        }
+
+        val response: WSResponse = await(request().put(requestBodyJson))
+        response.status shouldBe OK
+        response.body shouldBe ""
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid request is made with a Tax Year Specific tax year" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -143,16 +198,37 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
     }
 
     "return a 400 with multiple errors" when {
-      "all field validations fail on the request body" in new Test {
+      "all field validations fail on the request body" in new TysHipTest {
 
         val allInvalidFieldsRequestBodyJson: JsValue = Json.parse("""
             |{
+            |  "ukFhlProperty": {
+            |    "allowances": {
+            |      "annualInvestmentAllowance": 1000.50678,
+            |      "businessPremisesRenovationAllowance": 1000.65670,
+            |      "otherCapitalAllowance": 1000.76780,
+            |      "electricChargePointAllowance": 1000.856780,
+            |      "zeroEmissionsCarAllowance": 1000.678990
+            |    },
+            |    "adjustments": {
+            |      "privateUseAdjustment": 1000.2456780,
+            |      "balancingCharge": 1000.356780,
+            |      "periodOfGraceAdjustment": true,
+            |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.4567890,
+            |      "nonResidentLandlord": true,
+            |      "rentARoom": {
+            |        "jointlyLet": true
+            |      }
+            |    }
+            |  },
             |  "ukProperty": {
             |    "allowances": {
             |      "annualInvestmentAllowance": 2000.5456780,
+            |      "zeroEmissionsGoodsVehicleAllowance": 2000.6567890,
             |      "businessPremisesRenovationAllowance": 2000.75678900,
             |      "otherCapitalAllowance": 2000.56789080,
             |      "costOfReplacingDomesticItems": 2000.95678900,
+            |      "electricChargePointAllowance": 3000.1567890,
             |      "structuredBuildingAllowance": [
             |        {
             |          "amount": 3000.36780,
@@ -214,13 +290,23 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
           ValueFormatError.copy(
             paths = Some(
               List(
+                "/ukFhlProperty/adjustments/balancingCharge",
+                "/ukFhlProperty/adjustments/privateUseAdjustment",
+                "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+                "/ukFhlProperty/allowances/annualInvestmentAllowance",
+                "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+                "/ukFhlProperty/allowances/otherCapitalAllowance",
+                "/ukFhlProperty/allowances/electricChargePointAllowance",
+                "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
                 "/ukProperty/adjustments/balancingCharge",
                 "/ukProperty/adjustments/privateUseAdjustment",
                 "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
                 "/ukProperty/allowances/annualInvestmentAllowance",
+                "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
                 "/ukProperty/allowances/businessPremisesRenovationAllowance",
                 "/ukProperty/allowances/otherCapitalAllowance",
                 "/ukProperty/allowances/costOfReplacingDomesticItems",
+                "/ukProperty/allowances/electricChargePointAllowance",
                 "/ukProperty/allowances/zeroEmissionsCarAllowance",
                 "/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
                 "/ukProperty/allowances/structuredBuildingAllowance/0/amount",
@@ -250,12 +336,33 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
       val validRequestBodyJson = Json.parse("""
           |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
           |      "structuredBuildingAllowance": [
           |        {
           |          "amount": 3000.30,
@@ -299,12 +406,33 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
       val allInvalidValueRequestBodyJson = Json.parse("""
           |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.7650,
+          |      "businessPremisesRenovationAllowance": 1000.6350,
+          |      "otherCapitalAllowance": 1000.72650,
+          |      "electricChargePointAllowance": 1000.834650,
+          |      "zeroEmissionsCarAllowance": 1000.923540
+          |    },
+          |    "adjustments": {
+          |      "privateUseAdjustment": 1000.22540,
+          |      "balancingCharge": 1000.336540,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.4253420,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.5635430,
+          |      "zeroEmissionsGoodsVehicleAllowance": 2000.6235450,
           |      "businessPremisesRenovationAllowance": 2000.745360,
           |      "otherCapitalAllowance": 2000.8243520,
           |      "costOfReplacingDomesticItems": 2000.9064532,
+          |      "electricChargePointAllowance": 3000.1234520,
           |      "structuredBuildingAllowance": [
           |        {
           |          "amount": 3000.303645,
@@ -348,12 +476,33 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
       val allInvalidDateFormatRequestBodyJson = Json.parse("""
           |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
           |      "structuredBuildingAllowance": [
           |        {
           |          "amount": 3000.30,
@@ -397,12 +546,33 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
       val allInvalidStringRequestBodyJson = Json.parse("""
           |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
           |      "structuredBuildingAllowance": [
           |        {
           |          "amount": 3000.30,
@@ -446,12 +616,33 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
       val buildingNameNumberBodyJson = Json.parse("""
           |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "privateUseAdjustment": 1000.20,
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
           |  "ukProperty": {
           |    "allowances": {
           |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
           |      "structuredBuildingAllowance": [
           |        {
           |          "amount": 3000.30,
@@ -493,13 +684,34 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
 
       val bothAllowancesSuppliedBodyJson = Json.parse("""
           |{
+          |  "ukFhlProperty": {
+          |    "allowances": {
+          |      "propertyIncomeAllowance": 1000.00,
+          |      "annualInvestmentAllowance": 1000.50,
+          |      "businessPremisesRenovationAllowance": 1000.60,
+          |      "otherCapitalAllowance": 1000.70,
+          |      "electricChargePointAllowance": 1000.80,
+          |      "zeroEmissionsCarAllowance": 1000.90
+          |    },
+          |    "adjustments": {
+          |      "balancingCharge": 1000.30,
+          |      "periodOfGraceAdjustment": true,
+          |      "businessPremisesRenovationAllowanceBalancingCharges": 1000.40,
+          |      "nonResidentLandlord": true,
+          |      "rentARoom": {
+          |        "jointlyLet": true
+          |      }
+          |    }
+          |  },
           |  "ukProperty": {
           |    "allowances": {
           |      "propertyIncomeAllowance": 1000.00,
           |      "annualInvestmentAllowance": 2000.50,
+          |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
           |      "businessPremisesRenovationAllowance": 2000.70,
           |      "otherCapitalAllowance": 2000.80,
           |      "costOfReplacingDomesticGoods": 2000.90,
+          |      "electricChargePointAllowance": 3000.10,
           |      "structuredBuildingAllowance": [
           |        {
           |          "amount": 3000.30,
@@ -544,13 +756,23 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
         message = "The value must be between 0 and 99999999999.99",
         paths = Some(
           List(
+            "/ukFhlProperty/adjustments/balancingCharge",
+            "/ukFhlProperty/adjustments/privateUseAdjustment",
+            "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
+            "/ukFhlProperty/allowances/annualInvestmentAllowance",
+            "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
+            "/ukFhlProperty/allowances/otherCapitalAllowance",
+            "/ukFhlProperty/allowances/electricChargePointAllowance",
+            "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
             "/ukProperty/adjustments/balancingCharge",
             "/ukProperty/adjustments/privateUseAdjustment",
             "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
             "/ukProperty/allowances/annualInvestmentAllowance",
+            "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
             "/ukProperty/allowances/businessPremisesRenovationAllowance",
             "/ukProperty/allowances/otherCapitalAllowance",
             "/ukProperty/allowances/costOfReplacingDomesticItems",
+            "/ukProperty/allowances/electricChargePointAllowance",
             "/ukProperty/allowances/zeroEmissionsCarAllowance",
             "/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
             "/ukProperty/allowances/structuredBuildingAllowance/0/amount",
@@ -592,6 +814,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
         message = "Both allowances and property allowances must not be present at the same time",
         paths = Some(
           List(
+            "/ukFhlProperty/allowances",
             "/ukProperty/allowances"
           ))
       )
@@ -603,7 +826,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
                                 requestBody: JsValue,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"validation fails with ${expectedBody.code} error" in new TysHipTest {
 
             override val nino: String             = requestNino
             override val businessId: String       = requestBusinessId
@@ -623,23 +846,24 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
         }
 
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2025-26", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
+          ("AA1123A", "XAIS12345678910", "2023-24", validRequestBodyJson, BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "202362-23", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "XAIS1234dfxgchjbn5678910", "2025-26", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
-          ("AA123456A", "XAIS12345678910", "2025-28", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "XAIS12345678910", "2025-26", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
-          ("AA123456A", "XAIS12345678910", "2025-26", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
-          ("AA123456A", "XAIS12345678910", "2025-26", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
-          ("AA123456A", "XAIS12345678910", "2025-26", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
-          ("AA123456A", "XAIS12345678910", "2025-26", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
-          ("AA123456A", "XAIS12345678910", "2025-26", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
+          ("AA123456A", "XAIS1234dfxgchjbn5678910", "2023-24", validRequestBodyJson, BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2021-24", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2021-22", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "XAIS12345678910", "2023-24", Json.parse(s"""{}""".stripMargin), BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+          ("AA123456A", "XAIS12345678910", "2023-24", allInvalidValueRequestBodyJson, BAD_REQUEST, allInvalidValueRequestError),
+          ("AA123456A", "XAIS12345678910", "2023-24", allInvalidDateFormatRequestBodyJson, BAD_REQUEST, allInvalidDateFormatRequestError),
+          ("AA123456A", "XAIS12345678910", "2023-24", allInvalidStringRequestBodyJson, BAD_REQUEST, allInvalidStringRequestError),
+          ("AA123456A", "XAIS12345678910", "2023-24", buildingNameNumberBodyJson, BAD_REQUEST, buildingNameNumberError),
+          ("AA123456A", "XAIS12345678910", "2023-24", bothAllowancesSuppliedBodyJson, BAD_REQUEST, bothAllowancesSuppliedError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -658,8 +882,10 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -667,8 +893,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
           (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", INTERNAL_SERVER_ERROR, InternalError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
         val extraTysErrors = List(
@@ -676,7 +901,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionHipISpec extends IntegrationBase
           (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

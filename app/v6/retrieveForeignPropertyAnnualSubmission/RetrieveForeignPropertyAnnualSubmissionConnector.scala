@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
@@ -44,11 +44,7 @@ class RetrieveForeignPropertyAnnualSubmissionConnector @Inject() (val http: Http
       HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/foreign-property/annual/$nino/$businessId")
 
     lazy val downstreamUri1805: DownstreamUri[DownstreamResp] =
-      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1805")) {
-        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
-      } else {
-        IfsUri[DownstreamResp](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
-      }
+      HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
 
     lazy val downstreamUri1598: DownstreamUri[DownstreamResp] = IfsUri[DownstreamResp]("income-tax/business/property/annual")
 

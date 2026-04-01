@@ -14,40 +14,36 @@
  * limitations under the License.
  */
 
-package v6.retrieveUkPropertyPeriodSummary.def2
+package v6.retrieveUkPropertyPeriodSummary.def1
 
 import common.models.errors.RuleTypeOfBusinessIncorrectError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.AUTHORIZATION
 import shared.models.domain.TaxYear
+import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v6.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
+import v6.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 
-
-class Def2_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec with Def2_RetrieveUkPropertyPeriodSummaryFixture {
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1862.enabled" -> false) ++ super.servicesConfig
+class Def1_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveUkPropertyPeriodSummaryFixture {
 
   private trait Test {
 
     val nino: String = "AA123456A"
-
-    def taxYear: String = "2024-25"
-
+    def taxYear: String = "2023-24"
     val businessId: String = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
+    def downstreamQueryParams: Map[String, String] = Map("submissionId" -> submissionId)
     val responseBody: JsValue = fullMtdJson
 
-    def downstreamUri: String = s"/income-tax/business/property/${TaxYear.fromMtd(taxYear).asTysDownstream}/$nino/$businessId/periodic/$submissionId"
+    def downstreamUri: String = s"/itsa/income-tax/v1/${TaxYear.fromMtd(taxYear).asTysDownstream}/business/property/periodic/$nino/$businessId"
 
     def stubDownstreamSuccess(): Unit =
-      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, status = Status.OK, body = fullDownstreamJson)
+      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, status = Status.OK, body = fullDownstreamJson)
 
     def request(): WSRequest = {
       AuditStub.audit()
@@ -66,10 +62,17 @@ class Def2_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "error message"
+         |         }
+         |      ]
+         |   }
          |}
-         """.stripMargin
+       """.stripMargin
 
   }
 
@@ -96,8 +99,8 @@ class Def2_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
             body = Json.parse(
               """{
                 |  "submittedOn": "2023-06-17T10:53:38.000Z",
-                |  "fromDate": "2025-01-29",
-                |  "toDate": "2025-03-29",
+                |  "fromDate": "2024-01-29",
+                |  "toDate": "2024-03-29",
                 |  "ukFhlProperty": { },
                 |  "ukOtherProperty": { }
                 |}""".stripMargin)
@@ -170,4 +173,5 @@ class Def2_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
     }
 
   }
+
 }

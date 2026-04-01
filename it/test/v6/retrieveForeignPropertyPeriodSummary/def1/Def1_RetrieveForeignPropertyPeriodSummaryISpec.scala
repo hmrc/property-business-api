@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package v6.retrieveUkPropertyPeriodSummary.def1
+package v6.retrieveForeignPropertyPeriodSummary.def1
 
-import common.models.errors.RuleTypeOfBusinessIncorrectError
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
@@ -24,35 +24,36 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.domain.TaxYear
 import shared.models.errors.*
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v6.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
+import v6.retrieveForeignPropertyPeriodSummary.def1.model.Def1_RetrieveForeignPropertyPeriodSummaryFixture
 
-class Def1_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec with Def1_RetrieveUkPropertyPeriodSummaryFixture {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1862.enabled" -> false) ++ super.servicesConfig
+class Def1_RetrieveForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyPeriodSummaryFixture {
 
   private trait Test {
 
     val nino: String = "AA123456A"
+
     def taxYear: String = "2023-24"
+
     val businessId: String = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
 
+    def downstreamQueryParams: Map[String, String] = Map("submissionId" -> submissionId)
+
     val responseBody: JsValue = fullMtdJson
 
-    def downstreamUri: String = s"/income-tax/business/property/${TaxYear.fromMtd(taxYear).asTysDownstream}/$nino/$businessId/periodic/$submissionId"
+    def downstreamUri: String = s"/itsa/income-tax/v1/${TaxYear.fromMtd(taxYear).asTysDownstream}/business/property/periodic/$nino/$businessId"
 
     def stubDownstreamSuccess(): Unit =
-      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, status = Status.OK, body = fullDownstreamJson)
+      DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, status = Status.OK, body = fullDownstreamJson)
 
     def request(): WSRequest = {
       AuditStub.audit()
       AuthStub.authorised()
       MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(s"/uk/$nino/$businessId/period/$taxYear/$submissionId")
+      buildRequest(s"/foreign/$nino/$businessId/period/$taxYear/$submissionId")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
@@ -64,14 +65,21 @@ class Def1_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "error message"
+         |         }
+         |      ]
+         |   }
          |}
-       """.stripMargin
+         """.stripMargin
 
   }
 
-  "Retrieve UK property period summary endpoint" should {
+  "Retrieve Foreign property period summary endpoint" should {
     "return a 200 status code" when {
       "successful request is made" in new Test {
         override def setupStubs(): Unit = stubDownstreamSuccess()
@@ -85,7 +93,7 @@ class Def1_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
     }
 
     "return a 400 status code with RULE_TYPE_OF_BUSINESS_INCORRECT error" when {
-      "downstream returns a non uk result" in new Test {
+      "downstream returns a uk result" in new Test {
         override def setupStubs(): Unit =
           DownstreamStub.onSuccess(
             DownstreamStub.GET,
@@ -93,11 +101,10 @@ class Def1_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
             status = Status.OK,
             body = Json.parse(
               """{
-                |  "submittedOn": "2023-06-17T10:53:38.000Z",
+                |  "submittedOn": "2025-06-17T10:53:38.000Z",
                 |  "fromDate": "2024-01-29",
-                |  "toDate": "2024-03-29",
-                |  "ukFhlProperty": { },
-                |  "ukOtherProperty": { }
+                |  "toDate": "2025-03-29",
+                |  "foreignProperty": { }
                 |}""".stripMargin)
           )
 
@@ -153,8 +160,9 @@ class Def1_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
 
         val input = List(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
+          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
+          (Status.BAD_REQUEST, "INVALID_SUBMISSION_ID", Status.BAD_REQUEST, SubmissionIdFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "UNMATCHED_STUB_ERROR", Status.BAD_REQUEST, RuleIncorrectGovTestScenarioError),
           (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -168,4 +176,5 @@ class Def1_RetrieveUkPropertyPeriodSummaryIfsISpec extends IntegrationBaseSpec w
     }
 
   }
+
 }

@@ -16,8 +16,6 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import org.scalamock.handlers.CallHandler
-import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
@@ -27,7 +25,7 @@ import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 }
-import v6.createAmendUkPropertyAnnualSubmission.model.request._
+import v6.createAmendUkPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.Future
 
@@ -44,38 +42,12 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   "CreateAmendUkPropertyAnnualSubmissionConnector" when {
     val outcome = Right(ResponseWrapper(correlationId, ()))
 
-    "createAmendUkPropertyAnnualSubmissionConnector" must {
+    "a valid request with a Non-TYS tax year is supplied" must {
       "put a body and return a 204" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
         def taxYear: TaxYear = preTysTaxYear
 
-        stubHttpResponse(outcome)
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendUkPropertyAnnualSubmission(request))
-        result shouldBe outcome
-      }
-    }
-
-    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year on IFS" must {
-      "put a body and return a 204" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
-        def taxYear: TaxYear = tysTaxYear
-
-        stubTysHttpResponse(outcome)
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendUkPropertyAnnualSubmission(request))
-        result shouldBe outcome
-      }
-    }
-
-    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year 2023-24 on HIP" must {
-      "put a body and return a 204" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
-
-        def taxYear: TaxYear = tysTaxYear
-
         willPut(
-          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}",
           body = requestBody
         ).returns(Future.successful(outcome))
 
@@ -84,27 +56,9 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       }
     }
 
-    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year 2024-25 on HIP" must {
+    "a valid request with a TYS tax year is supplied" must {
       "put a body and return a 204" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
-
-        willPut(
-          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
-          body = requestBody
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendUkPropertyAnnualSubmission(request))
-        result shouldBe outcome
-      }
-    }
-
-    "amendUkPropertyAnnualSubmissionConnector called for a Tax Year Specific tax year 2025-26 on HIP" must {
-      "put a body and return a 204" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+        def taxYear: TaxYear = tysTaxYear
 
         willPut(
           url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
@@ -117,29 +71,34 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
     }
 
     "response is an error" must {
-
       val downstreamErrorResponse: DownstreamErrors =
         DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
       val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
 
-      "return the error" in new IfsTest with Test {
+      "return the error given a Non-TYS tax year request" in new IfsTest with Test {
         def taxYear: TaxYear = preTysTaxYear
 
-        stubHttpResponse(outcome)
+        willPut(
+          url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}",
+          body = requestBody
+        ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] =
           await(connector.createAmendUkPropertyAnnualSubmission(request))
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
+      "return the error given a TYS tax year request" in new HipTest with Test {
         def taxYear: TaxYear = tysTaxYear
 
-        stubTysHttpResponse(outcome)
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
+          body = requestBody
+        ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] =
           await(connector.createAmendUkPropertyAnnualSubmission(request))
+
         result shouldBe outcome
       }
     }
@@ -160,20 +119,6 @@ class CreateAmendUkPropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
       taxYear = taxYear,
       body = requestBody
     )
-
-    protected def stubHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
-      willPut(
-        url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}",
-        body = requestBody
-      ).returns(Future.successful(outcome))
-    }
-
-    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): CallHandler[Future[DownstreamOutcome[Unit]]]#Derived = {
-      willPut(
-        url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
-        body = requestBody
-      ).returns(Future.successful(outcome))
-    }
 
   }
 

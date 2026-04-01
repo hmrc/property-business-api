@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,58 +14,57 @@
  * limitations under the License.
  */
 
-package v6.createAmendForeignPropertyCumulativePeriodSummary
+package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
-import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.*
 import play.api.libs.json.*
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.AUTHORIZATION
+import play.api.test.Helpers.*
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
 
-class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1961.enabled" -> false) ++ super.servicesConfig
+  private val invalidEntryWithConsolidatedExpenses = Json.parse(
+    """
+      |{
+      |  "propertyId": "8e8b8450-dc1b-4360-8109-7067337b42cb",
+      |  "expenses": {
+      |    "premisesRunningCosts": 3123.21,
+      |    "consolidatedExpenses": 1.23
+      |  }
+      |}
+    """.stripMargin
+  )
 
-  private def invalidEntryWithConsolidatedExpenses() =
-    Json.parse(s"""
-                  |{
-                  |    "countryCode": "AFG",
-                  |    "expenses": {
-                  |        "premisesRunningCosts": 3123.21,
-                  |        "consolidatedExpenses": 1.23
-                  |    }
-                  |}""".stripMargin)
+  private def entryWith(propertyId: String, premisesRunningCosts: BigDecimal = 3123.21) = Json.parse(
+    s"""
+      |{
+      |  "propertyId": "$propertyId",
+      |  "expenses": {
+      |    "premisesRunningCosts": $premisesRunningCosts
+      |  }
+      |}
+    """.stripMargin
+  )
 
-  private def entryWith(countryCode: String, premisesRunningCosts: BigDecimal = 3123.21) =
-    Json.parse(s"""
-                  |{
-                  |    "countryCode": "$countryCode",
-                  |    "expenses": {
-                  |        "premisesRunningCosts": $premisesRunningCosts
-                  |    }
-                  |}""".stripMargin)
+  private def requestBodyWith(entries: JsValue*) = Json.parse(
+    s"""
+      |{
+      |  "fromDate": "2026-04-06",
+      |  "toDate": "2026-07-05",
+      |  "foreignProperty": ${JsArray(entries)}
+      |}
+    """.stripMargin
+  )
 
-  private def requestBodyWith(entries: JsValue*) =
-    Json.parse(
-      s"""{
-         |    "fromDate": "2025-04-06",
-         |    "toDate": "2025-07-05",
-         |    "foreignProperty": ${JsArray(entries)}
-         |}
-         |""".stripMargin
-    )
-
-  private val entry       = entryWith("AFG")
+  private val entry       = entryWith("8e8b8450-dc1b-4360-8109-7067337b42cb")
   private val requestBody = requestBodyWith(entry)
 
   "calling the create and amend endpoint" should {
@@ -129,16 +128,16 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
           }
         }
         val input = List(
-          ("AA1123A", "XAIS12345678910", "2025-26", requestBody, BAD_REQUEST, NinoFormatError, None),
-          ("AA123456A", "XA***IS1", "2025-26", requestBody, BAD_REQUEST, BusinessIdFormatError, None),
+          ("AA1123A", "XAIS12345678910", "2026-27", requestBody, BAD_REQUEST, NinoFormatError, None),
+          ("AA123456A", "XA***IS1", "2026-27", requestBody, BAD_REQUEST, BusinessIdFormatError, None),
           ("AA123456A", "XAIS12345678910", "20256", requestBody, BAD_REQUEST, TaxYearFormatError, None),
-          ("AA123456A", "XAIS12345678910", "2025-27", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
+          ("AA123456A", "XAIS12345678910", "2026-28", requestBody, BAD_REQUEST, RuleTaxYearRangeInvalidError, None),
           ("AA123456A", "XAIS12345678910", "2024-25", requestBody, BAD_REQUEST, RuleTaxYearNotSupportedError, None),
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
-            requestBodyWith(entryWith("AFG", 1.234)),
+            "2026-27",
+            requestBodyWith(entryWith("8e8b8450-dc1b-4360-8109-7067337b42cb", 1.234)),
             BAD_REQUEST,
             ValueFormatError.forPathAndRange(
               path = "/foreignProperty/0/expenses/premisesRunningCosts",
@@ -150,19 +149,19 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
-            requestBodyWith(invalidEntryWithConsolidatedExpenses()),
+            "2026-27",
+            requestBodyWith(invalidEntryWithConsolidatedExpenses),
             BAD_REQUEST,
             RuleBothExpensesSuppliedWithForeignPropertyError.withPath("/foreignProperty/0/expenses"),
             None
           ),
-          ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
-          ("AA123456A", "XAIS12345678910", "2025-26", requestBody.update("/fromDate", JsString("XX")), BAD_REQUEST, FromDateFormatError, None),
-          ("AA123456A", "XAIS12345678910", "2025-26", requestBody.update("/toDate", JsString("XX")), BAD_REQUEST, ToDateFormatError, None),
+          ("AA123456A", "XAIS12345678910", "2026-27", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None),
+          ("AA123456A", "XAIS12345678910", "2026-27", requestBody.update("/fromDate", JsString("XX")), BAD_REQUEST, FromDateFormatError, None),
+          ("AA123456A", "XAIS12345678910", "2026-27", requestBody.update("/toDate", JsString("XX")), BAD_REQUEST, ToDateFormatError, None),
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
+            "2026-27",
             requestBody.removeProperty("/fromDate"),
             BAD_REQUEST,
             RuleMissingSubmissionDatesError,
@@ -171,7 +170,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
+            "2026-27",
             requestBody.removeProperty("/toDate"),
             BAD_REQUEST,
             RuleMissingSubmissionDatesError,
@@ -180,7 +179,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
+            "2026-27",
             requestBody.update("/toDate", JsString("1999-01-01")),
             BAD_REQUEST,
             RuleToDateBeforeFromDateError,
@@ -189,22 +188,26 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
-            requestBodyWith(entryWith("France")),
+            "2026-27",
+            requestBodyWith(entryWith("Not-a-uuid")),
             BAD_REQUEST,
-            CountryCodeFormatError.withPath("/foreignProperty/0/countryCode"),
+            PropertyIdFormatError.withPath("/foreignProperty/0/propertyId"),
             None
           ),
           (
             "AA123456A",
             "XAIS12345678910",
-            "2025-26",
-            requestBodyWith(entryWith("QQQ")),
+            "2026-27",
+            requestBodyWith(entry, entry),
             BAD_REQUEST,
-            RuleCountryCodeError.withPath("/foreignProperty/0/countryCode"),
+            RuleDuplicatePropertyIdError.forDuplicatedIdsAndPaths(
+              id = "8e8b8450-dc1b-4360-8109-7067337b42cb",
+              paths = List("/foreignProperty/0/propertyId", "/foreignProperty/1/propertyId")
+            ),
             None
           )
         )
+
         input.foreach(args => validationErrorTest.tupled(args))
       }
 
@@ -244,7 +247,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
           (UNPROCESSABLE_ENTITY, "START_END_DATE_NOT_ACCEPTED", BAD_REQUEST, RuleStartAndEndDateNotAllowedError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (UNPROCESSABLE_ENTITY, "EARLY_DATA_SUBMISSION_NOT_ACCEPTED", BAD_REQUEST, RuleEarlyDataSubmissionNotAcceptedError),
-          (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
+          (UNPROCESSABLE_ENTITY, "PROPERTY_ID_DO_NOT_MATCH", BAD_REQUEST, RulePropertyIdMismatchError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
@@ -258,9 +261,9 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
     val nino: String       = "TC663795B"
     val businessId: String = "XAIS12345678910"
 
-    def mtdTaxYear: String = "2025-26"
+    def mtdTaxYear: String = "2026-27"
     def setupStubs(): StubMapping
-    def downstreamUri: String = s"/income-tax/25-26/business/property/periodic/$nino/$businessId"
+    def downstreamUri: String = s"/itsa/income-tax/v1/26-27/business/periodic/foreign-property/$nino/$businessId"
 
     def request(): WSRequest = {
       setupStubs()
@@ -274,8 +277,15 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryIfsISpec extends Int
     def errorBody(code: String): String =
       s"""
          |{
-         |   "code": "$code",
-         |   "reason": "downstream message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "error message"
+         |         }
+         |      ]
+         |   }
          |}
        """.stripMargin
 

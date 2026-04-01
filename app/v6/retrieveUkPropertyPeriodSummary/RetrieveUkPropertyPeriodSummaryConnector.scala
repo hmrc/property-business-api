@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
@@ -43,20 +43,14 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
         import def1.*
 
         val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
-            HipUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
-              s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" +
-                s"submissionId=$submissionId"
-            )
-          } else {
-            IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
-              s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
-          }
+          HipUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
+            s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" + s"submissionId=$submissionId")
         } else {
           IfsUri[Def1_RetrieveUkPropertyPeriodSummaryResponse](
             s"income-tax/business/property/periodic?" +
               s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
         }
+
         val response = get(downstreamUri)
 
         response.map {
@@ -68,21 +62,9 @@ class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2
       case def2: Def2_RetrieveUkPropertyPeriodSummaryRequestData =>
         import def2.*
 
-        val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1862")) {
-            HipUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
-              s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" +
-                s"submissionId=$submissionId"
-            )
-          } else {
-            IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
-              s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/periodic/$submissionId")
-          }
-        } else {
-          IfsUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
-            s"income-tax/business/property/periodic?" +
-              s"taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId&submissionId=$submissionId")
-        }
+        val downstreamUri = HipUri[Def2_RetrieveUkPropertyPeriodSummaryResponse](
+          s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId?" + s"submissionId=$submissionId")
+
         val response = get(downstreamUri)
 
         response.map {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1805.enabled" -> false) ++ super.servicesConfig
+class Def1_RetrieveUkPropertyAnnualSubmissionISpec extends IntegrationBaseSpec {
 
   "calling the retrieve uk property annual submission endpoint" should {
 
@@ -50,7 +47,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made for TYS" in new TysIfsTest {
+      "any valid request is made for TYS" in new TysHipTest {
         override def setupStubs(): StubMapping =
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, downstreamQueryParams, OK, downstreamResponseBodyTys)
 
@@ -70,7 +67,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
 
-          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new TysHipTest {
 
             override val nino: String       = requestNino
             override val businessId: String = requestBusinessId
@@ -89,9 +86,9 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
         }
 
         val input = List(
-          ("AA123", "XAIS12345678910", "2022-23", BAD_REQUEST, NinoFormatError),
+          ("AA123", "XAIS12345678910", "2023-24", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "XAIS12345678910", "2020", BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "203100", "2022-23", BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "203100", "2023-24", BAD_REQUEST, BusinessIdFormatError),
           ("AA123456A", "XAIS12345678910", "2020-23", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "XAIS12345678910", "2019-20", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
@@ -100,7 +97,7 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
 
             override def setupStubs(): StubMapping =
               DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamQueryParams, downstreamStatus, errorBody(downstreamCode))
@@ -114,7 +111,9 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
         val errors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+          (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -122,16 +121,11 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        val extraTysErrors = List(
-          (BAD_REQUEST, "INVALID_INCOMESOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
-          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
+        errors.foreach(args => serviceErrorTest.tupled(args))
 
       }
 
-      "downstream returns no UK properties" in new NonTysTest {
+      "downstream returns no UK properties" in new TysHipTest {
         val downstreamResponseBody: JsValue = Json.parse("""
             |{
             |  "submittedOn":"2022-06-17T10:53:38.000Z",
@@ -421,10 +415,17 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "message"
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "$code",
+         |        "reason": "message"
+         |      }
+         |    ]
+         |  }
          |}
-       """.stripMargin
+         """.stripMargin
 
   }
 
@@ -440,9 +441,9 @@ class Def1_RetrieveUkPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpe
 
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
     def taxYear: String                            = "2023-24"
-    def downstreamUri: String                      = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
+    def downstreamUri: String                      = s"/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
     def downstreamQueryParams: Map[String, String] = Map.empty
   }
 

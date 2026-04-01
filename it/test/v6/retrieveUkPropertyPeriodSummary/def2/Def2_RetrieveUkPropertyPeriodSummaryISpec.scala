@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package v6.retrieveForeignPropertyPeriodSummary
+package v6.retrieveUkPropertyPeriodSummary.def2
 
-import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
@@ -26,15 +26,16 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v6.retrieveForeignPropertyPeriodSummary.def1.model.Def1_RetrieveForeignPropertyPeriodSummaryFixture
+import v6.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
 
-class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyPeriodSummaryFixture {
+
+class Def2_RetrieveUkPropertyPeriodSummaryISpec extends IntegrationBaseSpec with Def2_RetrieveUkPropertyPeriodSummaryFixture  {
 
   private trait Test {
 
     val nino: String = "AA123456A"
 
-    def taxYear: String = "2023-24"
+    def taxYear: String = "2024-25"
 
     val businessId: String = "XAIS12345678910"
     val submissionId: String = "4557ecb5-fd32-48cc-81f5-e6acd1099f3c"
@@ -53,7 +54,7 @@ class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
       AuthStub.authorised()
       MtdIdLookupStub.ninoFound(nino)
       setupStubs()
-      buildRequest(s"/foreign/$nino/$businessId/period/$taxYear/$submissionId")
+      buildRequest(s"/uk/$nino/$businessId/period/$taxYear/$submissionId")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.6.0+json"),
           (AUTHORIZATION, "Bearer 123")
@@ -79,7 +80,7 @@ class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
 
   }
 
-  "Retrieve Foreign property period summary endpoint" should {
+  "Retrieve UK property period summary endpoint" should {
     "return a 200 status code" when {
       "successful request is made" in new Test {
         override def setupStubs(): Unit = stubDownstreamSuccess()
@@ -93,7 +94,7 @@ class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
     }
 
     "return a 400 status code with RULE_TYPE_OF_BUSINESS_INCORRECT error" when {
-      "downstream returns a uk result" in new Test {
+      "downstream returns a non uk result" in new Test {
         override def setupStubs(): Unit =
           DownstreamStub.onSuccess(
             DownstreamStub.GET,
@@ -101,10 +102,11 @@ class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
             status = Status.OK,
             body = Json.parse(
               """{
-                |  "submittedOn": "2025-06-17T10:53:38.000Z",
-                |  "fromDate": "2024-01-29",
+                |  "submittedOn": "2023-06-17T10:53:38.000Z",
+                |  "fromDate": "2025-01-29",
                 |  "toDate": "2025-03-29",
-                |  "foreignProperty": { }
+                |  "ukFhlProperty": { },
+                |  "ukOtherProperty": { }
                 |}""".stripMargin)
           )
 
@@ -160,9 +162,8 @@ class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
 
         val input = List(
           (Status.BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", Status.BAD_REQUEST, NinoFormatError),
-          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.INTERNAL_SERVER_ERROR, InternalError),
+          (Status.BAD_REQUEST, "INVALID_TAX_YEAR", Status.BAD_REQUEST, TaxYearFormatError),
           (Status.BAD_REQUEST, "INVALID_INCOMESOURCE_ID", Status.BAD_REQUEST, BusinessIdFormatError),
-          (Status.BAD_REQUEST, "INVALID_SUBMISSION_ID", Status.BAD_REQUEST, SubmissionIdFormatError),
           (Status.BAD_REQUEST, "INVALID_CORRELATION_ID", Status.INTERNAL_SERVER_ERROR, InternalError),
           (Status.BAD_REQUEST, "UNMATCHED_STUB_ERROR", Status.BAD_REQUEST, RuleIncorrectGovTestScenarioError),
           (Status.UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
@@ -176,5 +177,4 @@ class RetrieveForeignPropertyPeriodSummaryHipISpec extends IntegrationBaseSpec w
     }
 
   }
-
 }

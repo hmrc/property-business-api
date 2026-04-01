@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveUkPropertyCumulativeSummaryResponse, UkProperty}
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
-import v6.retrieveUkPropertyCumulativeSummary.model.{UkResult, NonUkResult, Result}
+import v6.retrieveUkPropertyCumulativeSummary.model.{NonUkResult, Result, UkResult}
 
 import scala.concurrent.Future
 
@@ -48,25 +48,11 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
   }
 
   "RetrieveUkPropertyCumulativeSummaryConnector" when {
-    "the request is made and UK property data is returned (HIP disabled)" should {
-      "return UkResult" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
-          Configuration("passIntentHeader.enabled" -> false, "ifs_hip_migration_1962.enabled" -> false)
 
-        private val response = responseWith(Some(UkProperty(None, None)))
-
-        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
-          Future.successful(Right(ResponseWrapper(correlationId, response)))
-
-        await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
-          Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-    }
-
-    "the request is made and UK property data is returned (HIP enabled)" should {
+    "the request is made and UK property data is returned" should {
       "return UkResult" in new HipTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
-          Configuration("passIntentHeader.enabled" -> false, "ifs_hip_migration_1962.enabled" -> true)
+          Configuration("passIntentHeader.enabled" -> false)
 
         private val response = responseWith(Some(UkProperty(None, None)))
 
@@ -79,12 +65,12 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "the request is made and non-UK property data is returned (e.g. because the businessId is for a foreign property)" should {
-      "return NonUkResult" in new IfsTest with Test {
+      "return NonUkResult" in new HipTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
-          Configuration("passIntentHeader.enabled" -> false, "ifs_hip_migration_1962.enabled" -> false)
+          Configuration("passIntentHeader.enabled" -> false)
         private val response = responseWith(None)
 
-        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/itsa/income-tax/v1/25-26/business/periodic/property/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe
@@ -93,12 +79,12 @@ class RetrieveUkPropertyCumulativeSummaryConnectorSpec extends ConnectorSpec {
     }
 
     "isPassIntentHeader feature switch is on" must {
-      "pass UK_PROPERTY intent" in new IfsTest with Test {
+      "pass UK_PROPERTY intent" in new HipTest with Test {
         MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns
-          Configuration("passIntentHeader.enabled" -> true, "ifs_hip_migration_1962.enabled" -> false)
+          Configuration("passIntentHeader.enabled" -> true)
         private val response = responseWith(None)
 
-        willGet(url = url"$baseUrl/income-tax/25-26/business/property/periodic/$nino/$businessId") returns
+        willGet(url = url"$baseUrl/itsa/income-tax/v1/25-26/business/periodic/property/$nino/$businessId") returns
           Future.successful(Right(ResponseWrapper(correlationId, response)))
 
         await(connector.retrieveUkPropertyCumulativeSummary(requestData)) shouldBe

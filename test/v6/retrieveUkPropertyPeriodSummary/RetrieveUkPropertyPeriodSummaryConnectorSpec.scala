@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package v6.retrieveUkPropertyPeriodSummary
 import common.models.domain.SubmissionId
 import org.scalamock.handlers.CallHandler
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain._
+import shared.models.domain.*
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
@@ -27,8 +27,7 @@ import v6.fixtures.retrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import v6.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}
 import v6.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 import v6.retrieveUkPropertyPeriodSummary.model.response.{Def1_RetrieveUkPropertyPeriodSummaryResponse, RetrieveUkPropertyPeriodSummaryResponse}
-import v6.retrieveUkPropertyPeriodSummary.model.{UkResult, NonUkResult, Result}
-import play.api.Configuration
+import v6.retrieveUkPropertyPeriodSummary.model.{NonUkResult, Result, UkResult}
 
 import java.net.URL
 import scala.concurrent.Future
@@ -43,7 +42,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
   "connector" when {
     "response has uk fhl details" must {
-      "return a uk ifs result" in new NonTysTest {
+      "return a uk result" in new NonTysTest {
         val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -53,18 +52,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
         result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
-      "return a uk tys result from IFS" in new TysIfsTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse =
-          responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(uri, outcome)
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkPropertyPeriodSummary(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-
-      "return a uk tys result from HIP" in new TysHipTest {
+      "return a uk TYS result" in new TysHipTest {
         val response: RetrieveUkPropertyPeriodSummaryResponse =
           responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
@@ -87,17 +75,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
         result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
-      "the tys endpoint should return a uk result from IFS" in new TysIfsTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(uri, outcome)
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkPropertyPeriodSummary(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-
-      "the tys endpoint should return a uk result from HIP" in new TysHipTest {
+      "the TYS endpoint should return a uk result" in new TysHipTest {
         val response: RetrieveUkPropertyPeriodSummaryResponse = responseWith(ukFhlProperty = None, ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -121,18 +99,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
         result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
       }
 
-      "the tys endpoint should return a uk result from IFS" in new TysIfsTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse =
-          responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(uri, outcome)
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkPropertyPeriodSummary(request))
-        result shouldBe Right(ResponseWrapper(correlationId, UkResult(response)))
-      }
-
-      "the tys endpoint should return a uk result from HIP" in new TysHipTest {
+      "the TYS endpoint should return a uk result" in new TysHipTest {
         val response: RetrieveUkPropertyPeriodSummaryResponse =
           responseWith(ukFhlProperty = Some(ukFhlProperty), ukNonFhlProperty = Some(ukNonFhlProperty))
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
@@ -155,17 +122,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
         result shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
       }
 
-      "the tys endpoint return a non-uk result from IFS" in new TysIfsTest {
-        val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(None, None)
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
-
-        stubHttpResponse(uri, outcome)
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkPropertyPeriodSummary(request))
-        result shouldBe Right(ResponseWrapper(correlationId, NonUkResult))
-      }
-
-      "the tys endpoint return a non-uk result from HIP" in new TysHipTest {
+      "the TYS endpoint return a non-uk result" in new TysHipTest {
         val response: RetrieveUkPropertyPeriodSummaryResponse                                 = responseWith(None, None)
         val outcome: Right[Nothing, ResponseWrapper[RetrieveUkPropertyPeriodSummaryResponse]] = Right(ResponseWrapper(correlationId, response))
 
@@ -187,17 +144,7 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
         result shouldBe Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
       }
 
-      "the tys endpoint should return the error from IFS" in new TysIfsTest {
-        val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
-          Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-
-        stubHttpResponse(uri, outcome)
-
-        val result: DownstreamOutcome[Result] = await(connector.retrieveUkPropertyPeriodSummary(request))
-        result shouldBe Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
-      }
-
-      "the tys endpoint should return the error from HIP" in new TysHipTest {
+      "the TYS endpoint should return the error" in new TysHipTest {
         val outcome: Left[ResponseWrapper[DownstreamErrors], Nothing] =
           Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))))
 
@@ -250,20 +197,8 @@ class RetrieveUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec with Re
 
   }
 
-  trait TysIfsTest extends Test with IfsTest {
-    protected def taxYear: String = "2023-24"
-
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> false)
-
-    protected val uri: URL =
-      url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/periodic/$submissionId"
-
-  }
-
   trait TysHipTest extends Test with HipTest {
     protected def taxYear: String = "2023-24"
-
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration("ifs_hip_migration_1862.enabled" -> true)
 
     protected val uri: URL =
       url"$baseUrl/itsa/income-tax/v1/23-24/business/property/periodic/$nino/$businessId?submissionId=$submissionId"

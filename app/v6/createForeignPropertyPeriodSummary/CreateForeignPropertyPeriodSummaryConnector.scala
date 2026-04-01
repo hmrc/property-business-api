@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,13 @@
 package v6.createForeignPropertyPeriodSummary
 
 import play.api.http.Status.OK
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.createForeignPropertyPeriodSummary.model.request.{
-  CreateForeignPropertyPeriodSummaryRequestData,
-  Def1_CreateForeignPropertyPeriodSummaryRequestData,
-  Def2_CreateForeignPropertyPeriodSummaryRequestData
-}
+import v6.createForeignPropertyPeriodSummary.model.request.*
 import v6.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -48,13 +44,8 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
         import def1.*
         val downstreamUri =
           if (taxYear.useTaxYearSpecificApi) {
-            if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1861")) {
-              HipUri[CreateForeignPropertyPeriodSummaryResponse](
-                s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
-            } else {
-              IfsUri[CreateForeignPropertyPeriodSummaryResponse](
-                s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
-            }
+            HipUri[CreateForeignPropertyPeriodSummaryResponse](
+              s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
           } else {
             IfsUri[CreateForeignPropertyPeriodSummaryResponse](
               s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
@@ -64,13 +55,9 @@ class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClien
 
       case def2: Def2_CreateForeignPropertyPeriodSummaryRequestData =>
         import def2.*
-        val downstreamUri = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1861")) {
-          HipUri[CreateForeignPropertyPeriodSummaryResponse](
-            s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
-        } else {
-          IfsUri[CreateForeignPropertyPeriodSummaryResponse](
-            s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
-        }
+        val downstreamUri = HipUri[CreateForeignPropertyPeriodSummaryResponse](
+          s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
+
         post(body, downstreamUri)
     }
   }

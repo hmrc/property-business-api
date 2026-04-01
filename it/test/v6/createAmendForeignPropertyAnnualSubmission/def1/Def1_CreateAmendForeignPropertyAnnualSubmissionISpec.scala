@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,7 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 
-class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends IntegrationBaseSpec with Def1_Fixtures {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1804.enabled" -> false) ++ super.servicesConfig
+class Def1_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBaseSpec with Def1_Fixtures {
 
   val requestBodyJson: JsValue = Json.parse("""
       |{
@@ -299,7 +296,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -316,7 +313,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
     }
 
     "return a 400 with multiple errors" when {
-      "field type validations fail on the request body" in new NonTysTest {
+      "field type validations fail on the request body" in new TysHipTest {
 
         val errorResponseJson: JsValue =
           Json.parse("""
@@ -350,7 +347,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
         response.json shouldBe errorResponseJson
       }
 
-      "field data validations fail on the request body" in new NonTysTest {
+      "field data validations fail on the request body" in new TysHipTest {
 
         val allInvalidFieldsRequestErrors: List[MtdError] = List(
           DateFormatError.copy(
@@ -406,7 +403,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
                               requestBody: JsValue,
                               expectedStatus: Int,
                               expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new TysIfsTest {
+        s"validation fails with ${expectedBody.code} error" in new TysHipTest {
 
           override val nino: String       = requestNino
           override val businessId: String = requestBusinessId
@@ -425,15 +422,15 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
       }
 
       val input = List(
-        ("AA1123A", "XAIS12345678910", "2021-22", requestBodyJson, BAD_REQUEST, NinoFormatError),
+        ("AA1123A", "XAIS12345678910", "2023-24", requestBodyJson, BAD_REQUEST, NinoFormatError),
         ("AA123456A", "XAIS12345678910", "202362-23", requestBodyJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2021-22", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
+        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2023-24", requestBodyJson, BAD_REQUEST, BusinessIdFormatError),
         ("AA123456A", "XAIS12345678910", "2021-24", requestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "XAIS12345678910", "2018-19", requestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError),
         (
           "AA123456A",
           "XAIS12345678910",
-          "2021-22",
+          "2023-24",
           Json.parse(s"""{
              |
              |}""".stripMargin),
@@ -442,28 +439,28 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
         (
           "AA123456A",
           "XAIS12345678910",
-          "2021-22",
+          "2023-24",
           ruleCountryCodeErrorRequestJson,
           BAD_REQUEST,
           RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
         (
           "AA123456A",
           "XAIS12345678910",
-          "2021-22",
+          "2023-24",
           formatCountryCodeErrorRequestJson,
           BAD_REQUEST,
           CountryCodeFormatError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
         (
           "AA123456A",
           "XAIS12345678910",
-          "2021-22",
+          "2023-24",
           bothAllowancesSuppliedErrorRequestJson,
           BAD_REQUEST,
           RuleBothAllowancesSuppliedError.copy(paths = Some(List("/foreignFhlEea/allowances")))),
         (
           "AA123456A",
           "XAIS12345678910",
-          "2022-23",
+          "2023-24",
           ruleBuildingNameOrNumberErrorRequestJson,
           BAD_REQUEST,
           RuleBuildingNameNumberError.copy(paths = Some(List("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building"))))
@@ -473,8 +470,7 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
 
     "downstream service error" when {
       def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
-
+        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
             AuthStub.authorised()
@@ -491,12 +487,14 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
       val errors = List(
         (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
+        (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError),
         (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
         (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
         (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
         (UNPROCESSABLE_ENTITY, "BUSINESS_VALIDATION_FAILURE", BAD_REQUEST, RulePropertyIncomeAllowanceError),
         (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
         (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
+        (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
         (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
         (UNPROCESSABLE_ENTITY, "MISSING_ALLOWANCES", INTERNAL_SERVER_ERROR, InternalError),
         (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
@@ -539,16 +537,23 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionIfsISpec extends Integratio
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "downstream error message"
+         |   "origin": "HoD",
+         |   "response": {
+         |      "failures": [
+         |         {
+         |            "type": "$code",
+         |            "reason": "error message"
+         |         }
+         |      ]
+         |   }
          |}
-       """.stripMargin
+           """.stripMargin
 
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
     def taxYear: String                            = "2023-24"
-    def downstreamUri: String                      = s"/income-tax/business/property/annual/23-24/$nino/$businessId"
+    def downstreamUri: String                      = s"/itsa/income-tax/v1/23-24/business/property/annual/$nino/$businessId"
     def downstreamQueryParams: Map[String, String] = Map()
   }
 

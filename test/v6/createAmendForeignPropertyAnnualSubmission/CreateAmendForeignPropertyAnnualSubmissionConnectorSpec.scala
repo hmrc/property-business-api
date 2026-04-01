@@ -16,26 +16,13 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
-  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData,
-  Def1_Fixtures
-}
-import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
-  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
-  Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData,
-  Def2_Fixtures
-}
-import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.{
-  Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
-  Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData,
-  Def3_Fixtures
-}
+import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.*
+import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.*
+import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.*
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.Future
@@ -63,36 +50,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
         result shouldBe outcome
       }
 
-      "a request is made for tax year 2023-24" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-        willPut(
-          url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
-          body = createAmendForeignPropertyAnnualSubmissionRequestBody
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
-        result shouldBe outcome
-      }
-
-      "a request is made for tax year 2025-26 (HIP disabled)" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> false))
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
-
-        willPut(
-          url = url"$baseUrl/income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId",
-          body = def2_createAmendForeignPropertyAnnualSubmissionRequestBody
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
-        result shouldBe outcome
-      }
-
-      "a request is made for tax year 2023-24 (HIP enabled)" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
-
+      "a request is made for tax year 2023-24" in new HipTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         willPut(
@@ -104,22 +62,7 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
         result shouldBe outcome
       }
 
-      "a request is made for tax year 2024-25 (HIP enabled)" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
-
-        def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
-
-        willPut(
-          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId",
-          body = createAmendForeignPropertyAnnualSubmissionRequestBody
-        ).returns(Future.successful(outcome))
-
-        val result: DownstreamOutcome[Unit] = await(connector.createAmendForeignPropertyAnnualSubmission(request))
-        result shouldBe outcome
-      }
-
-      "a request is made for tax year 2025-26 (HIP enabled)" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
+      "a request is made for tax year 2025-26" in new HipTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
 
         willPut(
@@ -132,8 +75,6 @@ class CreateAmendForeignPropertyAnnualSubmissionConnectorSpec extends ConnectorS
       }
 
       "a request is made for tax year 2026-27" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1804.enabled" -> true))
-
         def taxYear: TaxYear = TaxYear.fromMtd("2026-27")
 
         willPut(

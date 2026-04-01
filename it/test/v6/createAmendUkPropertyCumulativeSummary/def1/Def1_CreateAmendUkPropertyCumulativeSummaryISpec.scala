@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,8 @@ import shared.models.utils.JsonErrorValidators
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBaseSpec with JsonErrorValidators {
+class Def1_CreateAmendUkPropertyCumulativeSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1961.enabled" -> false) ++ super.servicesConfig
-  
   val validRequestBodyJson: JsValue = Json.parse(
     """
       |{
@@ -68,16 +65,18 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
       |    }
       |  }
       |}
-    """.stripMargin
+      """.stripMargin
   )
 
   private trait Test {
-    val nino: String          = "TC663795B"
-    val businessId: String    = "XAIS12345678910"
+    val nino: String = "TC663795B"
+    val businessId: String = "XAIS12345678910"
     val correlationId: String = "X-123"
 
     def taxYear: String
+
     def downstreamTaxYear: String
+
     def downstreamUri: String
 
     val requestBodyJson: JsValue = validRequestBodyJson
@@ -98,32 +97,39 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
     def errorBody(code: String): String =
       s"""
          |{
-         |  "code": "$code",
-         |  "reason": "ifs message"
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "$code",
+         |        "reason": "description"
+         |      }
+         |    ]
+         |  }
          |}
-       """.stripMargin
+         """.stripMargin
 
   }
 
-  private trait TysIfsTest extends Test {
-    def taxYear: String                            = "2025-26"
-    def downstreamTaxYear: String                  = "25-26"
-    def downstreamQueryParams: Map[String, String] = Map()
+  private trait TysHipTest extends Test {
+    def taxYear: String = "2025-26"
 
-    override def downstreamUri: String = s"/income-tax/$downstreamTaxYear/business/property/periodic/$nino/$businessId"
+    def downstreamTaxYear: String = "25-26"
+
+    override def downstreamUri: String = s"/itsa/income-tax/v1/$downstreamTaxYear/business/periodic/property/$nino/$businessId"
   }
 
   "Calling the create amend uk property cumulative summary endpoint" should {
 
     "return a 200 status code" when {
 
-      "any valid request is made" in new TysIfsTest {
+      "any valid request is made" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, downstreamQueryParams, Status.NO_CONTENT, JsObject.empty)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, Status.NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request().put(requestBodyJson))
@@ -134,7 +140,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
     }
 
     "return a 400 with multiple errors" when {
-      "all field validations fail on the request body" in new TysIfsTest {
+      "all field validations fail on the request body" in new TysHipTest {
 
         val allInvalidFieldsRequestBodyJson: JsValue = Json.parse(
           """
@@ -168,7 +174,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
             |    }
             |  }
             |}
-          """.stripMargin
+            """.stripMargin
         )
 
         val allInvalidFieldsRequestError: List[MtdError] = List(
@@ -257,7 +263,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
           |    }
           |  }
           |}
-        """.stripMargin
+          """.stripMargin
       )
 
       val allInvalidBody: MtdError = RuleIncorrectOrEmptyBodyError.copy(
@@ -277,11 +283,11 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
                                 expectedStatus: Int,
                                 expectedBody: MtdError,
                                 scenario: Option[String]): Unit = {
-          s"validation fails with ${expectedBody.code} error ${scenario.getOrElse("")}" in new TysIfsTest {
+          s"validation fails with ${expectedBody.code} error ${scenario.getOrElse("")}" in new TysHipTest {
 
-            override val nino: String             = requestNino
-            override val businessId: String       = requestBusinessId
-            override val taxYear: String          = requestTaxYear
+            override val nino: String = requestNino
+            override val businessId: String = requestBusinessId
+            override val taxYear: String = requestTaxYear
             override val requestBodyJson: JsValue = requestBody
 
             override def setupStubs(): StubMapping = {
@@ -355,7 +361,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysIfsTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -393,10 +399,9 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryIfsISpec extends IntegrationBas
           (UNPROCESSABLE_ENTITY, "SUBMITTED_TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        errors.foreach(args => (serviceErrorTest).tupled(args))
+        errors.foreach(args => serviceErrorTest.tupled(args))
       }
 
     }
   }
-
 }

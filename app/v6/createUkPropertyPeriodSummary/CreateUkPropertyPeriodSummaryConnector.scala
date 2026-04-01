@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,13 @@
 package v6.createUkPropertyPeriodSummary
 
 import play.api.http.Status.OK
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v6.createUkPropertyPeriodSummary.model.request.{
-  CreateUkPropertyPeriodSummaryRequestData,
-  Def1_CreateUkPropertyPeriodSummaryRequestData,
-  Def2_CreateUkPropertyPeriodSummaryRequestData,
-  Def2_CreateUkPropertyPeriodSummarySubmissionRequestData
-}
+import v6.createUkPropertyPeriodSummary.model.request.*
 import v6.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import javax.inject.{Inject, Singleton}
@@ -47,11 +42,7 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, 
       case def1: Def1_CreateUkPropertyPeriodSummaryRequestData =>
         import def1.*
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] = if (taxYear.useTaxYearSpecificApi) {
-          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1861")) {
-            HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
-          } else {
-            IfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
-          }
+          HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
         } else {
           // Note that MTD tax year format is used pre-TYS
           IfsUri(s"income-tax/business/property/periodic?taxableEntityId=$nino&taxYear=${taxYear.asMtd}&incomeSourceId=$businessId")
@@ -61,21 +52,15 @@ class CreateUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, 
       case def2: Def2_CreateUkPropertyPeriodSummaryRequestData =>
         import def2.*
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] =
-          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1861")) {
-            HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
-          } else {
-            IfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
-          }
+          HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
+
         post(body, downstreamUri)
 
       case def2Submission: Def2_CreateUkPropertyPeriodSummarySubmissionRequestData =>
         import def2Submission.*
         val downstreamUri: DownstreamUri[CreateUkPropertyPeriodSummaryResponse] =
-          if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1861")) {
-            HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
-          } else {
-            IfsUri(s"income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId")
-          }
+          HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId")
+
         post(body, downstreamUri)
     }
   }

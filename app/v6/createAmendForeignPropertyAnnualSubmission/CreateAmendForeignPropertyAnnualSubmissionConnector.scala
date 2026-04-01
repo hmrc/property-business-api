@@ -17,7 +17,7 @@
 package v6.createAmendForeignPropertyAnnualSubmission
 
 import play.api.http.Status.NO_CONTENT
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
@@ -44,11 +44,8 @@ class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: H
     lazy val downstreamUri1597 =
       IfsUri[Unit](s"income-tax/business/property/annual?taxableEntityId=$nino&incomeSourceId=$businessId&taxYear=${taxYear.asMtd}")
 
-    lazy val downstreamUri1804 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1804")) {
+    lazy val downstreamUri1804 =
       HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
-    } else {
-      IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")
-    }
 
     lazy val downstreamUriForTy2627Onwards =
       HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/foreign-property/annual/$nino/$businessId")

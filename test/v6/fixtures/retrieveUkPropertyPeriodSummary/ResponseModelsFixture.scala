@@ -16,9 +16,9 @@
 
 package v6.fixtures.retrieveUkPropertyPeriodSummary
 
+import play.api.libs.json.{JsValue, Json}
 import shared.models.domain.Timestamp
-import play.api.libs.json.{JsObject, JsValue, Json}
-import v6.retrieveUkPropertyPeriodSummary.def1.model.response._
+import v6.retrieveUkPropertyPeriodSummary.def1.model.response.*
 import v6.retrieveUkPropertyPeriodSummary.model.response.Def1_RetrieveUkPropertyPeriodSummaryResponse
 
 trait ResponseModelsFixture {
@@ -217,21 +217,5 @@ trait ResponseModelsFixture {
     ukFhlProperty = Some(ukFhlPropertyModel),
     ukNonFhlProperty = Some(ukNonFhlPropertyModel)
   )
-
-  val mtdResponseWithHateoas: JsObject = fullMtdJson.as[JsObject] ++ Json
-    .parse(
-      s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/business/property/AA123456A/XAIS12345678910/period/2022-23/4557ecb5-fd32-48cc-81f5-e6acd1099f3c",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
-         |   ]
-         |}
-    """.stripMargin
-    )
-    .as[JsObject]
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,54 @@ class AmendUkPropertyPeriodSummaryConnectorSpec extends ConnectorSpec {
         def taxYear: TaxYear = tysTaxYear
 
         stubTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
+        result shouldBe outcome
+      }
+    }
+
+    "amendUkPropertyPeriodSummary for Def2_AmendUkPropertyPeriodSummaryRequestData" must {
+      "send a request and return 204 no content" in new IfsTest {
+        val taxYear = tysTaxYear
+
+        val requestBody = Def2_AmendUkPropertyPeriodSummaryRequestBody(None, None)
+
+        val request =
+          Def2_AmendUkPropertyPeriodSummaryRequestData(Nino(nino), taxYear, BusinessId(businessId), SubmissionId(submissionId), requestBody)
+
+        val connector = new AmendUkPropertyPeriodSummaryConnector(mockHttpClient, mockSharedAppConfig)
+
+        val outcome = Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url =
+            url"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
+          body = requestBody
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
+        result shouldBe outcome
+      }
+    }
+
+    "amendUkPropertyPeriodSummary for Def2_AmendUkPropertyPeriodSummarySubmissionRequestData" must {
+      "send a request and return 204 no content" in new IfsTest {
+        val taxYear = tysTaxYear
+
+        val requestBody = Def2_AmendUkPropertyPeriodSummarySubmissionRequestBody(None, None)
+
+        val request =
+          Def2_AmendUkPropertyPeriodSummarySubmissionRequestData(Nino(nino), taxYear, BusinessId(businessId), SubmissionId(submissionId), requestBody)
+
+        val connector = new AmendUkPropertyPeriodSummaryConnector(mockHttpClient, mockSharedAppConfig)
+
+        val outcome = Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url =
+            url"$baseUrl/income-tax/business/property/periodic/${taxYear.asTysDownstream}?taxableEntityId=$nino&incomeSourceId=$businessId&submissionId=$submissionId",
+          body = requestBody
+        ).returns(Future.successful(outcome))
 
         val result: DownstreamOutcome[Unit] = await(connector.amendUkPropertyPeriodSummary(request))
         result shouldBe outcome

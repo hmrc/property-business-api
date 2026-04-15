@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import play.api.test.{FakeRequest, ResultExtractors}
 import shared.config.Deprecation.{Deprecated, NotDeprecated}
 import shared.config.{Deprecation, MockSharedAppConfig, SharedAppConfig}
 import shared.controllers.validators.Validator
-import shared.hateoas.*
 import shared.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.errors.{ErrorWrapper, InternalError, MtdError, NinoFormatError}
@@ -44,12 +43,10 @@ import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 class RequestHandlerSpec
     extends UnitSpec
     with MockAuditService
-    with MockHateoasFactory
     with MockIdGenerator
     with Status
     with HeaderNames
     with ResultExtractors
-    with ControllerSpecHateoasSupport
     with MockSharedAppConfig {
 
   private implicit val ec: ExecutionContextExecutor = ExecutionContext.global
@@ -87,12 +84,6 @@ class RequestHandlerSpec
 
   case object Output {
     implicit val writes: OWrites[Output.type] = _ => successResponseJson
-  }
-
-  case object HData extends HateoasData
-
-  implicit object HLinksFactory extends HateoasLinksFactory[Output.type, HData.type] {
-    override def links(appConfig: SharedAppConfig, data: HData.type): Seq[Link] = hateoaslinks
   }
 
   trait DummyService {

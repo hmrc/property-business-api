@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,20 @@ class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
+  val requestBodyFalse: UkPropertyAdjustmentsRentARoom =
+    UkPropertyAdjustmentsRentARoom(false)
+
+  val validJsonFalse: JsValue = Json.parse("""
+      |{
+      |    "jointlyLet": false
+      |}
+      |""".stripMargin)
+
   "reads" when {
     "passed a valid JSON" should {
       "return a valid model" in {
         validJson.as[UkPropertyAdjustmentsRentARoom] shouldBe requestBody
+        validJsonFalse.as[UkPropertyAdjustmentsRentARoom] shouldBe requestBodyFalse
       }
     }
   }
@@ -42,6 +52,42 @@ class UkPropertyAdjustmentsRentARoomSpec extends UnitSpec {
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(requestBody) shouldBe validJson
+        Json.toJson(requestBodyFalse) shouldBe validJsonFalse
+      }
+    }
+  }
+
+  "UkPropertyAdjustmentsRentARoom" when {
+    "testing case class operations" should {
+      "support equality comparison" in {
+        val copy1     = UkPropertyAdjustmentsRentARoom(true)
+        val copy2     = UkPropertyAdjustmentsRentARoom(true)
+        val different = UkPropertyAdjustmentsRentARoom(false)
+
+        copy1 shouldBe copy2
+        copy1 should not be different
+      }
+
+      "support copy method" in {
+        val original = UkPropertyAdjustmentsRentARoom(true)
+        val copied   = original.copy(jointlyLet = false)
+
+        copied.jointlyLet shouldBe false
+        original.jointlyLet shouldBe true
+      }
+
+      "test toString representation" in {
+        val model = UkPropertyAdjustmentsRentARoom(true)
+        model.toString should include("true")
+      }
+
+      "support hashCode" in {
+        val copy1     = UkPropertyAdjustmentsRentARoom(true)
+        val copy2     = UkPropertyAdjustmentsRentARoom(true)
+        val different = UkPropertyAdjustmentsRentARoom(false)
+
+        copy1.hashCode() shouldBe copy2.hashCode()
+        copy1.hashCode() should not equal different.hashCode()
       }
     }
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,39 @@ class AuditErrorSpec extends UnitSpec {
     "written to JSON" should {
       "produce the expected JsObject" in {
         Json.toJson(auditError) shouldBe auditErrorJson
+      }
+    }
+
+    "testing case class operations" should {
+      "support equality comparison" in {
+        val copy1     = AuditError("FORMAT_NINO")
+        val copy2     = AuditError("FORMAT_NINO")
+        val different = AuditError("FORMAT_TAX_YEAR")
+
+        copy1 shouldBe copy2
+        copy1 should not be different
+      }
+
+      "support copy method" in {
+        val original = AuditError("FORMAT_NINO")
+        val copied   = original.copy(errorCode = "FORMAT_TAX_YEAR")
+
+        copied.errorCode shouldBe "FORMAT_TAX_YEAR"
+        original.errorCode shouldBe "FORMAT_NINO"
+      }
+
+      "support hashCode" in {
+        val copy1     = AuditError("FORMAT_NINO")
+        val copy2     = AuditError("FORMAT_NINO")
+        val different = AuditError("FORMAT_TAX_YEAR")
+
+        copy1.hashCode() shouldBe copy2.hashCode()
+        copy1.hashCode() should not equal different.hashCode()
+      }
+
+      "support field access" in {
+        val error = AuditError("SOME_ERROR_CODE")
+        error.errorCode shouldBe "SOME_ERROR_CODE"
       }
     }
   }

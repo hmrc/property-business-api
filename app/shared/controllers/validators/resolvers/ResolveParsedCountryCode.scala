@@ -266,8 +266,9 @@ object ResolveParsedCountryCode {
   def apply(value: String, path: String): Validated[List[MtdError], String] = {
 
     def addPathIfPresent(error: MtdError): MtdError = if (path.nonEmpty) error.withPath(path) else error
+
     if (value.length != 3) {
-      Invalid(List(CountryCodeFormatError.withPath(path)))
+      Invalid(List(addPathIfPresent(CountryCodeFormatError)))
     } else if (permittedCodes.contains(value)) {
       Valid(value)
     } else {

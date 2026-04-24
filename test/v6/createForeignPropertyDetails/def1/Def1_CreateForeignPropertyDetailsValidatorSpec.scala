@@ -175,7 +175,7 @@ class Def1_CreateForeignPropertyDetailsValidatorSpec extends UnitSpec with JsonE
         val result: Either[ErrorWrapper, CreateForeignPropertyDetailsRequestData] =
           validator(validNino, validBusinessId, validTaxYear, invalidJson).validateAndWrapResult()
 
-        result shouldBe Left(ErrorWrapper(correlationId, RuleCountryCodeError.withPath("")))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleCountryCodeError))
       }
 
       "passed a body with an invalid endDate" in {

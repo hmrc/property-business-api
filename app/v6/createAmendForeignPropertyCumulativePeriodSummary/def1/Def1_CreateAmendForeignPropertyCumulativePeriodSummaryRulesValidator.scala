@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import common.models.errors.RuleBothExpensesSuppliedWithForeignPropertyError
+import common.models.errors.{RuleBothExpensesSuppliedWithForeignPropertyError, RuleDuplicateCountryCodeError}
 import common.utils.DateValidator
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
@@ -48,13 +48,23 @@ object Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator
   }
 
   private def validateForeignProperty(foreignProperty: Seq[ForeignProperty]): Validated[Seq[MtdError], Unit] = {
-    val zippedForeignProperties = foreignProperty.zipWithIndex
+    val zippedForeignProperties: Seq[(ForeignProperty, Int)] = foreignProperty.zipWithIndex
 
-    val validatedEntries = zippedForeignProperties
+    val validatedEntries: Validated[Seq[MtdError], Unit] = zippedForeignProperties
       .map { case (entry, index) => validateForeignPropertyEntry(entry, index) }
-      .traverse(identity)
+      .sequence
+      .andThen(_ => valid)
 
-    validatedEntries andThen (_ => valid)
+    val validatedCountryCodes: Seq[Validated[Seq[MtdError], Unit]] = zippedForeignProperties
+      .groupMap(_._1.countryCode) { case (_, index) =>
+        s"/foreignProperty/$index/countryCode"
+      }
+      .collect {
+        case (code, paths) if paths.size > 1 => Invalid(List(RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(code, paths)))
+      }
+      .toSeq
+
+    (validatedCountryCodes :+ validatedEntries).sequence.andThen(_ => valid)
   }
 
   private def validateForeignPropertyEntry(entry: ForeignProperty, index: Int): Validated[Seq[MtdError], Unit] = {

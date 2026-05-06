@@ -18,18 +18,15 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
-import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.*
 import play.api.libs.json.*
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.AUTHORIZATION
+import play.api.test.Helpers.*
 import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.services.*
 import shared.support.IntegrationBaseSpec
-
 
 class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends IntegrationBaseSpec with JsonErrorValidators {
 
@@ -83,6 +80,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
         response.status shouldBe NO_CONTENT
         response.body shouldBe ""
         response.header("Content-Type") shouldBe None
+        response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
 
@@ -96,6 +94,7 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
         val response: WSResponse = await(request().addHttpHeaders(("Content-Type", "application/json")).put("{ badJson }"))
         response.json shouldBe Json.toJson(BadRequestError)
         response.status shouldBe BAD_REQUEST
+        response.header("Content-Type") shouldBe Some("application/json")
       }
     }
 
@@ -123,8 +122,10 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             val response: WSResponse = await(request().put(requestBody))
             response.json shouldBe Json.toJson(expectedBody)
             response.status shouldBe expectedStatus
+            response.header("Content-Type") shouldBe Some("application/json")
           }
         }
+
         val input = List(
           ("AA1123A", "XAIS12345678910", "2025-26", requestBody, BAD_REQUEST, NinoFormatError, None),
           ("AA123456A", "XA***IS1", "2025-26", requestBody, BAD_REQUEST, BusinessIdFormatError, None),
@@ -200,14 +201,27 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             BAD_REQUEST,
             RuleCountryCodeError.withPath("/foreignProperty/0/countryCode"),
             None
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            requestBodyWith(entry, entry),
+            BAD_REQUEST,
+            RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
+              code = "AFG",
+              paths = List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode")
+            ),
+            None
           )
         )
+
         input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns a code $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -219,6 +233,8 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryISpec extends Integr
             val response: WSResponse = await(request().put(requestBody))
             response.json shouldBe Json.toJson(expectedBody)
             response.status shouldBe expectedStatus
+            response.header("X-CorrelationId").nonEmpty shouldBe true
+            response.header("Content-Type") shouldBe Some("application/json")
           }
         }
 

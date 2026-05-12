@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 
-import common.models.errors.{RuleBothExpensesSuppliedWithForeignPropertyError, RuleMissingSubmissionDatesError, RuleToDateBeforeFromDateError}
+import common.models.errors.*
 import play.api.libs.json.*
 import shared.models.domain.{BusinessId, Nino, TaxYear}
 import shared.models.errors.*
@@ -505,6 +505,23 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           ErrorWrapper(correlationId, CountryCodeFormatError.withPaths(List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode"))))
       }
 
+      "passed a body containing a single duplicated country code" in {
+        val invalidBody: JsValue = bodyWith(entry, entry)
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
+              code = "AFG",
+              paths = List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode")
+            )
+          )
+        )
+      }
+
       "passed a body containing both foreignProperty expenses" in {
 
         val invalidBody = bodyWith(entry.update("/expenses/consolidatedExpenses", JsNumber(100.00)))
@@ -539,7 +556,6 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
     }
 
     "return multiple errors" when {
-
       "passed a body with an invalidly formatted toDate and a missing fromDate" in {
         val requestWithInvalidToDateAndMissingFromDate = validBody.update("/toDate", JsString("2024")).removeProperty("/fromDate")
 
@@ -556,6 +572,32 @@ class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidatorSpec extend
           validator(validNino, validBusinessId, validTaxYear, requestWithInvalidFromDateAndMissingToDate).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(FromDateFormatError, RuleMissingSubmissionDatesError))))
+      }
+
+      "passed a body containing multiple duplicated country codes" in {
+        val invalidBody: JsValue = bodyWith(entry, entry, entryWith("FRA"), entryWith("FRA"))
+
+        val result: Either[ErrorWrapper, CreateAmendForeignPropertyCumulativePeriodSummaryRequestData] =
+          validator(validNino, validBusinessId, validTaxYear, invalidBody).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            BadRequestError,
+            Some(
+              List(
+                RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
+                  code = "AFG",
+                  paths = List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode")
+                ),
+                RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
+                  code = "FRA",
+                  paths = List("/foreignProperty/2/countryCode", "/foreignProperty/3/countryCode")
+                )
+              )
+            )
+          )
+        )
       }
     }
   }

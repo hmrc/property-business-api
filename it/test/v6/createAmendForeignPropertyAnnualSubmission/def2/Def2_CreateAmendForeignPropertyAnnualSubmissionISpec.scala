@@ -18,13 +18,11 @@ package v6.createAmendForeignPropertyAnnualSubmission.def2
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
-import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.AUTHORIZATION
+import play.api.test.Helpers.*
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
@@ -202,6 +200,7 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         val response: WSResponse = await(request().put(def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson))
         response.status shouldBe OK
         response.body shouldBe ""
+        response.header("Content-Type") shouldBe None
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
     }
@@ -235,32 +234,26 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         val response: WSResponse = await(request().put(invalidFieldsTypeRequestBodyJson))
         response.status shouldBe BAD_REQUEST
         response.json shouldBe errorResponseJson
+        response.header("Content-Type") shouldBe Some("application/json")
       }
 
       "field data validations fail on the request body" in new Test {
 
         val allInvalidFieldsRequestErrors: List[MtdError] = List(
-          DateFormatError.copy(
-            paths = Some(
-              List(
-                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"
-              ))
+          DateFormatError.withPath("/foreignProperty/0/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate"),
+          StringFormatError.withPaths(
+            List(
+              "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
+              "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/name",
+              "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/number"
+            )
           ),
-          StringFormatError.copy(
-            paths = Some(
-              List(
-                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/postcode",
-                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/name",
-                "/foreignProperty/0/allowances/structuredBuildingAllowance/0/building/number"
-              ))
-          ),
-          ValueFormatError.copy(
-            paths = Some(
-              List(
-                "/foreignProperty/0/adjustments/privateUseAdjustment",
-                "/foreignProperty/0/adjustments/balancingCharge",
-                "/foreignProperty/0/allowances/annualInvestmentAllowance"
-              ))
+          ValueFormatError.withPaths(
+            List(
+              "/foreignProperty/0/adjustments/privateUseAdjustment",
+              "/foreignProperty/0/adjustments/balancingCharge",
+              "/foreignProperty/0/allowances/annualInvestmentAllowance"
+            )
           )
         )
 
@@ -279,118 +272,132 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionISpec extends IntegrationBa
         val response: WSResponse = await(request().put(invalidFieldsRequestBodyJson))
         response.status shouldBe BAD_REQUEST
         response.json shouldBe Json.toJson(wrappedErrors)
+        response.header("Content-Type") shouldBe Some("application/json")
       }
     }
 
-    "validation error occurs" when {
-      def validationErrorTest(requestNino: String,
-                              requestBusinessId: String,
-                              requestTaxYear: String,
-                              requestBody: JsValue,
-                              expectedStatus: Int,
-                              expectedBody: MtdError): Unit = {
-        s"validation fails with ${expectedBody.code} error" in new Test {
+    "return an error according to spec" when {
+      "validation error occurs" when {
+        def validationErrorTest(requestNino: String,
+                                requestBusinessId: String,
+                                requestTaxYear: String,
+                                requestBody: JsValue,
+                                expectedStatus: Int,
+                                expectedBody: MtdError): Unit = {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
-          override val nino: String       = requestNino
-          override val businessId: String = requestBusinessId
-          override val taxYear: String    = requestTaxYear
+            override val nino: String = requestNino
+            override val businessId: String = requestBusinessId
+            override val taxYear: String = requestTaxYear
 
-          override def setupStubs(): StubMapping = {
-            AuditStub.audit()
-            AuthStub.authorised()
-            MtdIdLookupStub.ninoFound(nino)
+            override def setupStubs(): StubMapping = {
+              AuditStub.audit()
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+            }
+
+            val response: WSResponse = await(request().put(requestBody))
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+            response.header("Content-Type") shouldBe Some("application/json")
           }
-
-          val response: WSResponse = await(request().put(requestBody))
-          response.status shouldBe expectedStatus
-          response.json shouldBe Json.toJson(expectedBody)
         }
+
+        val input = List(
+          ("AA1123A", "XAIS12345678910", "2025-26", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "XAIS12345678910", "202362-23", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "XAIS1234dfxgchjbn5678910", "2025-26", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, BusinessIdFormatError),
+          ("AA123456A", "XAIS12345678910", "2021-24", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "XAIS12345678910", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            ruleCountryCodeErrorRequestJson,
+            BAD_REQUEST,
+            RuleCountryCodeError.withPath("/foreignProperty/0/countryCode")
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            formatCountryCodeErrorRequestJson,
+            BAD_REQUEST,
+            CountryCodeFormatError.withPath("/foreignProperty/0/countryCode")
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            duplicateCountryCodeErrorRequestJson,
+            BAD_REQUEST,
+            RuleDuplicateCountryCodeError.forDuplicatedCodesAndPaths(
+              code = "IND",
+              paths = List("/foreignProperty/0/countryCode", "/foreignProperty/1/countryCode")
+            )
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            bothAllowancesSuppliedErrorRequestJson,
+            BAD_REQUEST,
+            RuleBothAllowancesSuppliedError.withPath("/foreignProperty/0/allowances")
+          ),
+          (
+            "AA123456A",
+            "XAIS12345678910",
+            "2025-26",
+            ruleBuildingNameOrNumberErrorRequestJson,
+            BAD_REQUEST,
+            RuleBuildingNameNumberError.withPath("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building")
+          )
+        )
+
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
-      val input = List(
-        ("AA1123A", "XAIS12345678910", "2025-26", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, NinoFormatError),
-        ("AA123456A", "XAIS12345678910", "202362-23", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", "XAIS1234dfxgchjbn5678910", "2025-26", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, BusinessIdFormatError),
-        ("AA123456A", "XAIS12345678910", "2021-24", def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson, BAD_REQUEST, RuleTaxYearRangeInvalidError),
-        (
-          "AA123456A",
-          "XAIS12345678910",
-          "2025-26",
-          Json.parse(s"""{
-                        |
-                        |}""".stripMargin),
-          BAD_REQUEST,
-          RuleIncorrectOrEmptyBodyError),
-        (
-          "AA123456A",
-          "XAIS12345678910",
-          "2025-26",
-          ruleCountryCodeErrorRequestJson,
-          BAD_REQUEST,
-          RuleCountryCodeError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
-        (
-          "AA123456A",
-          "XAIS12345678910",
-          "2025-26",
-          formatCountryCodeErrorRequestJson,
-          BAD_REQUEST,
-          CountryCodeFormatError.copy(paths = Some(List("/foreignProperty/0/countryCode")))),
-        (
-          "AA123456A",
-          "XAIS12345678910",
-          "2025-26",
-          bothAllowancesSuppliedErrorRequestJson,
-          BAD_REQUEST,
-          RuleBothAllowancesSuppliedError.copy(paths = Some(List("/foreignProperty/0/allowances")))),
-        (
-          "AA123456A",
-          "XAIS12345678910",
-          "2025-26",
-          ruleBuildingNameOrNumberErrorRequestJson,
-          BAD_REQUEST,
-          RuleBuildingNameNumberError.copy(paths = Some(List("/foreignProperty/0/allowances/structuredBuildingAllowance/0/building"))))
-      )
-      input.foreach(args => (validationErrorTest).tupled(args))
-    }
+      "downstream service error" when {
+        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns a code $downstreamCode error and status $downstreamStatus" in new Test {
 
-    "downstream service error" when {
-      def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-        s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+            override def setupStubs(): StubMapping = {
+              AuditStub.audit()
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+            }
 
-          override def setupStubs(): StubMapping = {
-            AuditStub.audit()
-            AuthStub.authorised()
-            MtdIdLookupStub.ninoFound(nino)
-            DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+            val response: WSResponse = await(request().put(def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson))
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+            response.header("X-CorrelationId").nonEmpty shouldBe true
+            response.header("Content-Type") shouldBe Some("application/json")
           }
-
-          val response: WSResponse = await(request().put(def2_createAmendForeignPropertyAnnualSubmissionRequestBodyMtdJson))
-          response.status shouldBe expectedStatus
-          response.json shouldBe Json.toJson(expectedBody)
         }
+
+        val errors = List(
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
+          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
+          (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
+          (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
+        )
+
+        val extraTysErrors = List(
+          (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
+          (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError),
+          (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError)
+        )
+
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
-
-      val errors = List(
-        (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
-        (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-        (UNPROCESSABLE_ENTITY, "INCOMPATIBLE_PAYLOAD", BAD_REQUEST, RuleTypeOfBusinessIncorrectError),
-        (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
-        (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-        (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
-        (NOT_FOUND, "INCOME_SOURCE_NOT_FOUND", NOT_FOUND, NotFoundError),
-        (UNPROCESSABLE_ENTITY, "DUPLICATE_COUNTRY_CODE", BAD_REQUEST, RuleDuplicateCountryCodeError),
-        (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-        (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
-        (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
-      )
-
-      val extraTysErrors = List(
-        (UNPROCESSABLE_ENTITY, "MISSING_EXPENSES", INTERNAL_SERVER_ERROR, InternalError),
-        (UNPROCESSABLE_ENTITY, "FIELD_CONFLICT", BAD_REQUEST, RulePropertyIncomeAllowanceError),
-        (BAD_REQUEST, "INVALID_INCOME_SOURCE_ID", BAD_REQUEST, BusinessIdFormatError)
-      )
-
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
     }
   }
 

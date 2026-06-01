@@ -21,7 +21,7 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.*
 import v6.createAmendUkPropertyAnnualSubmission.def2.model.request.{
   Allowances,
@@ -32,16 +32,15 @@ import v6.createAmendUkPropertyAnnualSubmission.def2.model.request.{
 
 class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
-  private val stringRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
-
   private val resolveParsedNumber            = ResolveParsedNumber()
   private val resolvePropertyIncomeAllowance = ResolveParsedNumber(max = 1000.00)
+  private val stringRegex                    = "^[0-9a-zA-ZÀ-˿’\\- _&`():.'^]{1,90}$".r
 
-  private def resolveString(field: String, path: String): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(field)) valid else Invalid(List(StringFormatError.withPath(path)))
+  private def resolveOptionalStringByPattern(maybeValue: Option[String], mtdError: MtdError) =
+    maybeValue.map(value => resolveStringByPattern(value, mtdError)).getOrElse(valid)
 
-  private def resolveStringOptional(maybeField: Option[String], path: String) =
-    maybeField.map(field => resolveString(field, path)).getOrElse(valid)
+  private def resolveStringByPattern(value: String, error: MtdError): Validated[Seq[MtdError], String] =
+    ResolveStringPattern(value, stringRegex, error)
 
   def validateBusinessRules(parsed: Def2_CreateAmendUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
@@ -59,7 +58,8 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       (adjustments.flatMap(_.privateUseAdjustment), "/ukProperty/adjustments/privateUseAdjustment"),
       (
         adjustments.flatMap(_.businessPremisesRenovationAllowanceBalancingCharges),
-        "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"),
+        "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+      ),
       (allowances.flatMap(_.annualInvestmentAllowance), "/ukProperty/allowances/annualInvestmentAllowance"),
       (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
       (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
@@ -70,13 +70,13 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     val validatedPropertyIncomeAllowance =
       resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), "/ukProperty/allowances/propertyIncomeAllowance")
 
-    val validatedNumberFields = fieldsWithPaths
-      .map {
-        case (None, _)            => valid
-        case (Some(number), path) => resolveParsedNumber(number, path)
-      } :+ validatedPropertyIncomeAllowance
+    val validatedNumberFields = fieldsWithPaths.map {
+      case (None, _)            => valid
+      case (Some(number), path) => resolveParsedNumber(number, path)
+    } :+ validatedPropertyIncomeAllowance
 
-    val validatedAllowances = allowances.map(validateUkPropertyAllowances).getOrElse(valid)
+    val validatedAllowances =
+      allowances.map(validateUkPropertyAllowances).getOrElse(valid)
 
     val validatedStructuredBuildingAllowance = allowances
       .flatMap(_.structuredBuildingAllowance)
@@ -134,9 +134,9 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     }
 
     val validatedStringFields = List(
-      resolveStringOptional(building.name, s"/ukProperty/allowances/$buildingType/$index/building/name"),
-      resolveStringOptional(building.number, s"/ukProperty/allowances/$buildingType/$index/building/number"),
-      resolveString(building.postcode, s"/ukProperty/allowances/$buildingType/$index/building/postcode")
+      resolveOptionalStringByPattern(building.name, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/name")),
+      resolveOptionalStringByPattern(building.number, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/number")),
+      resolveStringByPattern(building.postcode, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
     )
 
     (validatedNumberFields ++ validatedStringFields :+ validatedDateField :+ validatedBuildingField).sequence.andThen(_ => valid)

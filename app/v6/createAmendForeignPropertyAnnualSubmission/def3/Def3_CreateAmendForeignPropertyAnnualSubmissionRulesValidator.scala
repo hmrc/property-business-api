@@ -23,7 +23,7 @@ import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
 import common.models.errors.{PropertyIdFormatError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicatePropertyIdError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.*
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty.{
@@ -45,11 +45,11 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   private val resolveParsedNumber                  = ResolveParsedNumber()
   private val resolvePropertyIncomeAllowanceNumber = ResolveParsedNumber(max = 1000.00)
 
-  private def resolveString(field: String, path: String): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(field)) valid else Invalid(List(StringFormatError.withPath(path)))
+  private def resolveStringByPattern(value: String, error: MtdError): Validated[Seq[MtdError], String] =
+    ResolveStringPattern(value, stringRegex, error)
 
-  private def resolveStringOptional(maybeField: Option[String], path: String) =
-    maybeField.map(field => resolveString(field, path)).getOrElse(valid)
+  private def resolveOptionalStringByPattern(maybeValue: Option[String], mtdError: MtdError) =
+    maybeValue.map(value => resolveStringByPattern(value, mtdError)).getOrElse(valid)
 
   def validateBusinessRules(parsed: Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
@@ -158,9 +158,15 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     }
 
     val validatedStringFields = List(
-      resolveString(building.postcode, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode"),
-      resolveStringOptional(building.name, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name"),
-      resolveStringOptional(building.number, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number")
+      resolveStringByPattern(
+        building.postcode,
+        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode")),
+      resolveOptionalStringByPattern(
+        building.name,
+        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name")),
+      resolveOptionalStringByPattern(
+        building.number,
+        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number"))
     )
 
     val validatedDate = {

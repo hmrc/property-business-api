@@ -45,12 +45,6 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
   private val resolveParsedNumber                  = ResolveParsedNumber()
   private val resolvePropertyIncomeAllowanceNumber = ResolveParsedNumber(max = 1000.00)
 
-  private def resolveStringByPattern(value: String, error: MtdError): Validated[Seq[MtdError], String] =
-    ResolveStringPattern(value, stringRegex, error)
-
-  private def resolveOptionalStringByPattern(maybeValue: Option[String], mtdError: MtdError) =
-    maybeValue.map(value => resolveStringByPattern(value, mtdError)).getOrElse(valid)
-
   def validateBusinessRules(parsed: Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
     import parsed.body.*
@@ -158,15 +152,9 @@ class Def3_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     }
 
     val validatedStringFields = List(
-      resolveStringByPattern(
-        building.postcode,
-        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode")),
-      resolveOptionalStringByPattern(
-        building.name,
-        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name")),
-      resolveOptionalStringByPattern(
-        building.number,
-        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number"))
+      ResolveStringPattern(building.postcode, stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode")),
+      ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name")),
+      ResolveStringPattern(building.number,stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number"))
     )
 
     val validatedDate = {

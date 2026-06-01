@@ -36,12 +36,6 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
   private val resolvePropertyIncomeAllowance = ResolveParsedNumber(max = 1000.00)
   private val stringRegex                    = "^[0-9a-zA-ZÀ-˿’\\- _&`():.'^]{1,90}$".r
 
-  private def resolveOptionalStringByPattern(maybeValue: Option[String], mtdError: MtdError) =
-    maybeValue.map(value => resolveStringByPattern(value, mtdError)).getOrElse(valid)
-
-  private def resolveStringByPattern(value: String, error: MtdError): Validated[Seq[MtdError], String] =
-    ResolveStringPattern(value, stringRegex, error)
-
   def validateBusinessRules(parsed: Def2_CreateAmendUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def2_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
     import parsed.body.*
@@ -134,9 +128,9 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     }
 
     val validatedStringFields = List(
-      resolveOptionalStringByPattern(building.name, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/name")),
-      resolveOptionalStringByPattern(building.number, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/number")),
-      resolveStringByPattern(building.postcode, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
+      ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/name")),
+      ResolveStringPattern(building.number, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/number")),
+      ResolveStringPattern(building.postcode,stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
     )
 
     (validatedNumberFields ++ validatedStringFields :+ validatedDateField :+ validatedBuildingField).sequence.andThen(_ => valid)

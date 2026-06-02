@@ -221,19 +221,19 @@
                       "properties": {
                         "name": {
                           "type": "string",
-                          "description": "The name of the building.",
+                          "description": "The name of the building. Must not be empty or contain only whitespace.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
                           "example": "Green Oak’s"
                         },
                         "number": {
                           "type": "string",
-                          "description": "The number of the building.",
+                          "description": "The number of the building. Must not be empty or contain only whitespace.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
                           "example": "16"
                         },
                         "postcode": {
                           "type": "string",
-                          "description": "The postcode for the building.",
+                          "description": "The postcode for the building. Must not be empty or contain only whitespace.",
                           "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
                           "example": "GF4 9JH"
                         }

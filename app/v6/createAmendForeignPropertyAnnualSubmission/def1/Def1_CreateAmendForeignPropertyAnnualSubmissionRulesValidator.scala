@@ -21,7 +21,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.*
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
@@ -39,12 +39,6 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
 
   private val resolveParsedNumber                  = ResolveParsedNumber()
   private val resolvePropertyIncomeAllowanceNumber = ResolveParsedNumber(max = 1000.00)
-
-  private def resolveString(field: String, path: String): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(field)) valid else Invalid(List(StringFormatError.withPath(path)))
-
-  private def resolveStringOptional(maybeField: Option[String], path: String) =
-    maybeField.map(field => resolveString(field, path)).getOrElse(valid)
 
   def validateBusinessRules(parsed: Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData] = {
@@ -191,9 +185,9 @@ class Def1_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     }
 
     val validatedStringFields = List(
-      resolveString(building.postcode, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode"),
-      resolveStringOptional(building.name, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name"),
-      resolveStringOptional(building.number, s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number")
+      ResolveStringPattern(building.postcode, stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode")),
+      ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name")),
+      ResolveStringPattern(building.number,stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number"))
     )
 
     val validatedDate = {

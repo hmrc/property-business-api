@@ -21,7 +21,7 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.*
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.*
@@ -33,12 +33,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
 
   private val resolveParsedNumber            = ResolveParsedNumber()
   private val resolvePropertyIncomeAllowance = ResolveParsedNumber(max = 1000.00)
-
-  private def resolveString(field: String, path: String): Validated[Seq[MtdError], Unit] =
-    if (stringRegex.matches(field)) valid else Invalid(List(StringFormatError.withPath(path)))
-
-  private def resolveStringOptional(maybeField: Option[String], path: String) =
-    maybeField.map(field => resolveString(field, path)).getOrElse(valid)
 
   def validateBusinessRules(parsed: Def1_CreateAmendUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
@@ -175,9 +169,9 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     }
 
     val validatedStringFields = List(
-      resolveStringOptional(building.name, s"/ukProperty/allowances/$buildingType/$index/building/name"),
-      resolveStringOptional(building.number, s"/ukProperty/allowances/$buildingType/$index/building/number"),
-      resolveString(building.postcode, s"/ukProperty/allowances/$buildingType/$index/building/postcode")
+      ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/name")),
+      ResolveStringPattern(building.number, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/number")),
+      ResolveStringPattern(building.postcode,stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
     )
 
     (validatedNumberFields ++ validatedStringFields :+ validatedDateField :+ validatedBuildingField).sequence.andThen(_ => valid)

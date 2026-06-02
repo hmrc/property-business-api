@@ -145,9 +145,20 @@ class Def2_CreateAmendForeignPropertyAnnualSubmissionRulesValidator
     }
 
     val validatedStringFields = List(
-      ResolveStringPattern(building.postcode, stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode")),
-      ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name")),
-      ResolveStringPattern(building.number,stringRegex, StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number"))
+      ResolveStringPattern(
+        building.postcode,
+        stringRegex,
+        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/postcode")
+      ),
+      ResolveStringPattern(
+        building.name,
+        stringRegex,
+        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/name")),
+      ResolveStringPattern(
+        building.number,
+        stringRegex,
+        StringFormatError.withPath(s"/foreignProperty/$index/allowances/structuredBuildingAllowance/$buildingIndex/building/number")
+      )
     )
 
     val validatedDate = {

@@ -171,7 +171,10 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
     val validatedStringFields = List(
       ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/name")),
       ResolveStringPattern(building.number, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/number")),
-      ResolveStringPattern(building.postcode,stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
+      ResolveStringPattern(
+        building.postcode,
+        stringRegex,
+        StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
     )
 
     (validatedNumberFields ++ validatedStringFields :+ validatedDateField :+ validatedBuildingField).sequence.andThen(_ => valid)

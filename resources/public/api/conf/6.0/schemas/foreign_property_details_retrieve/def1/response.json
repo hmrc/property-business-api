@@ -23,7 +23,7 @@
             "example": "8e8b8450-dc1b-4360-8109-7067337b42cb"
           },
           "propertyName": {
-            "description": "A customer-friendly name for the foreign property. This name will be unique for each country.",
+            "description": "A customer-friendly name for the foreign property. This name will be unique for each country. Must not be empty or contain only whitespace.",
             "type": "string",
             "pattern": "^.{1,105}$",
             "example": "Bob & Bobby Co",

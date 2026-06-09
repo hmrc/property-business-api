@@ -21,14 +21,31 @@ import shared.models.errors.*
 import shared.utils.Logging
 import uk.gov.hmrc.http.HttpResponse
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 trait HttpParser extends Logging {
 
   implicit class JsonResponseHelper(response: HttpResponse) {
-    private lazy val jsonOpt: Option[JsValue] = Try(response.json).toOption
+    private lazy val jsonTry: Try[JsValue] = Try(response.json)
 
-    def validateJson[T](implicit reads: Reads[T]): Option[T] = jsonOpt.flatMap(_.asOpt)
+    def validateJson[T](implicit reads: Reads[T]): Option[T] = jsonTry.toOption.flatMap(_.asOpt[T])
+
+    def validateJsonWithLogging[T](implicit reads: Reads[T]): Option[T] =
+      jsonTry match {
+        case Success(json) =>
+          json
+            .validate[T]
+            .fold(
+              errors => {
+                logger.warn(s"[JsonResponseHelper][validateJsonWithLogging] JSON validation failed: $errors")
+                None
+              },
+              value => Some(value)
+            )
+        case Failure(_) =>
+          logger.warn("[JsonResponseHelper][validateJsonWithLogging] Response body is not valid JSON")
+          None
+      }
 
   }
 
@@ -41,20 +58,23 @@ trait HttpParser extends Logging {
     (__ \ "response" \ "failures").read[Seq[DownstreamErrorCode]]
   }
 
-  private val multipleTopLevelErrorCodesReads: Reads[Seq[DownstreamErrorCode]] =
-    __.read[Seq[JsObject]].map(_.map(obj => DownstreamErrorCode((obj \ "errorCode").as[String])))
-
   private val bvrErrorReads: Reads[Seq[DownstreamErrorCode]] = {
     implicit val errorIdReads: Reads[DownstreamErrorCode] = (__ \ "id").read[String].map(DownstreamErrorCode(_))
     (__ \ "bvrfailureResponseElement" \ "validationRuleFailures").read[Seq[DownstreamErrorCode]]
   }
 
+  private val multipleTopLevelErrorCodesReads: Reads[Seq[DownstreamErrorCode]] =
+    __.read[Seq[JsObject]].map(_.map(obj => DownstreamErrorCode((obj \ "errorCode").as[String])))
+
   def parseErrors(response: HttpResponse): DownstreamError = {
     val wrappedResponse: JsonResponseHelper = new JsonResponseHelper(response)
 
-    val singleError            = wrappedResponse.validateJson[DownstreamErrorCode].map(err => DownstreamErrors(List(err)))
-    lazy val multipleErrors    = wrappedResponse.validateJson(multipleErrorReads).map(errs => DownstreamErrors(errs))
-    lazy val multipleHipErrors = wrappedResponse.validateJson(multipleHipErrorReads).map(errs => DownstreamErrors(errs))
+    val singleError =
+      wrappedResponse.validateJson[DownstreamErrorCode].map(err => DownstreamErrors(List(err)))
+    lazy val multipleErrors =
+      wrappedResponse.validateJson(multipleErrorReads).map(errs => DownstreamErrors(errs))
+    lazy val multipleHipErrors =
+      wrappedResponse.validateJson(multipleHipErrorReads).map(errs => DownstreamErrors(errs))
     lazy val multipleTopLevelErrorCodes =
       wrappedResponse.validateJson(multipleTopLevelErrorCodesReads).map(errs => DownstreamErrors(errs))
     lazy val bvrErrors =
@@ -65,7 +85,8 @@ trait HttpParser extends Logging {
       OutboundError(InternalError)
     }
 
-    singleError orElse multipleErrors orElse multipleHipErrors orElse multipleTopLevelErrorCodes orElse bvrErrors getOrElse unableToParseJsonError
+    singleError orElse multipleErrors orElse multipleHipErrors orElse multipleTopLevelErrorCodes orElse
+      bvrErrors getOrElse unableToParseJsonError
   }
 
 }

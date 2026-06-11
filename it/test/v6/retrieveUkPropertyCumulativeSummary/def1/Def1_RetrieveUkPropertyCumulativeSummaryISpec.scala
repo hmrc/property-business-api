@@ -22,10 +22,10 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.config.MockSharedAppConfig
 import shared.models.domain.TaxYear
 import shared.models.errors.*
 import shared.services.*
-import shared.config.MockSharedAppConfig
 import shared.support.IntegrationBaseSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
@@ -138,7 +138,7 @@ class Def1_RetrieveUkPropertyCumulativeSummaryISpec
           ("AA123456A", "XAIS12345678910", "2024-25", Status.BAD_REQUEST, RuleTaxYearNotSupportedError),
           ("AA123456A", "BAD_BUSINESS_ID", "2025-26", Status.BAD_REQUEST, BusinessIdFormatError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
     }
 

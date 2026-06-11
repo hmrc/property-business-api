@@ -18,11 +18,11 @@ package v6.createForeignPropertyDetails.def1
 
 import cats.data.Validated
 import cats.data.Validated.Invalid
+import common.models.errors.*
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.*
 import shared.models.domain.TaxYear
 import shared.models.errors.*
-import common.models.errors.*
 import v6.createForeignPropertyDetails.def1.model.request.{Def1_CreateForeignPropertyDetailsRequestData, EndReason}
 
 import scala.util.matching.Regex

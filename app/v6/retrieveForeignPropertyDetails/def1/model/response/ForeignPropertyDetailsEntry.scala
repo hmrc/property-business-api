@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
+import play.api.libs.json.*
 import shared.models.domain.Timestamp
-import play.api.libs.json._
 
 case class ForeignPropertyDetailsEntry(
     submittedOn: Timestamp,

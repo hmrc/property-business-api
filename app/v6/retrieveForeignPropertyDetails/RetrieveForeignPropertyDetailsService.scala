@@ -23,6 +23,7 @@ import shared.models.errors.*
 import shared.services.{BaseService, ServiceOutcome}
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

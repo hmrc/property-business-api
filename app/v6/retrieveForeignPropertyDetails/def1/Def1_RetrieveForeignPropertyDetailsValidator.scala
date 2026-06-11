@@ -23,10 +23,11 @@ import common.models.domain.PropertyId
 import common.models.errors.PropertyIdFormatError
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
-import shared.models.errors.MtdError
 import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
+
 import javax.inject.Inject
 
 class Def1_RetrieveForeignPropertyDetailsValidator @Inject() (

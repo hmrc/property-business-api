@@ -17,7 +17,12 @@
 package v6.createAmendUkPropertyAnnualSubmission.def1
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
+import common.models.errors.{
+  RuleBothAllowancesSuppliedError,
+  RuleBuildingNameNumberError,
+  RulePropertyIncomeAllowanceError,
+  RuleTypeOfBusinessIncorrectError
+}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}

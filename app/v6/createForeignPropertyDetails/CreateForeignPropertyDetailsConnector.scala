@@ -18,8 +18,8 @@ package v6.createForeignPropertyDetails
 
 import shared.config.SharedAppConfig
 import shared.connectors.*
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import shared.connectors.DownstreamUri.HipUri
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createForeignPropertyDetails.model.request.CreateForeignPropertyDetailsRequestData

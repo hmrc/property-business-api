@@ -27,7 +27,7 @@ import shared.models.errors.*
 import shared.models.utils.JsonErrorValidators
 import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.{def1_UpdateForeignPropertyDetailsMtdJson => requestBody}
+import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.def1_UpdateForeignPropertyDetailsMtdJson as requestBody
 
 class Def1_UpdateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

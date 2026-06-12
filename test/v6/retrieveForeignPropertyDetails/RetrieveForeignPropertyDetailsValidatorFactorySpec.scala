@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import shared.controllers.validators.AlwaysErrorsValidator
-import shared.utils.UnitSpec
+import api.controllers.validators.AlwaysErrorsValidator
+import api.utils.UnitSpec
 import v6.retrieveForeignPropertyDetails.def1.Def1_RetrieveForeignPropertyDetailsValidator
 
 class RetrieveForeignPropertyDetailsValidatorFactorySpec extends UnitSpec {

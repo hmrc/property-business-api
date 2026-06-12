@@ -22,11 +22,11 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.config.MockSharedAppConfig
-import shared.models.domain.TaxYear
-import shared.models.errors.*
-import shared.services.*
-import shared.support.IntegrationBaseSpec
+import api.config.MockSharedAppConfig
+import api.models.domain.TaxYear
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class Def1_RetrieveUkPropertyCumulativeSummaryISpec

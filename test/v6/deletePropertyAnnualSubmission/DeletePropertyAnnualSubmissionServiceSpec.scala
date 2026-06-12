@@ -17,11 +17,11 @@
 package v6.deletePropertyAnnualSubmission
 
 import common.models.errors.RuleOutsideAmendmentWindowError
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 

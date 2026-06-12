@@ -20,12 +20,12 @@ import play.api.Configuration
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{BusinessId, TaxYear}
-import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{BusinessId, TaxYear}
+import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import v6.createForeignPropertyDetails.def1.model.Def1_CreateForeignPropertyDetailsFixtures
 import v6.createForeignPropertyDetails.def1.model.request.Def1_CreateForeignPropertyDetailsRequestData
 import v6.createForeignPropertyDetails.def1.model.response.Def1_CreateForeignPropertyDetailsResponse

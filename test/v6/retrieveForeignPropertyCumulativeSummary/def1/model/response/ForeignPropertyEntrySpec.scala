@@ -17,7 +17,7 @@
 package v6.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.json.{JsValue, Json}
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 
 class ForeignPropertyEntrySpec extends UnitSpec with Def1_RetrieveForeignPropertyCumulativeSummaryFixture {

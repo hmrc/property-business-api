@@ -16,10 +16,10 @@
 
 package v6.updateForeignPropertyDetails
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.HipUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.config.SharedAppConfig
+import api.connectors.DownstreamUri.HipUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData

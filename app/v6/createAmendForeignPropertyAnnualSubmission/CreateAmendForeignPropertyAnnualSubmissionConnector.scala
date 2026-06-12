@@ -17,10 +17,10 @@
 package v6.createAmendForeignPropertyAnnualSubmission
 
 import play.api.http.Status.NO_CONTENT
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{HipUri, IfsUri}
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import api.config.SharedAppConfig
+import api.connectors.DownstreamUri.{HipUri, IfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData

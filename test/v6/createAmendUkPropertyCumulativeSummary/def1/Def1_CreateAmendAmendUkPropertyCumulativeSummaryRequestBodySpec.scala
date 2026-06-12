@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyCumulativeSummary.def1
 
 import play.api.libs.json.{JsValue, Json}
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import v6.createAmendUkPropertyCumulativeSummary.def1.model.request._
 
 class Def1_CreateAmendAmendUkPropertyCumulativeSummaryRequestBodySpec extends UnitSpec {

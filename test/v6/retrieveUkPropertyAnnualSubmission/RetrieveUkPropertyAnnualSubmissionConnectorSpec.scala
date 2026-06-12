@@ -16,10 +16,10 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData

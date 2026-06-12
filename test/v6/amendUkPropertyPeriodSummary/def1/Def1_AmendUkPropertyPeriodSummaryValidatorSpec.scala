@@ -20,11 +20,11 @@ import common.models.domain.SubmissionId
 import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import shared.controllers.validators.Validator
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.controllers.validators.Validator
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory
 import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
 import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._

@@ -17,7 +17,7 @@
 package v6.updateForeignPropertyDetails.model.request
 
 import common.models.domain.PropertyId
-import shared.models.domain.*
+import api.models.domain.*
 
 trait UpdateForeignPropertyDetailsRequestData {
   val nino: Nino

@@ -22,9 +22,9 @@ import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors.*
-import shared.services.*
-import shared.support.IntegrationBaseSpec
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
 
 class Def1_RetrieveForeignPropertyDetailsHipISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyDetailsFixture {

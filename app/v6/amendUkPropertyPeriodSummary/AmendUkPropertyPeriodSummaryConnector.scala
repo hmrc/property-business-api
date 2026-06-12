@@ -17,10 +17,10 @@
 package v6.amendUkPropertyPeriodSummary
 
 import play.api.http.Status.NO_CONTENT
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.config.SharedAppConfig
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.amendUkPropertyPeriodSummary.model.request.*

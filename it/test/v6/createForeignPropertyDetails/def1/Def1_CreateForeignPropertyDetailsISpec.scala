@@ -22,10 +22,10 @@ import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.*
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.services.*
-import shared.support.IntegrationBaseSpec
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.services.*
+import api.support.IntegrationBaseSpec
 
 class Def1_CreateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {
 

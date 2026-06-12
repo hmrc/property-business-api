@@ -19,9 +19,9 @@ package v6.createForeignPropertyDetails.def1
 import cats.data.Validated
 import cats.implicits.*
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.*
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.errors.MtdError
 import v6.createForeignPropertyDetails.def1.Def1_CreateForeignPropertyDetailsRulesValidator.validateBusinessRules
 import v6.createForeignPropertyDetails.def1.model.request.{Def1_CreateForeignPropertyDetailsRequestBody, Def1_CreateForeignPropertyDetailsRequestData}
 import v6.createForeignPropertyDetails.model.request.CreateForeignPropertyDetailsRequestData

@@ -17,11 +17,11 @@
 package v6.createAmendForeignPropertyAnnualSubmission
 
 import common.models.errors.*
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,

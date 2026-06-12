@@ -17,9 +17,9 @@
 package v6.propertyPeriodSummary.list.def1
 
 import config.MockPropertyBusinessConfig
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.utils.UnitSpec
 import v6.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
 class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {

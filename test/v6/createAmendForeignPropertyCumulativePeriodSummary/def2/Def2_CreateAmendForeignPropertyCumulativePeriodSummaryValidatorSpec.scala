@@ -18,10 +18,10 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
 import common.models.errors.*
 import play.api.libs.json.*
-import shared.models.domain.*
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.*
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 

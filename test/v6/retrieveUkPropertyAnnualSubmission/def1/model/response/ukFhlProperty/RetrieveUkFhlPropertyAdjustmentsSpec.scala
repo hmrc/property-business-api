@@ -17,7 +17,7 @@
 package v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 
 class RetrieveUkFhlPropertyAdjustmentsSpec extends UnitSpec {
 

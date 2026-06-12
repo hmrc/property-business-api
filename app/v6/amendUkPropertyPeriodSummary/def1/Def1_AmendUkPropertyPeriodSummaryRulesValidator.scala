@@ -20,9 +20,9 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.*
 import common.models.errors.RuleBothExpensesSuppliedError
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.*
-import shared.models.errors.MtdError
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.*
+import api.models.errors.MtdError
 import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.{Def1_Amend_UkFhlProperty, Def1_Amend_UkFhlPropertyExpenses}
 import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.{Def1_Amend_UkNonFhlProperty, Def1_Amend_UkNonFhlPropertyExpenses}
 import v6.amendUkPropertyPeriodSummary.model.request.Def1_AmendUkPropertyPeriodSummaryRequestData

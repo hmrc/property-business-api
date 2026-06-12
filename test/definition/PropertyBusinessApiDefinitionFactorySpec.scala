@@ -17,12 +17,12 @@
 package definition
 
 import cats.implicits.catsSyntaxValidatedId
-import shared.config.Deprecation.NotDeprecated
-import shared.config.MockSharedAppConfig
-import shared.definition.*
-import shared.definition.APIStatus.BETA
-import shared.routing.*
-import shared.utils.UnitSpec
+import api.config.Deprecation.NotDeprecated
+import api.config.MockSharedAppConfig
+import api.definition.*
+import api.definition.APIStatus.BETA
+import api.routing.*
+import api.utils.UnitSpec
 
 class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
 

@@ -18,10 +18,10 @@ package v6.updateForeignPropertyDetails
 
 import common.models.domain.PropertyId
 import org.scalamock.handlers.CallHandler
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.updateForeignPropertyDetails.def1.model.request.{Def1_UpdateForeignPropertyDetailsRequestBody, Def1_UpdateForeignPropertyDetailsRequestData}
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData

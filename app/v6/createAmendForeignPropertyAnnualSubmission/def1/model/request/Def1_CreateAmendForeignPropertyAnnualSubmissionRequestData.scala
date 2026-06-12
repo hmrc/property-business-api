@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def1.model.request
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import v6.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionSchema
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
 

@@ -17,11 +17,11 @@
 package v6.retrieveUkPropertyAnnualSubmission
 
 import common.models.errors.RuleTypeOfBusinessIncorrectError
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, UkResult}
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData

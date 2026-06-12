@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import shared.utils.UnitSpec
-import shared.utils.enums.EnumJsonSpecSupport
+import api.utils.UnitSpec
+import api.utils.enums.EnumJsonSpecSupport
 import v6.retrieveForeignPropertyDetails.def1.model.response.EndReason.*
 
 class EndReasonSpec extends UnitSpec with EnumJsonSpecSupport {

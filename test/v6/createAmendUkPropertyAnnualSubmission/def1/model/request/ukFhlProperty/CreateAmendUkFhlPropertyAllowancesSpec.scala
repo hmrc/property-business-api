@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty
 
 import play.api.libs.json.{JsValue, Json}
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 
 class CreateAmendUkFhlPropertyAllowancesSpec extends UnitSpec {
 

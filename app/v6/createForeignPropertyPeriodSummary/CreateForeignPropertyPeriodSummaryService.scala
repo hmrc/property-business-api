@@ -18,9 +18,9 @@ package v6.createForeignPropertyPeriodSummary
 
 import cats.implicits.*
 import common.models.errors.*
-import shared.controllers.RequestContext
-import shared.models.errors.*
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.services.{BaseService, ServiceOutcome}
 import v6.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData
 import v6.createForeignPropertyPeriodSummary.model.response.CreateForeignPropertyPeriodSummaryResponse
 

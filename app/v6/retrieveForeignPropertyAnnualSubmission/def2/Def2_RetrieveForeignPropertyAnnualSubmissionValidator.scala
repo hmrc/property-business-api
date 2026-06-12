@@ -18,10 +18,10 @@ package v6.retrieveForeignPropertyAnnualSubmission.def2
 
 import cats.data.Validated
 import cats.implicits.*
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import v6.retrieveForeignPropertyAnnualSubmission.def2.request.Def2_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 

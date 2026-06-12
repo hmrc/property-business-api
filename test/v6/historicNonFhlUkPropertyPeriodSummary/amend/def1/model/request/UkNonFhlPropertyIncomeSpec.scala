@@ -17,7 +17,7 @@
 package v6.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request
 
 import play.api.libs.json.Json
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 
 class UkNonFhlPropertyIncomeSpec extends UnitSpec with Def1_Fixtures {
 

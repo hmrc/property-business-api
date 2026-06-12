@@ -17,7 +17,7 @@
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request
 
 import play.api.libs.json.Json
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 
 class PropertyIncomeSpec extends UnitSpec {
 

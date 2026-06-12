@@ -16,10 +16,10 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
-import shared.config.SharedAppConfig
-import shared.connectors.*
-import shared.connectors.DownstreamUri.HipUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.config.SharedAppConfig
+import api.connectors.*
+import api.connectors.DownstreamUri.HipUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData

@@ -20,10 +20,10 @@ import common.models.domain.SubmissionId
 import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json._
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._

@@ -17,11 +17,11 @@
 package v6.retrieveForeignPropertyAnnualSubmission
 
 import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult}
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse

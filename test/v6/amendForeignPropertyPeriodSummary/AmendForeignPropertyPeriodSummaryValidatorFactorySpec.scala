@@ -18,9 +18,9 @@ package v6.amendForeignPropertyPeriodSummary
 
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.Json
-import shared.controllers.validators.Validator
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.controllers.validators.Validator
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.amendForeignPropertyPeriodSummary.def1.Def1_AmendForeignPropertyPeriodSummaryValidator
 import v6.amendForeignPropertyPeriodSummary.model.request.AmendForeignPropertyPeriodSummaryRequestData
 

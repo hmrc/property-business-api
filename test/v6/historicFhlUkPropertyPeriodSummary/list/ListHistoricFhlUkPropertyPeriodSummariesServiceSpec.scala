@@ -16,11 +16,11 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.list
 
-import shared.controllers.EndpointLogContext
-import shared.models.domain.Nino
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.historicFhlUkPropertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v6.historicFhlUkPropertyPeriodSummary.list.model.request.{

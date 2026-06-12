@@ -17,9 +17,9 @@
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import play.api.libs.json.*
-import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.controllers.validators.{AlwaysErrorsValidator, Validator}
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData

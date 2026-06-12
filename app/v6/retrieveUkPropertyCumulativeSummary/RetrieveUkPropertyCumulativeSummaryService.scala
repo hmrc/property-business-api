@@ -18,10 +18,10 @@ package v6.retrieveUkPropertyCumulativeSummary
 
 import cats.data.EitherT
 import common.models.errors.RuleTypeOfBusinessIncorrectError
-import shared.controllers.RequestContext
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{BaseService, ServiceOutcome}
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
 import v6.retrieveUkPropertyCumulativeSummary.model.{NonUkResult, Result, UkResult}

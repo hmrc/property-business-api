@@ -17,8 +17,8 @@
 package v6.retrieveForeignPropertyPeriodSummary
 
 import config.MockPropertyBusinessConfig
-import shared.controllers.validators.Validator
-import shared.utils.UnitSpec
+import api.controllers.validators.Validator
+import api.utils.UnitSpec
 import v6.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v6.retrieveForeignPropertyPeriodSummary.model.request._
 

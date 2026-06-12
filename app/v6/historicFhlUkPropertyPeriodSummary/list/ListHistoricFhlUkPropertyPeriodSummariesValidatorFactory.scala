@@ -16,7 +16,7 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.list
 
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v6.historicFhlUkPropertyPeriodSummary.list.def1.Def1_ListHistoricFhlUkPropertyPeriodSummariesValidator
 import v6.historicFhlUkPropertyPeriodSummary.list.model.request.ListHistoricFhlUkPropertyPeriodSummariesRequestData
 

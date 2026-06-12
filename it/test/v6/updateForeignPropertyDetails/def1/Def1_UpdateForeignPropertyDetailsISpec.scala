@@ -23,10 +23,10 @@ import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.*
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.services.*
-import shared.support.IntegrationBaseSpec
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.services.*
+import api.support.IntegrationBaseSpec
 import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.def1_UpdateForeignPropertyDetailsMtdJson as requestBody
 
 class Def1_UpdateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {

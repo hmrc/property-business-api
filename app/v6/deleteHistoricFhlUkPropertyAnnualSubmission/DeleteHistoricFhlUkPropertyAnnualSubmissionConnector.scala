@@ -19,10 +19,10 @@ package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 import common.models.domain.HistoricPropertyType
 import config.PropertyBusinessFeatureSwitches
 import play.api.libs.json.JsObject
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.config.SharedAppConfig
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.{

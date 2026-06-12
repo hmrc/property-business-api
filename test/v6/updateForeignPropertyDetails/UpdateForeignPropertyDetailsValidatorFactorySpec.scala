@@ -17,9 +17,9 @@
 package v6.updateForeignPropertyDetails
 
 import play.api.libs.json.{JsObject, Json}
-import shared.controllers.validators.{Validator, AlwaysErrorsValidator}
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.controllers.validators.{Validator, AlwaysErrorsValidator}
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.updateForeignPropertyDetails.def1.Def1_UpdateForeignPropertyDetailsValidator
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData
 

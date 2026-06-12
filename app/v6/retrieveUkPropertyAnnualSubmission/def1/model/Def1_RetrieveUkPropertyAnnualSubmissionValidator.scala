@@ -19,10 +19,10 @@ package v6.retrieveUkPropertyAnnualSubmission.def1.model
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import config.PropertyBusinessConfig
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.*
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.model.request.*
 

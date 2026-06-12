@@ -16,9 +16,9 @@
 
 package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody,

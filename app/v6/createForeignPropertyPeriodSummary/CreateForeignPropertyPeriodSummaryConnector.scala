@@ -17,10 +17,10 @@
 package v6.createForeignPropertyPeriodSummary
 
 import play.api.http.Status.OK
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{HipUri, IfsUri}
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.config.SharedAppConfig
+import api.connectors.DownstreamUri.{HipUri, IfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createForeignPropertyPeriodSummary.model.request.*

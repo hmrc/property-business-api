@@ -17,7 +17,7 @@
 package v6.createForeignPropertyDetails.def1.model.response
 
 import play.api.libs.json.*
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 
 class Def1_CreateForeignPropertyDetailsResponseSpec extends UnitSpec {
 

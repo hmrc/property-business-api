@@ -17,7 +17,7 @@
 package config
 
 import play.api.Configuration
-import shared.config.AppConfigBase
+import api.config.AppConfigBase
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.{Inject, Singleton}

@@ -16,7 +16,7 @@
 
 package v6.deletePropertyAnnualSubmission.model.request
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 
 sealed trait DeletePropertyAnnualSubmissionRequestData {
   val nino: Nino

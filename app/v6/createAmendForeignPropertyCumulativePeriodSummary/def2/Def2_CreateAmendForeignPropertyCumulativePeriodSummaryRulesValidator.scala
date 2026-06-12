@@ -23,9 +23,9 @@ import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
 import common.models.errors.*
 import common.utils.DateValidator
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.ResolveParsedNumber
-import shared.models.errors.*
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.ResolveParsedNumber
+import api.models.errors.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.*
 

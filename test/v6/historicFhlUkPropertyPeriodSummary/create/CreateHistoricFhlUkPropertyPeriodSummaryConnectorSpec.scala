@@ -16,9 +16,9 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.create
 
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.Nino
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.Nino
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.historicFhlUkPropertyPeriodSummary.create.model.request.{
   Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,

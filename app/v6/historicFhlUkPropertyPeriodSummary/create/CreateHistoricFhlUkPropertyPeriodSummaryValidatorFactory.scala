@@ -17,7 +17,7 @@
 package v6.historicFhlUkPropertyPeriodSummary.create
 
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v6.historicFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidator
 import v6.historicFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricFhlUkPropertyPeriodSummaryRequestData
 

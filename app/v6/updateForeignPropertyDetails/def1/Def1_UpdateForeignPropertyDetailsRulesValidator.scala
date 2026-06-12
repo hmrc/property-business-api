@@ -19,10 +19,10 @@ package v6.updateForeignPropertyDetails.def1
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import common.models.errors.*
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveStringPattern, ResolverSupport}
-import shared.models.domain.TaxYear
-import shared.models.errors.*
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveStringPattern, ResolverSupport}
+import api.models.domain.TaxYear
+import api.models.errors.*
 import v6.updateForeignPropertyDetails.def1.model.request.{Def1_UpdateForeignPropertyDetailsRequestData, EndReason}
 
 import scala.util.matching.Regex

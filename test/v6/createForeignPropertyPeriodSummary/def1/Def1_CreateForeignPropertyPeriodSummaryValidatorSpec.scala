@@ -19,10 +19,10 @@ package v6.createForeignPropertyPeriodSummary.def1
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, RuleToDateBeforeFromDateError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json._
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea._
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry._
 import v6.createForeignPropertyPeriodSummary.model.request._

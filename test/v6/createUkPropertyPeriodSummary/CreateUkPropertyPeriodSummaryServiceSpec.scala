@@ -24,11 +24,11 @@ import common.models.errors.{
   RuleToDateBeforeFromDateError,
   RuleTypeOfBusinessIncorrectError
 }
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import v6.createUkPropertyPeriodSummary.model.request.{Def1_CreateUkPropertyPeriodSummaryRequestBody, Def1_CreateUkPropertyPeriodSummaryRequestData}
 import v6.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 

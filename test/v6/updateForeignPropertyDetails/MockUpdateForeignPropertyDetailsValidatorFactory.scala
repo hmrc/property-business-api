@@ -18,7 +18,7 @@ package v6.updateForeignPropertyDetails
 
 import org.scalamock.handlers.CallHandler
 import play.api.libs.json.JsValue
-import shared.controllers.validators.{MockValidatorFactory, Validator}
+import api.controllers.validators.{MockValidatorFactory, Validator}
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData
 
 trait MockUpdateForeignPropertyDetailsValidatorFactory extends MockValidatorFactory[UpdateForeignPropertyDetailsRequestData] {

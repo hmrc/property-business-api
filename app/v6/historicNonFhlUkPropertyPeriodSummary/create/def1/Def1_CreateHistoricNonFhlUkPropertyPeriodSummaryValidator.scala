@@ -22,9 +22,9 @@ import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
+import api.models.errors.MtdError
 import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,

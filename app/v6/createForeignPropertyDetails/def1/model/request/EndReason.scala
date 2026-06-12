@@ -16,7 +16,7 @@
 
 package v6.createForeignPropertyDetails.def1.model.request
 
-import shared.utils.enums.Enums
+import api.utils.enums.Enums
 
 enum EndReason(val toDownstream: String) {
   case `no-longer-renting-property-out` extends EndReason("noLongerRentingPropertyOut")

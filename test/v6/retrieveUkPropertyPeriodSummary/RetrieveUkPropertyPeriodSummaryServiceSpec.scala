@@ -18,11 +18,11 @@ package v6.retrieveUkPropertyPeriodSummary
 
 import common.models.domain.SubmissionId
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveUkPropertyPeriodSummary.model.{NonUkResult, UkResult}
 import v6.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture

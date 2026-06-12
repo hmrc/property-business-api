@@ -17,9 +17,9 @@
 package v6.createForeignPropertyDetails
 
 import play.api.libs.json.{JsObject, Json}
-import shared.controllers.validators.Validator
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.controllers.validators.Validator
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.createForeignPropertyDetails.def1.Def1_CreateForeignPropertyDetailsValidator
 import v6.createForeignPropertyDetails.def1.model.Def1_CreateForeignPropertyDetailsFixtures
 import v6.createForeignPropertyDetails.model.request.CreateForeignPropertyDetailsRequestData

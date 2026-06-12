@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import shared.controllers.validators.AlwaysErrorsValidator
-import shared.utils.UnitSpec
+import api.controllers.validators.AlwaysErrorsValidator
+import api.utils.UnitSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def1.Def1_RetrieveForeignPropertyCumulativeSummaryValidator
 import v6.retrieveForeignPropertyCumulativeSummary.def2.Def2_RetrieveForeignPropertyCumulativeSummaryValidator
 

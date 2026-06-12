@@ -19,12 +19,12 @@ package v6.retrieveHistoricFhlUkPropertyAnnualSubmission
 import play.api.Configuration
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response._
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._

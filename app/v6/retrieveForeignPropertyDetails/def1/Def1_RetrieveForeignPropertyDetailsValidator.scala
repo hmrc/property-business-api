@@ -21,10 +21,10 @@ import cats.syntax.all.*
 import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
 import common.models.errors.PropertyIdFormatError
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 

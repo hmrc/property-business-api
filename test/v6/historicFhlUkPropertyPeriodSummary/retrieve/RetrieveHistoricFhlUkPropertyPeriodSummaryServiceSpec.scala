@@ -18,12 +18,12 @@ package v6.historicFhlUkPropertyPeriodSummary.retrieve
 
 import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
-import shared.controllers.EndpointLogContext
-import shared.models.domain.Nino
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceOutcome
-import shared.utils.UnitSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceOutcome
+import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,

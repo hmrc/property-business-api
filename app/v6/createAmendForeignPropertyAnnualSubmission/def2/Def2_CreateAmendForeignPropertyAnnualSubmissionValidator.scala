@@ -19,10 +19,10 @@ package v6.createAmendForeignPropertyAnnualSubmission.def2
 import cats.data.Validated
 import cats.implicits.*
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.{
   Def2_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData

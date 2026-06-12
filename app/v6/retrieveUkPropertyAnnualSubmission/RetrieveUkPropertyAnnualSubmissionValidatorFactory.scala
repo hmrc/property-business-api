@@ -18,8 +18,8 @@ package v6.retrieveUkPropertyAnnualSubmission
 
 import cats.data.Validated.*
 import config.PropertyBusinessConfig
-import shared.controllers.validators.Validator
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.models.errors.MtdError
 import v6.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator

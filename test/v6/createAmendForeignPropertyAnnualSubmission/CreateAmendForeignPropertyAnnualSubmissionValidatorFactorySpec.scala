@@ -18,8 +18,8 @@ package v6.createAmendForeignPropertyAnnualSubmission
 
 import config.MockPropertyBusinessConfig
 import play.api.libs.json._
-import shared.controllers.validators.AlwaysErrorsValidator
-import shared.utils.UnitSpec
+import api.controllers.validators.AlwaysErrorsValidator
+import api.utils.UnitSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def1.Def1_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v6.createAmendForeignPropertyAnnualSubmission.def2.Def2_CreateAmendForeignPropertyAnnualSubmissionValidator
 import v6.createAmendForeignPropertyAnnualSubmission.def3.Def3_CreateAmendForeignPropertyAnnualSubmissionValidator

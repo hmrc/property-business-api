@@ -17,11 +17,11 @@
 package v6.createForeignPropertyDetails.def1
 
 import play.api.libs.json.*
-import shared.models.domain.*
-import shared.models.errors.*
+import api.models.domain.*
+import api.models.errors.*
 import common.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.createForeignPropertyDetails.def1.model.request.{Def1_CreateForeignPropertyDetailsRequestBody, Def1_CreateForeignPropertyDetailsRequestData}
 import v6.createForeignPropertyDetails.model.request.CreateForeignPropertyDetailsRequestData
 

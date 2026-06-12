@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyCumulativeSummary.model.request
 
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil.writesFrom
+import api.utils.JsonWritesUtil.writesFrom
 import v6.createAmendUkPropertyCumulativeSummary.def1.model.request.Def1_CreateAmendUkPropertyCumulativeSummaryRequestBody
 
 trait CreateAmendUkPropertyCumulativeSummaryRequestBody

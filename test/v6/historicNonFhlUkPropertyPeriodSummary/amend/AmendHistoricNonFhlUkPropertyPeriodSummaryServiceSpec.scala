@@ -18,11 +18,11 @@ package v6.historicNonFhlUkPropertyPeriodSummary.amend
 
 import common.models.domain.PeriodId
 import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
-import shared.controllers.EndpointLogContext
-import shared.models.domain.Nino
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{ServiceOutcome, ServiceSpec}
+import api.controllers.EndpointLogContext
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
+import api.services.{ServiceOutcome, ServiceSpec}
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,

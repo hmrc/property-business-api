@@ -19,10 +19,10 @@ package v6.historicFhlUkPropertyPeriodSummary.retrieve.def1
 import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
 import config.MockPropertyBusinessConfig
-import shared.models.domain.Nino
-import shared.models.errors._
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.Nino
+import api.models.errors._
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData

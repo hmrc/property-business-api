@@ -20,9 +20,9 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError}
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber, ResolveStringPattern}
-import shared.models.errors.*
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber, ResolveStringPattern}
+import api.models.errors.*
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty.*

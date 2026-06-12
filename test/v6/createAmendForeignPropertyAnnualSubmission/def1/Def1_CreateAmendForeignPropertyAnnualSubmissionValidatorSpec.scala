@@ -18,10 +18,10 @@ package v6.createAmendForeignPropertyAnnualSubmission.def1
 
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError}
 import play.api.libs.json.*
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea.*
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignProperty.*
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.*

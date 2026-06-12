@@ -17,7 +17,7 @@
 package v6.retrieveUkPropertyCumulativeSummary.model.response
 
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil.writesFrom
+import api.utils.JsonWritesUtil.writesFrom
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.response.Def1_RetrieveUkPropertyCumulativeSummaryResponse
 
 trait RetrieveUkPropertyCumulativeSummaryResponse {

@@ -17,7 +17,7 @@
 package v6.retrieveForeignPropertyCumulativeSummary.model.response
 
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil.writesFrom
+import api.utils.JsonWritesUtil.writesFrom
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response.Def1_RetrieveForeignPropertyCumulativeSummaryResponse
 import v6.retrieveForeignPropertyCumulativeSummary.def2.model.response.Def2_RetrieveForeignPropertyCumulativeSummaryResponse
 

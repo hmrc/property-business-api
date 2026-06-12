@@ -22,8 +22,8 @@ import common.models.domain.HistoricPropertyType
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.controllers.validators.Validator
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.models.errors.MtdError
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 trait MockDeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory extends TestSuite with MockFactory {

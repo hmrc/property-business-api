@@ -23,9 +23,9 @@ import play.api.libs.json.JsValue
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors.{ClientOrAgentNotAuthorisedError, InternalError}
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import shared.support.IntegrationBaseSpec
+import api.models.errors.{ClientOrAgentNotAuthorisedError, InternalError}
+import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import api.support.IntegrationBaseSpec
 
 abstract class AuthMainAgentsOnlyISpec extends IntegrationBaseSpec {
 

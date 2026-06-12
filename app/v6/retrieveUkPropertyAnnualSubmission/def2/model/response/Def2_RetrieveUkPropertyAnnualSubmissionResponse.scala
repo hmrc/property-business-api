@@ -18,7 +18,7 @@ package v6.retrieveUkPropertyAnnualSubmission.def2.model.response
 
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Json, OWrites, Reads, __}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
 import v6.retrieveUkPropertyAnnualSubmission.model.response.RetrieveUkPropertyAnnualSubmissionResponse
 
 // Note: ukProperty is effectively mandatory.

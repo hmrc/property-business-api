@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
-import shared.controllers.validators.AlwaysErrorsValidator
-import shared.utils.UnitSpec
+import api.controllers.validators.AlwaysErrorsValidator
+import api.utils.UnitSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.Def1_RetrieveUkPropertyCumulativeSummaryValidator
 
 class RetrieveUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec {

@@ -19,10 +19,10 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary.def1
 import cats.data.Validated
 import cats.implicits.*
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.*
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request.{
   Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestBody,

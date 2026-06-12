@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def1.model.request
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import v6.createAmendForeignPropertyCumulativePeriodSummary.model.request.CreateAmendForeignPropertyCumulativePeriodSummaryRequestData
 
 case class Def1_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(nino: Nino,

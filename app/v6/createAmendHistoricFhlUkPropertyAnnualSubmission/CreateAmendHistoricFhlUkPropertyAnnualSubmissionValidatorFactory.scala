@@ -18,7 +18,7 @@ package v6.createAmendHistoricFhlUkPropertyAnnualSubmission
 
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 

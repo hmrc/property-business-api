@@ -17,7 +17,7 @@
 package v6.createForeignPropertyDetails.model.request
 
 import play.api.libs.json.Json
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import v6.createForeignPropertyDetails.def1.model.Def1_CreateForeignPropertyDetailsFixtures
 import v6.createForeignPropertyDetails.def1.model.request.Def1_CreateForeignPropertyDetailsRequestBody
 

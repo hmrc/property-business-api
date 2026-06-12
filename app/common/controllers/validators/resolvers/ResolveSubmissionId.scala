@@ -19,8 +19,8 @@ package common.controllers.validators.resolvers
 import cats.data.Validated
 import common.models.domain.SubmissionId
 import common.models.errors.SubmissionIdFormatError
-import shared.controllers.validators.resolvers.{ResolveStringPattern, ResolverSupport}
-import shared.models.errors.MtdError
+import api.controllers.validators.resolvers.{ResolveStringPattern, ResolverSupport}
+import api.models.errors.MtdError
 
 object ResolveSubmissionId extends ResolverSupport {
 

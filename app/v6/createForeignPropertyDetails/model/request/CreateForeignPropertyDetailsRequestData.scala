@@ -16,7 +16,7 @@
 
 package v6.createForeignPropertyDetails.model.request
 
-import shared.models.domain.*
+import api.models.domain.*
 import v6.createForeignPropertyDetails.CreateForeignPropertyDetailsSchema
 
 trait CreateForeignPropertyDetailsRequestData {

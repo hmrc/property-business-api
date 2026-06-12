@@ -17,7 +17,7 @@
 package v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty
 
 import play.api.libs.json.{JsValue, Json}
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 
 class CreateAmendUkPropertySpec extends UnitSpec {

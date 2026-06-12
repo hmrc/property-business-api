@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyCumulativeSummary.def1.model
 
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.response._
 

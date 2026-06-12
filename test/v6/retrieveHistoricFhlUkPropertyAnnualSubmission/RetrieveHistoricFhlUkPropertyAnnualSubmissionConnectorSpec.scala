@@ -17,10 +17,10 @@
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission
 
 import org.scalamock.handlers.CallHandler
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{DownstreamErrorCode, DownstreamErrors}
-import shared.models.outcomes.ResponseWrapper
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
+import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response._

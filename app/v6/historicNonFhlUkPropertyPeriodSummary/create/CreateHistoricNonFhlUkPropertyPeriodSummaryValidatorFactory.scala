@@ -17,7 +17,7 @@
 package v6.historicNonFhlUkPropertyPeriodSummary.create
 
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator
 import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
 

@@ -18,9 +18,9 @@ package v6.retrieveForeignPropertyCumulativeSummary.def2
 
 import common.models.domain.PropertyId
 import common.models.errors.PropertyIdFormatError
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors.*
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import v6.retrieveForeignPropertyCumulativeSummary.def2.model.request.Def2_RetrieveForeignPropertyCumulativeSummaryRequestData
 
 class Def2_RetrieveForeignPropertyCumulativeSummaryValidatorSpec extends UnitSpec {

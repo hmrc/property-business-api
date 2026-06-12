@@ -19,8 +19,8 @@ package v6.retrieveForeignPropertyDetails
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import shared.controllers.RequestContext
-import shared.services.ServiceOutcome
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 

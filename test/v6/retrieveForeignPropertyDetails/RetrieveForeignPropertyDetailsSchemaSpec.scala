@@ -18,9 +18,9 @@ package v6.retrieveForeignPropertyDetails
 
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
-import shared.utils.UnitSpec
+import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import api.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
+import api.utils.UnitSpec
 
 class RetrieveForeignPropertyDetailsSchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

@@ -18,7 +18,7 @@ package v6.createForeignPropertyDetails
 
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
+import api.controllers.validators.Validator
 import v6.createForeignPropertyDetails.CreateForeignPropertyDetailsSchema.Def1
 import v6.createForeignPropertyDetails.def1.Def1_CreateForeignPropertyDetailsValidator
 import v6.createForeignPropertyDetails.model.request.CreateForeignPropertyDetailsRequestData

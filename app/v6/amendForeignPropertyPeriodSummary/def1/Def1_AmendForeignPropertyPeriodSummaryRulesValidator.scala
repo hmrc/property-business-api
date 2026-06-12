@@ -20,9 +20,9 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import shared.models.errors.MtdError
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import api.models.errors.MtdError
 import v6.amendForeignPropertyPeriodSummary.def1.model.request.foreignFhlEea.{AmendForeignFhlEea, AmendForeignFhlEeaExpenses}
 import v6.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry.{
   AmendForeignNonFhlPropertyEntry,

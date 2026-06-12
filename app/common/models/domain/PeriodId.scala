@@ -17,7 +17,7 @@
 package common.models.domain
 
 import play.api.libs.json.{JsString, Writes}
-import shared.models.domain.DateRange
+import api.models.domain.DateRange
 
 import java.time.format.DateTimeFormatter
 

@@ -17,7 +17,7 @@
 package v6.retrieveForeignPropertyAnnualSubmission.def3.model.response
 
 import play.api.libs.json.{JsPath, Json, OFormat, OWrites, Reads}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
 import v6.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 
 case class Def3_RetrieveForeignPropertyAnnualSubmissionResponse(

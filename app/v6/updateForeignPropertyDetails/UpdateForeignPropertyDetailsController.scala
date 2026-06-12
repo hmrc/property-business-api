@@ -18,11 +18,11 @@ package v6.updateForeignPropertyDetails
 
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers.*
-import shared.routing.Version
-import shared.services.*
-import shared.utils.IdGenerator
+import api.config.SharedAppConfig
+import api.controllers.*
+import api.routing.Version
+import api.services.*
+import api.utils.IdGenerator
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext

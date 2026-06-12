@@ -18,8 +18,8 @@ package v6.createUkPropertyPeriodSummary
 
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
+import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import v6.createUkPropertyPeriodSummary.CreateUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v6.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator
 import v6.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator

@@ -17,9 +17,9 @@
 package v6.updateForeignPropertyDetails
 
 import cats.data.Validated
-import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 
 sealed trait UpdateForeignPropertyDetailsSchema
 

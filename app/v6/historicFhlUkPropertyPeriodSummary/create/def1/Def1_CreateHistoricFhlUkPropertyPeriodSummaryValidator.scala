@@ -22,9 +22,9 @@ import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveFromAndToDates
 import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.*
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.errors.MtdError
 import v6.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
 import v6.historicFhlUkPropertyPeriodSummary.create.model.request.*
 

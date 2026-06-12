@@ -17,8 +17,8 @@
 package v6.retrieveForeignPropertyAnnualSubmission.def2.model.response
 
 import play.api.libs.json.Json
-import shared.models.domain.Timestamp
-import shared.utils.UnitSpec
+import api.models.domain.Timestamp
+import api.utils.UnitSpec
 
 class Def2_RetrieveForeignPropertyAnnualSubmissionResponseSpec extends UnitSpec {
 

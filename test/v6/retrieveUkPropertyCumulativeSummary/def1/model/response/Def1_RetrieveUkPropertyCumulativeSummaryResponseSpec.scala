@@ -17,7 +17,7 @@
 package v6.retrieveUkPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.json.Json
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class Def1_RetrieveUkPropertyCumulativeSummaryResponseSpec extends UnitSpec with Def1_RetrieveUkPropertyCumulativeSummaryFixture {

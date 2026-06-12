@@ -18,10 +18,10 @@ package v6.retrieveForeignPropertyCumulativeSummary
 
 import cats.data.EitherT
 import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
-import shared.controllers.RequestContext
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{BaseService, ServiceOutcome}
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 import v6.retrieveForeignPropertyCumulativeSummary.model.{ForeignResult, NonForeignResult, Result}

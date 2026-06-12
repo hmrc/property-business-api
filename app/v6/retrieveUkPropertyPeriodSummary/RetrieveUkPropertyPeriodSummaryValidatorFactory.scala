@@ -17,8 +17,8 @@
 package v6.retrieveUkPropertyPeriodSummary
 
 import config.PropertyBusinessConfig
-import shared.controllers.validators.Validator
-import shared.models.domain.TaxYear
+import api.controllers.validators.Validator
+import api.models.domain.TaxYear
 import v6.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v6.retrieveUkPropertyPeriodSummary.def1.Def1_RetrieveUkPropertyPeriodSummaryValidator
 import v6.retrieveUkPropertyPeriodSummary.def2.Def2_RetrieveUkPropertyPeriodSummaryValidator

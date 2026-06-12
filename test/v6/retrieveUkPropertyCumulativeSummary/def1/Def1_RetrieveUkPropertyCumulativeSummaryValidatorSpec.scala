@@ -16,9 +16,9 @@
 
 package v6.retrieveUkPropertyCumulativeSummary.def1
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.utils.UnitSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 
 class Def1_RetrieveUkPropertyCumulativeSummaryValidatorSpec extends UnitSpec {

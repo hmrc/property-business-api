@@ -18,8 +18,8 @@ package v6.amendUkPropertyPeriodSummary
 
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.Json
-import shared.controllers.validators.Validator
-import shared.utils.UnitSpec
+import api.controllers.validators.Validator
+import api.utils.UnitSpec
 import v6.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
 import v6.amendUkPropertyPeriodSummary.model.request._
 

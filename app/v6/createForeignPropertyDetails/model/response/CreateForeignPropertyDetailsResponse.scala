@@ -17,7 +17,7 @@
 package v6.createForeignPropertyDetails.model.response
 
 import play.api.libs.json.OWrites
-import shared.utils.JsonWritesUtil.writesFrom
+import api.utils.JsonWritesUtil.writesFrom
 import v6.createForeignPropertyDetails.def1.model.response.Def1_CreateForeignPropertyDetailsResponse
 
 trait CreateForeignPropertyDetailsResponse

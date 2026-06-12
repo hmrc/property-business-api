@@ -18,10 +18,10 @@ package v6.retrieveUkPropertyPeriodSummary
 
 import cats.data.EitherT
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
-import shared.controllers.RequestContext
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{BaseService, ServiceOutcome}
 import v6.retrieveUkPropertyPeriodSummary.model.request.RetrieveUkPropertyPeriodSummaryRequestData
 import v6.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
 import v6.retrieveUkPropertyPeriodSummary.model.{NonUkResult, Result, UkResult}

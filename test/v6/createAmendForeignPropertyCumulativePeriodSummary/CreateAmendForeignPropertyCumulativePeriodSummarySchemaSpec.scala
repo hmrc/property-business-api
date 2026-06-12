@@ -18,9 +18,9 @@ package v6.createAmendForeignPropertyCumulativePeriodSummary
 
 import cats.data.Validated.{Invalid, Valid}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import shared.models.errors.*
-import shared.utils.UnitSpec
+import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import api.models.errors.*
+import api.utils.UnitSpec
 import v6.createAmendForeignPropertyCumulativePeriodSummary.CreateAmendForeignPropertyCumulativePeriodSummarySchema.*
 
 class CreateAmendForeignPropertyCumulativePeriodSummarySchemaSpec

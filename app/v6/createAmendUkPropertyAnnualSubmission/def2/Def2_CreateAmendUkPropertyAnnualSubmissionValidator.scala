@@ -19,9 +19,9 @@ package v6.createAmendUkPropertyAnnualSubmission.def2
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.*
-import shared.models.errors.MtdError
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.errors.MtdError
 import v6.createAmendUkPropertyAnnualSubmission.def2.model.request.{
   Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def2_CreateAmendUkPropertyAnnualSubmissionRequestData

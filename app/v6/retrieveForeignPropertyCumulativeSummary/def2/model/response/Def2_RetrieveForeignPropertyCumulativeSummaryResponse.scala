@@ -17,7 +17,7 @@
 package v6.retrieveForeignPropertyCumulativeSummary.def2.model.response
 
 import play.api.libs.json.{Json, OWrites, OFormat, Reads}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
 import v6.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
 case class Def2_RetrieveForeignPropertyCumulativeSummaryResponse(

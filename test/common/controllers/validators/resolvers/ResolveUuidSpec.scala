@@ -20,8 +20,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import common.models.domain.PropertyId
 import common.models.errors.PropertyIdFormatError
-import shared.models.errors.MtdError
-import shared.utils.UnitSpec
+import api.models.errors.MtdError
+import api.utils.UnitSpec
 
 import java.util.UUID
 

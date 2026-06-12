@@ -18,12 +18,12 @@ package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import common.models.domain.HistoricPropertyType
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers.*
-import shared.models.audit.GenericAuditDetail
-import shared.routing.Version
-import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
+import api.config.SharedAppConfig
+import api.controllers.*
+import api.models.audit.GenericAuditDetail
+import api.routing.Version
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import api.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext

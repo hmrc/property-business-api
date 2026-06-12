@@ -19,10 +19,10 @@ package v6.retrieveUkPropertyAnnualSubmission
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
+import api.models.errors._
+import api.models.outcomes.ResponseWrapper
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty._

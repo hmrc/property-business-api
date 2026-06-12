@@ -16,7 +16,7 @@
 
 package v6.createAmendUkPropertyAnnualSubmission.def1.model.request
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import v6.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 

@@ -17,7 +17,7 @@
 package v6.retrieveForeignPropertyPeriodSummary.model.request
 
 import common.models.domain.SubmissionId
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 
 sealed trait RetrieveForeignPropertyPeriodSummaryRequestData {
   val nino: Nino

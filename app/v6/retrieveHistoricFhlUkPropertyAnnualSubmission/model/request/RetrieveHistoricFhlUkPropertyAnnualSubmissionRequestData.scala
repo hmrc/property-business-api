@@ -16,7 +16,7 @@
 
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request
 
-import shared.models.domain.{Nino, TaxYear}
+import api.models.domain.{Nino, TaxYear}
 
 sealed trait RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData {
   val nino: Nino

@@ -18,7 +18,7 @@ package v6.retrieveUkPropertyCumulativeSummary.def1.model.response
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Json, OWrites, Reads, __}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
 import v6.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
 
 // Note: ukProperty is effectively mandatory.

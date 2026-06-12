@@ -19,9 +19,9 @@ package v6.retrieveForeignPropertyPeriodSummary.def1
 import common.models.domain.SubmissionId
 import common.models.errors.SubmissionIdFormatError
 import config.MockPropertyBusinessConfig
-import shared.models.domain.{BusinessId, Nino, TaxYear}
-import shared.models.errors._
-import shared.utils.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors._
+import api.utils.UnitSpec
 import v6.retrieveForeignPropertyPeriodSummary.model.request._
 
 class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {

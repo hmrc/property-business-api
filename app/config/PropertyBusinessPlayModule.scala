@@ -19,8 +19,8 @@ package config
 import com.google.inject.AbstractModule
 import definition.PropertyBusinessApiDefinitionFactory
 import routing.PropertyBusinessVersionRoutingMap
-import shared.definition.ApiDefinitionFactory
-import shared.routing.VersionRoutingMap
+import api.definition.ApiDefinitionFactory
+import api.routing.VersionRoutingMap
 
 class PropertyBusinessPlayModule extends AbstractModule {
 

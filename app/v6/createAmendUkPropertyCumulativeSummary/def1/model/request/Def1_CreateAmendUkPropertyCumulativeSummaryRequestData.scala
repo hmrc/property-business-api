@@ -16,7 +16,7 @@
 
 package v6.createAmendUkPropertyCumulativeSummary.def1.model.request
 
-import shared.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.domain.{BusinessId, Nino, TaxYear}
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
 case class Def1_CreateAmendUkPropertyCumulativeSummaryRequestData(nino: Nino,

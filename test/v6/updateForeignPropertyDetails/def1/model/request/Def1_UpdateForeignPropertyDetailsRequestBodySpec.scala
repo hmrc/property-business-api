@@ -16,7 +16,7 @@
 
 package v6.updateForeignPropertyDetails.def1.model.request
 
-import shared.utils.UnitSpec
+import api.utils.UnitSpec
 import play.api.libs.json.Json
 import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.{
   def1_UpdateForeignPropertyDetailsMtdJson,

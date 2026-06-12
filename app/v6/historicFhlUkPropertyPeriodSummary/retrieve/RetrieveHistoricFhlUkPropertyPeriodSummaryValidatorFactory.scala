@@ -16,8 +16,8 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.retrieve
 
-import config.PropertyBusinessConfig
 import api.controllers.validators.Validator
+import config.PropertyBusinessConfig
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.def1.Def1_RetrieveHistoricFhlUkPeriodSummaryValidator
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.request.RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData
 

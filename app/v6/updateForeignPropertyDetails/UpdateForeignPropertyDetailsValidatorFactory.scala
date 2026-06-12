@@ -16,9 +16,9 @@
 
 package v6.updateForeignPropertyDetails
 
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
-import api.controllers.validators.Validator
 import v6.updateForeignPropertyDetails.def1.Def1_UpdateForeignPropertyDetailsValidator
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData
 

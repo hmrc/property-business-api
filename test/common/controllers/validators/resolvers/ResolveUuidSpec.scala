@@ -16,12 +16,12 @@
 
 package common.controllers.validators.resolvers
 
+import api.models.errors.MtdError
+import api.utils.UnitSpec
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import common.models.domain.PropertyId
 import common.models.errors.PropertyIdFormatError
-import api.models.errors.MtdError
-import api.utils.UnitSpec
 
 import java.util.UUID
 

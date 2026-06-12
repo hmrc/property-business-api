@@ -16,12 +16,12 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import play.api.Configuration
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
+import play.api.mvc.Result
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.Def1_RetrieveForeignPropertyCumulativeSummaryFixture
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.*

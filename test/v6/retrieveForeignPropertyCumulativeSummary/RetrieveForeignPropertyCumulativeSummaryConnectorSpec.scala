@@ -16,11 +16,11 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import common.models.domain.PropertyId
-import play.api.Configuration
 import api.connectors.ConnectorSpec
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.PropertyId
+import play.api.Configuration
 import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveForeignPropertyCumulativeSummaryResponse, ForeignPropertyEntry}

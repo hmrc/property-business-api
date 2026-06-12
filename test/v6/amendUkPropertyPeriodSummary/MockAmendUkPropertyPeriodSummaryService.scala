@@ -16,11 +16,11 @@
 
 package v6.amendUkPropertyPeriodSummary
 
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import v6.amendUkPropertyPeriodSummary.model.request.AmendUkPropertyPeriodSummaryRequestData
 
 import scala.concurrent.{ExecutionContext, Future}

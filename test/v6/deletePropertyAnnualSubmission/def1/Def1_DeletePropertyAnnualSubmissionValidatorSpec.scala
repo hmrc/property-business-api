@@ -16,10 +16,10 @@
 
 package v6.deletePropertyAnnualSubmission.def1
 
-import config.MockPropertyBusinessConfig
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.deletePropertyAnnualSubmission.DeletePropertyAnnualSubmissionValidatorFactory
 import v6.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 

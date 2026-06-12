@@ -16,12 +16,12 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json.Json
 import api.controllers.validators.Validator
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.Json
 import v6.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
-import v6.amendUkPropertyPeriodSummary.model.request._
+import v6.amendUkPropertyPeriodSummary.model.request.*
 
 class AmendUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 

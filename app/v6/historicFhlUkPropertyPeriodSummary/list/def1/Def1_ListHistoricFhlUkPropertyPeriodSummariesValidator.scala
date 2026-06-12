@@ -16,10 +16,10 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.list.def1
 
-import cats.data.Validated
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.ResolveNino
 import api.models.errors.MtdError
+import cats.data.Validated
 import v6.historicFhlUkPropertyPeriodSummary.list.model.request.{
   Def1_ListHistoricFhlUkPropertyPeriodSummariesRequestData,
   ListHistoricFhlUkPropertyPeriodSummariesRequestData

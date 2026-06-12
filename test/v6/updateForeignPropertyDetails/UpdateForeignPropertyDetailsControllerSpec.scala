@@ -16,15 +16,15 @@
 
 package v6.updateForeignPropertyDetails
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import common.models.domain.PropertyId
 import play.api.Configuration
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors.*
-import api.models.outcomes.ResponseWrapper
 import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.def1_UpdateForeignPropertyDetailsModel
 import v6.updateForeignPropertyDetails.def1.model.request.Def1_UpdateForeignPropertyDetailsRequestData
 import v6.updateForeignPropertyDetails.model.request.*

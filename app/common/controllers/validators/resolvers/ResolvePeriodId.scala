@@ -16,13 +16,13 @@
 
 package common.controllers.validators.resolvers
 
+import api.controllers.validators.resolvers.{ResolveDateRange, ResolverSupport}
+import api.models.domain.{DateRange, TaxYear}
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
-import api.controllers.validators.resolvers.{ResolveDateRange, ResolverSupport}
-import api.models.domain.{DateRange, TaxYear}
-import api.models.errors.MtdError
 
 import java.time.LocalDate
 import scala.math.Ordering.Implicits.infixOrderingOps

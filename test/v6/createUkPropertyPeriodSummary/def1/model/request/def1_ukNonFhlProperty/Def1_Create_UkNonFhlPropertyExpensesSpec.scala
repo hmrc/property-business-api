@@ -16,8 +16,8 @@
 
 package v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.Def1_Create_UkPropertyExpensesRentARoom
 
 class Def1_Create_UkNonFhlPropertyExpensesSpec extends UnitSpec {

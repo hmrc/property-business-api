@@ -16,11 +16,11 @@
 
 package auth
 
+import api.models.errors.NinoFormatError
+import api.services.DownstreamStub
 import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import api.models.errors.NinoFormatError
-import api.services.DownstreamStub
 
 class PropertyBusinessApiAuthSupportingAgentsAllowedISpec extends AuthSupportingAgentsAllowedISpec {
 

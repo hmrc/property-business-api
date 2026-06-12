@@ -16,8 +16,8 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.create.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.UkPropertyExpensesRentARoom
 
 class UkFhlPropertyExpensesSpec extends UnitSpec {

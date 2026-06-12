@@ -16,10 +16,10 @@
 
 package v6.propertyPeriodSummary.list.def1
 
-import config.MockPropertyBusinessConfig
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 
 class Def1_ListPropertyPeriodSummariesValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {

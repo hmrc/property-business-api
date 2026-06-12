@@ -16,9 +16,9 @@
 
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidator
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 

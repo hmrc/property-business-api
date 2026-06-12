@@ -16,9 +16,9 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.def1.model.response
 
+import api.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{Json, OWrites, Reads, __}
-import api.models.domain.Timestamp
 import v6.retrieveForeignPropertyCumulativeSummary.model.response.RetrieveForeignPropertyCumulativeSummaryResponse
 
 // Note: ForeignPropertyEntry is effectively mandatory.

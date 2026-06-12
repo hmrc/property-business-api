@@ -16,13 +16,13 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import play.api.libs.json.JsValue
-import play.api.mvc.{Action, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.routing.Version
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import api.utils.IdGenerator
+import play.api.libs.json.JsValue
+import play.api.mvc.{Action, ControllerComponents}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -36,7 +36,7 @@ class CreateAmendUkPropertyAnnualSubmissionController @Inject() (
     auditService: AuditService,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-amend-uk-property-annual-submission"

@@ -16,13 +16,13 @@
 
 package v6.amendUkPropertyPeriodSummary.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.ResolveParsedNumber
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.*
 import common.models.errors.RuleBothExpensesSuppliedError
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.ResolveParsedNumber
-import api.models.errors.MtdError
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.{Def2_Amend_UkFhlProperty, Def2_Amend_UkFhlPropertyExpenses}
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.{Def2_Amend_UkNonFhlProperty, Def2_Amend_UkNonFhlPropertyExpenses}
 import v6.amendUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Amend_UkPropertyExpensesRentARoom

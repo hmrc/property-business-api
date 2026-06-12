@@ -16,8 +16,8 @@
 
 package config
 
+import api.config.{AppConfig, FeatureSwitches}
 import play.api.Configuration
-import api.config.{FeatureSwitches, SharedAppConfig}
 
 case class PropertyBusinessFeatureSwitches private (protected val featureSwitchConfig: Configuration) extends FeatureSwitches {
 
@@ -26,5 +26,5 @@ case class PropertyBusinessFeatureSwitches private (protected val featureSwitchC
 }
 
 object PropertyBusinessFeatureSwitches {
-  def apply()(implicit appConfig: SharedAppConfig): PropertyBusinessFeatureSwitches = PropertyBusinessFeatureSwitches(appConfig.featureSwitchConfig)
+  def apply()(implicit appConfig: AppConfig): PropertyBusinessFeatureSwitches = PropertyBusinessFeatureSwitches(appConfig.featureSwitchConfig)
 }

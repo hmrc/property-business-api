@@ -16,23 +16,23 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.utils.MockIdGenerator
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData,
   Def1_Fixtures
 }
-import v6.createAmendForeignPropertyAnnualSubmission.model.request._
+import v6.createAmendForeignPropertyAnnualSubmission.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

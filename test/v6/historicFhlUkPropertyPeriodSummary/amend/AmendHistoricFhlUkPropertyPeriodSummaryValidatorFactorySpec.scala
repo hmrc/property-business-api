@@ -16,11 +16,11 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.amend
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json.Json
 import api.controllers.validators.Validator
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.Json
 import v6.historicFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator
 import v6.historicFhlUkPropertyPeriodSummary.amend.request.AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 

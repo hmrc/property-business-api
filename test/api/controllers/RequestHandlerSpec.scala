@@ -16,16 +16,8 @@
 
 package api.controllers
 
-import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
-import cats.implicits.catsSyntaxValidatedId
-import org.scalamock.handlers.CallHandler
-import play.api.http.{HeaderNames, Status}
-import play.api.libs.json.{JsString, Json, OWrites}
-import play.api.mvc.{AnyContent, AnyContentAsEmpty}
-import play.api.test.{FakeRequest, ResultExtractors}
 import api.config.Deprecation.{Deprecated, NotDeprecated}
-import api.config.{Deprecation, MockSharedAppConfig, SharedAppConfig}
+import api.config.{AppConfig, Deprecation, MockAppConfig}
 import api.controllers.validators.Validator
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
@@ -34,6 +26,14 @@ import api.models.outcomes.ResponseWrapper
 import api.routing.{Version, Version3}
 import api.services.{MockAuditService, ServiceOutcome}
 import api.utils.{MockIdGenerator, UnitSpec}
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
+import cats.implicits.catsSyntaxValidatedId
+import org.scalamock.handlers.CallHandler
+import play.api.http.{HeaderNames, Status}
+import play.api.libs.json.{JsString, Json, OWrites}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty}
+import play.api.test.{FakeRequest, ResultExtractors}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 
@@ -47,7 +47,7 @@ class RequestHandlerSpec
     with Status
     with HeaderNames
     with ResultExtractors
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private implicit val ec: ExecutionContextExecutor = ExecutionContext.global
 
@@ -74,8 +74,8 @@ class RequestHandlerSpec
     UserRequest[AnyContent](userDetails, fakeRequest)
   }
 
-  implicit val appConfig: SharedAppConfig = mockSharedAppConfig
-  private val mockService                 = mock[DummyService]
+  implicit val appConfig: AppConfig = mockSharedAppConfig
+  private val mockService           = mock[DummyService]
 
   private def service =
     (mockService.service(_: Input.type)(_: RequestContext, _: ExecutionContext)).expects(Input, *, *).anyNumberOfTimes()

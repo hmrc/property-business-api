@@ -16,8 +16,8 @@
 
 package v6.propertyPeriodSummary.list.model.response
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 
 class ListPropertyPeriodSummariesResponseSpec extends UnitSpec {

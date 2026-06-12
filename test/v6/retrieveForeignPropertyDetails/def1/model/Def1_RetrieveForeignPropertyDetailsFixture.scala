@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model
 
-import play.api.libs.json.{JsValue, Json}
 import api.models.domain.Timestamp
+import play.api.libs.json.{JsValue, Json}
 import v6.retrieveForeignPropertyDetails.def1.model.response.*
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 

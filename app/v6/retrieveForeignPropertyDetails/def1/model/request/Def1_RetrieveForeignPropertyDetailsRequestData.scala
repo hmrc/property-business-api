@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.request
 
-import common.models.domain.PropertyId
 import api.models.domain.{BusinessId, Nino, TaxYear}
+import common.models.domain.PropertyId
 import v6.retrieveForeignPropertyDetails.RetrieveForeignPropertyDetailsSchema
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 

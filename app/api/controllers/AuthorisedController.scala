@@ -16,11 +16,11 @@
 
 package api.controllers
 
-import play.api.mvc.*
-import api.config.{ConfigFeatureSwitches, SharedAppConfig}
+import api.config.{AppConfig, ConfigFeatureSwitches}
 import api.models.auth.UserDetails
 import api.models.errors.MtdError
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import play.api.mvc.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -30,7 +30,7 @@ case class UserRequest[A](userDetails: UserDetails, request: Request[A]) extends
 
 abstract class AuthorisedController(
     cc: ControllerComponents
-)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends BackendController(cc) {
 
   val authService: EnrolmentsAuthService

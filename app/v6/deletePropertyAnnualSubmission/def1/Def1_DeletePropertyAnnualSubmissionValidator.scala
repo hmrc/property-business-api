@@ -16,13 +16,13 @@
 
 package v6.deletePropertyAnnualSubmission.def1
 
-import cats.data.Validated
-import cats.implicits.*
-import config.PropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.*
+import config.PropertyBusinessConfig
 import v6.deletePropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject

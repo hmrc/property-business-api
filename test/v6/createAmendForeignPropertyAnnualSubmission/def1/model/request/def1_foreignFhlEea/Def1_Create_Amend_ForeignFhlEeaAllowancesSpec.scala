@@ -16,8 +16,8 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.def1_foreignFhlEea
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.Def1_Fixtures
 
 class Def1_Create_Amend_ForeignFhlEeaAllowancesSpec extends UnitSpec with Def1_Fixtures {

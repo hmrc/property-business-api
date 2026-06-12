@@ -16,12 +16,12 @@
 
 package v6.retrieveForeignPropertyPeriodSummary.def1.model.response
 
-import play.api.libs.json.Json
 import api.models.domain.Timestamp
 import api.utils.UnitSpec
-import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea._
-import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty._
-import v6.retrieveForeignPropertyPeriodSummary.model.response._
+import play.api.libs.json.Json
+import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.*
+import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.*
+import v6.retrieveForeignPropertyPeriodSummary.model.response.*
 
 class RetrieveForeignPropertyPeriodSummaryResponseSpec extends UnitSpec {
 

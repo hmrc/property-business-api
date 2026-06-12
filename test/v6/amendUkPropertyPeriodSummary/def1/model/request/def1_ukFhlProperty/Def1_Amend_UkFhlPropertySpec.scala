@@ -16,9 +16,9 @@
 
 package v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
-import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
+import play.api.libs.json.{JsValue, Json}
+import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
 
 class Def1_Amend_UkFhlPropertySpec extends UnitSpec {
 

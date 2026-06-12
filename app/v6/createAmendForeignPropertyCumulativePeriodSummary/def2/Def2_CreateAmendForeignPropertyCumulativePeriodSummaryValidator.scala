@@ -16,13 +16,13 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
-import cats.data.Validated
-import cats.implicits.*
-import play.api.libs.json.JsValue
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.*
+import play.api.libs.json.JsValue
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRulesValidator.validateBusinessRules
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.{

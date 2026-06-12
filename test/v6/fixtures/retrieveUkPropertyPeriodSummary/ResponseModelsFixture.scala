@@ -16,8 +16,8 @@
 
 package v6.fixtures.retrieveUkPropertyPeriodSummary
 
-import play.api.libs.json.{JsValue, Json}
 import api.models.domain.Timestamp
+import play.api.libs.json.{JsValue, Json}
 import v6.retrieveUkPropertyPeriodSummary.def1.model.response.*
 import v6.retrieveUkPropertyPeriodSummary.model.response.Def1_RetrieveUkPropertyPeriodSummaryResponse
 

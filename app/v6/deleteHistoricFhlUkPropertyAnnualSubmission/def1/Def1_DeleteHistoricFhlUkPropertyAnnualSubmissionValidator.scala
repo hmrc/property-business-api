@@ -16,16 +16,16 @@
 
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.*
 import cats.implicits.*
 import common.models.domain.HistoricPropertyType
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject

@@ -16,8 +16,8 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
 
 class RetrieveHistoricNonFhlUkPropertyPeriodSummaryResponseSpec extends UnitSpec {

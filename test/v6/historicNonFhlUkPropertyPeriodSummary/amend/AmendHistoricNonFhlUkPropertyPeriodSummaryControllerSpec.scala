@@ -16,12 +16,6 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.amend
 
-import common.models.domain.PeriodId
-import common.models.errors.RuleMisalignedPeriodError
-import play.api.Configuration
-import play.api.libs.json.{JsObject, JsValue}
-import play.api.mvc.Result
-import play.api.test.FakeRequest
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
@@ -30,7 +24,13 @@ import api.models.errors.{ErrorWrapper, NinoFormatError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.utils.MockIdGenerator
-import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request._
+import common.models.domain.PeriodId
+import common.models.errors.RuleMisalignedPeriodError
+import play.api.Configuration
+import play.api.libs.json.{JsObject, JsValue}
+import play.api.mvc.Result
+import play.api.test.FakeRequest
+import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.*
 import v6.historicNonFhlUkPropertyPeriodSummary.create.MockAmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global

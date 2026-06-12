@@ -16,11 +16,11 @@
 
 package common.controllers.validators.resolvers
 
+import api.controllers.validators.resolvers.{ResolveStringPattern, ResolverSupport}
+import api.models.errors.MtdError
 import cats.data.Validated
 import common.models.domain.SubmissionId
 import common.models.errors.SubmissionIdFormatError
-import api.controllers.validators.resolvers.{ResolveStringPattern, ResolverSupport}
-import api.models.errors.MtdError
 
 object ResolveSubmissionId extends ResolverSupport {
 

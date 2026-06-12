@@ -16,10 +16,10 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
-import play.api.Configuration
 import api.connectors.ConnectorSpec
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
 import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.response.{Def1_RetrieveUkPropertyCumulativeSummaryResponse, UkProperty}

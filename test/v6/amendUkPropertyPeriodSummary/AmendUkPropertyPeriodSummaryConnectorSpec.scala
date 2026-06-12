@@ -16,14 +16,14 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
-import org.scalamock.handlers.CallHandler
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
+import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
-import v6.amendUkPropertyPeriodSummary.model.request._
+import v6.amendUkPropertyPeriodSummary.model.request.*
 
 import scala.concurrent.Future
 

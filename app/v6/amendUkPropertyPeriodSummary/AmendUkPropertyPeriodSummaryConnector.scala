@@ -16,11 +16,11 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import play.api.http.Status.NO_CONTENT
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.amendUkPropertyPeriodSummary.model.request.*
@@ -29,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class AmendUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amendUkPropertyPeriodSummary(request: AmendUkPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,

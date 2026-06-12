@@ -16,12 +16,13 @@
 
 package v6.updateForeignPropertyDetails
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import api.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockUpdateForeignPropertyDetailsConnector extends TestSuite with MockFactory {

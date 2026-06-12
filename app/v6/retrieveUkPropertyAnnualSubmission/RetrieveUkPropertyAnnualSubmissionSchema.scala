@@ -16,13 +16,13 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import cats.data.Validated
-import cats.data.Validated.Valid
-import play.api.libs.json.Reads
 import api.controllers.validators.resolvers.ResolveTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
+import cats.data.Validated
+import cats.data.Validated.Valid
+import play.api.libs.json.Reads
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.model.response.*

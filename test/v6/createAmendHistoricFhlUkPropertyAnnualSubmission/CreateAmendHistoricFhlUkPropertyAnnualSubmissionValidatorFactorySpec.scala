@@ -16,13 +16,13 @@
 
 package v6.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json.Json
 import api.controllers.validators.Validator
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.Json
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 

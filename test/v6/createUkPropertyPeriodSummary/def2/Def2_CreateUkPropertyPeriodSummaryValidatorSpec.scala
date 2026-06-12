@@ -16,17 +16,17 @@
 
 package v6.createUkPropertyPeriodSummary.def2
 
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
-import config.MockPropertyBusinessConfig
-import play.api.libs.json._
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty._
-import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty._
-import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom._
-import v6.createUkPropertyPeriodSummary.model.request._
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.*
+import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.*
+import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.*
+import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.*
+import v6.createUkPropertyPeriodSummary.model.request.*
 
 class Def2_CreateUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 

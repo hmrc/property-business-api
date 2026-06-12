@@ -16,7 +16,7 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.list
 
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
@@ -35,7 +35,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListHistoricNonFhlUkPropertyPeriodSummariesConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class ListHistoricNonFhlUkPropertyPeriodSummariesConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def listPeriodSummaries(request: ListHistoricNonFhlUkPropertyPeriodSummariesRequestData)(implicit

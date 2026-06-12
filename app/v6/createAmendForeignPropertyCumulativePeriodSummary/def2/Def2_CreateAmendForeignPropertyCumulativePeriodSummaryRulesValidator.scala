@@ -16,6 +16,9 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.ResolveParsedNumber
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
@@ -23,9 +26,6 @@ import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
 import common.models.errors.*
 import common.utils.DateValidator
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.ResolveParsedNumber
-import api.models.errors.*
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.*
 

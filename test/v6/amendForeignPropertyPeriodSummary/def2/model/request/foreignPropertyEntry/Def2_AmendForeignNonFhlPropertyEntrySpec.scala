@@ -16,8 +16,8 @@
 
 package v6.amendForeignPropertyPeriodSummary.def2.model.request.foreignPropertyEntry
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry.{
   Def2_AmendForeignNonFhlPropertyEntry,
   Def2_AmendForeignNonFhlPropertyExpenses,

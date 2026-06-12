@@ -20,7 +20,7 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
 import scala.concurrent.Future

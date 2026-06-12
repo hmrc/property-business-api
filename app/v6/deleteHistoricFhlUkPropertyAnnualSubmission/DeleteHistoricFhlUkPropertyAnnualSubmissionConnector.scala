@@ -16,13 +16,13 @@
 
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import common.models.domain.HistoricPropertyType
-import config.PropertyBusinessFeatureSwitches
-import play.api.libs.json.JsObject
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import common.models.domain.HistoricPropertyType
+import config.PropertyBusinessFeatureSwitches
+import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.{
@@ -34,7 +34,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class DeleteHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def deleteHistoricUkPropertyAnnualSubmission(request: DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData)(implicit

@@ -16,13 +16,13 @@
 
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission.def1
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import common.models.domain.HistoricPropertyType
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.utils.UnitSpec
-import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 

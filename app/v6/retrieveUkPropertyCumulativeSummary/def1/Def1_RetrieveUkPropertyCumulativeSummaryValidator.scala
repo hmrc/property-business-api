@@ -16,11 +16,11 @@
 
 package v6.retrieveUkPropertyCumulativeSummary.def1
 
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple3Semigroupal
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
 

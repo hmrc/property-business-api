@@ -16,10 +16,10 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import config.PropertyBusinessConfig
-import play.api.libs.json.JsValue
 import api.controllers.validators.Validator
 import api.models.domain.TaxYear
+import config.PropertyBusinessConfig
+import play.api.libs.json.JsValue
 import v6.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory.def2TaxYearStart
 import v6.amendUkPropertyPeriodSummary.def1.Def1_AmendUkPropertyPeriodSummaryValidator
 import v6.amendUkPropertyPeriodSummary.def2.Def2_AmendUkPropertyPeriodSummaryValidator

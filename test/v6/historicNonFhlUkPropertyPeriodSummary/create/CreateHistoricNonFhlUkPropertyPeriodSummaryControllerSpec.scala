@@ -16,20 +16,20 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.create
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.domain.Nino
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import common.models.domain.PeriodId
 import common.models.errors.RuleMisalignedPeriodError
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.Nino
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.utils.MockIdGenerator
 import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request.{
   CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestBody,

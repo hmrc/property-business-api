@@ -17,7 +17,7 @@
 package v6.retrieveUkPropertyCumulativeSummary.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.utils.UnitSpec
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 

@@ -16,15 +16,15 @@
 
 package v6.amendUkPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
-import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import uk.gov.hmrc.http.HeaderCarrier
-import v6.amendUkPropertyPeriodSummary.model.request._
+import v6.amendUkPropertyPeriodSummary.model.request.*
 
 import scala.concurrent.Future
 

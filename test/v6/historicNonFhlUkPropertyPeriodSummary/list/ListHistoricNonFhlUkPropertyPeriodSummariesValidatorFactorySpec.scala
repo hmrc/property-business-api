@@ -16,8 +16,8 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.list
 
-import config.MockPropertyBusinessConfig
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.historicNonFhlUkPropertyPeriodSummary.list.def1.Def1_ListHistoricNonFhlUkPropertyPeriodSummariesValidator
 
 class ListHistoricNonFhlUkPropertyPeriodSummariesValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {

@@ -16,17 +16,17 @@
 
 package v6.amendForeignPropertyPeriodSummary.def2
 
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import common.models.domain.SubmissionId
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, SubmissionIdFormatError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
-import api.utils.UnitSpec
-import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea._
-import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry._
-import v6.amendForeignPropertyPeriodSummary.model.request._
+import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.*
+import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry.*
+import v6.amendForeignPropertyPeriodSummary.model.request.*
 
 class Def2_AmendForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

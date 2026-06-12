@@ -16,14 +16,14 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple2Semigroupal
-import common.controllers.validators.resolvers.ResolvePeriodId
-import config.PropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple2Semigroupal
+import common.controllers.validators.resolvers.ResolvePeriodId
+import config.PropertyBusinessConfig
 import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData

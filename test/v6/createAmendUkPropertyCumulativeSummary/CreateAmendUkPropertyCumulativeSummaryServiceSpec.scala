@@ -16,12 +16,12 @@
 
 package v6.createAmendUkPropertyCumulativeSummary
 
-import common.models.errors._
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import v6.createAmendUkPropertyCumulativeSummary.def1.model.request._
+import common.models.errors.*
+import v6.createAmendUkPropertyCumulativeSummary.def1.model.request.*
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
 import scala.concurrent.Future

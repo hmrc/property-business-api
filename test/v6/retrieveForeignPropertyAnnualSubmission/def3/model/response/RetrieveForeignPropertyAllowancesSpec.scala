@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission.def3.model.response
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.retrieveForeignPropertyAnnualSubmission.def3.fixture.Def3_RetrieveForeignPropertyAnnualSubmissionFixture.*
 
 class RetrieveForeignPropertyAllowancesSpec extends UnitSpec {

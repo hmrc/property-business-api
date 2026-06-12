@@ -18,7 +18,7 @@ package v6.retrieveForeignPropertyCumulativeSummary.def1.model
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
-import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response._
+import v6.retrieveForeignPropertyCumulativeSummary.def1.model.response.*
 
 trait Def1_RetrieveForeignPropertyCumulativeSummaryFixture {
 

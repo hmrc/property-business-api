@@ -16,13 +16,13 @@
 
 package v6.createForeignPropertyPeriodSummary.def2
 
-import cats.data.Validated
-import cats.implicits.*
-import play.api.libs.json.JsValue
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMaximum}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.*
+import play.api.libs.json.JsValue
 import v6.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryRulesValidator.validateBusinessRules
 import v6.createForeignPropertyPeriodSummary.model.request.*
 

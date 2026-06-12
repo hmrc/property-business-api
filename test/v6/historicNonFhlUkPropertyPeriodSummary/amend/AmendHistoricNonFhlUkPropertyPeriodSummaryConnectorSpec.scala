@@ -16,11 +16,11 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.amend
 
-import common.models.domain.PeriodId
-import org.scalamock.handlers.CallHandler
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
+import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,

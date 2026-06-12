@@ -16,10 +16,10 @@
 
 package api.config.rewriters
 
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.utils.UnitSpec
 
-class EndpointSummaryRewriterSpec extends UnitSpec with MockSharedAppConfig {
+class EndpointSummaryRewriterSpec extends UnitSpec with MockAppConfig {
 
   val rewriter = new EndpointSummaryRewriter(mockSharedAppConfig)
 

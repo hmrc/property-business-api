@@ -16,12 +16,12 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.retrieve
 
-import common.models.domain.PeriodId
-import org.scalamock.handlers.CallHandler
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
+import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,

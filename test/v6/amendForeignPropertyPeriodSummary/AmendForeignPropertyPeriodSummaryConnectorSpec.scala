@@ -16,12 +16,12 @@
 
 package v6.amendForeignPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
-import org.scalamock.handlers.CallHandler
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
+import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
 import v6.amendForeignPropertyPeriodSummary.model.request.{
   AmendForeignPropertyPeriodSummaryRequestData,

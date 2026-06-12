@@ -16,6 +16,13 @@
 
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.auth.UserDetails
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.MockAuditService
 import common.models.domain.HistoricPropertyType
 import common.models.domain.HistoricPropertyType.{Fhl, NonFhl}
 import play.api.Configuration
@@ -23,13 +30,6 @@ import play.api.http.HeaderNames
 import play.api.libs.json.JsValue
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.MockAuditService
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

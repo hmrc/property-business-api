@@ -16,13 +16,13 @@
 
 package api.controllers
 
-import play.api.Configuration
-import play.api.libs.json.JsObject
-import play.api.mvc.{Action, AnyContent, Result}
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.models.auth.UserDetails
 import api.models.errors.*
 import api.services.{EnrolmentsAuthService, MockEnrolmentsAuthService, MockMtdIdLookupService, MtdIdLookupService}
+import play.api.Configuration
+import play.api.libs.json.JsObject
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.auth.core.Enrolment
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AuthorisedControllerSpec extends ControllerBaseSpec with MockSharedAppConfig {
+class AuthorisedControllerSpec extends ControllerBaseSpec with MockAppConfig {
 
   private val nino  = "AA123456A"
   private val mtdId = "X123567890"

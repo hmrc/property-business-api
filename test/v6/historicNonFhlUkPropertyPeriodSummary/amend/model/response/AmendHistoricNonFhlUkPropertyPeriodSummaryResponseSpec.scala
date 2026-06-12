@@ -16,8 +16,8 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.amend.model.response
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryResponseSpec extends UnitSpec {
 

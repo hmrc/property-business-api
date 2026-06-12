@@ -16,11 +16,11 @@
 
 package v6.createForeignPropertyPeriodSummary
 
-import play.api.http.Status.OK
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.{HipUri, IfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, reads}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createForeignPropertyPeriodSummary.model.request.*
@@ -30,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateForeignPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createForeignProperty(request: CreateForeignPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,

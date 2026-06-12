@@ -16,10 +16,10 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.create
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json._
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.*
 import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator
 
 class CreateHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {

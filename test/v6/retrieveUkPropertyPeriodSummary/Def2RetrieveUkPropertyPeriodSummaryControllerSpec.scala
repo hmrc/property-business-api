@@ -16,15 +16,15 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import common.models.domain.SubmissionId
 import play.api.Configuration
 import play.api.mvc.Result
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
 import v6.retrieveUkPropertyPeriodSummary.def2.model.Def2_RetrieveUkPropertyPeriodSummaryFixture
-import v6.retrieveUkPropertyPeriodSummary.model.request._
+import v6.retrieveUkPropertyPeriodSummary.model.request.*
 import v6.retrieveUkPropertyPeriodSummary.model.response.RetrieveUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global

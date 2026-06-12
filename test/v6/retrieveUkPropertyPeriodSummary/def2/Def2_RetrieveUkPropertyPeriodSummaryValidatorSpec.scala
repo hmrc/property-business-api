@@ -16,14 +16,14 @@
 
 package v6.retrieveUkPropertyPeriodSummary.def2
 
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import common.models.domain.SubmissionId
 import common.models.errors.SubmissionIdFormatError
 import config.MockPropertyBusinessConfig
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.utils.UnitSpec
 import v6.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
-import v6.retrieveUkPropertyPeriodSummary.model.request._
+import v6.retrieveUkPropertyPeriodSummary.model.request.*
 
 class Def2_RetrieveUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
 

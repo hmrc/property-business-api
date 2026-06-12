@@ -16,17 +16,17 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
-import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import uk.gov.hmrc.http.HeaderCarrier
-import v6.retrieveUkPropertyPeriodSummary.model.{NonUkResult, UkResult}
 import v6.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
 import v6.retrieveUkPropertyPeriodSummary.model.request.{Def1_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
+import v6.retrieveUkPropertyPeriodSummary.model.{NonUkResult, UkResult}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

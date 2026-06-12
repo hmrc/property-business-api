@@ -16,10 +16,10 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json._
 import api.controllers.validators.AlwaysErrorsValidator
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.*
 import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
 

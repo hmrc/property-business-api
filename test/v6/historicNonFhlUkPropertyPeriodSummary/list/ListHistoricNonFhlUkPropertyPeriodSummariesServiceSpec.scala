@@ -18,7 +18,7 @@ package v6.historicNonFhlUkPropertyPeriodSummary.list
 
 import api.controllers.EndpointLogContext
 import api.models.domain.Nino
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier

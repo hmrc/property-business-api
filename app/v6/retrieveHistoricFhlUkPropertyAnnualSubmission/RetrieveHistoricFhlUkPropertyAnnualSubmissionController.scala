@@ -16,11 +16,11 @@
 
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import api.utils.IdGenerator
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -32,7 +32,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
     validatorFactory: RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
     service: RetrieveHistoricFhlUkPropertyAnnualSubmissionService,
     cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-historic-fhluk-property-annual-submission"

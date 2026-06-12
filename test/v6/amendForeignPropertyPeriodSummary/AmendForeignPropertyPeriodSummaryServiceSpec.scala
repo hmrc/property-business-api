@@ -16,13 +16,13 @@
 
 package v6.amendForeignPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
-import common.models.errors.{RuleDuplicateCountryCodeError, RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
+import common.models.domain.SubmissionId
+import common.models.errors.{RuleDuplicateCountryCodeError, RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.amendForeignPropertyPeriodSummary.model.request.{
   AmendForeignPropertyPeriodSummaryRequestData,

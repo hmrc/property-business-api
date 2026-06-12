@@ -16,27 +16,26 @@
 
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 
-import common.models.domain.HistoricPropertyType
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.models.audit.GenericAuditDetail
 import api.routing.Version
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import api.utils.IdGenerator
+import common.models.domain.HistoricPropertyType
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (
-    val authService: EnrolmentsAuthService,
-    val lookupService: MtdIdLookupService,
-    validatorFactory: DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
-    service: DeleteHistoricFhlUkPropertyAnnualSubmissionService,
-    auditService: AuditService,
-    cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+class DeleteHistoricFhlUkPropertyAnnualSubmissionController @Inject() (val authService: EnrolmentsAuthService,
+                                                                       val lookupService: MtdIdLookupService,
+                                                                       validatorFactory: DeleteHistoricFhlUkPropertyAnnualSubmissionValidatorFactory,
+                                                                       service: DeleteHistoricFhlUkPropertyAnnualSubmissionService,
+                                                                       auditService: AuditService,
+                                                                       cc: ControllerComponents,
+                                                                       idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "delete-historic-fhluk-property-annual-submission"

@@ -16,11 +16,11 @@
 
 package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.Configuration
-import play.api.libs.json.JsObject
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
+import play.api.libs.json.JsObject
 import uk.gov.hmrc.http.StringContextOps
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData,

@@ -16,15 +16,15 @@
 
 package v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
-import api.utils.UnitSpec
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request._
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request.*
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"

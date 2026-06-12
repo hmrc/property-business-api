@@ -16,10 +16,10 @@
 
 package v6.retrieveUkPropertyPeriodSummary.def1.model.response
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.retrieveUkPropertyPeriodSummary.def1.model.Def1_RetrieveUkPropertyPeriodSummaryFixture
-import v6.retrieveUkPropertyPeriodSummary.model.response._
+import v6.retrieveUkPropertyPeriodSummary.model.response.*
 
 class Def1_RetrieveUkPropertyPeriodSummaryResponseSpec extends UnitSpec with Def1_RetrieveUkPropertyPeriodSummaryFixture {
 

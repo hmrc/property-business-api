@@ -16,8 +16,8 @@
 
 package v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator
 
 class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {

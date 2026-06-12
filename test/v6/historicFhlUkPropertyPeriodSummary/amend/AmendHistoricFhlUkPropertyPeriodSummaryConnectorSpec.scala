@@ -16,10 +16,10 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.amend
 
-import common.models.domain.PeriodId
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.Nino
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.PeriodId
 import uk.gov.hmrc.http.StringContextOps
 import v6.historicFhlUkPropertyPeriodSummary.amend.request.{
   Def1_AmendHistoricFhlUkPropertyPeriodSummaryRequestBody,

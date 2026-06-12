@@ -16,13 +16,13 @@
 
 package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.models.audit.GenericAuditDetail
 import api.routing.Version
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import api.utils.IdGenerator
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -35,7 +35,7 @@ class DeleteHistoricNonFhlUkPropertyAnnualSubmissionController @Inject() (
     service: DeleteHistoricNonFhlUkPropertyAnnualSubmissionService,
     auditService: AuditService,
     cc: ControllerComponents,
-    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+    idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "delete-historic-non-fhluk-property-annual-submission"

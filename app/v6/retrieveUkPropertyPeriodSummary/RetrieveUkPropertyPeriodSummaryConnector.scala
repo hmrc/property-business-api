@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.{HipUri, IfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
@@ -31,7 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkPropertyPeriodSummary(request: RetrieveUkPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,

@@ -16,10 +16,10 @@
 
 package v6.createForeignPropertyPeriodSummary
 
-import config.PropertyBusinessConfig
-import play.api.libs.json.JsValue
 import api.controllers.validators.Validator
 import api.models.domain.TaxYear
+import config.PropertyBusinessConfig
+import play.api.libs.json.JsValue
 import v6.createForeignPropertyPeriodSummary.CreateForeignPropertyPeriodSummaryValidatorFactory.{def2TaxYearStart, maximumTaxYear}
 import v6.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
 import v6.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator

@@ -16,15 +16,15 @@
 
 package v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.utils.MockIdGenerator
+import play.api.Configuration
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1.model.response.{AnnualAdjustments, AnnualAllowances, RentARoom}
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,

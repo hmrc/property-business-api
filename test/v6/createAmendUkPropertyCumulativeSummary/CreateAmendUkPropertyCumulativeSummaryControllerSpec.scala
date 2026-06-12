@@ -16,16 +16,16 @@
 
 package v6.createAmendUkPropertyCumulativeSummary
 
-import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import v6.createAmendUkPropertyCumulativeSummary.def1.model.request._
+import play.api.Configuration
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
+import v6.createAmendUkPropertyCumulativeSummary.def1.model.request.*
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

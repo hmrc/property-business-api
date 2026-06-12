@@ -16,11 +16,11 @@
 
 package v6.createForeignPropertyDetails
 
-import cats.data.Validated.{Invalid, Valid}
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import api.models.domain.TaxYear
 import api.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import api.utils.UnitSpec
+import cats.data.Validated.{Invalid, Valid}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class CreateForeignPropertyDetailsSchemaSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
 

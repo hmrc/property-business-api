@@ -16,13 +16,13 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber, ResolveStringPattern}
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError}
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedCountryCode, ResolveParsedNumber, ResolveStringPattern}
-import api.models.errors.*
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.{
   Def2_Create_Amend_ForeignAllowances,

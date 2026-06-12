@@ -16,15 +16,15 @@
 
 package v6.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import uk.gov.hmrc.http.HeaderCarrier
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request._
-import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response._
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.*
+import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

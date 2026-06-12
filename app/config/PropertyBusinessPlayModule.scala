@@ -16,11 +16,11 @@
 
 package config
 
+import api.definition.ApiDefinitionFactory
+import api.routing.VersionRoutingMap
 import com.google.inject.AbstractModule
 import definition.PropertyBusinessApiDefinitionFactory
 import routing.PropertyBusinessVersionRoutingMap
-import api.definition.ApiDefinitionFactory
-import api.routing.VersionRoutingMap
 
 class PropertyBusinessPlayModule extends AbstractModule {
 

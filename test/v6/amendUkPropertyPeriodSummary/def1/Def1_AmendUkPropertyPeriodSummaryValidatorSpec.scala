@@ -16,20 +16,20 @@
 
 package v6.amendUkPropertyPeriodSummary.def1
 
+import api.controllers.validators.Validator
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.UnitSpec
 import common.models.domain.SubmissionId
 import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
-import api.controllers.validators.Validator
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
-import api.utils.UnitSpec
 import v6.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory
-import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
-import v6.amendUkPropertyPeriodSummary.model.request._
+import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
+import v6.amendUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
+import v6.amendUkPropertyPeriodSummary.model.request.*
 
 class Def1_AmendUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 

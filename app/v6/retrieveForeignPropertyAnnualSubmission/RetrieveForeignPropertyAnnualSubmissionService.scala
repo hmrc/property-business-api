@@ -16,13 +16,13 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import cats.data.EitherT
-import cats.implicits.*
-import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import api.controllers.RequestContext
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
+import cats.data.EitherT
+import cats.implicits.*
+import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult, Result}

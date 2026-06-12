@@ -16,8 +16,8 @@
 
 package v6.createAmendUkPropertyAnnualSubmission.model.request
 
-import play.api.libs.json.OWrites
 import api.utils.JsonWritesUtil
+import play.api.libs.json.OWrites
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody
 import v6.createAmendUkPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody
 

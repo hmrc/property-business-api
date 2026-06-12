@@ -16,8 +16,8 @@
 
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission.def1.model.response
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
 class RetrieveHistoricFhlUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {

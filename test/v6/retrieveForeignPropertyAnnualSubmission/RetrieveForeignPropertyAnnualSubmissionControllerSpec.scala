@@ -16,15 +16,15 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import play.api.Configuration
-import play.api.libs.json.Json
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.utils.MockIdGenerator
+import play.api.Configuration
+import play.api.libs.json.Json
+import play.api.mvc.Result
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignFhlEea.*
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.foreignProperty.*

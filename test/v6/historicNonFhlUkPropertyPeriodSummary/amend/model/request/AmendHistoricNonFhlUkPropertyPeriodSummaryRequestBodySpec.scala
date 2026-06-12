@@ -16,8 +16,8 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.Def1_Fixtures
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryRequestBodySpec extends UnitSpec with Def1_Fixtures {

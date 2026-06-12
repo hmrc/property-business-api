@@ -16,11 +16,11 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.list
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import api.utils.IdGenerator
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ class ListHistoricFhlUkPropertyPeriodSummariesController @Inject() (
     validatorFactory: ListHistoricFhlUkPropertyPeriodSummariesValidatorFactory,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "list-historic-fhluk-property-period-summaries"

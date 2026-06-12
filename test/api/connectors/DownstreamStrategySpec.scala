@@ -16,14 +16,14 @@
 
 package api.connectors
 
+import api.config.{BasicAuthDownstreamConfig, DownstreamConfig, MockAppConfig}
+import api.utils.UnitSpec
 import org.scalatest.concurrent.ScalaFutures
 import play.api.Configuration
-import api.config.{BasicAuthDownstreamConfig, DownstreamConfig, MockSharedAppConfig}
-import api.utils.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class DownstreamStrategySpec extends UnitSpec with ScalaFutures with MockSharedAppConfig {
+class DownstreamStrategySpec extends UnitSpec with ScalaFutures with MockAppConfig {
 
   "StandardStrategy" must {
     "use the supplied DownstreamConfig" in {

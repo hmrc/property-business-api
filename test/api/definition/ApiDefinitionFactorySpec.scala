@@ -16,13 +16,13 @@
 
 package api.definition
 
-import cats.implicits.catsSyntaxValidatedId
 import api.config.Deprecation.NotDeprecated
-import api.config.{MockSharedAppConfig, SharedAppConfig}
+import api.config.{AppConfig, MockAppConfig}
 import api.definition.APIStatus.{ALPHA, BETA}
 import api.mocks.MockHttpClient
 import api.routing.*
 import api.utils.UnitSpec
+import cats.implicits.catsSyntaxValidatedId
 
 import scala.language.reflectiveCalls
 
@@ -68,11 +68,11 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
   }
 
-  trait Test extends UnitSpec with MockHttpClient with MockSharedAppConfig {
+  trait Test extends UnitSpec with MockHttpClient with MockAppConfig {
     MockedSharedAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
 
     val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory {
-      protected val appConfig: SharedAppConfig = mockSharedAppConfig
+      protected val appConfig: AppConfig = mockSharedAppConfig
 
       val definition: Definition = Definition(
         APIDefinition(

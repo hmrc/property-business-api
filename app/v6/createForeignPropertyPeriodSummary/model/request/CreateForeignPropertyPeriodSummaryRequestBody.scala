@@ -16,10 +16,10 @@
 
 package v6.createForeignPropertyPeriodSummary.model.request
 
-import play.api.libs.functional.syntax.*
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import api.utils.EmptinessChecker
 import api.utils.EmptinessChecker.field
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignFhlEea.Def1_Create_CreateForeignFhlEea
 import v6.createForeignPropertyPeriodSummary.def1.model.request.Def1_foreignPropertyEntry.Def1_Create_CreateForeignNonFhlPropertyEntry
 import v6.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea.Def2_Create_CreateForeignFhlEea

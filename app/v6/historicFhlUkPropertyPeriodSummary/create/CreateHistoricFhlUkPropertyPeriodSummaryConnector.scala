@@ -16,11 +16,11 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.create
 
-import play.api.http.Status
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.historicFhlUkPropertyPeriodSummary.create.model.request.{
@@ -32,8 +32,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class CreateHistoricFhlUkPropertyPeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def create(request: CreateHistoricFhlUkPropertyPeriodSummaryRequestData)(implicit
       hc: HeaderCarrier,

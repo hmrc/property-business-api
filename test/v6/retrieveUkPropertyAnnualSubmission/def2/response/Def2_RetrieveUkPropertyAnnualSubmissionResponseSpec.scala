@@ -16,10 +16,10 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def2.response
 
-import play.api.libs.json.Json
 import api.models.domain.Timestamp
 import api.utils.UnitSpec
-import v6.retrieveUkPropertyAnnualSubmission.def2.model.response._
+import play.api.libs.json.Json
+import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.*
 
 class Def2_RetrieveUkPropertyAnnualSubmissionResponseSpec extends UnitSpec {
 

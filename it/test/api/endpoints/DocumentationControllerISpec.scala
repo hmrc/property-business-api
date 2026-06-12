@@ -16,21 +16,21 @@
 
 package api.endpoints
 
+import api.config.AppConfig
+import api.routing.{Version, Versions}
+import api.support.IntegrationBaseSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSResponse
-import api.config.SharedAppConfig
-import api.routing.{Version, Versions}
-import api.support.IntegrationBaseSpec
 
 import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
-  private val config = app.injector.instanceOf[SharedAppConfig]
+  private val config = app.injector.instanceOf[AppConfig]
 
   private lazy val enabledVersions: Seq[Version] =
     (1 to 99).collect {

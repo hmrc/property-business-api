@@ -16,18 +16,18 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.create.def1
 
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
-import config.MockPropertyBusinessConfig
-import play.api.libs.json._
 import api.controllers.validators.Validator
 import api.models.domain.Nino
-import api.models.errors._
+import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.*
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{UkPropertyExpensesRentARoom, UkPropertyIncomeRentARoom}
 import v6.historicFhlUkPropertyPeriodSummary.create.CreateHistoricFhlUkPropertyPeriodSummaryValidatorFactory
 import v6.historicFhlUkPropertyPeriodSummary.create.def1.model.request.{UkFhlPropertyExpenses, UkFhlPropertyIncome}
-import v6.historicFhlUkPropertyPeriodSummary.create.model.request._
+import v6.historicFhlUkPropertyPeriodSummary.create.model.request.*
 
 class Def1_CreateHistoricFhlUkPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
 

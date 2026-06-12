@@ -16,9 +16,9 @@
 
 package auth
 
+import api.services.DownstreamStub
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
-import api.services.DownstreamStub
 
 class PropertyBusinessApiAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec {
 

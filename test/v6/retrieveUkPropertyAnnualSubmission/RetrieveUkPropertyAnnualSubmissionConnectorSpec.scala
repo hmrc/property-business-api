@@ -21,15 +21,17 @@ import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v6.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
-import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty.{RetrieveUkFhlProperty => RetrieveUkFhlPropertyDef1}
-import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.{RetrieveUkProperty => RetrieveUkPropertyDef1}
+import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukFhlProperty.RetrieveUkFhlProperty as RetrieveUkFhlPropertyDef1
+import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.ukProperty.RetrieveUkProperty as RetrieveUkPropertyDef1
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
-import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
-import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.{RetrieveUkProperty => RetrieveUkPropertyDef2}
+import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.{
+  Def2_RetrieveUkPropertyAnnualSubmissionResponse,
+  RetrieveUkProperty as RetrieveUkPropertyDef2
+}
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
+import v6.retrieveUkPropertyAnnualSubmission.model.{NonUkResult, Result, UkResult}
 
 import scala.concurrent.Future
 

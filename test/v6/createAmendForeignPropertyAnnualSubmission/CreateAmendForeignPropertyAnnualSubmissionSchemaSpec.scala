@@ -16,12 +16,12 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import cats.data.Validated.{Invalid, Valid}
-import config.MockPropertyBusinessConfig
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
 import api.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
 import api.utils.UnitSpec
+import cats.data.Validated.{Invalid, Valid}
+import config.MockPropertyBusinessConfig
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import v6.createAmendForeignPropertyAnnualSubmission.CreateAmendForeignPropertyAnnualSubmissionSchema.*
 
 class CreateAmendForeignPropertyAnnualSubmissionSchemaSpec

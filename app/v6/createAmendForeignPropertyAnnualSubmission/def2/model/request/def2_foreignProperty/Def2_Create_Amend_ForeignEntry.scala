@@ -16,9 +16,9 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty
 
-import play.api.libs.json.{Json, OFormat}
 import api.utils.EmptinessChecker
 import api.utils.EmptinessChecker.field
+import play.api.libs.json.{Json, OFormat}
 
 case class Def2_Create_Amend_ForeignEntry(countryCode: String,
                                           adjustments: Option[Def2_Create_Amend_ForeignAdjustments],

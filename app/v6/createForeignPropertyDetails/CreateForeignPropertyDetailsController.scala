@@ -16,14 +16,14 @@
 
 package v6.createForeignPropertyDetails
 
-import play.api.libs.json.JsValue
-import play.api.mvc.{Action, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.controllers.validators.Validator
 import api.routing.Version
 import api.services.*
 import api.utils.IdGenerator
+import play.api.libs.json.JsValue
+import play.api.mvc.{Action, ControllerComponents}
 import v6.createForeignPropertyDetails.model.request.CreateForeignPropertyDetailsRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -36,7 +36,7 @@ class CreateForeignPropertyDetailsController @Inject() (val authService: Enrolme
                                                         service: CreateForeignPropertyDetailsService,
                                                         auditService: AuditService,
                                                         cc: ControllerComponents,
-                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "create-foreign-property-details"

@@ -16,11 +16,11 @@
 
 package v6.createUkPropertyPeriodSummary
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json._
 import api.controllers.validators.Validator
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.*
 import v6.createUkPropertyPeriodSummary.def1.Def1_CreateUkPropertyPeriodSummaryValidator
 import v6.createUkPropertyPeriodSummary.def2.Def2_CreateUkPropertyPeriodSummaryValidator
 import v6.createUkPropertyPeriodSummary.model.request.CreateUkPropertyPeriodSummaryRequestData

@@ -18,7 +18,7 @@ package v6.propertyPeriodSummary.list
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier

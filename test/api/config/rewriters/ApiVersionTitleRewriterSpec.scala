@@ -16,10 +16,10 @@
 
 package api.config.rewriters
 
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.utils.UnitSpec
 
-class ApiVersionTitleRewriterSpec extends UnitSpec with MockSharedAppConfig {
+class ApiVersionTitleRewriterSpec extends UnitSpec with MockAppConfig {
 
   private val rewriter        = new ApiVersionTitleRewriter(mockSharedAppConfig)
   private val checkAndRewrite = rewriter.rewriteApiVersionTitle

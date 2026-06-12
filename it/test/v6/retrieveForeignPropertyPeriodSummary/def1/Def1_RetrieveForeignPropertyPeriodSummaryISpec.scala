@@ -16,16 +16,16 @@
 
 package v6.retrieveForeignPropertyPeriodSummary.def1
 
+import api.models.domain.TaxYear
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import api.models.domain.TaxYear
-import api.models.errors.*
-import api.services.*
-import api.support.IntegrationBaseSpec
 import v6.retrieveForeignPropertyPeriodSummary.def1.model.Def1_RetrieveForeignPropertyPeriodSummaryFixture
 
 class Def1_RetrieveForeignPropertyPeriodSummaryISpec extends IntegrationBaseSpec with Def1_RetrieveForeignPropertyPeriodSummaryFixture {

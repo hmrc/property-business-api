@@ -16,15 +16,15 @@
 
 package definition
 
-import cats.implicits.catsSyntaxValidatedId
 import api.config.Deprecation.NotDeprecated
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.definition.*
 import api.definition.APIStatus.BETA
 import api.routing.*
 import api.utils.UnitSpec
+import cats.implicits.catsSyntaxValidatedId
 
-class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
+class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
 
   "definition" when {
     "called" should {

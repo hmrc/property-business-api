@@ -16,13 +16,13 @@
 
 package v6.retrieveForeignPropertyPeriodSummary.def1
 
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import common.models.domain.SubmissionId
 import common.models.errors.SubmissionIdFormatError
 import config.MockPropertyBusinessConfig
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.utils.UnitSpec
-import v6.retrieveForeignPropertyPeriodSummary.model.request._
+import v6.retrieveForeignPropertyPeriodSummary.model.request.*
 
 class Def1_RetrieveForeignPropertyPeriodSummaryValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
   private implicit val correlationId: String = "1234"

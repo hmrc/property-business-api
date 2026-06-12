@@ -16,13 +16,13 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
-import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
-import play.api.libs.json.Reads
 import api.controllers.validators.resolvers.ResolveTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import api.schema.DownstreamReadable
+import cats.data.Validated
+import cats.data.Validated.{Invalid, Valid}
+import play.api.libs.json.Reads
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.response.Def1_RetrieveUkPropertyCumulativeSummaryResponse
 import v6.retrieveUkPropertyCumulativeSummary.model.response.RetrieveUkPropertyCumulativeSummaryResponse
 

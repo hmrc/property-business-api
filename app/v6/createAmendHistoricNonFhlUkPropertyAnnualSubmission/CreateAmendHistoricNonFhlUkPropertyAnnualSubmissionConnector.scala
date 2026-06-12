@@ -16,11 +16,11 @@
 
 package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
-import play.api.libs.json.Format.GenericFormat
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import play.api.libs.json.Format.GenericFormat
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
@@ -33,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def amend(request: CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)(implicit

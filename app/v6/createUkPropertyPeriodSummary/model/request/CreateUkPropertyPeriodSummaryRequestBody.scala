@@ -16,10 +16,10 @@
 
 package v6.createUkPropertyPeriodSummary.model.request
 
-import play.api.libs.functional.syntax.*
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import api.utils.EmptinessChecker
 import api.utils.EmptinessChecker.field
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.Def1_Create_UkFhlProperty
 import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.Def1_Create_UkNonFhlProperty
 import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.Def2_Create_UkFhlProperty

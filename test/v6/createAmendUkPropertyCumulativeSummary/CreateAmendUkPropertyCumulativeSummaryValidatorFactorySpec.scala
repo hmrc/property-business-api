@@ -16,9 +16,9 @@
 
 package v6.createAmendUkPropertyCumulativeSummary
 
-import play.api.libs.json.{JsValue, Json}
 import api.controllers.validators.AlwaysErrorsValidator
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v6.createAmendUkPropertyCumulativeSummary.def1.Def1_CreateAmendUkPropertyCumulativeSummaryValidator
 
 class CreateAmendUkPropertyCumulativeSummaryValidatorFactorySpec extends UnitSpec {

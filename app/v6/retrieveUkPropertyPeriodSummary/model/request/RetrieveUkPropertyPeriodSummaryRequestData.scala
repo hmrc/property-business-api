@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyPeriodSummary.model.request
 
-import common.models.domain.SubmissionId
 import api.models.domain.{BusinessId, Nino, TaxYear}
+import common.models.domain.SubmissionId
 
 sealed trait RetrieveUkPropertyPeriodSummaryRequestData {
   val nino: Nino

@@ -16,11 +16,11 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
+import api.controllers.validators.Validator
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
-import api.controllers.validators.Validator
-import api.models.errors.MtdError
 import v6.createAmendForeignPropertyCumulativePeriodSummary.CreateAmendForeignPropertyCumulativePeriodSummarySchema.{Def1, Def2}
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def1.Def1_CreateAmendForeignPropertyCumulativePeriodSummaryValidator
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator

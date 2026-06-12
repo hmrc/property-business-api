@@ -16,22 +16,22 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.retrieve
 
-import common.models.domain.PeriodId
-import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.Nino
 import api.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.utils.MockIdGenerator
+import common.models.domain.PeriodId
+import play.api.Configuration
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
 import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
 import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData
 }
-import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response._
+import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.response.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

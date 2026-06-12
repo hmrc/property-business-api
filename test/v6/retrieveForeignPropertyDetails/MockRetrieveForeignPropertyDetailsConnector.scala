@@ -16,13 +16,14 @@
 
 package v6.retrieveForeignPropertyDetails
 
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import api.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockRetrieveForeignPropertyDetailsConnector extends TestSuite with MockFactory {

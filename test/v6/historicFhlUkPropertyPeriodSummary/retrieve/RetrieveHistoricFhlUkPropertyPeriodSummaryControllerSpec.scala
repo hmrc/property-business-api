@@ -16,16 +16,16 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.retrieve
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.Nino
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import common.models.domain.PeriodId
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.Nino
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import api.utils.MockIdGenerator
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.def1.model.response.{PeriodExpenses, PeriodIncome, RentARoomExpenses, RentARoomIncome}
 import v6.historicFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricFhlUkPropertyPeriodSummaryRequestData,

@@ -16,9 +16,9 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import config.PropertyBusinessConfig
-import api.controllers.validators.Validator
 import v6.retrieveForeignPropertyAnnualSubmission.RetrieveForeignPropertyAnnualSubmissionSchema.{Def1, Def2, Def3}
 import v6.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.def2.Def2_RetrieveForeignPropertyAnnualSubmissionValidator

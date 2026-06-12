@@ -16,11 +16,11 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import cats.data.Validated
-import cats.data.Validated.Valid
 import api.controllers.validators.resolvers.ResolveTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.data.Validated.Valid
 
 import scala.math.Ordered.orderingToOrdered
 

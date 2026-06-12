@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails.def1.model.response
 
-import play.api.libs.json.{Reads, Writes}
 import api.utils.enums.Enums
+import play.api.libs.json.{Reads, Writes}
 
 enum EndReason(val fromDownstream: String) {
   case `no-longer-renting-property-out` extends EndReason("noLongerRentingPropertyOut")

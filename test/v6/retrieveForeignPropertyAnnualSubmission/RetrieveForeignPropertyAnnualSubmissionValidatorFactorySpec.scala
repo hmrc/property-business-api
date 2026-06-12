@@ -16,9 +16,9 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
 import api.controllers.validators.{AlwaysErrorsValidator, Validator}
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.retrieveForeignPropertyAnnualSubmission.def1.Def1_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.def2.Def2_RetrieveForeignPropertyAnnualSubmissionValidator
 import v6.retrieveForeignPropertyAnnualSubmission.def3.Def3_RetrieveForeignPropertyAnnualSubmissionValidator

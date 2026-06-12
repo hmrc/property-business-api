@@ -16,8 +16,8 @@
 
 package v6.updateForeignPropertyDetails.def1.model.request
 
-import common.models.domain.PropertyId
 import api.models.domain.{Nino, TaxYear}
+import common.models.domain.PropertyId
 import v6.updateForeignPropertyDetails.UpdateForeignPropertyDetailsSchema
 import v6.updateForeignPropertyDetails.model.request.UpdateForeignPropertyDetailsRequestData
 

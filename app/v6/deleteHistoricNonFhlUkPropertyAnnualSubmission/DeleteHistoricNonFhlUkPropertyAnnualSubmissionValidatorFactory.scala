@@ -16,8 +16,8 @@
 
 package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import config.PropertyBusinessConfig
 import api.controllers.validators.Validator
+import config.PropertyBusinessConfig
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 

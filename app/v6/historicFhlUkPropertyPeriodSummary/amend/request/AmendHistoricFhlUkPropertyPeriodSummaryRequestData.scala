@@ -16,8 +16,8 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.amend.request
 
-import common.models.domain.PeriodId
 import api.models.domain.Nino
+import common.models.domain.PeriodId
 
 sealed trait AmendHistoricFhlUkPropertyPeriodSummaryRequestData {
   val nino: Nino

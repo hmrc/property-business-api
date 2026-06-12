@@ -16,15 +16,15 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
-import common.models.errors.RuleTypeOfBusinessIncorrectError
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import v6.retrieveUkPropertyCumulativeSummary.model.{UkResult, NonUkResult}
+import common.models.errors.RuleTypeOfBusinessIncorrectError
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
 import v6.retrieveUkPropertyCumulativeSummary.model.request.RetrieveUkPropertyCumulativeSummaryRequestData
+import v6.retrieveUkPropertyCumulativeSummary.model.{NonUkResult, UkResult}
 
 import scala.concurrent.Future
 

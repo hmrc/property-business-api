@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import org.scalamock.handlers.CallHandler
 import api.controllers.validators.{MockValidatorFactory, Validator}
+import org.scalamock.handlers.CallHandler
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 
 trait MockRetrieveForeignPropertyDetailsValidatorFactory extends MockValidatorFactory[RetrieveForeignPropertyDetailsRequestData] {

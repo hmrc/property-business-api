@@ -16,11 +16,11 @@
 
 package v6.createForeignPropertyPeriodSummary
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json._
 import api.controllers.validators.Validator
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.*
 import v6.createForeignPropertyPeriodSummary.def1.Def1_CreateForeignPropertyPeriodSummaryValidator
 import v6.createForeignPropertyPeriodSummary.def2.Def2_CreateForeignPropertyPeriodSummaryValidator
 import v6.createForeignPropertyPeriodSummary.model.request.CreateForeignPropertyPeriodSummaryRequestData

@@ -16,8 +16,8 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_Fixtures
 
 class Def3_Create_Amend_ForeignAdjustmentsSpec extends UnitSpec with Def3_Fixtures {

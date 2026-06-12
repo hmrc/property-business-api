@@ -16,7 +16,7 @@
 
 package v6.createAmendHistoricFhlUkPropertyAnnualSubmission
 
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.IfsUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
@@ -32,7 +32,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class CreateAmendHistoricFhlUkPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def amend(request: CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData)(implicit

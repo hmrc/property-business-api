@@ -16,13 +16,13 @@
 
 package config
 
+import api.routing.*
+import api.support.IntegrationBaseSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import api.routing.*
-import api.support.IntegrationBaseSpec
 
 import scala.util.Try
 

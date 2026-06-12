@@ -16,8 +16,7 @@
 
 package api.services
 
-import org.scalamock.handlers.CallHandler
-import api.config.{ConfidenceLevelConfig, MockSharedAppConfig}
+import api.config.{ConfidenceLevelConfig, MockAppConfig}
 import api.models.auth.UserDetails
 import api.models.errors.{ClientOrAgentNotAuthorisedError, InternalError}
 import api.models.outcomes.AuthOutcome
@@ -27,6 +26,7 @@ import api.services.EnrolmentsAuthService.{
   mtdEnrolmentPredicate,
   supportingAgentAuthPredicate
 }
+import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -36,7 +36,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EnrolmentsAuthServiceSpec extends ServiceSpec with MockSharedAppConfig {
+class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
   private val mtdId = "123567890"
 

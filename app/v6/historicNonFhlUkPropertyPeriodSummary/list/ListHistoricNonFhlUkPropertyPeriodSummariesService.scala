@@ -16,10 +16,10 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.list
 
-import cats.implicits.toBifunctorOps
 import api.controllers.RequestContext
 import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
+import cats.implicits.toBifunctorOps
 import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.ListHistoricNonFhlUkPropertyPeriodSummariesRequestData
 import v6.historicNonFhlUkPropertyPeriodSummary.list.model.response.ListHistoricNonFhlUkPropertyPeriodSummariesResponse
 

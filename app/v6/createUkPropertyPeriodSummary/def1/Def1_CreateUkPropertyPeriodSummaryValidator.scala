@@ -16,14 +16,14 @@
 
 package v6.createUkPropertyPeriodSummary.def1
 
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple4Semigroupal
-import config.PropertyBusinessConfig
-import play.api.libs.json.JsValue
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple4Semigroupal
+import config.PropertyBusinessConfig
+import play.api.libs.json.JsValue
 import v6.createUkPropertyPeriodSummary.model.request.*
 
 import javax.inject.Inject

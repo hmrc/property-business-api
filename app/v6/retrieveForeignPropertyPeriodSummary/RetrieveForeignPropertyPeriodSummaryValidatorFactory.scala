@@ -16,9 +16,9 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
-import config.PropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.models.domain.TaxYear
+import config.PropertyBusinessConfig
 import v6.retrieveForeignPropertyPeriodSummary.def1.Def1_RetrieveForeignPropertyPeriodSummaryValidator
 import v6.retrieveForeignPropertyPeriodSummary.model.request.*
 

@@ -16,19 +16,19 @@
 
 package v6.createUkPropertyPeriodSummary
 
-import play.api.Configuration
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty._
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty._
-import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom._
-import v6.createUkPropertyPeriodSummary.model.request._
+import play.api.Configuration
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Result
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukNonFhlProperty.*
+import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom.*
+import v6.createUkPropertyPeriodSummary.model.request.*
 import v6.createUkPropertyPeriodSummary.model.response.CreateUkPropertyPeriodSummaryResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global

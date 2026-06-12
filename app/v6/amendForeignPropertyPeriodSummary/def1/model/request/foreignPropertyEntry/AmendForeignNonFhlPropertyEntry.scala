@@ -16,10 +16,10 @@
 
 package v6.amendForeignPropertyPeriodSummary.def1.model.request.foreignPropertyEntry
 
-import play.api.libs.functional.syntax.*
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import api.utils.EmptinessChecker
 import api.utils.EmptinessChecker.field
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class AmendForeignNonFhlPropertyEntry(
     countryCode: String,

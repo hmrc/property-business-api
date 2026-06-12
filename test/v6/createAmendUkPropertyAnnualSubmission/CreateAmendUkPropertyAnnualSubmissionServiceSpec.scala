@@ -16,12 +16,12 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import common.models.errors.{RuleOutsideAmendmentWindowError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
+import common.models.errors.{RuleOutsideAmendmentWindowError, RulePropertyIncomeAllowanceError, RuleTypeOfBusinessIncorrectError}
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,

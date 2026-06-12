@@ -16,8 +16,8 @@
 
 package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidator
 
 class DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {

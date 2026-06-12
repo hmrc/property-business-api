@@ -16,13 +16,13 @@
 
 package v6.amendForeignPropertyPeriodSummary.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveParsedCountryCode, ResolveParsedNumber}
-import api.models.errors.MtdError
 import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.{Def2_AmendForeignFhlEea, Def2_AmendForeignFhlEeaExpenses}
 import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignPropertyEntry.{
   Def2_AmendForeignNonFhlPropertyEntry,

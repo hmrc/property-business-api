@@ -16,12 +16,12 @@
 
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission.def1
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.utils.UnitSpec
 import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.utils.UnitSpec
-import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request._
+import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.*
 
 class Def1_RetrieveHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
   private implicit val correlationId: String = "1234"

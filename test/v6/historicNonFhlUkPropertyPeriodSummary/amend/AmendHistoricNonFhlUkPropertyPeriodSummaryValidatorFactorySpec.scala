@@ -16,10 +16,10 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.amend
 
-import config.MockPropertyBusinessConfig
-import play.api.libs.json.JsObject
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
+import play.api.libs.json.JsObject
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator
 
 class AmendHistoricNonFhlUkPropertyPeriodSummaryValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {

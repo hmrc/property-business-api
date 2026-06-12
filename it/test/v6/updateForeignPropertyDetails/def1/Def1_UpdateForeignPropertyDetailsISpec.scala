@@ -16,6 +16,10 @@
 
 package v6.updateForeignPropertyDetails.def1
 
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.services.*
+import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.models.errors.*
 import play.api.libs.json.*
@@ -23,10 +27,6 @@ import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.*
-import api.models.errors.*
-import api.models.utils.JsonErrorValidators
-import api.services.*
-import api.support.IntegrationBaseSpec
 import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.def1_UpdateForeignPropertyDetailsMtdJson as requestBody
 
 class Def1_UpdateForeignPropertyDetailsISpec extends IntegrationBaseSpec with JsonErrorValidators {

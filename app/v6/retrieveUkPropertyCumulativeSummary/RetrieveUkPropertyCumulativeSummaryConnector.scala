@@ -16,11 +16,11 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
-import config.PropertyBusinessFeatureSwitches
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.HipUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import config.PropertyBusinessFeatureSwitches
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.retrieveUkPropertyCumulativeSummary.model.request.*
@@ -30,8 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
-    extends BaseDownstreamConnector {
+class RetrieveUkPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieveUkPropertyCumulativeSummary(request: RetrieveUkPropertyCumulativeSummaryRequestData)(implicit
       hc: HeaderCarrier,

@@ -16,12 +16,12 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.retrieve.def1
 
+import api.models.domain.Nino
+import api.models.errors.*
+import api.utils.UnitSpec
 import common.models.domain.PeriodId
 import common.models.errors.PeriodIdFormatError
 import config.MockPropertyBusinessConfig
-import api.models.domain.Nino
-import api.models.errors._
-import api.utils.UnitSpec
 import v6.historicNonFhlUkPropertyPeriodSummary.retrieve.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData,
   RetrieveHistoricNonFhlUkPropertyPeriodSummaryRequestData

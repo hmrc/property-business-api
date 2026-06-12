@@ -16,11 +16,11 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.retrieve
 
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import api.utils.IdGenerator
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ class RetrieveHistoricNonFhlUkPropertyPeriodSummaryController @Inject() (
     service: RetrieveHistoricNonFhlUkPropertyPeriodSummaryService,
     cc: ControllerComponents,
     idGenerator: IdGenerator
-)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "retrieve-historic-non-fhluk-property-period-summary"

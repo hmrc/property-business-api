@@ -16,12 +16,12 @@
 
 package v6.retrieveUkPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
-import org.scalamock.handlers.CallHandler
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.*
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
+import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
 import v6.fixtures.retrieveUkPropertyPeriodSummary.ResponseModelsFixture
 import v6.retrieveUkPropertyPeriodSummary.def1.model.response.{Def1_Retrieve_UkFhlProperty, Def1_Retrieve_UkNonFhlProperty}

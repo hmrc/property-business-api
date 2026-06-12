@@ -16,17 +16,17 @@
 
 package api.controllers.validators.resolvers
 
-import play.api.libs.json.{JsArray, JsObject, JsValue}
 import api.controllers.validators.resolvers.UnexpectedJsonFieldsValidator.SchemaStructureSource
 import api.models.domain.TaxYear
 import api.models.errors.RuleIncorrectOrEmptyBodyError
 import api.utils.Logging
+import play.api.libs.json.{JsArray, JsObject, JsValue}
 
 import scala.compiletime.{constValue, erasedValue, summonInline}
 import scala.deriving.Mirror
 
 class UnexpectedJsonFieldsValidator[A](using extraPathChecker: SchemaStructureSource[A]) extends ResolverSupport with Logging {
-  import UnexpectedJsonFieldsValidator.SchemaStructure
+  import api.controllers.validators.resolvers.UnexpectedJsonFieldsValidator.SchemaStructure
 
   def validator: Validator[(JsObject, A)] = { case (inputJson, data) =>
     val expectedJson = extraPathChecker.schemaStructureOf(data)

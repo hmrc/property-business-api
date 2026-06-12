@@ -16,18 +16,18 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import api.controllers.EndpointLogContext
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
+import common.models.errors.{PropertyIdFormatError, RuleTypeOfBusinessIncorrectError}
 import uk.gov.hmrc.http.HeaderCarrier
-import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult}
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def1.request.Def1_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.response.RetrieveForeignPropertyAnnualSubmissionResponse
+import v6.retrieveForeignPropertyAnnualSubmission.model.{ForeignResult, NonForeignResult}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

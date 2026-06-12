@@ -16,16 +16,16 @@
 
 package api.config
 
+import api.routing.Version
 import cats.data.Validated
 import org.scalamock.handlers.{CallHandler, CallHandler0}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import play.api.Configuration
-import api.routing.Version
 
-trait MockSharedAppConfig extends TestSuite with MockFactory {
+trait MockAppConfig extends TestSuite with MockFactory {
 
-  implicit val mockSharedAppConfig: SharedAppConfig = mock[SharedAppConfig]
+  implicit val mockSharedAppConfig: AppConfig = mock[AppConfig]
 
   object MockedSharedAppConfig {
     // MTD ID Lookup Config

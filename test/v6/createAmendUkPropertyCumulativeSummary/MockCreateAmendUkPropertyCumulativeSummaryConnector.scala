@@ -22,6 +22,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.createAmendUkPropertyCumulativeSummary.model.request.CreateAmendUkPropertyCumulativeSummaryRequestData
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCreateAmendUkPropertyCumulativeSummaryConnector extends TestSuite with MockFactory {

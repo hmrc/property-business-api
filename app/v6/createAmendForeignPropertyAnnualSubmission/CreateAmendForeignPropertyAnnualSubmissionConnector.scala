@@ -16,11 +16,11 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import play.api.http.Status.NO_CONTENT
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.{HipUri, IfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.{SuccessCode, readsEmpty}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import play.api.http.Status.NO_CONTENT
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.createAmendForeignPropertyAnnualSubmission.model.request.CreateAmendForeignPropertyAnnualSubmissionRequestData
@@ -29,7 +29,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class CreateAmendForeignPropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def createAmendForeignPropertyAnnualSubmission(request: CreateAmendForeignPropertyAnnualSubmissionRequestData)(implicit

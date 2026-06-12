@@ -16,15 +16,15 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission.def3
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
 import common.models.errors.PropertyIdFormatError
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import v6.retrieveForeignPropertyAnnualSubmission.def3.request.Def3_RetrieveForeignPropertyAnnualSubmissionRequestData
 import v6.retrieveForeignPropertyAnnualSubmission.model.request.RetrieveForeignPropertyAnnualSubmissionRequestData
 

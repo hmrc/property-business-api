@@ -16,15 +16,15 @@
 
 package v6.retrieveUkPropertyCumulativeSummary
 
-import play.api.Configuration
-import play.api.mvc.Result
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
+import play.api.mvc.Result
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.request.Def1_RetrieveUkPropertyCumulativeSummaryRequestData
-import v6.retrieveUkPropertyCumulativeSummary.model.request._
+import v6.retrieveUkPropertyCumulativeSummary.model.request.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

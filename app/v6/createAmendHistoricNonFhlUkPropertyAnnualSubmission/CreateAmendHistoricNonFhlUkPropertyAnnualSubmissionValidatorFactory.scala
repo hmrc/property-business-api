@@ -16,9 +16,9 @@
 
 package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission
 
+import api.controllers.validators.Validator
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
-import api.controllers.validators.Validator
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 

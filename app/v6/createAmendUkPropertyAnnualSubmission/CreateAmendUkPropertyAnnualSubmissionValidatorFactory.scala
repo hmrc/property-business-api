@@ -16,10 +16,10 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
-import api.controllers.validators.Validator
 import v6.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema.{Def1, Def2}
 import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator

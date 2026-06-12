@@ -16,13 +16,13 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def1
 
-import cats.data.Validated
-import cats.implicits.*
-import play.api.libs.json.JsValue
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.*
+import play.api.libs.json.JsValue
 import v6.createAmendForeignPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendForeignPropertyAnnualSubmissionRequestData

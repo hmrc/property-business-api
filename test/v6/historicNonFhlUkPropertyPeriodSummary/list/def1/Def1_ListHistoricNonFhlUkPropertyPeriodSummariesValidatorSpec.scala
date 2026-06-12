@@ -16,11 +16,11 @@
 
 package v6.historicNonFhlUkPropertyPeriodSummary.list.def1
 
-import config.MockPropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.models.domain.Nino
-import api.models.errors._
+import api.models.errors.*
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.historicNonFhlUkPropertyPeriodSummary.list.model.request.{
   Def1_ListHistoricNonFhlUkPropertyPeriodSummariesRequestData,
   ListHistoricNonFhlUkPropertyPeriodSummariesRequestData

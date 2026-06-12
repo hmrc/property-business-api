@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission.def3.fixture
 
-import play.api.libs.json.{JsValue, Json}
 import api.models.domain.Timestamp
+import play.api.libs.json.{JsValue, Json}
 import v6.retrieveForeignPropertyAnnualSubmission.def3.model.response.*
 
 object Def3_RetrieveForeignPropertyAnnualSubmissionFixture {

@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission.model.response
 
-import play.api.libs.json.OWrites
 import api.utils.JsonWritesUtil.writesFrom
+import play.api.libs.json.OWrites
 import v6.retrieveForeignPropertyAnnualSubmission.def1.model.response.Def1_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def2.model.response.Def2_RetrieveForeignPropertyAnnualSubmissionResponse
 import v6.retrieveForeignPropertyAnnualSubmission.def3.model.response.Def3_RetrieveForeignPropertyAnnualSubmissionResponse

@@ -16,12 +16,12 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission.def3
 
-import common.models.errors.*
-import play.api.libs.json.*
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
+import common.models.errors.*
+import play.api.libs.json.*
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty.*
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.{
   Def3_CreateAmendForeignPropertyAnnualSubmissionRequestBody,

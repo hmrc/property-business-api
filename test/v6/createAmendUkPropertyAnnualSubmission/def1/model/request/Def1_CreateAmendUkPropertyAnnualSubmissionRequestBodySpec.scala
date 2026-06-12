@@ -16,10 +16,10 @@
 
 package v6.createAmendUkPropertyAnnualSubmission.def1.model.request
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty._
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty._
+import play.api.libs.json.{JsValue, Json}
+import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.*
+import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.*
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionRequestBodySpec extends UnitSpec {

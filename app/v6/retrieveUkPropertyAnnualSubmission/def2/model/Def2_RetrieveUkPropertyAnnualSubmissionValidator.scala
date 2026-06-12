@@ -16,11 +16,11 @@
 
 package v6.retrieveUkPropertyAnnualSubmission.def2.model
 
-import cats.data.Validated
-import cats.implicits.*
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.*
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.model.request.*
 

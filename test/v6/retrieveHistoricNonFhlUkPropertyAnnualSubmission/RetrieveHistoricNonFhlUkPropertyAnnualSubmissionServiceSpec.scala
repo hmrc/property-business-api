@@ -16,13 +16,13 @@
 
 package v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import api.utils.UnitSpec
+import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,

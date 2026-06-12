@@ -16,6 +16,9 @@
 
 package api.routing
 
+import api.config.MockAppConfig
+import api.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
+import api.utils.UnitSpec
 import org.apache.pekko.actor.ActorSystem
 import org.scalatest.Inside
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -24,11 +27,8 @@ import play.api.mvc.*
 import play.api.routing.Router
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import api.config.MockSharedAppConfig
-import api.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
-import api.utils.UnitSpec
 
-class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockSharedAppConfig with GuiceOneAppPerSuite {
+class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockAppConfig with GuiceOneAppPerSuite {
   test =>
 
   implicit private val actorSystem: ActorSystem = ActorSystem("test")

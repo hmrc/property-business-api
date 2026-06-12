@@ -16,8 +16,8 @@
 
 package v6.retrieveUkPropertyCumulativeSummary.def1.model.response
 
-import play.api.libs.json.{JsValue, Json}
 import api.utils.UnitSpec
+import play.api.libs.json.{JsValue, Json}
 import v6.retrieveUkPropertyCumulativeSummary.def1.model.Def1_RetrieveUkPropertyCumulativeSummaryFixture
 
 class IncomeSpec extends UnitSpec with Def1_RetrieveUkPropertyCumulativeSummaryFixture {

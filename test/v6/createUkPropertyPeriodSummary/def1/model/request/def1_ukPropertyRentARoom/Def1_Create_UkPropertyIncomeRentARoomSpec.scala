@@ -16,8 +16,8 @@
 
 package v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukPropertyRentARoom
 
-import play.api.libs.json.Json
 import api.utils.UnitSpec
+import play.api.libs.json.Json
 
 class Def1_Create_UkPropertyIncomeRentARoomSpec extends UnitSpec {
 

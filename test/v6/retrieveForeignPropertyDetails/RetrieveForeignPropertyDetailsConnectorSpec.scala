@@ -16,11 +16,11 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import common.models.domain.PropertyId
-import play.api.Configuration
 import api.connectors.ConnectorSpec
 import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.PropertyId
+import play.api.Configuration
 import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.def1.model.response.{Def1_RetrieveForeignPropertyDetailsResponse, ForeignPropertyDetailsEntry}

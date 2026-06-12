@@ -16,8 +16,8 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import cats.data.Validated.{Invalid, Valid}
 import api.controllers.validators.Validator
+import cats.data.Validated.{Invalid, Valid}
 import v6.retrieveForeignPropertyDetails.def1.Def1_RetrieveForeignPropertyDetailsValidator
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData
 

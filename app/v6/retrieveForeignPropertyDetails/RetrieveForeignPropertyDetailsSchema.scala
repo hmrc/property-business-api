@@ -16,12 +16,12 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import cats.data.Validated
-import play.api.libs.json.Reads
 import api.controllers.validators.resolvers.ResolveTaxYearMinimum
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
+import cats.data.Validated
+import play.api.libs.json.Reads
 import v6.retrieveForeignPropertyDetails.def1.model.response.Def1_RetrieveForeignPropertyDetailsResponse
 import v6.retrieveForeignPropertyDetails.model.response.RetrieveForeignPropertyDetailsResponse
 

@@ -16,11 +16,11 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import config.PropertyBusinessFeatureSwitches
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.DownstreamUri.HipUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import config.PropertyBusinessFeatureSwitches
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
@@ -30,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2)(implicit val appConfig: SharedAppConfig)
+class RetrieveForeignPropertyCumulativeSummaryConnector @Inject() (val http: HttpClientV2)(implicit val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def retrieveForeignPropertyCumulativeSummary(request: RetrieveForeignPropertyCumulativeSummaryRequestData)(implicit

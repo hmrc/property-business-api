@@ -16,9 +16,9 @@
 
 package v6.deletePropertyAnnualSubmission
 
-import config.MockPropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.utils.UnitSpec
+import config.MockPropertyBusinessConfig
 import v6.deletePropertyAnnualSubmission.def1.Def1_DeletePropertyAnnualSubmissionValidator
 import v6.deletePropertyAnnualSubmission.model.request.DeletePropertyAnnualSubmissionRequestData
 

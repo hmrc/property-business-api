@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyCumulativePeriodSummary
 
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.connectors.*
 import api.connectors.DownstreamUri.HipUri
 import api.connectors.httpparsers.StandardDownstreamHttpParser.readsEmpty
@@ -28,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class CreateAmendForeignPropertyCumulativePeriodSummaryConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def createAmendForeignProperty(request: CreateAmendForeignPropertyCumulativePeriodSummaryRequestData)(implicit

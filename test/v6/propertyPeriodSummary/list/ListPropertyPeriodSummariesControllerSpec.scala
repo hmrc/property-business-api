@@ -16,13 +16,13 @@
 
 package v6.propertyPeriodSummary.list
 
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{BusinessId, Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Result
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{BusinessId, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
 import v6.propertyPeriodSummary.list.def1.model.response.SubmissionPeriod
 import v6.propertyPeriodSummary.list.model.request.ListPropertyPeriodSummariesRequestData
 import v6.propertyPeriodSummary.list.model.response.ListPropertyPeriodSummariesResponse

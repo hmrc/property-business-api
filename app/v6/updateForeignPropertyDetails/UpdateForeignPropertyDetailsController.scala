@@ -16,13 +16,13 @@
 
 package v6.updateForeignPropertyDetails
 
-import play.api.libs.json.JsValue
-import play.api.mvc.{Action, ControllerComponents}
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.routing.Version
 import api.services.*
 import api.utils.IdGenerator
+import play.api.libs.json.JsValue
+import play.api.mvc.{Action, ControllerComponents}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -33,7 +33,7 @@ class UpdateForeignPropertyDetailsController @Inject() (val authService: Enrolme
                                                         service: UpdateForeignPropertyDetailsService,
                                                         auditService: AuditService,
                                                         cc: ControllerComponents,
-                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+                                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   override val endpointName: String = "update-foreign-property-details"

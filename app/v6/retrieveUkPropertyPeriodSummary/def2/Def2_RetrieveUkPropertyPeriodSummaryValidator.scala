@@ -16,14 +16,14 @@
 
 package v6.retrieveUkPropertyPeriodSummary.def2
 
-import cats.data.Validated
-import cats.implicits.catsSyntaxTuple4Semigroupal
-import common.controllers.validators.resolvers.ResolveSubmissionId
-import config.PropertyBusinessConfig
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple4Semigroupal
+import common.controllers.validators.resolvers.ResolveSubmissionId
+import config.PropertyBusinessConfig
 import v6.retrieveUkPropertyPeriodSummary.model.request.{Def2_RetrieveUkPropertyPeriodSummaryRequestData, RetrieveUkPropertyPeriodSummaryRequestData}
 
 import javax.inject.Inject

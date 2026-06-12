@@ -16,11 +16,11 @@
 
 package v6.retrieveForeignPropertyPeriodSummary
 
-import common.models.domain.SubmissionId
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.*
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import common.models.domain.SubmissionId
 import uk.gov.hmrc.http.StringContextOps
 import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignFhlEea.ForeignFhlEea
 import v6.retrieveForeignPropertyPeriodSummary.def1.model.response.foreignNonFhlProperty.ForeignNonFhlProperty

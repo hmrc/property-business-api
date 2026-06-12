@@ -16,9 +16,9 @@
 
 package v6.historicFhlUkPropertyPeriodSummary.amend
 
+import api.controllers.validators.Validator
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
-import api.controllers.validators.Validator
 import v6.historicFhlUkPropertyPeriodSummary.amend.def1.Def1_AmendHistoricFhlUkPropertyPeriodSummaryValidator
 import v6.historicFhlUkPropertyPeriodSummary.amend.request.AmendHistoricFhlUkPropertyPeriodSummaryRequestData
 

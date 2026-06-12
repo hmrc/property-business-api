@@ -16,12 +16,12 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary.def1
 
-import cats.data.Validated
 import api.controllers.validators.Validator
-import cats.implicits.catsSyntaxTuple2Semigroupal
 import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
+import cats.data.Validated
+import cats.implicits.catsSyntaxTuple2Semigroupal
 import v6.retrieveForeignPropertyCumulativeSummary.def1.model.request.Def1_RetrieveForeignPropertyCumulativeSummaryRequestData
 import v6.retrieveForeignPropertyCumulativeSummary.model.request.RetrieveForeignPropertyCumulativeSummaryRequestData
 

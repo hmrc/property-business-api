@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": {{#if (enabled 'r22_fya_docs')}} "Tax Year 2025-26" {{else}} "Tax Years 2025-26 Onwards" {{/if}},
+  "title": {{#unless (releasedInProduction "r22_fya_docs")}}[Test only] {{/unless}}Tax Years 2026-27 Onwards",
   "type": "object",
   "description": "This endpoint allows a developer to retrieve adjustments and allowances for a UK property business. For either or both of Furnished Holiday Letting (FHL) or other UK property submissions. A National Insurance number, business ID and tax year are required.",
   "properties": {
@@ -263,7 +263,7 @@
               "multipleOf": 0.01,
               "example": "5000.99"
             },
-           "firstYearAllowanceOnPlantAndMachinery": {
+            "firstYearAllowanceOnPlantAndMachinery": {
               "type": "number",
               "description": "First-Year Allowance for qualifying expenditure incurred on plant and machinery. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
               "minimum": 0,

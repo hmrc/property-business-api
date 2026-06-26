@@ -50,23 +50,38 @@ responses:
           oneOf:
             - $ref: './schemas/uk_property_annual_submission_retrieve/def1/response.json'
             - $ref: './schemas/uk_property_annual_submission_retrieve/def2/response.json'
+            {{#if (enabled 'r22_fya_docs')}}
+            - $ref: './schemas/uk_property_annual_submission_retrieve/def3/response.json'
+            {{/if}}   
         examples:
-          property-allowance-response-TY-2024-25:
-            description: Property Allowance response for TY 2024-25 and before
+          "Property Allowance response for TY 2024-25 and before":
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def1/property_allowance_response.json'
-          all-other-allowances-response-TY-2024-25:
-            description: All Other Allowances response for TY 2024-25 and before
+          "All Other Allowances response for TY 2024-25 and before":
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def1/all_other_allowances_response.json'
-          property-allowance-response-TY-2025-26:
-            description: Property Allowance request for TY 2025-26 and after
+          {{#if (enabled 'r22_fya_docs')}}
+          "Property Allowance response for TY 2025-26":
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def2/property_allowance_response.json'
-          all-other-allowances-response-TY-2025-26:
-            description: All Other Allowances request for TY 2025-26 and after
+          "All Other Allowances response for TY 2025-26":
             value:
               $ref: './examples/uk_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
+          {{else}}
+          "Property Allowance response for TY 2025-26 and after":
+            value:
+              $ref: './examples/uk_property_annual_submission_retrieve/def2/property_allowance_response.json'
+          "All Other Allowances response for TY 2025-26 and after":
+            value:
+              $ref: './examples/uk_property_annual_submission_retrieve/def2/all_other_allowances_response.json'
+          {{#if (enabled 'r22_fya_docs')}}
+          "Property Allowance response for TY 2026-27 and after":
+            value:
+              $ref: './examples/uk_property_annual_submission_retrieve/def3/property_allowance_response.json'
+          "All Other Allowances response for TY 2026-27 and after":
+            value:
+              $ref: './examples/uk_property_annual_submission_retrieve/def3/all_other_allowances_response.json'
+          {{/if}}
   "400":
     description: Bad request
     headers:

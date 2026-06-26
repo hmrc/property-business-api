@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package v6.retrieveUkPropertyAnnualSubmission.def1.model
+package v6.retrieveUkPropertyAnnualSubmission.def3.model
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.*
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple2Semigroupal
-import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
+import cats.implicits.*
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.request.Def3_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.model.request.*
 
 import javax.inject.Inject
 
-class Def1_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
+class Def3_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String)
     extends Validator[RetrieveUkPropertyAnnualSubmissionRequestData] {
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId)
-    ).mapN((validNino, validBusinessId) => Def1_RetrieveUkPropertyAnnualSubmissionRequestData(validNino, validBusinessId, TaxYear.fromMtd(taxYear)))
+    ).mapN((validNino, validBusinessId) => Def3_RetrieveUkPropertyAnnualSubmissionRequestData(validNino, validBusinessId, TaxYear.fromMtd(taxYear)))
 
 }

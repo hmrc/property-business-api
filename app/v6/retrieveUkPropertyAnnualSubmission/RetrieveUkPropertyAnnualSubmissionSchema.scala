@@ -16,15 +16,17 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYear
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
 import cats.data.Validated
 import cats.data.Validated.Valid
+import config.PropertyBusinessConfig
 import play.api.libs.json.Reads
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.response.Def3_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.model.response.*
 
 import scala.math.Ordered.orderingToOrdered
@@ -43,14 +45,21 @@ object RetrieveUkPropertyAnnualSubmissionSchema {
     val connectorReads: Reads[DownstreamResp] = Def2_RetrieveUkPropertyAnnualSubmissionResponse.reads
   }
 
-  def schemaFor(maybeTaxYear: Option[String]): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] =
+  case object Def3 extends RetrieveUkPropertyAnnualSubmissionSchema {
+    type DownstreamResp = Def3_RetrieveUkPropertyAnnualSubmissionResponse
+    val connectorReads: Reads[DownstreamResp] = Def3_RetrieveUkPropertyAnnualSubmissionResponse.reads
+  }
+
+  def schemaFor(maybeTaxYear: Option[String])(implicit
+      config: PropertyBusinessConfig): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] =
     maybeTaxYear match {
-      case Some(taxYearString) => ResolveTaxYear(taxYearString) andThen schemaFor
+      case Some(taxYearString) => ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))(taxYearString) andThen schemaFor
       case None                => Valid(Def1)
     }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] = {
-    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2)
+    if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def3)
+    else if (taxYear == TaxYear.fromMtd("2025-26")) Valid(Def2)
     else Valid(Def1)
   }
 

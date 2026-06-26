@@ -40,6 +40,20 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
         result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
       }
 
+      "return the Validator for schema definition 2" in new SetupConfig {
+        val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
+
+        result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
+      }
+
+      "return the Validator for schema definition 2" in new SetupConfig {
+        val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
+
+        result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
+      }
+
       "passed the minimum supported taxYear" in new SetupConfig {
         val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] = validatorFactory.validator(validNino, validBusinessId, validTaxYear)
 

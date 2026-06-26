@@ -20,9 +20,10 @@ import api.controllers.validators.Validator
 import api.models.errors.MtdError
 import cats.data.Validated.*
 import config.PropertyBusinessConfig
-import v6.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema.{Def1, Def2}
+import v6.retrieveUkPropertyAnnualSubmission.RetrieveUkPropertyAnnualSubmissionSchema.{Def1, Def2, Def3}
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.Def3_RetrieveUkPropertyAnnualSubmissionValidator
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -34,6 +35,7 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit con
     RetrieveUkPropertyAnnualSubmissionSchema.schemaFor(Some(taxYear)) match {
       case Valid(Def1)                    => new Def1_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
       case Valid(Def2)                    => new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+      case Valid(Def3)                    => new Def3_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
       case Invalid(errors: Seq[MtdError]) => Validator.returningErrors(errors)
     }
 

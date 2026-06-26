@@ -17,7 +17,8 @@
 package v6.retrieveUkPropertyAnnualSubmission.def2.model
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.*
@@ -32,8 +33,7 @@ class Def2_RetrieveUkPropertyAnnualSubmissionValidator @Inject() (nino: String, 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionRequestData] =
     (
       ResolveNino(nino),
-      ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear)
-    ).mapN(Def2_RetrieveUkPropertyAnnualSubmissionRequestData.apply)
+      ResolveBusinessId(businessId)
+    ).mapN((validNino, validBusinessId) => Def2_RetrieveUkPropertyAnnualSubmissionRequestData(validNino, validBusinessId, TaxYear.fromMtd(taxYear)))
 
 }

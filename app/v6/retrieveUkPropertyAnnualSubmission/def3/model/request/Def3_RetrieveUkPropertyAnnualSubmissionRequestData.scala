@@ -26,6 +26,6 @@ case class Def3_RetrieveUkPropertyAnnualSubmissionRequestData(
     taxYear: TaxYear
 ) extends RetrieveUkPropertyAnnualSubmissionRequestData {
 
-  val schema: RetrieveUkPropertyAnnualSubmissionSchema = RetrieveUkPropertyAnnualSubmissionSchema.Def2
+  val schema: RetrieveUkPropertyAnnualSubmissionSchema = RetrieveUkPropertyAnnualSubmissionSchema.Def3
 
 }

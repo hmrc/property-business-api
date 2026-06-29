@@ -20,8 +20,8 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
 import config.MockPropertyBusinessConfig
-import v6.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
-import v6.retrieveUkPropertyAnnualSubmission.def2.model.request.Def2_RetrieveUkPropertyAnnualSubmissionRequestData
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.Def3_RetrieveUkPropertyAnnualSubmissionValidator
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.request.Def3_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 class Def3_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig {
@@ -36,7 +36,7 @@ class Def3_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
   private def validator(nino: String, businessId: String, taxYear: String) =
-    new Def2_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
+    new Def3_RetrieveUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear)
 
   "validator" should {
     "return the parsed domain object" when {
@@ -44,7 +44,7 @@ class Def3_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validBusinessId, validTaxYear).validateAndWrapResult()
 
-        result shouldBe Right(Def2_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
+        result shouldBe Right(Def3_RetrieveUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear))
       }
 
     }

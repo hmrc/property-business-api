@@ -16,18 +16,22 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import api.controllers.validators.Validator
+import api.controllers.validators.{AlwaysErrorsValidator, Validator}
 import api.utils.UnitSpec
 import config.MockPropertyBusinessConfig
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.Def1_RetrieveUkPropertyAnnualSubmissionValidator
+import v6.retrieveUkPropertyAnnualSubmission.def2.model.Def2_RetrieveUkPropertyAnnualSubmissionValidator
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.Def3_RetrieveUkPropertyAnnualSubmissionValidator
 import v6.retrieveUkPropertyAnnualSubmission.model.request.RetrieveUkPropertyAnnualSubmissionRequestData
 
 class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
-  private val validNino       = "AA123456B"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2022-23"
-  private val validTysTaxYear = "2023-24"
+  private val validNino        = "AA123456B"
+  private val validBusinessId  = "XAIS12345678901"
+  private val validTaxYear     = "2022-23"
+  private val validTysTaxYear  = "2023-24"
+  private val validDef2TaxYear = "2025-26"
+  private val validDef3TaxYear = "2026-27"
 
   private val validatorFactory = new RetrieveUkPropertyAnnualSubmissionValidatorFactory
 
@@ -42,22 +46,28 @@ class RetrieveUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec wi
 
       "return the Validator for schema definition 2" in new SetupConfig {
         val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
-          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
+          validatorFactory.validator(validNino, validBusinessId, validDef2TaxYear)
 
-        result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
+        result shouldBe a[Def2_RetrieveUkPropertyAnnualSubmissionValidator]
       }
 
-      "return the Validator for schema definition 2" in new SetupConfig {
+      "return the Validator for schema definition 3" in new SetupConfig {
         val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] =
-          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear)
+          validatorFactory.validator(validNino, validBusinessId, validDef3TaxYear)
 
-        result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
+        result shouldBe a[Def3_RetrieveUkPropertyAnnualSubmissionValidator]
       }
 
       "passed the minimum supported taxYear" in new SetupConfig {
         val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] = validatorFactory.validator(validNino, validBusinessId, validTaxYear)
 
         result shouldBe a[Def1_RetrieveUkPropertyAnnualSubmissionValidator]
+      }
+
+      "given an invalid taxYear" in new SetupConfig {
+        val result: Validator[RetrieveUkPropertyAnnualSubmissionRequestData] = validatorFactory.validator(validNino, validBusinessId, "2021-22")
+
+        result shouldBe an[AlwaysErrorsValidator]
       }
     }
 

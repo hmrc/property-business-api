@@ -28,7 +28,7 @@ class RetrieveUkPropertyAllowancesSpec extends UnitSpec {
       |   "zeroEmissionGoodsVehicleAllowance":456.34,
       |   "businessPremisesRenovationAllowance":573.45,
       |   "otherCapitalAllowance":452.34,
-      |   "costOfReplacingDomesticGoods":567.34,
+      |   "costOfReplacingDomesticItems":567.34,
       |   "propertyIncomeAllowance":342.34,
       |   "structuredBuildingAllowance":[
       |      {

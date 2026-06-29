@@ -42,6 +42,9 @@ requestBody:
         oneOf:
           - $ref: './schemas/uk_property_annual_submission_create_and_amend/def1/request.json'
           - $ref: './schemas/uk_property_annual_submission_create_and_amend/def2/request.json'
+          {{#if (enabled 'r22_fya_docs')}}
+          - $ref: './schemas/uk_property_annual_submission_create_and_amend/def3/request.json'
+          {{/if}}
       examples:
         property-allowance-request-TY-2024-25:
           description: Property Allowance request for TY 2024-25 and before
@@ -52,13 +55,23 @@ requestBody:
           value:
             $ref: './examples/uk_property_annual_submission_create_and_amend/def1/all_other_allowances_request.json'
         property-allowance-request-TY-2025-26:
-          description: Property Allowance request for TY 2025-26 and after
+          description: Property Allowance request for TY 2025-26 {{#unless (enabled 'r22_fya_docs')}} and after {{/unless}}
           value:
             $ref: './examples/uk_property_annual_submission_create_and_amend/def2/property_allowance_request.json'
         all-other-allowance-request-TY-2025-26:
-          description: All Other Allowances request for TY 2025-26 and after
+          description: All Other Allowances request for TY 2025-26 {{#unless (enabled 'r22_fya_docs')}} and after {{/unless}}
           value:
             $ref: './examples/uk_property_annual_submission_create_and_amend/def2/all_other_allowances_request.json'
+        {{#if (enabled 'r22_fya_docs')}}
+        property-allowance-request-TY-2026-27:
+          description: Property Allowance request for TY 2026-27 and after
+          value:
+            $ref: './examples/uk_property_annual_submission_create_and_amend/def3/property_allowance_request.json'
+        all-other-allowance-request-TY-2026-27:
+          description: All Other Allowances request for TY 2026-27 and after
+          value:
+            $ref: './examples/uk_property_annual_submission_create_and_amend/def3/all_other_allowances_request.json'
+        {{/if}}
 
 responses:
   "200":

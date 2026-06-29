@@ -20,6 +20,7 @@ import api.utils.JsonWritesUtil.writesFrom
 import play.api.libs.json.*
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse
 import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.Def2_RetrieveUkPropertyAnnualSubmissionResponse
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.response.Def3_RetrieveUkPropertyAnnualSubmissionResponse
 
 trait RetrieveUkPropertyAnnualSubmissionResponse {
   def hasUkData: Boolean
@@ -30,6 +31,7 @@ object RetrieveUkPropertyAnnualSubmissionResponse {
   implicit val writes: OWrites[RetrieveUkPropertyAnnualSubmissionResponse] = writesFrom {
     case def1: Def1_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def1_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def1)
     case def2: Def2_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def2_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def2)
+    case def3: Def3_RetrieveUkPropertyAnnualSubmissionResponse => implicitly[OWrites[Def3_RetrieveUkPropertyAnnualSubmissionResponse]].writes(def3)
   }
 
 }

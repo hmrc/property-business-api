@@ -67,15 +67,6 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
-      "given an incorrectly formatted taxYear" in new SetupConfig {
-
-        val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validBusinessId, "202324").validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-
-      }
-
       "given an incorrectly formatted businessId" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
@@ -84,33 +75,19 @@ class Def1_RetrieveUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
-      "given a taxYear immediately before the minimum supported" in new SetupConfig {
-
-        val result = validator(validNino, validBusinessId, "2021-22").validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-
-      "given a taxYear spanning an invalid range" in new SetupConfig {
-
-        val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validBusinessId, "2021-23").validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-
     }
 
     "return multiple validation errors" when {
       "given a request with multiple issues (path parameters)" in new SetupConfig {
 
         val result: Either[ErrorWrapper, RetrieveUkPropertyAnnualSubmissionRequestData] =
-          validator("invalid", "invalid", "invalid").validateAndWrapResult()
+          validator("invalid", "invalid", "2022-23").validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError))
           )
         )
       }

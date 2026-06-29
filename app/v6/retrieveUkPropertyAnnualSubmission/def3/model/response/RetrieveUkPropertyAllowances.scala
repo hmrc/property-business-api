@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.retrieveUkPropertyAnnualSubmission.def2.model.response
+package v6.retrieveUkPropertyAnnualSubmission.def3.model.response
 
 import play.api.libs.json.*
 
@@ -26,7 +26,8 @@ case class RetrieveUkPropertyAllowances(
     propertyIncomeAllowance: Option[BigDecimal],
     structuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
     enhancedStructuredBuildingAllowance: Option[Seq[RetrieveUkPropertyStructuredBuildingAllowance]],
-    zeroEmissionsCarAllowance: Option[BigDecimal]
+    zeroEmissionsCarAllowance: Option[BigDecimal],
+    firstYearAllowanceOnPlantAndMachinery: Option[BigDecimal]
 )
 
 object RetrieveUkPropertyAllowances {

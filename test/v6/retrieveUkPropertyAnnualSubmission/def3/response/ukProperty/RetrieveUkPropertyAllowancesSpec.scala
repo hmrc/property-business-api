@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v6.retrieveUkPropertyAnnualSubmission.def2.response.ukProperty
+package v6.retrieveUkPropertyAnnualSubmission.def3.response.ukProperty
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsValue, Json}
-import v6.retrieveUkPropertyAnnualSubmission.def2.model.response.*
+import v6.retrieveUkPropertyAnnualSubmission.def3.model.response.*
 
 class RetrieveUkPropertyAllowancesSpec extends UnitSpec {
 
@@ -58,7 +58,8 @@ class RetrieveUkPropertyAllowancesSpec extends UnitSpec {
       |         }
       |      }
       |   ],
-      |   "zeroEmissionsCarAllowance":454.34
+      |   "zeroEmissionsCarAllowance":454.34,
+      |   "firstYearAllowanceOnPlantAndMachinery": 500.99
       |}
       |""".stripMargin)
 
@@ -102,7 +103,8 @@ class RetrieveUkPropertyAllowancesSpec extends UnitSpec {
           )
         )
       )),
-    zeroEmissionsCarAllowance = Some(454.34)
+    zeroEmissionsCarAllowance = Some(454.34),
+    firstYearAllowanceOnPlantAndMachinery = Some(500.99)
   )
 
   val mtdJson: JsValue = Json.parse("""
@@ -140,7 +142,8 @@ class RetrieveUkPropertyAllowancesSpec extends UnitSpec {
       |         }
       |      }
       |   ],
-      |   "zeroEmissionsCarAllowance":454.34
+      |   "zeroEmissionsCarAllowance":454.34,
+      |   "firstYearAllowanceOnPlantAndMachinery": 500.99
       |}   
       |""".stripMargin)
 

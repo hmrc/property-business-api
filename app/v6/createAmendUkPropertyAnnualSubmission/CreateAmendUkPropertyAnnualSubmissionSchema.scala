@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ object CreateAmendUkPropertyAnnualSubmissionSchema {
 
   case object Def1 extends CreateAmendUkPropertyAnnualSubmissionSchema
   case object Def2 extends CreateAmendUkPropertyAnnualSubmissionSchema
+  case object Def3 extends CreateAmendUkPropertyAnnualSubmissionSchema
 
   private val preTysSchema = Def1
 
@@ -41,7 +42,8 @@ object CreateAmendUkPropertyAnnualSubmissionSchema {
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] = {
     if (taxYear < TaxYear.starting(2025)) Valid(Def1)
-    else Valid(Def2)
+    else if (taxYear > TaxYear.starting(2024) && taxYear < TaxYear.starting(2026)) Valid(Def2)
+    else Valid(Def3)
   }
 
 }

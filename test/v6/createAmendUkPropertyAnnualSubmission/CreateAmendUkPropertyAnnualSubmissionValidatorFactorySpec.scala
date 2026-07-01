@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import config.MockPropertyBusinessConfig
 import play.api.libs.json.*
 import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
+import v6.createAmendUkPropertyAnnualSubmission.def3.Def3_CreateAmendUkPropertyAnnualSubmissionValidator
 
 class CreateAmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
@@ -40,6 +41,12 @@ class CreateAmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec
     "given a request corresponding to a Def2 schema" should {
       "return a Def2 validator" in new SetupConfig {
         validatorFor("2025-26") shouldBe a[Def2_CreateAmendUkPropertyAnnualSubmissionValidator]
+      }
+    }
+
+    "given a request corresponding to a Def3 schema" should {
+      "return a Def3 validator" in new SetupConfig {
+        validatorFor("2026-27") shouldBe a[Def3_CreateAmendUkPropertyAnnualSubmissionValidator]
       }
     }
 

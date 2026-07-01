@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
-import v6.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema.{Def1, Def2}
+import v6.createAmendUkPropertyAnnualSubmission.CreateAmendUkPropertyAnnualSubmissionSchema.{Def1, Def2, Def3}
 import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
+import v6.createAmendUkPropertyAnnualSubmission.def3.Def3_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -36,6 +37,7 @@ class CreateAmendUkPropertyAnnualSubmissionValidatorFactory @Inject() (implicit 
     schema match {
       case Valid(Def1)     => new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Valid(Def2)     => new Def2_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
+      case Valid(Def3)     => new Def3_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }

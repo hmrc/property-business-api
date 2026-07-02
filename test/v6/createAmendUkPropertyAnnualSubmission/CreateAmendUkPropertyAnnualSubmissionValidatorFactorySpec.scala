@@ -16,43 +16,62 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import api.controllers.validators.AlwaysErrorsValidator
+import api.controllers.validators.{AlwaysErrorsValidator, Validator}
 import api.utils.UnitSpec
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.*
 import v6.createAmendUkPropertyAnnualSubmission.def1.Def1_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def2.Def2_CreateAmendUkPropertyAnnualSubmissionValidator
 import v6.createAmendUkPropertyAnnualSubmission.def3.Def3_CreateAmendUkPropertyAnnualSubmissionValidator
+import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 class CreateAmendUkPropertyAnnualSubmissionValidatorFactorySpec extends UnitSpec with MockPropertyBusinessConfig {
 
-  private def validatorFor(taxYear: String) = {
-    val validatorFactory = new CreateAmendUkPropertyAnnualSubmissionValidatorFactory
-    validatorFactory.validator(nino = "ignoredNino", businessId = "ignored", taxYear = taxYear, body = JsObject.empty)
-  }
+  private val validNino        = "AA123456B"
+  private val validBusinessId  = "XAIS12345678901"
+  private val validTaxYear     = "2022-23"
+  private val validTysTaxYear  = "2023-24"
+  private val validDef2TaxYear = "2025-26"
+  private val validDef3TaxYear = "2026-27"
+  private val validBody        = JsObject.empty
 
-  "CreateAmendUkPropertyAnnualSubmissionValidatorFactory" when {
-    "given a request corresponding to a Def1 schema" should {
-      "return a Def1 validator" in new SetupConfig {
-        validatorFor("2024-25") shouldBe a[Def1_CreateAmendUkPropertyAnnualSubmissionValidator]
+  private val validatorFactory = new CreateAmendUkPropertyAnnualSubmissionValidatorFactory
+
+  "validator" when {
+    "given a valid taxYear" should {
+      "return the validator for schema definition 1" in new SetupConfig {
+        val result: Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validTysTaxYear, validBody)
+
+        result shouldBe a[Def1_CreateAmendUkPropertyAnnualSubmissionValidator]
       }
-    }
 
-    "given a request corresponding to a Def2 schema" should {
-      "return a Def2 validator" in new SetupConfig {
-        validatorFor("2025-26") shouldBe a[Def2_CreateAmendUkPropertyAnnualSubmissionValidator]
+      "return the validator for schema definition 2" in new SetupConfig {
+        val result: Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validDef2TaxYear, validBody)
+
+        result shouldBe a[Def2_CreateAmendUkPropertyAnnualSubmissionValidator]
       }
-    }
 
-    "given a request corresponding to a Def3 schema" should {
-      "return a Def3 validator" in new SetupConfig {
-        validatorFor("2026-27") shouldBe a[Def3_CreateAmendUkPropertyAnnualSubmissionValidator]
+      "return the validator for schema definition 3" in new SetupConfig {
+        val result: Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validDef3TaxYear, validBody)
+
+        result shouldBe a[Def3_CreateAmendUkPropertyAnnualSubmissionValidator]
       }
-    }
 
-    "given a request where no valid schema could be determined" should {
-      "return a validator returning the errors" in new SetupConfig {
-        validatorFor("BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
+      "return def1 when passed the minimum supported taxYear" in new SetupConfig {
+        val result: Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, validTaxYear, validBody)
+
+        result shouldBe a[Def1_CreateAmendUkPropertyAnnualSubmissionValidator]
+      }
+
+      "return an error when given an invalid taxYear" in new SetupConfig {
+        val result: Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] =
+          validatorFactory.validator(validNino, validBusinessId, "2021-22", validBody)
+
+        result shouldBe an[AlwaysErrorsValidator]
       }
     }
   }

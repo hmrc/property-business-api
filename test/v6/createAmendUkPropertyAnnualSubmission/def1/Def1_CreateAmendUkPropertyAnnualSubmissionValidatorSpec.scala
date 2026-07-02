@@ -30,13 +30,14 @@ import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 }
+import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
-  private implicit val correlationId: String = "1234"
 
-  private val validNino       = "AA123456A"
-  private val validBusinessId = "XAIS12345678901"
-  private val validTaxYear    = "2023-24"
+  private implicit val correlationId: String = "1234"
+  private val validNino                      = "AA123456A"
+  private val validBusinessId                = "XAIS12345678901"
+  private val validTaxYear                   = "2023-24"
 
   private val validBodyMinimal = Json.parse("""
       |{
@@ -198,21 +199,21 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
       "passed a valid request with a minimal request body" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBodyMinimal).validateAndWrapResult()
 
         result shouldBe Right(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimal))
       }
 
       "passed a valid request where only a ukFhlProperty is supplied" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBodyFhlOnly).validateAndWrapResult()
 
         result shouldBe Right(
@@ -220,7 +221,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
 
       "passed a valid request where only a ukProperty is supplied" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBodyUkPropertyOnly).validateAndWrapResult()
 
         result shouldBe Right(
@@ -234,42 +235,23 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       }
     }
 
-    "return a single error" when {
+    "return a single validation error" when {
       "passed an invalid nino" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in new SetupConfig {
-        val result =
-          validator(validNino, "202324", validBusinessId, validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-
-      "passed a taxYear spanning an invalid tax year range" in new SetupConfig {
-        val result =
-          validator(validNino, "2020-22", validBusinessId, validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-
-      "passed a taxYear immediately before the minimum supported" in new SetupConfig {
-        validator(validNino, "2020-21", validBusinessId, validBody).validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
-      }
-
       "passed an incorrectly formatted businessId" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, "invalid business id", validBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, BusinessIdFormatError))
       }
 
       "passed an empty body" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, Json.parse("""{}""")).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError))
@@ -280,7 +262,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           s"for $path" in new SetupConfig {
             val invalidBody: JsValue = validBody.removeProperty(path).replaceWithEmptyObject(path)
 
-            val result =
+            val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
               validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
             result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath(path)))
@@ -304,7 +286,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             |    }
             |}""".stripMargin)
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty")))
@@ -319,7 +301,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             |}
             |""".stripMargin)
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -333,7 +315,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       "passed a body with a ukFhlPropertyAdjustments containing an empty rentARoom object" in new SetupConfig {
         val invalidBody: JsValue = validBody.removeProperty("/ukFhlProperty/adjustments/rentARoom/jointlyLet")
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty/adjustments/rentARoom/jointlyLet")))
@@ -342,7 +324,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       "passed a body with ukProperty adjustments missing a required field object" in new SetupConfig {
         val invalidBody: JsValue = validBody.removeProperty("/ukProperty/adjustments/nonResidentLandlord")
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukProperty/adjustments/nonResidentLandlord")))
@@ -351,7 +333,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       "passed a body with ukProperty adjustments with an empty rentARoom object" in new SetupConfig {
         val invalidBody: JsValue = validBody.replaceWithEmptyObject("/ukProperty/adjustments/rentARoom/jointlyLet")
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukProperty/adjustments/rentARoom/jointlyLet")))
@@ -366,7 +348,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           )
         validBody.update("/ukProperty/allowances/structuredBuildingAllowance/0/firstYear/qualifyingDate", JsString("2020.10.01"))
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -381,7 +363,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
               enhancedStructuredBuildingAllowanceEntry.update("/firstYear/qualifyingDate", JsString("2020.10.01")))
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -397,7 +379,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             ukPropertyJson(structuredBuildingAllowanceEntry)(enhancedStructuredBuildingAllowanceEntry.update("/building/name", JsString("*")))
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -411,7 +393,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             ukPropertyJson(structuredBuildingAllowanceEntry)(enhancedStructuredBuildingAllowanceEntry.update("/building/number", JsString("")))
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -425,7 +407,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             ukPropertyJson(structuredBuildingAllowanceEntry)(enhancedStructuredBuildingAllowanceEntry.update("/building/postcode", JsString("*")))
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -435,7 +417,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
       "passed a body with invalid numeric fields" should {
 
         def testValueFormatError(path: String): Unit = s"for $path" in new SetupConfig {
-          val result =
+          val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
             validator(validNino, validTaxYear, validBusinessId, validBody.update(path, JsNumber(123.456))).validateAndWrapResult()
 
           result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPath(path)))
@@ -474,7 +456,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             )(enhancedStructuredBuildingAllowanceEntry)
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -497,7 +479,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
                 .update("/firstYear/qualifyingAmountExpenditure", JsNumber(453.3424)))
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -516,7 +498,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             .removeProperty("/ukFhlProperty/allowances")
             .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.455))
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -532,7 +514,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             .removeProperty("/ukProperty/allowances")
             .update("/ukProperty/allowances/propertyIncomeAllowance", JsNumber(345.676))
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -548,7 +530,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             .removeProperty("/ukFhlProperty/allowances")
             .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(1000.01))
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -564,7 +546,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             .removeProperty("/ukProperty/allowances")
             .update("/ukProperty/allowances/propertyIncomeAllowance", JsNumber(1000.01))
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -580,7 +562,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
             .removeProperty("/ukFhlProperty/adjustments/privateUseAdjustment")
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/ukFhlProperty/allowances")))
@@ -592,7 +574,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             .update("/ukProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
             .removeProperty("/ukProperty/adjustments/privateUseAdjustment")
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/ukProperty/allowances")))
@@ -609,7 +591,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             )(enhancedStructuredBuildingAllowanceEntry)
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -627,7 +609,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             )
           )
 
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
 
         result shouldBe Left(
@@ -637,14 +619,14 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
 
     "return multiple errors" when {
       "the request has multiple issues (path parameters)" in new SetupConfig {
-        val result =
+        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator("invalid", "invalid", "invalid", validBody).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError))
           )
         )
       }

@@ -58,7 +58,8 @@ class Def3_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesVali
       (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
       (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
       (allowances.flatMap(_.costOfReplacingDomesticItems), "/ukProperty/allowances/costOfReplacingDomesticItems"),
-      (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance")
+      (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance"),
+      (allowances.flatMap(_.firstYearAllowanceOnPlantAndMachinery), "/ukProperty/allowances/firstYearAllowanceOnPlantAndMachinery")
     )
 
     val validatedPropertyIncomeAllowance =

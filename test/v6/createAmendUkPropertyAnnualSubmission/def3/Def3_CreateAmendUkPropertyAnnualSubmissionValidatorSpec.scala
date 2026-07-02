@@ -149,20 +149,6 @@ class Def3_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         result shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
-      "passed an incorrectly formatted taxYear" in new SetupConfig {
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, "202324", validBusinessId, validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, TaxYearFormatError))
-      }
-
-      "passed a taxYear spanning an invalid tax year range" in new SetupConfig {
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, "2020-22", validBusinessId, validBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError))
-      }
-
       "passed an incorrectly formatted businessId" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, "invalid business id", validBody).validateAndWrapResult()
@@ -304,6 +290,7 @@ class Def3_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           "/ukProperty/allowances/otherCapitalAllowance",
           "/ukProperty/allowances/costOfReplacingDomesticItems",
           "/ukProperty/allowances/zeroEmissionsCarAllowance",
+          "/ukProperty/allowances/firstYearAllowanceOnPlantAndMachinery",
           "/ukProperty/adjustments/balancingCharge",
           "/ukProperty/adjustments/privateUseAdjustment",
           "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
@@ -447,7 +434,7 @@ class Def3_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(BusinessIdFormatError, NinoFormatError, TaxYearFormatError))
+            Some(List(BusinessIdFormatError, NinoFormatError))
           )
         )
       }

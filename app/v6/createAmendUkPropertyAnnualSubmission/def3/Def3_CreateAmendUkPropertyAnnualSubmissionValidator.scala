@@ -18,9 +18,10 @@ package v6.createAmendUkPropertyAnnualSubmission.def3
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple4Semigroupal
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
 import v6.createAmendUkPropertyAnnualSubmission.def3.model.request.{
   Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody,
@@ -41,8 +42,12 @@ class Def3_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: Strin
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      ResolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def3_CreateAmendUkPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN((validNino, validBusinessId, validBody) =>
+      Def3_CreateAmendUkPropertyAnnualSubmissionRequestData(
+        validNino,
+        validBusinessId,
+        TaxYear.fromMtd(taxYear),
+        validBody)) andThen rulesValidator.validateBusinessRules
 
 }

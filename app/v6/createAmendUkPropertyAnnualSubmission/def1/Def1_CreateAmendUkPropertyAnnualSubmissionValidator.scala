@@ -21,8 +21,7 @@ import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple4Semigroupal
-import config.PropertyBusinessConfig
+import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.{
   Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
@@ -33,11 +32,8 @@ import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPrope
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)(implicit
-    config: PropertyBusinessConfig)
+class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] {
-
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody]()
   private val rulesValidator = new Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator()
@@ -46,8 +42,12 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: Strin
     (
       ResolveNino(nino),
       ResolveBusinessId(businessId),
-      resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN((validNino, validBusinessId, validBody) =>
+      Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(
+        validNino,
+        validBusinessId,
+        TaxYear.fromMtd(taxYear),
+        validBody)) andThen rulesValidator.validateBusinessRules
 
 }

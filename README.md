@@ -12,7 +12,7 @@ The Property Business API allows software packages to create, retrieve, amend an
 - Scala 3.5.x
 - Java 21
 - sbt 1.10.x
-- [Service Manager 2](https://github.com/hmrc/sm2)
+- [Service Manager V2](https://github.com/hmrc/sm2)
 
 ## Development Setup
 
@@ -23,7 +23,6 @@ Start the service manager profile:
 ```bash
 sm2 -start MTDFB_PROPERTY_BUSINESS
 ```
-
 
 ## Run Tests
 

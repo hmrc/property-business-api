@@ -1,0 +1,143 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v6.createAmendUkPropertyAnnualSubmission.def3
+
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
+import api.models.errors.*
+import cats.data.Validated
+import cats.data.Validated.Invalid
+import cats.implicits.toTraverseOps
+import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
+import v6.createAmendUkPropertyAnnualSubmission.def3.model.request.{
+  Allowances,
+  Def3_CreateAmendUkPropertyAnnualSubmissionRequestData,
+  StructuredBuildingAllowance,
+  UkProperty
+}
+
+class Def3_CreateAmendUkPropertyAnnualSubmissionRulesValidator extends RulesValidator[Def3_CreateAmendUkPropertyAnnualSubmissionRequestData] {
+
+  private val resolveParsedNumber            = ResolveParsedNumber()
+  private val resolvePropertyIncomeAllowance = ResolveParsedNumber(max = 1000.00)
+  private val stringRegex                    = "^[0-9a-zA-ZÀ-˿’\\- _&`():.'^]{1,90}$".r
+
+  def validateBusinessRules(parsed: Def3_CreateAmendUkPropertyAnnualSubmissionRequestData)
+      : Validated[Seq[MtdError], Def3_CreateAmendUkPropertyAnnualSubmissionRequestData] = {
+    import parsed.body.*
+    combine(
+      validateUkProperty(ukProperty)
+    ).onSuccess(parsed)
+  }
+
+  private def validateUkProperty(ukProperty: UkProperty): Validated[Seq[MtdError], Unit] = {
+    import ukProperty.*
+
+    val fieldsWithPaths = List(
+      (adjustments.flatMap(_.balancingCharge), "/ukProperty/adjustments/balancingCharge"),
+      (adjustments.flatMap(_.privateUseAdjustment), "/ukProperty/adjustments/privateUseAdjustment"),
+      (
+        adjustments.flatMap(_.businessPremisesRenovationAllowanceBalancingCharges),
+        "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
+      ),
+      (allowances.flatMap(_.annualInvestmentAllowance), "/ukProperty/allowances/annualInvestmentAllowance"),
+      (allowances.flatMap(_.businessPremisesRenovationAllowance), "/ukProperty/allowances/businessPremisesRenovationAllowance"),
+      (allowances.flatMap(_.otherCapitalAllowance), "/ukProperty/allowances/otherCapitalAllowance"),
+      (allowances.flatMap(_.costOfReplacingDomesticItems), "/ukProperty/allowances/costOfReplacingDomesticItems"),
+      (allowances.flatMap(_.zeroEmissionsCarAllowance), "/ukProperty/allowances/zeroEmissionsCarAllowance"),
+      (allowances.flatMap(_.firstYearAllowanceOnPlantAndMachinery), "/ukProperty/allowances/firstYearAllowanceOnPlantAndMachinery")
+    )
+
+    val validatedPropertyIncomeAllowance =
+      resolvePropertyIncomeAllowance(allowances.flatMap(_.propertyIncomeAllowance), "/ukProperty/allowances/propertyIncomeAllowance")
+
+    val validatedNumberFields = fieldsWithPaths.map {
+      case (None, _)            => valid
+      case (Some(number), path) => resolveParsedNumber(number, path)
+    } :+ validatedPropertyIncomeAllowance
+
+    val validatedAllowances =
+      allowances.map(validateUkPropertyAllowances).getOrElse(valid)
+
+    val validatedStructuredBuildingAllowance = allowances
+      .flatMap(_.structuredBuildingAllowance)
+      .map(_.zipWithIndex.toList.map { case (entry, index) =>
+        validateBuildingAllowance(entry, index, enhanced = false)
+      })
+      .toList
+      .flatten
+
+    val validatedEnhancedStructuredBuildingAllowance = allowances
+      .flatMap(_.enhancedStructuredBuildingAllowance)
+      .map(_.zipWithIndex.toList.map { case (entry, index) =>
+        validateBuildingAllowance(entry, index, enhanced = true)
+      })
+      .toList
+      .flatten
+
+    (validatedNumberFields ++ validatedStructuredBuildingAllowance ++ validatedEnhancedStructuredBuildingAllowance :+ validatedAllowances).sequence
+      .andThen(_ => valid)
+  }
+
+  private def validateUkPropertyAllowances(allowances: Allowances): Validated[Seq[MtdError], Unit] = {
+    allowances.propertyIncomeAllowance match {
+      case None => valid
+      case Some(_) =>
+        allowances match {
+          case Allowances(None, None, None, None, None, None, None, Some(_), None, None) => valid
+          case _ => Invalid(List(RuleBothAllowancesSuppliedError.withPath("/ukProperty/allowances")))
+        }
+    }
+  }
+
+  private def validateBuildingAllowance(buildingAllowance: StructuredBuildingAllowance,
+                                        index: Int,
+                                        enhanced: Boolean): Validated[Seq[MtdError], Unit] = {
+    import buildingAllowance.*
+
+    val buildingType = if (enhanced) "enhancedStructuredBuildingAllowance" else "structuredBuildingAllowance"
+
+    val validatedNumberFields = List(
+      (firstYear.map(_.qualifyingAmountExpenditure), s"/ukProperty/allowances/$buildingType/$index/firstYear/qualifyingAmountExpenditure")
+    ).map {
+      case (None, _)            => valid
+      case (Some(number), path) => resolveParsedNumber(number, path)
+    } :+ resolveParsedNumber(amount, s"/ukProperty/allowances/$buildingType/$index/amount")
+
+    val validatedDateField = ResolveIsoDate(
+      firstYear.map(_.qualifyingDate),
+      DateFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/firstYear/qualifyingDate"))
+
+    val validatedBuildingField = (building.name, building.number) match {
+      case (None, None) =>
+        Invalid(List(RuleBuildingNameNumberError.withPath(s"/ukProperty/allowances/$buildingType/$index/building")))
+      case _ => valid
+    }
+
+    val validatedStringFields = List(
+      ResolveStringPattern(building.name, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/name")),
+      ResolveStringPattern(building.number, stringRegex, StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/number")),
+      ResolveStringPattern(
+        building.postcode,
+        stringRegex,
+        StringFormatError.withPath(s"/ukProperty/allowances/$buildingType/$index/building/postcode"))
+    )
+
+    (validatedNumberFields ++ validatedStringFields :+ validatedDateField :+ validatedBuildingField).sequence.andThen(_ => valid)
+  }
+
+}

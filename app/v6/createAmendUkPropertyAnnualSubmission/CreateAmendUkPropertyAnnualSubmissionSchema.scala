@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYear
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
+import config.PropertyBusinessConfig
 
 import scala.math.Ordered.orderingToOrdered
 
@@ -30,18 +31,16 @@ object CreateAmendUkPropertyAnnualSubmissionSchema {
 
   case object Def1 extends CreateAmendUkPropertyAnnualSubmissionSchema
   case object Def2 extends CreateAmendUkPropertyAnnualSubmissionSchema
+  case object Def3 extends CreateAmendUkPropertyAnnualSubmissionSchema
 
-  private val preTysSchema = Def1
-
-  def schemaFor(maybeTaxYear: Option[String]): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] =
-    maybeTaxYear match {
-      case Some(taxYearString) => ResolveTaxYear(taxYearString) andThen schemaFor
-      case None                => Valid(preTysSchema)
-    }
+  def schemaFor(taxYearString: String)(implicit
+      config: PropertyBusinessConfig): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] =
+    ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] = {
     if (taxYear < TaxYear.starting(2025)) Valid(Def1)
-    else Valid(Def2)
+    else if (taxYear == TaxYear.starting(2025)) Valid(Def2)
+    else Valid(Def3)
   }
 
 }

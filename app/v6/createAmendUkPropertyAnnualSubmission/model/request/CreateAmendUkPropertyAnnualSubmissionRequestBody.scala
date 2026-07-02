@@ -20,6 +20,7 @@ import api.utils.JsonWritesUtil
 import play.api.libs.json.OWrites
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody
 import v6.createAmendUkPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody
+import v6.createAmendUkPropertyAnnualSubmission.def3.model.request.Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody
 
 trait CreateAmendUkPropertyAnnualSubmissionRequestBody
 
@@ -30,6 +31,8 @@ object CreateAmendUkPropertyAnnualSubmissionRequestBody extends JsonWritesUtil {
       implicitly[OWrites[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody]].writes(def1)
     case def2: Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody =>
       implicitly[OWrites[Def2_CreateAmendUkPropertyAnnualSubmissionRequestBody]].writes(def2)
+    case def3: Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody =>
+      implicitly[OWrites[Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody]].writes(def3)
   }
 
 }

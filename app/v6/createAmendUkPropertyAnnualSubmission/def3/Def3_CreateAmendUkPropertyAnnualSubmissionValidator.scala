@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendUkPropertyAnnualSubmission.def1
+package v6.createAmendUkPropertyAnnualSubmission.def3
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
@@ -23,20 +23,20 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import play.api.libs.json.JsValue
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.{
-  Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
+import v6.createAmendUkPropertyAnnualSubmission.def3.model.request.{
+  Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody,
+  Def3_CreateAmendUkPropertyAnnualSubmissionRequestData
 }
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
+class Def3_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: String, businessId: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendUkPropertyAnnualSubmissionRequestData] {
 
-  private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody]()
-  private val rulesValidator = new Def1_CreateAmendUkPropertyAnnualSubmissionRulesValidator()
+  private val resolveJson    = new ResolveNonEmptyJsonObject[Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody]()
+  private val rulesValidator = new Def3_CreateAmendUkPropertyAnnualSubmissionRulesValidator()
 
   def validate: Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionRequestData] =
     (
@@ -44,7 +44,7 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: Strin
       ResolveBusinessId(businessId),
       resolveJson(body)
     ).mapN((validNino, validBusinessId, validBody) =>
-      Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(
+      Def3_CreateAmendUkPropertyAnnualSubmissionRequestData(
         validNino,
         validBusinessId,
         TaxYear.fromMtd(taxYear),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v6.createAmendUkPropertyAnnualSubmission.def1
+package v6.createAmendUkPropertyAnnualSubmission.def3
 
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
@@ -23,219 +23,125 @@ import api.utils.UnitSpec
 import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.*
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.*
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.*
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukPropertyRentARoom.CreateAmendUkPropertyAdjustmentsRentARoom
-import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.{
-  Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody,
-  Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
-}
+import v6.createAmendUkPropertyAnnualSubmission.def3.model.request.*
 import v6.createAmendUkPropertyAnnualSubmission.model.request.CreateAmendUkPropertyAnnualSubmissionRequestData
 
-class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
-
+class Def3_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec with MockPropertyBusinessConfig with JsonErrorValidators {
   private implicit val correlationId: String = "1234"
-  private val validNino                      = "AA123456A"
-  private val validBusinessId                = "XAIS12345678901"
-  private val validTaxYear                   = "2023-24"
 
-  private val validBodyMinimal = Json.parse("""
-      |{
-      |  "ukFhlProperty": {
-      |    "adjustments": {
-      |      "periodOfGraceAdjustment": true,
-      |      "nonResidentLandlord": true
-      |    }
-      |  }
-      |}
-      |""".stripMargin)
-
-  private val ukFhlPropertyJson = Json.parse("""
-      |{
-      | "allowances": {
-      |   "annualInvestmentAllowance": 123.45,
-      |   "businessPremisesRenovationAllowance": 345.56,
-      |   "otherCapitalAllowance": 345.34,
-      |   "electricChargePointAllowance": 453.34,
-      |   "zeroEmissionsCarAllowance": 123.12
-      |  },
-      |  "adjustments": {
-      |   "privateUseAdjustment": 454.45,
-      |   "balancingCharge": 231.45,
-      |   "periodOfGraceAdjustment": true,
-      |   "businessPremisesRenovationAllowanceBalancingCharges": 567.67,
-      |   "nonResidentLandlord": true,
-      |   "rentARoom": {
-      |     "jointlyLet": true
-      |   }
-      | }
-      |}
-      |""".stripMargin)
+  private val validNino       = "AA123456A"
+  private val validBusinessId = "XAIS12345678901"
+  private val validTaxYear    = "2026-27"
 
   private val structuredBuildingAllowanceEntry = Json.parse("""
-      |{
-      |    "amount": 234.34,
-      |    "firstYear": {
-      |      "qualifyingDate": "2020-03-29",
-      |      "qualifyingAmountExpenditure": 3434.45
-      |    },
-      |    "building": {
-      |      "name": "Plaza",
-      |      "number": "1",
-      |      "postcode": "TF3 4EH"
-      |    }
-      |}
-      |""".stripMargin)
+    |{
+    |    "amount": 3000.30,
+    |    "firstYear": {
+    |      "qualifyingDate": "2020-01-01",
+    |      "qualifyingAmountExpenditure": 3000.40
+    |    },
+    |    "building": {
+    |      "name": "house name",
+    |      "postcode": "GF4 9JH"
+    |    }
+    |}
+    |""".stripMargin)
 
   private val enhancedStructuredBuildingAllowanceEntry = Json.parse("""
-      |{
-      | "amount": 234.45,
-      | "firstYear": {
-      |   "qualifyingDate": "2020-05-29",
-      |   "qualifyingAmountExpenditure": 453.34
-      | },
-      | "building": {
-      |   "name": "Plaza 2",
-      |   "number": "2",
-      |   "postcode": "TF3 4ER"
-      | }
-      |}
-      |""".stripMargin)
+    |{
+    | "amount": 3000.50,
+    | "firstYear": {
+    |   "qualifyingDate": "2020-01-01",
+    |   "qualifyingAmountExpenditure": 3000.60
+    | },
+    | "building": {
+    |   "number": "house number",
+    |   "postcode": "GF4 9JH"
+    | }
+    |}
+    |""".stripMargin)
 
   private def ukPropertyJson(structuredBuildingAllowanceEntries: JsValue*)(enhancedStructuredBuildingAllowance: JsValue*) = Json.parse(s"""
-       |{
-       |    "allowances": {
-       |      "annualInvestmentAllowance": 678.45,
-       |      "zeroEmissionsGoodsVehicleAllowance": 456.34,
-       |      "businessPremisesRenovationAllowance": 573.45,
-       |      "otherCapitalAllowance": 452.34,
-       |      "costOfReplacingDomesticItems": 567.34,
-       |      "electricChargePointAllowance": 454.34,
-       |      "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowanceEntries)},
-       |      "enhancedStructuredBuildingAllowance": ${JsArray(enhancedStructuredBuildingAllowance)},
-       |      "zeroEmissionsCarAllowance": 454.34
-       |    },
-       |    "adjustments": {
-       |      "balancingCharge": 565.34,
-       |      "privateUseAdjustment": 533.54,
-       |      "businessPremisesRenovationAllowanceBalancingCharges": 563.34,
-       |      "nonResidentLandlord": true,
-       |      "rentARoom": {
-       |        "jointlyLet": true
-       |      }
-       |    }
-       |}
-       |
-       |""".stripMargin)
+      |{
+      |    "allowances": {
+      |      "annualInvestmentAllowance": 2000.50,
+      |      "zeroEmissionsGoodsVehicleAllowance": 2000.60,
+      |      "businessPremisesRenovationAllowance": 2000.70,
+      |      "otherCapitalAllowance": 2000.80,
+      |      "costOfReplacingDomesticItems": 2000.90,
+      |      "zeroEmissionsCarAllowance": 3000.80,
+      |      "firstYearAllowanceOnPlantAndMachinery": 3000.90,
+      |      "structuredBuildingAllowance": ${JsArray(structuredBuildingAllowanceEntries)},
+      |      "enhancedStructuredBuildingAllowance": ${JsArray(enhancedStructuredBuildingAllowance)}
+      |    },
+      |    "adjustments": {
+      |      "balancingCharge": 2000.20,
+      |      "privateUseAdjustment": 2000.30,
+      |      "businessPremisesRenovationAllowanceBalancingCharges": 2000.40,
+      |      "nonResidentLandlord": true,
+      |      "rentARoom": {
+      |        "jointlyLet": true
+      |      }
+      |    }
+      |}
+      |
+      |""".stripMargin)
 
   private val validBody = Json.obj(
-    "ukFhlProperty" -> ukFhlPropertyJson,
-    "ukProperty"    -> ukPropertyJson(structuredBuildingAllowanceEntry)(enhancedStructuredBuildingAllowanceEntry)
+    "ukProperty" -> ukPropertyJson(structuredBuildingAllowanceEntry)(enhancedStructuredBuildingAllowanceEntry)
   )
-
-  private val validBodyFhlOnly = Json.obj("ukFhlProperty" -> ukFhlPropertyJson)
-
-  private val validBodyUkPropertyOnly =
-    Json.obj("ukProperty" -> ukPropertyJson(structuredBuildingAllowanceEntry)(enhancedStructuredBuildingAllowanceEntry))
 
   private val parsedNino       = Nino(validNino)
   private val parsedBusinessId = BusinessId(validBusinessId)
   private val parsedTaxYear    = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedUkFhlPropertyAdjustments = CreateAmendUkFhlPropertyAdjustments(
-    Some(454.45),
-    Some(231.45),
-    periodOfGraceAdjustment = true,
-    Some(567.67),
-    nonResidentLandlord = true,
-    Some(CreateAmendUkPropertyAdjustmentsRentARoom(true))
-  )
+  private val parsedUkPropertyAdjustments =
+    Adjustments(Some(2000.20), Some(2000.30), Some(2000.40), nonResidentLandlord = true, Some(RentARoom(true)))
 
-  private val parsedUkFhlPropertyAllowances: CreateAmendUkFhlPropertyAllowances =
-    CreateAmendUkFhlPropertyAllowances(Some(123.45), Some(345.56), Some(345.34), Some(453.34), Some(123.12), None)
-
-  private val parsedUkFhlProperty =
-    CreateAmendUkFhlProperty(
-      Some(parsedUkFhlPropertyAdjustments),
-      Some(parsedUkFhlPropertyAllowances)
+  private val parsedUkPropertyAllowances =
+    Allowances(
+      Some(2000.50),
+      Some(2000.60),
+      Some(2000.70),
+      Some(2000.80),
+      Some(2000.90),
+      Some(3000.80),
+      Some(3000.90),
+      None,
+      Some(List(StructuredBuildingAllowance(3000.30, Some(FirstYear("2020-01-01", 3000.40)), Building(Some("house name"), None, "GF4 9JH")))),
+      Some(List(StructuredBuildingAllowance(3000.50, Some(FirstYear("2020-01-01", 3000.60)), Building(None, Some("house number"), "GF4 9JH"))))
     )
 
-  private val parsedUkPropertyAdjustments =
-    CreateAmendUkPropertyAdjustments(
-      Some(565.34),
-      Some(533.54),
-      Some(563.34),
-      nonResidentLandlord = true,
-      Some(CreateAmendUkPropertyAdjustmentsRentARoom(true)))
+  private val parsedUkProperty = UkProperty(Some(parsedUkPropertyAdjustments), Some(parsedUkPropertyAllowances))
 
-  //@formatter:off
-  private val parsedUkPropertyAllowances = CreateAmendUkPropertyAllowances(
-    Some(678.45), Some(456.34), Some(573.45), Some(452.34),
-    Some(567.34), Some(454.34), Some(454.34), None,
-    Some(List(CreateAmendStructuredBuildingAllowance(234.34, Some(CreateAmendFirstYear("2020-03-29", 3434.45)), CreateAmendBuilding(Some("Plaza"), Some("1"), "TF3 4EH")))),
-    Some(List(CreateAmendStructuredBuildingAllowance(234.45, Some(CreateAmendFirstYear("2020-05-29", 453.34)), CreateAmendBuilding(Some("Plaza 2"), Some("2"), "TF3 4ER"))))
-  )
-  //@formatter:on
+  private val parsedBody = Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody(parsedUkProperty)
 
-  private val parsedUkProperty = CreateAmendUkProperty(Some(parsedUkPropertyAdjustments), Some(parsedUkPropertyAllowances))
-
-  private val parsedUkFhlPropertyMinimal =
-    CreateAmendUkFhlProperty(
-      Some(CreateAmendUkFhlPropertyAdjustments(None, None, periodOfGraceAdjustment = true, None, nonResidentLandlord = true, None)),
-      None)
-
-  private val parsedBody = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(Some(parsedUkFhlProperty), Some(parsedUkProperty))
-
-  private val parsedBodyMinimal = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(Some(parsedUkFhlPropertyMinimal), None)
-
-  val submissionRequestBody: Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody = Def1_CreateAmendUkPropertyAnnualSubmissionRequestBody(
-    ukFhlProperty = Some(parsedUkFhlProperty),
-    ukProperty = Some(parsedUkProperty)
+  val submissionRequestBody: Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody = Def3_CreateAmendUkPropertyAnnualSubmissionRequestBody(
+    ukProperty = parsedUkProperty
   )
 
-  private def validator(nino: String, taxYear: String, businessId: String, body: JsValue) =
-    new Def1_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
+  private def validator(nino: String, taxYear: String, businessId: String, body: JsValue): Def3_CreateAmendUkPropertyAnnualSubmissionValidator = {
+    new Def3_CreateAmendUkPropertyAnnualSubmissionValidator(nino, businessId, taxYear, body)
+  }
 
   "validator" should {
     "return the parsed domain object" when {
       "passed a valid request" in new SetupConfig {
+
         val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, validTaxYear, validBusinessId, validBody).validateAndWrapResult()
 
-        result shouldBe Right(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
-      }
-
-      "passed a valid request with a minimal request body" in new SetupConfig {
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, validBodyMinimal).validateAndWrapResult()
-
-        result shouldBe Right(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBodyMinimal))
-      }
-
-      "passed a valid request where only a ukFhlProperty is supplied" in new SetupConfig {
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, validBodyFhlOnly).validateAndWrapResult()
-
-        result shouldBe Right(
-          Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody.copy(ukProperty = None)))
-      }
-
-      "passed a valid request where only a ukProperty is supplied" in new SetupConfig {
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, validBodyUkPropertyOnly).validateAndWrapResult()
-
-        result shouldBe Right(
-          Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody.copy(ukFhlProperty = None)))
+        result shouldBe Right(Def3_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, parsedTaxYear, parsedBody))
       }
 
       "passed the minimum supported taxYear" in new SetupConfig {
         val taxYearString = "2022-23"
         validator(validNino, taxYearString, validBusinessId, validBody).validateAndWrapResult() shouldBe
-          Right(Def1_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
+          Right(Def3_CreateAmendUkPropertyAnnualSubmissionRequestData(parsedNino, parsedBusinessId, TaxYear.fromMtd(taxYearString), parsedBody))
       }
     }
 
-    "return a single validation error" when {
+    "return a single error" when {
       "passed an invalid nino" in new SetupConfig {
         val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
           validator("invalid nino", validTaxYear, validBusinessId, validBody).validateAndWrapResult()
@@ -269,56 +175,11 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           }
 
         List(
-          "/ukFhlProperty",
-          "/ukFhlProperty/allowances",
           "/ukProperty",
           "/ukProperty/allowances",
           "/ukProperty/allowances/structuredBuildingAllowance",
           "/ukProperty/allowances/enhancedStructuredBuildingAllowance"
         ).foreach(p => testEmpty(p))
-      }
-
-      "passed a body with an empty object except for an additional (non-schema) property" in new SetupConfig {
-        val invalidBody: JsValue = Json.parse("""
-            |{
-            |    "ukFhlProperty":{
-            |       "unknownField": 999.99
-            |    }
-            |}""".stripMargin)
-
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty")))
-      }
-
-      "passed a body with an empty ukFhlPropertyAdjustments object" in new SetupConfig {
-        val invalidBody: JsValue = Json.parse("""
-            |{
-            |  "ukFhlProperty": {
-            |      "adjustments": {}
-            |  }
-            |}
-            |""".stripMargin)
-
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            RuleIncorrectOrEmptyBodyError.withPaths(
-              List("/ukFhlProperty/adjustments/nonResidentLandlord", "/ukFhlProperty/adjustments/periodOfGraceAdjustment"))
-          ))
-      }
-
-      "passed a body with a ukFhlPropertyAdjustments containing an empty rentARoom object" in new SetupConfig {
-        val invalidBody: JsValue = validBody.removeProperty("/ukFhlProperty/adjustments/rentARoom/jointlyLet")
-
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.withPath("/ukFhlProperty/adjustments/rentARoom/jointlyLet")))
       }
 
       "passed a body with ukProperty adjustments missing a required field object" in new SetupConfig {
@@ -424,21 +285,12 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
         }
 
         List(
-          "/ukFhlProperty/allowances/annualInvestmentAllowance",
-          "/ukFhlProperty/allowances/businessPremisesRenovationAllowance",
-          "/ukFhlProperty/allowances/otherCapitalAllowance",
-          "/ukFhlProperty/allowances/electricChargePointAllowance",
-          "/ukFhlProperty/allowances/zeroEmissionsCarAllowance",
-          "/ukFhlProperty/adjustments/privateUseAdjustment",
-          "/ukFhlProperty/adjustments/balancingCharge",
-          "/ukFhlProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges",
           "/ukProperty/allowances/annualInvestmentAllowance",
-          "/ukProperty/allowances/zeroEmissionsGoodsVehicleAllowance",
           "/ukProperty/allowances/businessPremisesRenovationAllowance",
           "/ukProperty/allowances/otherCapitalAllowance",
           "/ukProperty/allowances/costOfReplacingDomesticItems",
-          "/ukProperty/allowances/electricChargePointAllowance",
           "/ukProperty/allowances/zeroEmissionsCarAllowance",
+          "/ukProperty/allowances/firstYearAllowanceOnPlantAndMachinery",
           "/ukProperty/adjustments/balancingCharge",
           "/ukProperty/adjustments/privateUseAdjustment",
           "/ukProperty/adjustments/businessPremisesRenovationAllowanceBalancingCharges"
@@ -451,8 +303,8 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             "/ukProperty",
             ukPropertyJson(
               structuredBuildingAllowanceEntry
-                .update("/amount", JsNumber(234.345342))
-                .update("/firstYear/qualifyingAmountExpenditure", JsNumber(3434.453423))
+                .update("/amount", JsNumber(3000.305342))
+                .update("/firstYear/qualifyingAmountExpenditure", JsNumber(3000.403423))
             )(enhancedStructuredBuildingAllowanceEntry)
           )
 
@@ -475,8 +327,8 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             "/ukProperty",
             ukPropertyJson(structuredBuildingAllowanceEntry)(
               enhancedStructuredBuildingAllowanceEntry
-                .update("/amount", JsNumber(234.4576))
-                .update("/firstYear/qualifyingAmountExpenditure", JsNumber(453.3424)))
+                .update("/amount", JsNumber(3000.5067))
+                .update("/firstYear/qualifyingAmountExpenditure", JsNumber(3000.6024)))
           )
 
         val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
@@ -489,22 +341,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
               "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/firstYear/qualifyingAmountExpenditure",
               "/ukProperty/allowances/enhancedStructuredBuildingAllowance/0/amount"
             ))
-          ))
-      }
-
-      "passed a body with an invalid ukFhlProperty propertyIncomeAllowance" in new SetupConfig {
-        val invalidBody: JsValue =
-          validBody
-            .removeProperty("/ukFhlProperty/allowances")
-            .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.455))
-
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            ValueFormatError.forPathAndRange("/ukFhlProperty/allowances/propertyIncomeAllowance", "0", "1000.0")
           ))
       }
 
@@ -524,22 +360,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
           ))
       }
 
-      "passed a body with ukFhlProperty propertyIncomeAllowance that is too big" in new SetupConfig {
-        val invalidBody: JsValue =
-          validBody
-            .removeProperty("/ukFhlProperty/allowances")
-            .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(1000.01))
-
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            ValueFormatError.forPathAndRange("/ukFhlProperty/allowances/propertyIncomeAllowance", "0", "1000.0")
-          ))
-      }
-
       "passed a body with ukProperty propertyIncomeAllowance that is too big" in new SetupConfig {
         val invalidBody: JsValue =
           validBody
@@ -554,18 +374,6 @@ class Def1_CreateAmendUkPropertyAnnualSubmissionValidatorSpec extends UnitSpec w
             correlationId,
             ValueFormatError.forPathAndRange("/ukProperty/allowances/propertyIncomeAllowance", "0", "1000.0")
           ))
-      }
-
-      "passed a body with both allowances and propertyIncomeAllowance supplied for fhl" in new SetupConfig {
-        val invalidBody: JsValue =
-          validBody
-            .update("/ukFhlProperty/allowances/propertyIncomeAllowance", JsNumber(123.45))
-            .removeProperty("/ukFhlProperty/adjustments/privateUseAdjustment")
-
-        val result: Either[ErrorWrapper, CreateAmendUkPropertyAnnualSubmissionRequestData] =
-          validator(validNino, validTaxYear, validBusinessId, invalidBody).validateAndWrapResult()
-
-        result shouldBe Left(ErrorWrapper(correlationId, RuleBothAllowancesSuppliedError.withPath("/ukFhlProperty/allowances")))
       }
 
       "passed a body with both allowances and propertyIncomeAllowance supplied for non-fhl" in new SetupConfig {

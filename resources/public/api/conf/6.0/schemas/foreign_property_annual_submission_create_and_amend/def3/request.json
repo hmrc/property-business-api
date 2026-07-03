@@ -24,7 +24,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5003.39"
+                "example": 5003.39
               },
               "balancingCharge": {
                 "type": "number",
@@ -32,7 +32,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5002.29"
+                "example": 5002.29
               }
             },
             "additionalProperties": false
@@ -47,7 +47,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5001.19"
+                "example": 5001.19
               },
               "costOfReplacingDomesticItems": {
                 "type": "number",
@@ -55,7 +55,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "409.99"
+                "example": 409.99
               },
               "otherCapitalAllowance": {
                 "type": "number",
@@ -63,7 +63,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "407.00"
+                "example": 407.00
               },
               "zeroEmissionsCarAllowance": {
                 "type": "number",
@@ -71,7 +71,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "4005.59"
+                "example": 4005.59
               },
               "propertyIncomeAllowance": {
                 "type": "number",
@@ -79,7 +79,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 1000.00,
-                "example": "100.25"
+                "example": 100.25
               },
               "structuredBuildingAllowance": {
                 "type": "array",
@@ -93,7 +93,7 @@
                       "multipleOf": 0.01,
                       "minimum": 0.00,
                       "maximum": 99999999999.99,
-                      "example": "4003.39"
+                      "example": 4003.39
                     },
                     "firstYear": {
                       "type": "object",
@@ -111,7 +111,7 @@
                           "multipleOf": 0.01,
                           "minimum": 0.00,
                           "maximum": 99999999999.99,
-                          "example": "3000.33"
+                          "example": 3000.33
                         }
                       },
                       "additionalProperties": false,

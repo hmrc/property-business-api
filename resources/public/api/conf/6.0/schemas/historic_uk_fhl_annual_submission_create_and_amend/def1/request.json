@@ -14,7 +14,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "privateUseAdjustment": {
           "type": "number",
@@ -22,7 +22,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "balancingCharge": {
           "type": "number",
@@ -30,12 +30,12 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "periodOfGraceAdjustment": {
           "type": "boolean",
           "description": "A boolean to identify a property which didn't qualify for FHL this year, but qualified the previous year. The value must be true or false",
-          "example": "false"
+          "example": false
         },
         "businessPremisesRenovationAllowanceBalancingCharges": {
           "type": "number",
@@ -43,12 +43,12 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "nonResidentLandlord": {
           "type": "boolean",
           "description": "A boolean to identify that the user is a Non-Resident Landlord. The value must be true or false.",
-          "example": "false"
+          "example": false
         },
         "rentARoom": {
           "type": "object",
@@ -57,7 +57,7 @@
             "jointlyLet": {
               "type": "boolean",
               "description": "A boolean to identify that the Rent A Room income (RAR) is shared with another individual. The value must be true or false.",
-              "example": "false"
+              "example": false
             }
           },
           "additionalProperties": false,
@@ -82,7 +82,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "businessPremisesRenovationAllowance": {
           "type": "number",
@@ -90,7 +90,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "otherCapitalAllowance": {
           "type": "number",
@@ -98,7 +98,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "propertyIncomeAllowance": {
           "type": "number",
@@ -106,7 +106,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "5000.99"
+          "example": 5000.99
         }
       },
       "additionalProperties": false

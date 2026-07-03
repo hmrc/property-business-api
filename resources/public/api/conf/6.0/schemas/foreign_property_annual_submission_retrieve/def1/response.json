@@ -23,7 +23,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "balancingCharge": {
               "type": "number",
@@ -31,12 +31,12 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "periodOfGraceAdjustment": {
               "type": "boolean",
               "description": "A boolean to identify a property which didn't qualify for FHL this year, but qualified the previous year. The value must be true or false.",
-              "example": "true"
+              "example": true
             }
           },
           "additionalProperties": false
@@ -51,7 +51,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "otherCapitalAllowance": {
               "type": "number",
@@ -59,7 +59,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "electricChargePointAllowance": {
               "type": "number",
@@ -67,7 +67,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "zeroEmissionsCarAllowance": {
               "type": "number",
@@ -75,7 +75,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "propertyIncomeAllowance": {
               "type": "number",
@@ -83,7 +83,7 @@
               "minimum": 0,
               "maximum": 1000.00,
               "multipleOf": 0.01,
-              "example": "100.25"
+              "example": 100.25
             }
           },
           "additionalProperties": false
@@ -113,7 +113,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "balancingCharge": {
                 "type": "number",
@@ -121,7 +121,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               }
             },
             "additionalProperties": false
@@ -136,7 +136,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "costOfReplacingDomesticItems": {
                 "type": "number",
@@ -144,7 +144,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "zeroEmissionsGoodsVehicleAllowance": {
                 "type": "number",
@@ -152,7 +152,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "otherCapitalAllowance": {
                 "type": "number",
@@ -160,7 +160,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "electricChargePointAllowance": {
                 "type": "number",
@@ -168,7 +168,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "zeroEmissionsCarAllowance": {
                 "type": "number",
@@ -176,7 +176,7 @@
                 "minimum": 0,
                 "maximum": 99999999999.99,
                 "multipleOf": 0.01,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "propertyIncomeAllowance": {
                 "type": "number",
@@ -184,7 +184,7 @@
                 "minimum": 0,
                 "maximum": 1000.00,
                 "multipleOf": 0.01,
-                "example": "100.25"
+                "example": 100.25
               },
               "structuredBuildingAllowance": {
                 "type": "array",
@@ -198,7 +198,7 @@
                       "minimum": 0,
                       "maximum": 99999999999.99,
                       "multipleOf": 0.01,
-                      "example": "5000.99"
+                      "example": 5000.99
                     },
                     "firstYear": {
                       "type": "object",
@@ -216,7 +216,7 @@
                           "minimum": 0,
                           "maximum": 99999999999.99,
                           "multipleOf": 0.01,
-                          "example": "5000.99"
+                          "example": 5000.99
                         }
                       },
                       "additionalProperties": false,

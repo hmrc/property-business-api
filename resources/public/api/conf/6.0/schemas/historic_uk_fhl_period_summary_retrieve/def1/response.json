@@ -24,7 +24,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "taxDeducted": {
           "type": "number",
@@ -32,7 +32,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "rentARoom": {
           "type": "object",
@@ -43,7 +43,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "additionalProperties": false
@@ -60,7 +60,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5167.53"
+          "example": 5167.53
         },
         "repairsAndMaintenance": {
           "type": "number",
@@ -68,7 +68,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "424.65"
+          "example": 424.65
         },
         "financialCosts": {
           "type": "number",
@@ -76,7 +76,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "853.56"
+          "example": 853.56
         },
         "professionalFees": {
           "type": "number",
@@ -84,7 +84,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "835.78"
+          "example": 835.78
         },
         "costOfServices": {
           "type": "number",
@@ -92,7 +92,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "978.34"
+          "example": 978.34
         },
         "other": {
           "type": "number",
@@ -100,7 +100,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "382.34"
+          "example": 382.34
         },
         "consolidatedExpenses": {
           "type": "number",
@@ -108,7 +108,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "travelCosts": {
           "type": "number",
@@ -116,7 +116,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "135.78"
+          "example": 135.78
         },
         "rentARoom": {
           "type": "object",
@@ -128,7 +128,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "945.9"
+              "example": 945.9
             }
           },
           "additionalProperties": false

@@ -36,7 +36,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "additionalProperties": false
@@ -51,7 +51,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "repairsAndMaintenance": {
               "type": "number",
@@ -59,7 +59,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "financialCosts": {
               "type": "number",
@@ -67,7 +67,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "professionalFees": {
               "type": "number",
@@ -75,7 +75,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "costOfServices": {
               "type": "number",
@@ -83,7 +83,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "travelCosts": {
               "type": "number",
@@ -91,7 +91,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "other": {
               "type": "number",
@@ -99,7 +99,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "rentARoom": {
               "type": "object",
@@ -111,7 +111,7 @@
                   "multipleOf": 0.01,
                   "minimum": 0.00,
                   "maximum": 99999999999.99,
-                  "example": "5000.99"
+                  "example": 5000.99
                 }
               },
               "additionalProperties": false
@@ -122,7 +122,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "additionalProperties": false
@@ -139,6 +139,7 @@
           "countryCode": {
             "type": "string",
             "description": "A three-letter code that represents a country name.\n\nThis must be an ISO 3166-1 Alpha-3 value.",
+            "pattern": "^[A-Z]{3}$",
             "example": "FRA"
           },
           "income": {
@@ -155,7 +156,7 @@
                     "multipleOf": 0.01,
                     "minimum": 0.00,
                     "maximum": 99999999999.99,
-                    "example": "5000.99"
+                    "example": 5000.99
                   }
                 },
                 "additionalProperties": false
@@ -163,7 +164,7 @@
               "foreignTaxCreditRelief": {
                 "type": "boolean",
                 "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed.",
-                "example": "5000.99"
+                "example": true
               },
               "premiumsOfLeaseGrant": {
                 "type": "number",
@@ -171,7 +172,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "otherPropertyIncome": {
                 "type": "number",
@@ -179,7 +180,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "foreignTaxPaidOrDeducted": {
                 "type": "number",
@@ -187,7 +188,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "specialWithholdingTaxOrUkTaxPaid": {
                 "type": "number",
@@ -195,7 +196,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               }
             },
             "required": [
@@ -213,7 +214,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "repairsAndMaintenance": {
                 "type": "number",
@@ -221,7 +222,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "financialCosts": {
                 "type": "number",
@@ -229,7 +230,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "professionalFees": {
                 "type": "number",
@@ -237,7 +238,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "costOfServices": {
                 "type": "number",
@@ -245,7 +246,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "travelCosts": {
                 "type": "number",
@@ -253,7 +254,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "residentialFinancialCost": {
                 "type": "number",
@@ -261,7 +262,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "broughtFwdResidentialFinancialCost": {
                 "type": "number",
@@ -269,7 +270,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "other": {
                 "type": "number",
@@ -277,7 +278,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "rentARoom": {
                 "type": "object",
@@ -289,7 +290,7 @@
                     "multipleOf": 0.01,
                     "minimum": 0.00,
                     "maximum": 99999999999.99,
-                    "example": "5000.99"
+                    "example": 5000.99
                   }
                 },
                 "additionalProperties": false
@@ -300,7 +301,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               }
             },
             "additionalProperties": false

@@ -17,7 +17,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "privateUseAdjustment": {
               "type": "number",
@@ -25,7 +25,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "businessPremisesRenovationAllowanceBalancingCharges": {
               "type": "number",
@@ -33,12 +33,12 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "nonResidentLandlord": {
               "type": "boolean",
               "description": "A boolean to identify that the user is a Non-Resident Landlord. The value must be true or false.",
-              "example": "false"
+              "example": false
             },
             "rentARoom": {
               "type": "object",
@@ -47,7 +47,7 @@
                 "jointlyLet": {
                   "type": "boolean",
                   "description": "A boolean to identify that the Rent A Room income (RAR) is shared with another individual. The value must be true or false.",
-                  "example": "false"
+                  "example": false
                 }
               },
               "additionalProperties": false,
@@ -71,7 +71,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "businessPremisesRenovationAllowance": {
               "type": "number",
@@ -79,7 +79,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "otherCapitalAllowance": {
               "type": "number",
@@ -87,7 +87,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "costOfReplacingDomesticItems": {
               "type": "number",
@@ -95,7 +95,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "zeroEmissionsCarAllowance": {
               "type": "number",
@@ -103,7 +103,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "propertyIncomeAllowance": {
               "type": "number",
@@ -111,7 +111,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 1000.00,
-              "example": "100.25"
+              "example": 100.25
             },
             "structuredBuildingAllowance": {
               "type": "array",
@@ -125,7 +125,7 @@
                     "multipleOf": 0.01,
                     "minimum": 0.00,
                     "maximum": 99999999999.99,
-                    "example": "5000.99"
+                    "example": 5000.99
                   },
                   "firstYear": {
                     "type": "object",
@@ -143,7 +143,7 @@
                         "multipleOf": 0.01,
                         "minimum": 0.00,
                         "maximum": 99999999999.99,
-                        "example": "5000.99"
+                        "example": 5000.99
                       }
                     },
                     "additionalProperties": false,
@@ -201,7 +201,7 @@
                     "multipleOf": 0.01,
                     "minimum": 0.00,
                     "maximum": 99999999999.99,
-                    "example": "5000.99"
+                    "example": 5000.99
                   },
                   "firstYear": {
                     "type": "object",
@@ -219,7 +219,7 @@
                         "multipleOf": 0.01,
                         "minimum": 0.00,
                         "maximum": 99999999999.99,
-                        "example": "5000.99"
+                        "example": 5000.99
                       }
                     },
                     "additionalProperties": false,

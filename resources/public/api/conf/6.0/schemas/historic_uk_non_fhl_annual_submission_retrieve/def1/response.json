@@ -14,7 +14,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "2000.99"
+          "example": 2000.99
         },
         "privateUseAdjustment": {
           "type": "number",
@@ -22,7 +22,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "1000.45"
+          "example": 1000.45
         },
         "balancingCharge": {
           "type": "number",
@@ -30,7 +30,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "1000.45"
+          "example": 1000.45
         },
         "businessPremisesRenovationAllowanceBalancingCharges": {
           "type": "number",
@@ -38,12 +38,12 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "nonResidentLandlord": {
           "type": "boolean",
           "description": "A boolean to identify that the user is a Non-Resident Landlord.",
-          "example": "false"
+          "example": false
         },
         "rentARoom": {
           "type": "object",
@@ -52,7 +52,7 @@
             "jointlyLet": {
               "type": "boolean",
               "description": "A boolean to identify that the Rent A Room income (RAR) is shared with another individual.",
-              "example": "false"
+              "example": false
             }
           },
           "required": [
@@ -74,7 +74,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "zeroEmissionGoodsVehicleAllowance": {
           "type": "number",
@@ -82,7 +82,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "businessPremisesRenovationAllowance": {
           "type": "number",
@@ -90,7 +90,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "otherCapitalAllowance": {
           "type": "number",
@@ -98,7 +98,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "costOfReplacingDomesticGoods": {
           "type": "number",
@@ -106,7 +106,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "propertyIncomeAllowance": {
           "type": "number",
@@ -114,7 +114,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "100.25"
+          "example": 100.25
         }
       }
     }

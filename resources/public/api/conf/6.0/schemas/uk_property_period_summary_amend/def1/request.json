@@ -19,7 +19,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "taxDeducted": {
               "description": "The tax deducted from the income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -27,7 +27,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "rentARoom": {
               "description": "Object holding the rents received for rooms.",
@@ -39,7 +39,7 @@
                   "multipleOf": 0.01,
                   "minimum": 0.00,
                   "maximum": 99999999999.99,
-                  "example": "5000.99"
+                  "example": 5000.99
                 }
               },
               "additionalProperties": false
@@ -57,7 +57,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "repairsAndMaintenance": {
               "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -65,7 +65,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "financialCosts": {
               "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -73,7 +73,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "professionalFees": {
               "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -81,7 +81,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "costOfServices": {
               "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -89,7 +89,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "travelCosts": {
               "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -97,7 +97,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "other": {
               "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -105,7 +105,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "rentARoom": {
               "description": "Object holding the amount claimed for the period.",
@@ -117,7 +117,7 @@
                   "multipleOf": 0.01,
                   "minimum": 0.00,
                   "maximum": 99999999999.99,
-                  "example": "5000.99"
+                  "example": 5000.99
                 }
               },
               "additionalProperties": false
@@ -128,7 +128,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "additionalProperties": false
@@ -149,7 +149,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "reversePremiums": {
               "description": "Amount paid by a landlord or outgoing tenant to induce a new tenant to enter into a leasehold agreement. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -157,7 +157,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "periodAmount": {
               "description": "Total rents from property (but not ground rents, rent charges and rent-a-room rental income). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -165,7 +165,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "taxDeducted": {
               "description": "Tax already deducted from the rental income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -173,7 +173,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "otherIncome": {
               "description": "Total amount of rent and any income for services provided to tenants. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -181,7 +181,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "rentARoom": {
               "description": "Object holding the rents received for rooms.",
@@ -193,7 +193,7 @@
                   "multipleOf": 0.01,
                   "minimum": 0.00,
                   "maximum": 99999999999.99,
-                  "example": "5000.99"
+                  "example": 5000.99
                 }
               },
               "additionalProperties": false
@@ -211,7 +211,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "repairsAndMaintenance": {
               "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -219,7 +219,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "financialCosts": {
               "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -227,7 +227,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "professionalFees": {
               "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -235,7 +235,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "costOfServices": {
               "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -243,7 +243,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "other": {
               "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -251,7 +251,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "residentialFinancialCost": {
               "description": "The residential financial cost deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -259,7 +259,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "travelCosts": {
               "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -267,7 +267,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "residentialFinancialCostsCarriedForward": {
               "description": "Amount of residential financial costs carried forward. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -275,7 +275,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "rentARoom": {
               "description": "Object holding the rent claimed for rooms.",
@@ -287,7 +287,7 @@
                   "multipleOf": 0.01,
                   "minimum": 0.00,
                   "maximum": 99999999999.99,
-                  "example": "5000.99"
+                  "example": 5000.99
                 }
               },
               "additionalProperties": false
@@ -298,7 +298,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "additionalProperties": false

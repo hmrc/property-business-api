@@ -31,6 +31,7 @@
           "countryCode": {
             "description": "A three-letter code that represents a country name.\n\nThis must be an ISO 3166-1 Alpha-3 value.",
             "type": "string",
+            "pattern": "^[A-Z]{3}$",
             "example": "FRA"
           },
           "endDate": {

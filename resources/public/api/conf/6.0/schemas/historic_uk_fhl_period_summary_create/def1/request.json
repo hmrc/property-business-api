@@ -25,7 +25,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "taxDeducted": {
           "description": "Tax already deducted from the rental income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -33,7 +33,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "rentARoom": {
           "description": "Object holding rents received for the period",
@@ -45,7 +45,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             }
           }
         }
@@ -61,7 +61,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "repairsAndMaintenance": {
           "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -69,7 +69,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "financialCosts": {
           "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places",
@@ -77,7 +77,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "professionalFees": {
           "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -85,7 +85,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "costOfServices": {
           "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places",
@@ -93,7 +93,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "other": {
           "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -101,7 +101,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "consolidatedExpenses": {
           "description": "The sum of all allowable expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, other, travelCosts, rentARoom). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -109,7 +109,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "travelCosts": {
           "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -117,7 +117,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "rentARoom": {
           "description": "Object holding the amount claimed for the period",
@@ -129,7 +129,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             }
           }
         }

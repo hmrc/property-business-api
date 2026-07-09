@@ -18,7 +18,7 @@
               "multipleOf": 0.01,
               "minimum": 0.00,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "required": [
@@ -36,7 +36,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "repairsAndMaintenance": {
               "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -44,7 +44,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "financialCosts": {
               "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -52,7 +52,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "professionalFees": {
               "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -60,7 +60,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "costOfServices": {
               "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -68,7 +68,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "travelCosts": {
               "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -76,7 +76,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "other": {
               "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -84,7 +84,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             },
             "consolidatedExpenses": {
               "description": "The sum of all allowable expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -92,7 +92,7 @@
               "multipleOf": 0.01,
               "minimum": 0,
               "maximum": 99999999999.99,
-              "example": "5000.99"
+              "example": 5000.99
             }
           },
           "additionalProperties": false
@@ -109,6 +109,7 @@
           "countryCode": {
             "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
             "type": "string",
+            "pattern": "^[A-Z]{3}$",
             "example": "FRA"
           },
           "income": {
@@ -125,7 +126,7 @@
                     "multipleOf": 0.01,
                     "minimum": 0.00,
                     "maximum": 99999999999.99,
-                    "example": "5000.99"
+                    "example": 5000.99
                   }
                 },
                 "additionalProperties": false
@@ -133,7 +134,7 @@
               "foreignTaxCreditRelief": {
                 "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
                 "type": "boolean",
-                "example": "false"
+                "example": false
               },
               "premiumsOfLeaseGrant": {
                 "description": "Premiums received for the grant of a lease and other lump sums to possess a property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -141,7 +142,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "otherPropertyIncome": {
                 "description": "Other income from property, such as rent charges and ground rents, income from letting others tip waste on your land, and income for the use of a caravan or houseboat at a fixed location. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -149,7 +150,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "foreignTaxPaidOrDeducted": {
                 "description": "The total amount of foreign tax paid or deducted from your income. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -157,7 +158,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "specialWithholdingTaxOrUkTaxPaid": {
                 "description": "Tax withheld (in UK Pounds) on certain payments to UK residents or UK Tax paid from rental Income (applies to non-resident landlords only). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -165,7 +166,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               }
             },
             "required": [
@@ -183,7 +184,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "repairsAndMaintenance": {
                 "description": "Property repairs and maintenance. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -191,7 +192,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "financialCosts": {
                 "description": "Loan interest and other financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -199,7 +200,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "professionalFees": {
                 "description": "Legal, management and other professional fees. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -207,7 +208,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "travelCosts": {
                 "description": "Car, van and travel costs incurred in running a property business. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -215,7 +216,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "costOfServices": {
                 "description": "Cost of services provided, including wages. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -223,7 +224,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "residentialFinancialCost": {
                 "description": "The residential financial cost deductible from rental income (tax relief). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -231,7 +232,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "broughtFwdResidentialFinancialCost": {
                 "description": "Amount of relief brought forward for restricted residential financial costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -239,7 +240,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "other": {
                 "description": "Other allowable property expenses. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -247,7 +248,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "consolidatedExpenses": {
                 "description": "The sum of all allowable expenses for the specified period. You can either submit a consolidatedExpenses value or individual expenses (premisesRunningCosts, repairsAndMaintenance, financialCosts, professionalFees, costOfServices, travelCosts, other). The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -255,7 +256,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               }
             },
             "additionalProperties": false

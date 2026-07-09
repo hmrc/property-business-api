@@ -25,7 +25,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "premiumsOfLeaseGrant": {
           "type": "number",
@@ -33,7 +33,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "reversePremiums": {
           "type": "number",
@@ -41,7 +41,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "otherIncome": {
           "type": "number",
@@ -49,7 +49,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "taxDeducted": {
           "type": "number",
@@ -57,7 +57,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "rentARoom": {
           "type": "object",
@@ -69,7 +69,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             }
           }
         }
@@ -85,7 +85,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "repairsAndMaintenance": {
           "type": "number",
@@ -93,7 +93,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "financialCosts": {
           "type": "number",
@@ -101,7 +101,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "professionalFees": {
           "type": "number",
@@ -109,7 +109,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "costOfServices": {
           "type": "number",
@@ -117,7 +117,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "other": {
           "type": "number",
@@ -125,7 +125,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "consolidatedExpenses": {
           "type": "number",
@@ -133,7 +133,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "travelCosts": {
           "type": "number",
@@ -141,7 +141,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "residentialFinancialCostsCarriedForward": {
           "type": "number",
@@ -149,7 +149,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "5000.99"
+          "example": 5000.99
         },
         "residentialFinancialCost": {
           "type": "number",
@@ -157,7 +157,7 @@
           "minimum": 0,
           "maximum": 99999999999.99,
           "multipleOf": 0.01,
-          "example": "1000.45"
+          "example": 1000.45
         },
         "rentARoom": {
           "type": "object",
@@ -169,7 +169,7 @@
               "minimum": 0,
               "maximum": 99999999999.99,
               "multipleOf": 0.01,
-              "example": "5000.99"
+              "example": 5000.99
             }
           }
         }

@@ -25,6 +25,7 @@
           "countryCode": {
             "type": "string",
             "description": "A three-letter code that represents a country name. This must be an ISO 3166-1 Alpha-3 value.",
+            "pattern": "^[A-Z]{3}$",
             "example": "FRA"
           },
           "income": {
@@ -49,7 +50,7 @@
               "foreignTaxCreditRelief": {
                 "type": "boolean",
                 "description": "A boolean indicating whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.",
-                "example": "false"
+                "example": false
               },
               "premiumsOfLeaseGrant": {
                 "type": "number",

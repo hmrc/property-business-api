@@ -35,7 +35,7 @@
             "example": "FRA"
           },
           "endDate": {
-            "description": "The date on which income is no longer received from the property. A property with an end date will always have an associated end reason. Properties with an end date will no longer appear on the list of properties to report against for any subsequent tax year.\n\nMust conform to the format: `YYYY-MM-DD`",
+            "description": "The date on which income is no longer received from the property. A property with an end date will always have an associated end reason. Properties with an end date will no longer appear on the list of properties to report against for any subsequent tax year. For properties which have been added to the list in error, the endDate should be the date the property was added.\n\nMust conform to the format: `YYYY-MM-DD`",
             "format": "date",
             "type": "string",
             "example": "2026-08-24"

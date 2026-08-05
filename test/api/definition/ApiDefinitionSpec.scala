@@ -22,13 +22,13 @@ import play.api.libs.json.*
 
 class ApiDefinitionSpec extends UnitSpec {
 
-  private val apiVersion: APIVersion       = APIVersion(Version3, APIStatus.ALPHA, endpointsEnabled = true)
+  private val apiVersion: APIVersion       = APIVersion(Version3, APIStatus.ALPHA, APIAccessType.PUBLIC, endpointsEnabled = true)
   private val apiDefinition: APIDefinition = APIDefinition("b", "c", "d", List("category"), List(apiVersion), Some(false))
 
   "APIVersion" when {
     "created with valid parameters" should {
       "construct successfully with all fields" in {
-        val version = APIVersion(Version3, APIStatus.BETA, endpointsEnabled = false)
+        val version = APIVersion(Version3, APIStatus.BETA, APIAccessType.PUBLIC, endpointsEnabled = false)
         version.version shouldBe Version3
         version.status shouldBe APIStatus.BETA
         version.endpointsEnabled shouldBe false
@@ -37,17 +37,17 @@ class ApiDefinitionSpec extends UnitSpec {
 
     "created with different status values" should {
       "handle ALPHA status" in {
-        val version = APIVersion(Version3, APIStatus.ALPHA, endpointsEnabled = true)
+        val version = APIVersion(Version3, APIStatus.ALPHA, APIAccessType.PUBLIC, endpointsEnabled = true)
         version.status shouldBe APIStatus.ALPHA
       }
 
       "handle STABLE status" in {
-        val version = APIVersion(Version3, APIStatus.STABLE, endpointsEnabled = true)
+        val version = APIVersion(Version3, APIStatus.STABLE, APIAccessType.PUBLIC, endpointsEnabled = true)
         version.status shouldBe APIStatus.STABLE
       }
 
       "handle DEPRECATED status" in {
-        val version = APIVersion(Version3, APIStatus.DEPRECATED, endpointsEnabled = false)
+        val version = APIVersion(Version3, APIStatus.DEPRECATED, APIAccessType.PUBLIC, endpointsEnabled = false)
         version.status shouldBe APIStatus.DEPRECATED
       }
     }
@@ -62,7 +62,7 @@ class ApiDefinitionSpec extends UnitSpec {
 
     "deserialized from JSON" should {
       "reconstruct object correctly" in {
-        val json    = Json.parse("""{"version":"3.0","status":"BETA","endpointsEnabled":false}""")
+        val json    = Json.parse("""{"version":"3.0","status":"BETA", "access": "PUBLIC", "endpointsEnabled":false}""")
         val version = json.as[APIVersion]
         version.status shouldBe APIStatus.BETA
         version.endpointsEnabled shouldBe false
@@ -71,7 +71,7 @@ class ApiDefinitionSpec extends UnitSpec {
 
     "round-tripped through JSON" should {
       "maintain equality" in {
-        val original     = APIVersion(Version4, APIStatus.STABLE, endpointsEnabled = true)
+        val original     = APIVersion(Version4, APIStatus.STABLE, APIAccessType.PUBLIC, endpointsEnabled = true)
         val json         = Json.toJson(original)
         val deserialized = json.as[APIVersion]
         deserialized shouldBe original
@@ -142,8 +142,8 @@ class ApiDefinitionSpec extends UnitSpec {
 
     "versions contain duplicate version numbers" should {
       "throw an 'IllegalArgumentException'" in {
-        val versionA = APIVersion(Version3, APIStatus.ALPHA, endpointsEnabled = true)
-        val versionB = APIVersion(Version3, APIStatus.BETA, endpointsEnabled = false)
+        val versionA = APIVersion(Version3, APIStatus.ALPHA, APIAccessType.PUBLIC, endpointsEnabled = true)
+        val versionB = APIVersion(Version3, APIStatus.BETA, APIAccessType.PUBLIC, endpointsEnabled = false)
         assertThrows[IllegalArgumentException](
           apiDefinition.copy(versions = List(versionA, versionB))
         )
@@ -152,8 +152,8 @@ class ApiDefinitionSpec extends UnitSpec {
 
     "with multiple unique versions" should {
       "construct successfully" in {
-        val versionV3  = APIVersion(Version3, APIStatus.ALPHA, endpointsEnabled = true)
-        val versionV4  = APIVersion(Version4, APIStatus.STABLE, endpointsEnabled = true)
+        val versionV3  = APIVersion(Version3, APIStatus.ALPHA, APIAccessType.PUBLIC, endpointsEnabled = true)
+        val versionV4  = APIVersion(Version4, APIStatus.STABLE, APIAccessType.PUBLIC, endpointsEnabled = true)
         val definition = APIDefinition("Multi-version API", "Supports multiple versions", "/multi", List("API"), List(versionV3, versionV4), None)
         definition.versions should have length 2
         definition.versions should contain(versionV3)
@@ -209,7 +209,7 @@ class ApiDefinitionSpec extends UnitSpec {
             "description": "A test description",
             "context": "/test",
             "categories": ["CATEGORY1", "CATEGORY2"],
-            "versions": [{"version":"3.0","status":"ALPHA","endpointsEnabled":true}],
+            "versions": [{"version":"3.0", "status":"ALPHA", "access": "PUBLIC", "endpointsEnabled":true}],
             "requiresTrust": false
           }
         """)
@@ -269,7 +269,7 @@ class ApiDefinitionSpec extends UnitSpec {
               "description": "API Description",
               "context": "/context",
               "categories": ["CAT"],
-              "versions": [{"version":"3.0","status":"ALPHA","endpointsEnabled":true}],
+              "versions": [{"version":"3.0","status":"ALPHA", "access": "PUBLIC", "endpointsEnabled":true}],
               "requiresTrust": null
             }
           }
@@ -292,8 +292,8 @@ class ApiDefinitionSpec extends UnitSpec {
 
     "with complex nested APIDefinition" should {
       "maintain structure through serialization" in {
-        val versionV3  = APIVersion(Version3, APIStatus.ALPHA, endpointsEnabled = true)
-        val versionV4  = APIVersion(Version4, APIStatus.STABLE, endpointsEnabled = false)
+        val versionV3  = APIVersion(Version3, APIStatus.ALPHA, APIAccessType.PUBLIC, endpointsEnabled = true)
+        val versionV4  = APIVersion(Version4, APIStatus.STABLE, APIAccessType.PUBLIC, endpointsEnabled = false)
         val complexDef = APIDefinition("Complex", "Complex API", "/complex", List("CAT1", "CAT2"), List(versionV3, versionV4), Some(true))
         val definition = Definition(complexDef)
 
@@ -311,7 +311,7 @@ class ApiDefinitionSpec extends UnitSpec {
     "APIVersion format" should {
       "be accessible and work correctly" in {
         val format   = summon[OFormat[APIVersion]]
-        val version  = APIVersion(Version3, APIStatus.BETA, endpointsEnabled = false)
+        val version  = APIVersion(Version3, APIStatus.BETA, APIAccessType.PUBLIC, endpointsEnabled = false)
         val json     = format.writes(version)
         val readBack = format.reads(json)
         readBack shouldBe JsSuccess(version)

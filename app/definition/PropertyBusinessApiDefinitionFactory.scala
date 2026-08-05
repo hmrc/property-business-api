@@ -18,6 +18,7 @@ package definition
 
 import api.config.AppConfig
 import api.definition.*
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.routing.*
 
 import javax.inject.{Inject, Singleton}
@@ -25,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PropertyBusinessApiDefinitionFactory @Inject() (protected val appConfig: AppConfig) extends ApiDefinitionFactory {
 
-  val definition: Definition =
+  lazy val definition: Definition =
     Definition(
       api = APIDefinition(
         name = "Property Business (MTD)",
@@ -36,6 +37,7 @@ class PropertyBusinessApiDefinitionFactory @Inject() (protected val appConfig: A
           APIVersion(
             version = Version6,
             status = buildAPIStatus(Version6),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version6)
           )
         ),

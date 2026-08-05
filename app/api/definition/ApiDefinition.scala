@@ -31,7 +31,15 @@ object APIStatus {
 
 }
 
-case class APIVersion(version: Version, status: APIStatus, endpointsEnabled: Boolean)
+enum APIAccessType {
+  case CONTROLLED, PUBLIC
+}
+
+object APIAccessType {
+  given Format[APIAccessType] = Enums.format(values)
+}
+
+case class APIVersion(version: Version, status: APIStatus, access: APIAccessType, endpointsEnabled: Boolean)
 
 object APIVersion {
   given OFormat[APIVersion] = Json.format[APIVersion]

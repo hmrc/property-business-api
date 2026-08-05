@@ -19,6 +19,7 @@ package definition
 import api.config.Deprecation.NotDeprecated
 import api.config.MockAppConfig
 import api.definition.*
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.definition.APIStatus.BETA
 import api.routing.*
 import api.utils.UnitSpec
@@ -26,35 +27,39 @@ import cats.implicits.catsSyntaxValidatedId
 
 class PropertyBusinessApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
 
-  "definition" when {
-    "called" should {
-      "return a valid Definition case class" in {
-        List(Version6).foreach { version =>
-          MockedAppConfig.apiGatewayContext.returns("individuals/business/property").anyNumberOfTimes()
-          MockedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
-          MockedAppConfig.apiStatus(version) returns "BETA"
-          MockedAppConfig.endpointsEnabled(version) returns true
-        }
+  "calling definition" when {
+    List((PUBLIC, false), (CONTROLLED, true)).foreach { (accessType, controlledAccessEnabled) =>
+      s"the controlled access flag is set to $controlledAccessEnabled" should {
+        s"return a valid Definition case class with the access type set to $accessType" in {
+          List(Version6).foreach { version =>
+            MockedAppConfig.apiGatewayContext.returns("individuals/business/property")
+            MockedAppConfig.deprecationFor(version).returns(NotDeprecated.valid)
+            MockedAppConfig.apiStatus(version).returns("BETA")
+            MockedAppConfig.endpointsEnabled(version).returns(true)
+            MockedAppConfig.controlledAccessEnabled.returns(controlledAccessEnabled)
+          }
 
-        val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockAppConfig)
+          val apiDefinitionFactory = new PropertyBusinessApiDefinitionFactory(mockAppConfig)
 
-        apiDefinitionFactory.definition shouldBe
-          Definition(
-            api = APIDefinition(
-              name = "Property Business (MTD)",
-              description = "An API for providing property business data",
-              context = "individuals/business/property",
-              categories = List("INCOME_TAX_MTD"),
-              versions = List(
-                APIVersion(
-                  version = Version6,
-                  status = BETA,
-                  endpointsEnabled = true
-                )
-              ),
-              requiresTrust = None
+          apiDefinitionFactory.definition shouldBe
+            Definition(
+              api = APIDefinition(
+                name = "Property Business (MTD)",
+                description = "An API for providing property business data",
+                context = "individuals/business/property",
+                categories = List("INCOME_TAX_MTD"),
+                versions = List(
+                  APIVersion(
+                    version = Version6,
+                    status = BETA,
+                    access = accessType,
+                    endpointsEnabled = true
+                  )
+                ),
+                requiresTrust = None
+              )
             )
-          )
+        }
       }
     }
   }

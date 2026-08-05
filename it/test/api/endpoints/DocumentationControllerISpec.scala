@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
 
       responseBody should include(""""api":{"name":""")
       responseBody should include(""""categories":["INCOME_TAX_MTD"]""")
+      responseBody should include(""""access":"PUBLIC"""")
 
       noException should be thrownBy Json.parse(responseBody)
     }

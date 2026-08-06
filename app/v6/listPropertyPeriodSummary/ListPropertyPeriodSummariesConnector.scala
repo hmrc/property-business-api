@@ -16,8 +16,8 @@
 
 package v6.listPropertyPeriodSummary
 
-import api.config.AppConfig
-import api.connectors.DownstreamUri.IfsUri
+import api.config.{AppConfig, ConfigFeatureSwitches}
+import api.connectors.DownstreamUri.{HipUri, IfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser.reads
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -42,10 +42,18 @@ class ListPropertyPeriodSummariesConnector @Inject() (val http: HttpClientV2, va
     import request.*
 
     val (downstreamUri, queryParams) = if (taxYear.useTaxYearSpecificApi) {
-      (
-        IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
-        Nil
-      )
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1954")) {
+        (
+          HipUri[ListPropertyPeriodSummariesResponse](
+            s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/periodic/$nino/$businessId/submissions"),
+          Nil
+        )
+      } else {
+        (
+          IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/${taxYear.asTysDownstream}/$nino/$businessId/period"),
+          Nil
+        )
+      }
     } else {
       (
         IfsUri[ListPropertyPeriodSummariesResponse](s"income-tax/business/property/$nino/$businessId/period"),

@@ -19,6 +19,7 @@ package v6.listPropertyPeriodSummary
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
 import uk.gov.hmrc.http.StringContextOps
 import v6.listPropertyPeriodSummary.def1.model.response.SubmissionPeriod
 import v6.listPropertyPeriodSummary.model.request.ListPropertyPeriodSummariesRequestData
@@ -48,17 +49,34 @@ class ListPropertyPeriodSummariesConnectorSpec extends ConnectorSpec {
       result shouldBe outcome
     }
 
-    "send a request and return a body for a tys tax year" in new IfsTest with Test {
-      def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
+    "send a request and return a body for a tys tax year" when {
+      "hip migration feature switch is disabled" in new IfsTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
 
-      val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
+        val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1954.enabled" -> false))
 
-      willGet(
-        url = url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/period"
-      ).returns(Future.successful(outcome))
+        willGet(
+          url = url"$baseUrl/income-tax/business/property/23-24/$nino/$businessId/period"
+        ).returns(Future.successful(outcome))
 
-      val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))
-      result shouldBe outcome
+        val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))
+        result shouldBe outcome
+      }
+
+      "hip migration feature switch is enabled" in new HipTest with Test {
+        def taxYear: TaxYear = TaxYear.fromMtd(tysTaxYear)
+
+        val outcome: Right[Nothing, ResponseWrapper[ListPropertyPeriodSummariesResponse]] = Right(ResponseWrapper(correlationId, response))
+
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1954.enabled" -> true))
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/23-24/business/property/periodic/$nino/$businessId/submissions"
+        ).returns(Future.successful(outcome))
+
+        val result: DownstreamOutcome[ListPropertyPeriodSummariesResponse] = await(connector.listPeriodSummaries(request))
+        result shouldBe outcome
+      }
     }
   }
 

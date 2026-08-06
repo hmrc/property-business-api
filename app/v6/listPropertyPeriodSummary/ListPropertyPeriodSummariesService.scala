@@ -52,9 +52,10 @@ class ListPropertyPeriodSummariesService @Inject() (connector: ListPropertyPerio
     )
 
     val extraTysErrors = Map(
-      "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
-      "NOT_FOUND"               -> NotFoundError,
-      "INVALID_CORRELATION_ID"  -> InternalError
+      "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
+      "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
+      "NOT_FOUND"                -> NotFoundError,
+      "INVALID_CORRELATION_ID"   -> InternalError
     )
 
     errors ++ extraTysErrors

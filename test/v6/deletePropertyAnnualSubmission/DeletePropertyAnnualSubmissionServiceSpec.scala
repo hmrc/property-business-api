@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ class DeletePropertyAnnualSubmissionServiceSpec extends ServiceSpec {
 
         val extraTysErrors = List(
           "INVALID_INCOMESOURCE_ID"  -> BusinessIdFormatError,
+          "INVALID_INCOME_SOURCE_ID" -> BusinessIdFormatError,
           "INVALID_CORRELATION_ID"   -> InternalError,
           "NOT_FOUND"                -> NotFoundError,
           "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,

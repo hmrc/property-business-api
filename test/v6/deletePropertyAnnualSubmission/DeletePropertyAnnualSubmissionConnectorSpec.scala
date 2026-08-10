@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
+import play.api.Configuration
 import uk.gov.hmrc.http.StringContextOps
 import v6.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 
@@ -30,46 +31,88 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
   private val nino       = Nino("AA123456A")
   private val businessId = BusinessId("XAIS12345678910")
 
-  private val preTysTaxYear = TaxYear.fromMtd("2021-22")
-  private val tysTaxYear    = TaxYear.fromMtd("2023-24")
+  private val preTysTaxYear  = TaxYear.fromMtd("2021-22")
+  private val tysTaxYear2324 = TaxYear.fromMtd("2023-24")
+  private val tysTaxYear2526 = TaxYear.fromMtd("2025-26")
 
-  "connector" when {
-    "the downstream response is a success" must {
+  "DeletePropertyAnnualSubmissionConnector" must {
+    "return a NO_CONTENT response" when {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
-      "return no content" in new IfsTest with Test {
+      "a nonTys deletion is made" in new IfsTest with Test {
         def taxYear: TaxYear = preTysTaxYear
         stubHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+
+        result shouldBe outcome
+      }
+
+      "a TYS 2023-24 tax year deletion is made" in new IfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear2324
+
+        stubIfsTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
         result shouldBe outcome
       }
 
-      "return no content given a TYS tax year request" in new IfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
-        stubTysHttpResponse(outcome)
+      "a TYS 2025-26 tax year deletion is made and hip migration feature switch is disabled" in new IfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear2526
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> false))
+        stubIfsTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a TYS 2025-26 tax year deletion is made and hip migration feature switch is enabled" in new HipTest with Test {
+        def taxYear: TaxYear = tysTaxYear2526
+
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> true))
+        stubHipTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
         result shouldBe outcome
       }
     }
 
-    "the downstream response is an error" must {
+    "return the downstream error response" when {
       val downstreamErrorResponse: DownstreamErrors =
         DownstreamErrors.single(DownstreamErrorCode("SOME_ERROR"))
       val outcome = Left(ResponseWrapper(correlationId, downstreamErrorResponse))
 
-      "return the error" in new IfsTest with Test {
+      "a nonTys deletion is made" in new IfsTest with Test {
         def taxYear: TaxYear = preTysTaxYear
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> false))
         stubHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
         result shouldBe outcome
       }
 
-      "return the error given a TYS tax year request" in new IfsTest with Test {
-        def taxYear: TaxYear = tysTaxYear
-        stubTysHttpResponse(outcome)
+      "a TYS 2023-24 tax year deletion is made" in new IfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear2324
+
+        stubIfsTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a TYS 2025-26 tax year deletion is made and hip migration feature switch is disabled" in new IfsTest with Test {
+        def taxYear: TaxYear = tysTaxYear2526
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> false))
+        stubIfsTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a TYS 2025-26 tax year deletion is made and hip migration feature switch is enabled" in new HipTest with Test {
+        def taxYear: TaxYear = tysTaxYear2526
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> true))
+        stubHipTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
         result shouldBe outcome
@@ -95,9 +138,14 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         url = url"$baseUrl/income-tax/business/property/annual?taxableEntityId=AA123456A&incomeSourceId=XAIS12345678910&taxYear=2021-22"
       ).returns(Future.successful(outcome))
 
-    protected def stubTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
+    protected def stubIfsTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
       willDelete(
         url = url"$baseUrl/income-tax/business/property/annual/${request.taxYear.asTysDownstream}/${request.nino}/${request.businessId}"
+      ).returns(Future.successful(outcome))
+
+    protected def stubHipTysHttpResponse(outcome: DownstreamOutcome[Unit]): Unit =
+      willDelete(
+        url = url"$baseUrl/itsa/income-tax/v1/${request.taxYear.asTysDownstream}/business/property/annual/${request.nino}/${request.businessId}"
       ).returns(Future.successful(outcome))
 
   }

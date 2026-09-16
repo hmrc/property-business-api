@@ -51,7 +51,6 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       "a TYS 2023-24 tax year deletion is made" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear2324
-        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> false))
         stubIfsTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -103,7 +102,6 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
 
       "a TYS 2023-24 tax year deletion is made" in new IfsTest with Test {
         def taxYear: TaxYear = tysTaxYear2324
-        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> false))
         stubIfsTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
@@ -114,6 +112,16 @@ class DeletePropertyAnnualSubmissionConnectorSpec extends ConnectorSpec {
         def taxYear: TaxYear = tysTaxYear2526
         MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> false))
         stubIfsTysHttpResponse(outcome)
+
+        val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
+        result shouldBe outcome
+      }
+
+      "a TYS 2024-25 tax year deletion is made and hip migration feature switch is enabled" in new HipTest with Test {
+        def taxYear: TaxYear = tysTaxYear2425
+
+        MockedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1863.enabled" -> true))
+        stubHipTysHttpResponse(outcome)
 
         val result: DownstreamOutcome[Unit] = await(connector.deletePropertyAnnualSubmission(request))
         result shouldBe outcome

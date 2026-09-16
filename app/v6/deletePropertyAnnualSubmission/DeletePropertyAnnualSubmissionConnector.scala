@@ -44,7 +44,7 @@ class DeletePropertyAnnualSubmissionConnector @Inject() (val http: HttpClientV2,
     )
 
     lazy val downstreamUri1596 = IfsUri[Unit](s"income-tax/business/property/annual")
-    lazy val downstreamUri1863 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1863")) {
+    lazy val downstreamUri1863 = if (taxYear.year >= 2025 && ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1863")) {
       HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/business/property/annual/$nino/$businessId")
     } else {
       IfsUri[Unit](s"income-tax/business/property/annual/${taxYear.asTysDownstream}/$nino/$businessId")

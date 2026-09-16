@@ -40,7 +40,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def1/request.json'
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def2/request.json'
           - $ref: './schemas/foreign_property_annual_submission_create_and_amend/def3/request.json'

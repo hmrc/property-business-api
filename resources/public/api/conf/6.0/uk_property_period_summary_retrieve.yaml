@@ -52,7 +52,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/uk_property_period_summary_retrieve/def1/response.json'
             - $ref: './schemas/uk_property_period_summary_retrieve/def2/response.json'
         examples:

@@ -50,7 +50,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def1/response.json'
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def2/response.json'
             - $ref: './schemas/foreign_property_annual_submission_retrieve/def3/response.json'

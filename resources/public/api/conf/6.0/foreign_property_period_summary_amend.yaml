@@ -41,7 +41,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: './schemas/foreign_property_period_summary_amend/def1/request.json'
           - $ref: './schemas/foreign_property_period_summary_amend/def2/request.json'
       examples:

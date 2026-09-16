@@ -45,7 +45,7 @@ post:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/foreign_property_period_summary_create/def1/request.json'
             - $ref: './schemas/foreign_property_period_summary_create/def2/request.json'
         examples:

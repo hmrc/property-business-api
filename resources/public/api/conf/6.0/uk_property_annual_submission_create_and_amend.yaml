@@ -39,7 +39,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: './schemas/uk_property_annual_submission_create_and_amend/def1/request.json'
           - $ref: './schemas/uk_property_annual_submission_create_and_amend/def2/request.json'
           {{#if (enabled 'r22_fya_docs')}}

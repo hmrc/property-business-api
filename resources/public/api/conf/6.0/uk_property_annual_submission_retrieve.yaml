@@ -47,7 +47,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/uk_property_annual_submission_retrieve/def1/response.json'
             - $ref: './schemas/uk_property_annual_submission_retrieve/def2/response.json'
             {{#if (enabled 'r22_fya_docs')}}

@@ -17,7 +17,7 @@
 package v6.createForeignPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMaximum}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveDetailedTaxYear, ResolveNino, ResolveNonEmptyJsonObject}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -29,7 +29,7 @@ import v6.createForeignPropertyPeriodSummary.model.request.*
 class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, maxTaxYear: TaxYear, body: JsValue)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMaximum(maxTaxYear)
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd("2000-01"), Some(maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateForeignPropertyPeriodSummaryRequestBody]()
 

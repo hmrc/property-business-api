@@ -38,7 +38,7 @@ object RetrieveUkPropertyCumulativeSummarySchema {
   }
 
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveUkPropertyCumulativeSummarySchema] =
-    ResolveTaxYear(taxYearString) andThen schemaFor
+    ResolveTaxYear(taxYearString).andThen(schemaFor)
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveUkPropertyCumulativeSummarySchema] = {
     if (taxYear < TaxYear.starting(2025)) Invalid(Seq(RuleTaxYearNotSupportedError))

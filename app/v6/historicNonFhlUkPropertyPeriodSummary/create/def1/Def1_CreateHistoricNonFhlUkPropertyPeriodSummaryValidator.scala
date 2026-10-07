@@ -45,7 +45,7 @@ class Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryValidator(nino: String, bo
     (
       ResolveNino(nino),
       resolveJson(body)
-    ).mapN(Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
+    ).mapN(Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply).andThen(validateBusinessRules)
 
   private def validateBusinessRules(parsed: Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], Def1_CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData] = {

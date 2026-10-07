@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -37,7 +37,7 @@ object CreateAmendForeignPropertyAnnualSubmissionSchema {
 
   def schemaFor(taxYearString: String)(implicit
       config: PropertyBusinessConfig): Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionSchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear)).apply(taxYearString).andThen(schemaFor)
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendForeignPropertyAnnualSubmissionSchema] = Valid {
     taxYear match {

@@ -40,7 +40,7 @@ class Def1_CreateAmendUkPropertyCumulativeSummaryValidator @Inject() (nino: Stri
       ResolveTaxYear(taxYear),
       ResolveBusinessId(businessId),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendUkPropertyCumulativeSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_CreateAmendUkPropertyCumulativeSummaryRequestData.apply).andThen(rulesValidator.validateBusinessRules)
 
   }
 

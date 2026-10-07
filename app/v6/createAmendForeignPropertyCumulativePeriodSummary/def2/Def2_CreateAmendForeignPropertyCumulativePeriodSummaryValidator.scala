@@ -42,10 +42,7 @@ class Def2_CreateAmendForeignPropertyCumulativePeriodSummaryValidator(nino: Stri
       ResolveBusinessId(businessId),
       resolveJson(body)
     ).mapN((validNino, validBusinessId, validBody) =>
-      Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(
-        validNino,
-        validBusinessId,
-        TaxYear.fromMtd(taxYear),
-        validBody)) andThen validateBusinessRules
+      Def2_CreateAmendForeignPropertyCumulativePeriodSummaryRequestData(validNino, validBusinessId, TaxYear.fromMtd(taxYear), validBody))
+      .andThen(validateBusinessRules)
 
 }

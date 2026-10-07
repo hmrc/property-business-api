@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyDetails
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -35,6 +35,6 @@ object RetrieveForeignPropertyDetailsSchema {
   }
 
   def schemaFor(taxYear: String): Validated[Seq[MtdError], RetrieveForeignPropertyDetailsSchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd("2026-27"))(taxYear).map(_ => Def1)
+    ResolveDetailedTaxYear(TaxYear.fromMtd("2026-27")).apply(taxYear).map(_ => Def1)
 
 }

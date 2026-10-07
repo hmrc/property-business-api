@@ -16,7 +16,7 @@
 
 package v6.updateForeignPropertyDetails
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -28,6 +28,6 @@ object UpdateForeignPropertyDetailsSchema {
   case object Def1 extends UpdateForeignPropertyDetailsSchema
 
   def schemaFor(taxYear: String): Validated[Seq[MtdError], UpdateForeignPropertyDetailsSchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd("2026-27"))(taxYear).map(_ => Def1)
+    ResolveDetailedTaxYear(TaxYear.fromMtd("2026-27")).apply(taxYear).map(_ => Def1)
 
 }

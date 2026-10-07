@@ -18,6 +18,7 @@ package v6.listPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -34,7 +35,7 @@ class Def1_ListPropertyPeriodSummariesValidator @Inject() (
 )(implicit config: PropertyBusinessConfig)
     extends Validator[ListPropertyPeriodSummariesRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), TaxYear.fromMtd("2024-25")))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear), Some(TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], ListPropertyPeriodSummariesRequestData] =
     (

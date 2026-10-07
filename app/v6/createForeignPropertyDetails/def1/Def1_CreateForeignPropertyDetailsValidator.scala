@@ -38,6 +38,7 @@ class Def1_CreateForeignPropertyDetailsValidator(nino: String, businessId: Strin
       ResolveTaxYear(taxYear),
       resolveJson(body)
     ).mapN((validNino, validBusinessId, validTaxYear, validBody) =>
-      Def1_CreateForeignPropertyDetailsRequestData(validNino, validBusinessId, validTaxYear, validBody)) andThen validateBusinessRules
+      Def1_CreateForeignPropertyDetailsRequestData(validNino, validBusinessId, validTaxYear, validBody))
+      .andThen(validateBusinessRules)
 
 }

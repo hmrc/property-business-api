@@ -17,7 +17,8 @@
 package v6.retrieveForeignPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -35,7 +36,7 @@ class Def1_RetrieveForeignPropertyPeriodSummaryValidator @Inject() (nino: String
                                                                     submissionId: String)(implicit config: PropertyBusinessConfig)
     extends Validator[RetrieveForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maximumTaxYear))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear), Some(maximumTaxYear))
 
   def validate: Validated[Seq[MtdError], RetrieveForeignPropertyPeriodSummaryRequestData] =
     (

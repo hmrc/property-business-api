@@ -17,7 +17,8 @@
 package v6.createUkPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveNonEmptyJsonObject}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -32,7 +33,7 @@ class Def1_CreateUkPropertyPeriodSummaryValidator @Inject() (nino: String, busin
     config: PropertyBusinessConfig)
     extends Validator[CreateUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.ukMinimumTaxYear), TaxYear.fromMtd("2023-24")))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.ukMinimumTaxYear), Some(TaxYear.fromMtd("2023-24")))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def1_CreateUkPropertyPeriodSummaryRulesValidator()

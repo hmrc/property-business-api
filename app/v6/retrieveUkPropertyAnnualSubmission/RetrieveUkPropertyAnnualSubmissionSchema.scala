@@ -16,7 +16,7 @@
 
 package v6.retrieveUkPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -53,7 +53,7 @@ object RetrieveUkPropertyAnnualSubmissionSchema {
   def schemaFor(maybeTaxYear: Option[String])(implicit
       config: PropertyBusinessConfig): Validated[Seq[MtdError], RetrieveUkPropertyAnnualSubmissionSchema] =
     maybeTaxYear match {
-      case Some(taxYearString) => ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))(taxYearString) andThen schemaFor
+      case Some(taxYearString) => ResolveDetailedTaxYear(TaxYear.fromMtd(config.ukMinimumTaxYear)).apply(taxYearString).andThen(schemaFor)
       case None                => Valid(Def1)
     }
 

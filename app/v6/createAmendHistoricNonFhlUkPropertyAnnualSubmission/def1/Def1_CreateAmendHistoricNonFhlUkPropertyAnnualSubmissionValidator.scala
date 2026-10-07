@@ -18,6 +18,7 @@ package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -35,9 +36,12 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject(
     config: PropertyBusinessConfig)
     extends Validator[CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax(
-    (TaxYear.fromMtd(config.historicMinimumTaxYear), TaxYear.fromMtd(config.historicMaximumTaxYear)),
-    RuleHistoricTaxYearNotSupportedError)
+  private val resolveTaxYear = ResolveDetailedTaxYear(
+    TaxYear.fromMtd(config.historicMinimumTaxYear),
+    Some(TaxYear.fromMtd(config.historicMaximumTaxYear)),
+    minError = RuleHistoricTaxYearNotSupportedError,
+    maxError = RuleHistoricTaxYearNotSupportedError
+  )
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody]()
 
@@ -51,7 +55,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject(
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData.apply) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData.apply).andThen(validateBusinessRules)
 
   private def validateBusinessRules(parsed: Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData] = {

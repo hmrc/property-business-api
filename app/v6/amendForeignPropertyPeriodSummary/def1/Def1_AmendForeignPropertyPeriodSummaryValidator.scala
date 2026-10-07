@@ -18,6 +18,7 @@ package v6.amendForeignPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
+import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -33,12 +34,11 @@ import javax.inject.Inject
 class Def1_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
                                                                  businessId: String,
                                                                  taxYear: String,
-                                                                 maxTaxYear: TaxYear,
                                                                  submissionId: String,
                                                                  body: JsValue)(implicit config: PropertyBusinessConfig)
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maxTaxYear))
+  private val resolveTaxYear = ResolveDetailedTaxYear((TaxYear.fromMtd(config.foreignMinimumTaxYear)))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendForeignPropertyPeriodSummaryRequestBody]()
 
@@ -49,6 +49,6 @@ class Def1_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
       resolveTaxYear(taxYear),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
-    ).mapN(Def1_AmendForeignPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
+    ).mapN(Def1_AmendForeignPropertyPeriodSummaryRequestData.apply).andThen(validateBusinessRules)
 
 }

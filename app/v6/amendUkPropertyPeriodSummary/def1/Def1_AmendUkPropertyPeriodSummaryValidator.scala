@@ -33,7 +33,7 @@ class Def1_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
     implicit config: PropertyBusinessConfig)
     extends Validator[AmendUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))
+  private val resolveTaxYear = ResolveDetailedTaxYear((TaxYear.fromMtd(config.ukMinimumTaxYear)))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def1_AmendUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def1_AmendUkPropertyPeriodSummaryRulesValidator()
@@ -45,6 +45,6 @@ class Def1_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
       ResolveBusinessId(businessId),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
-    ).mapN(Def1_AmendUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def1_AmendUkPropertyPeriodSummaryRequestData.apply).andThen(rulesValidator.validateBusinessRules)
 
 }

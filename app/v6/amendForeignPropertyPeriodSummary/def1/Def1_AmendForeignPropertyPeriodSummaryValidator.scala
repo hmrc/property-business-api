@@ -18,7 +18,6 @@ package v6.amendForeignPropertyPeriodSummary.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
-import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -40,7 +39,7 @@ class Def1_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
   private lazy val resolveTaxYear =
-    ResolveDetailedTaxYear(minimumTaxYear = (TaxYear.fromMtd(config.foreignMinimumTaxYear)), maximumTaxYear = Some(maxTaxYear))
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd(config.foreignMinimumTaxYear), maximumTaxYear = Some(maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_AmendForeignPropertyPeriodSummaryRequestBody]()
 

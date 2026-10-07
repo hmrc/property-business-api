@@ -29,7 +29,7 @@ import v6.createForeignPropertyPeriodSummary.model.request.*
 class Def2_CreateForeignPropertyPeriodSummaryValidator(nino: String, businessId: String, taxYear: String, maxTaxYear: TaxYear, body: JsValue)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd("2000-01"), Some(maxTaxYear))
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd("2024-25"), maximumTaxYear = Some(maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateForeignPropertyPeriodSummaryRequestBody]()
 

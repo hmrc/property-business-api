@@ -16,7 +16,7 @@
 
 package v6.createAmendForeignPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated

@@ -17,7 +17,7 @@
 package v6.retrieveHistoricFhlUkPropertyAnnualSubmission.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.ResolveTaxYear.ResolveDetailedTaxYear
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.controllers.validators.resolvers.ResolveNino
 import api.models.domain.TaxYear
 import api.models.errors.MtdError

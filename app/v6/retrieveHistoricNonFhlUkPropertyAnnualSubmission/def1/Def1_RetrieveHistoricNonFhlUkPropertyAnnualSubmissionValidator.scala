@@ -37,8 +37,8 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (
     extends Validator[RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] {
 
   private val resolveTaxYear = ResolveDetailedTaxYear(
-    TaxYear.fromMtd(config.historicMinimumTaxYear),
-    Some(TaxYear.fromMtd(config.historicMaximumTaxYear)),
+    minimumTaxYear = TaxYear.fromMtd(config.historicMinimumTaxYear),
+    maximumTaxYear = Some(TaxYear.fromMtd(config.historicMaximumTaxYear)),
     minError = RuleHistoricTaxYearNotSupportedError,
     maxError = RuleHistoricTaxYearNotSupportedError
   )

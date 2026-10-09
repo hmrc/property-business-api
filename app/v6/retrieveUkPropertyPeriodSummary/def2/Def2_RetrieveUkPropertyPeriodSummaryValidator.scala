@@ -17,7 +17,8 @@
 package v6.retrieveUkPropertyPeriodSummary.def2
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMinMax}
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -36,7 +37,7 @@ class Def2_RetrieveUkPropertyPeriodSummaryValidator @Inject() (
 )(implicit config: PropertyBusinessConfig)
     extends Validator[RetrieveUkPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.ukMinimumTaxYear), TaxYear.fromMtd("2024-25")))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.ukMinimumTaxYear), Some(TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], RetrieveUkPropertyPeriodSummaryRequestData] =
     (

@@ -37,7 +37,8 @@ class Def2_AmendForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
                                                                  body: JsValue)(implicit config: PropertyBusinessConfig)
     extends Validator[AmendForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maxTaxYear))
+  private val resolveTaxYear =
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromMtd(config.foreignMinimumTaxYear), maximumTaxYear = Some(maxTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendForeignPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_AmendForeignPropertyPeriodSummaryRulesValidator()

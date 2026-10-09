@@ -41,7 +41,7 @@ class Def2_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
       ResolveBusinessId(businessId),
       ResolveSubmissionId(submissionId),
       resolveJson(body)
-    ).mapN(Def2_AmendUkPropertyPeriodSummaryRequestData.apply) andThen rulesValidator.validateBusinessRules
+    ).mapN(Def2_AmendUkPropertyPeriodSummaryRequestData.apply).andThen(rulesValidator.validateBusinessRules)
 
     result.fold(Invalid(_), e => Valid(e.toSubmission))
   }
@@ -49,8 +49,8 @@ class Def2_AmendUkPropertyPeriodSummaryValidator @Inject() (nino: String, busine
 }
 
 object Def2_AmendUkPropertyPeriodSummaryValidator {
-  private val maxTaxYear     = TaxYear.fromMtd("2024-25")
-  private val resolveTaxYear = ResolveTaxYearMaximum(maxTaxYear)
+  private val minMaxTaxYear  = TaxYear.fromMtd("2024-25")
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = minMaxTaxYear, maximumTaxYear = Some(minMaxTaxYear))
 
   private val resolveJson    = new ResolveNonEmptyJsonObject[Def2_AmendUkPropertyPeriodSummaryRequestBody]()
   private val rulesValidator = new Def2_AmendUkPropertyPeriodSummaryRulesValidator()

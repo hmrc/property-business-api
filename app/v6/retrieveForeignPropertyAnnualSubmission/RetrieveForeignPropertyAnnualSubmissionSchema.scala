@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -52,7 +52,7 @@ object RetrieveForeignPropertyAnnualSubmissionSchema {
 
   def schemaFor(taxYearString: String)(implicit
       config: PropertyBusinessConfig): Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionSchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear)).apply(taxYearString).andThen(schemaFor)
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyAnnualSubmissionSchema] = Valid {
     taxYear match {

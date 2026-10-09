@@ -16,7 +16,7 @@
 
 package v6.retrieveForeignPropertyCumulativeSummary
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -44,7 +44,7 @@ object RetrieveForeignPropertyCumulativeSummarySchema {
   }
 
   def schemaFor(taxYearString: String): Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummarySchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd("2025-26"))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(TaxYear.fromMtd("2025-26")).apply(taxYearString).andThen(schemaFor)
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveForeignPropertyCumulativeSummarySchema] = {
     if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def2) else Valid(Def1)

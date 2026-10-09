@@ -34,7 +34,7 @@ class Def1_ListPropertyPeriodSummariesValidator @Inject() (
 )(implicit config: PropertyBusinessConfig)
     extends Validator[ListPropertyPeriodSummariesRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), TaxYear.fromMtd("2024-25")))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear), Some(TaxYear.fromMtd("2024-25")))
 
   def validate: Validated[Seq[MtdError], ListPropertyPeriodSummariesRequestData] =
     (

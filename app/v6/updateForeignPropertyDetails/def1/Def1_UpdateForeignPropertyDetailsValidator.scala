@@ -43,6 +43,7 @@ class Def1_UpdateForeignPropertyDetailsValidator @Inject() (nino: String, proper
       ResolveUuid(propertyId, PropertyIdFormatError)(PropertyId.apply),
       resolveJson(body)
     ).mapN((validNino, validPropertyId, validBody) =>
-      Def1_UpdateForeignPropertyDetailsRequestData(validNino, validPropertyId, TaxYear.fromMtd(taxYear), validBody)) andThen validateBusinessRules
+      Def1_UpdateForeignPropertyDetailsRequestData(validNino, validPropertyId, TaxYear.fromMtd(taxYear), validBody))
+      .andThen(validateBusinessRules)
 
 }

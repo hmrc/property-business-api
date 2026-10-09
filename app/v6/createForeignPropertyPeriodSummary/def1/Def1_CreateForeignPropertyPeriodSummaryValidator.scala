@@ -36,7 +36,7 @@ class Def1_CreateForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
                                                                   body: JsValue)(implicit config: PropertyBusinessConfig)
     extends Validator[CreateForeignPropertyPeriodSummaryRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax((TaxYear.fromMtd(config.foreignMinimumTaxYear), maxTaxYear))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear), Some(maxTaxYear))
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateForeignPropertyPeriodSummaryRequestBody]()
 
@@ -46,6 +46,6 @@ class Def1_CreateForeignPropertyPeriodSummaryValidator @Inject() (nino: String,
       ResolveBusinessId(businessId),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
+    ).mapN(Def1_CreateForeignPropertyPeriodSummaryRequestData.apply).andThen(validateBusinessRules)
 
 }

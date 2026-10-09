@@ -44,10 +44,7 @@ class Def2_CreateAmendUkPropertyAnnualSubmissionValidator @Inject() (nino: Strin
       ResolveBusinessId(businessId),
       resolveJson(body)
     ).mapN((validNino, validBusinessId, validBody) =>
-      Def2_CreateAmendUkPropertyAnnualSubmissionRequestData(
-        validNino,
-        validBusinessId,
-        TaxYear.fromMtd(taxYear),
-        validBody)) andThen rulesValidator.validateBusinessRules
+      Def2_CreateAmendUkPropertyAnnualSubmissionRequestData(validNino, validBusinessId, TaxYear.fromMtd(taxYear), validBody))
+      .andThen(rulesValidator.validateBusinessRules)
 
 }

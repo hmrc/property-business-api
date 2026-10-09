@@ -50,7 +50,7 @@ class Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryValidator @Inject() (
       ResolveNino(nino),
       resolvePeriodId(periodId),
       resolveJson(body)
-    ).mapN(Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply) andThen validateBusinessRules
+    ).mapN(Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData.apply).andThen(validateBusinessRules)
 
   private def validateBusinessRules(parsed: Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData)
       : Validated[Seq[MtdError], Def1_AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData] = {

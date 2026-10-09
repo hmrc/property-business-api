@@ -31,7 +31,7 @@ class Def1_DeletePropertyAnnualSubmissionValidator @Inject() (nino: String, busi
     config: PropertyBusinessConfig)
     extends Validator[DeletePropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd(config.foreignMinimumTaxYear))
+  private val resolveTaxYear = ResolveDetailedTaxYear(TaxYear.fromMtd(config.foreignMinimumTaxYear))
 
   def validate: Validated[Seq[MtdError], DeletePropertyAnnualSubmissionRequestData] =
     (

@@ -35,9 +35,12 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
     config: PropertyBusinessConfig)
     extends Validator[CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMinMax(
-    (TaxYear.fromMtd(config.historicMinimumTaxYear), TaxYear.fromMtd(config.historicMaximumTaxYear)),
-    RuleHistoricTaxYearNotSupportedError)
+  private val resolveTaxYear = ResolveDetailedTaxYear(
+    minimumTaxYear = TaxYear.fromMtd(config.historicMinimumTaxYear),
+    maximumTaxYear = Some(TaxYear.fromMtd(config.historicMaximumTaxYear)),
+    minError = RuleHistoricTaxYearNotSupportedError,
+    maxError = RuleHistoricTaxYearNotSupportedError
+  )
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestBody]()
 
@@ -50,7 +53,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidator @Inject() (
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData.apply) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData.apply).andThen(validateBusinessRules)
 
   private def validateBusinessRules(parsed: Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData] = {

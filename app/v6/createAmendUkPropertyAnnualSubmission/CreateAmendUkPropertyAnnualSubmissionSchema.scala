@@ -16,7 +16,7 @@
 
 package v6.createAmendUkPropertyAnnualSubmission
 
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -35,7 +35,7 @@ object CreateAmendUkPropertyAnnualSubmissionSchema {
 
   def schemaFor(taxYearString: String)(implicit
       config: PropertyBusinessConfig): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] =
-    ResolveTaxYearMinimum(TaxYear.fromMtd(config.ukMinimumTaxYear))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(TaxYear.fromMtd(config.ukMinimumTaxYear)).apply(taxYearString).andThen(schemaFor)
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendUkPropertyAnnualSubmissionSchema] = {
     if (taxYear < TaxYear.starting(2025)) Valid(Def1)

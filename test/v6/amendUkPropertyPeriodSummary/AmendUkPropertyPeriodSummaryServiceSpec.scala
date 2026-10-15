@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import common.models.domain.SubmissionId
-import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.amendUkPropertyPeriodSummary.model.request.*
 

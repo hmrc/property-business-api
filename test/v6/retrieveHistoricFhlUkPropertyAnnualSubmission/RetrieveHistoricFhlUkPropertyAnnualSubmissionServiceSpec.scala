@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import api.utils.UnitSpec
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.*
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.*
@@ -69,7 +68,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends UnitSpec 
           "INVALID_CORRELATIONID"   -> InternalError,
           "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
           "NOT_FOUND_PERIOD"        -> NotFoundError,
-          "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+          "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
           "SERVER_ERROR"            -> InternalError,
           "SERVICE_UNAVAILABLE"     -> InternalError
         )

@@ -20,10 +20,9 @@ import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.controllers.validators.resolvers.ResolveNino
 import api.models.domain.TaxYear
-import api.models.errors.MtdError
+import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.*
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
@@ -39,8 +38,8 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject() (
   private val resolveTaxYear = ResolveDetailedTaxYear(
     minimumTaxYear = TaxYear.fromMtd(config.historicMinimumTaxYear),
     maximumTaxYear = Some(TaxYear.fromMtd(config.historicMaximumTaxYear)),
-    minError = RuleHistoricTaxYearNotSupportedError,
-    maxError = RuleHistoricTaxYearNotSupportedError
+    minError = RuleTaxYearNotSupportedError,
+    maxError = RuleTaxYearNotSupportedError
   )
 
   def validate: Validated[Seq[MtdError], RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =

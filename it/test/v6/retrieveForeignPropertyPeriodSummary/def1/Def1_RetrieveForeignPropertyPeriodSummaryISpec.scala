@@ -20,7 +20,6 @@ import api.models.domain.TaxYear
 import api.models.errors.*
 import api.services.*
 import api.support.IntegrationBaseSpec
-import common.models.errors.{RuleTypeOfBusinessIncorrectError, SubmissionIdFormatError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}

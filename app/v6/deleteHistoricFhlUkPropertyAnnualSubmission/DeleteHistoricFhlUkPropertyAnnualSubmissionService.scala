@@ -17,10 +17,9 @@
 package v6.deleteHistoricFhlUkPropertyAnnualSubmission
 
 import api.controllers.RequestContext
-import api.models.errors.{InternalError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
 import javax.inject.{Inject, Singleton}
@@ -47,7 +46,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connector: D
       "NOT_FOUND"              -> NotFoundError,
       "NOT_FOUND_PROPERTY"     -> NotFoundError,
       "GONE"                   -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"           -> InternalError,
       "SERVICE_UNAVAILABLE"    -> InternalError
     )

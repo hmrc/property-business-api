@@ -22,7 +22,6 @@ import api.models.outcomes.ResponseWrapper
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import common.models.domain.PeriodId
-import common.models.errors.*
 import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request.CreateHistoricNonFhlUkPropertyPeriodSummaryRequestData
 import v6.historicNonFhlUkPropertyPeriodSummary.create.model.response.CreateHistoricNonFhlUkPropertyPeriodSummaryResponse
 
@@ -57,7 +56,7 @@ class CreateHistoricNonFhlUkPropertyPeriodSummaryService @Inject() (connector: C
       "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
       "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
       "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
-      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )

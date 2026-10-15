@@ -24,7 +24,6 @@ import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
-import common.models.errors.*
 import common.utils.DateValidator
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request
 import v6.createAmendForeignPropertyCumulativePeriodSummary.def2.model.request.*

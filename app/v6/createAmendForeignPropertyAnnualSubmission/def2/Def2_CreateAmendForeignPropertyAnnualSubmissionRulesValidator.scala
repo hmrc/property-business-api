@@ -22,7 +22,6 @@ import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
-import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError}
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.Def2_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.{
   Def2_Create_Amend_ForeignAllowances,

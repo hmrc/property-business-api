@@ -21,7 +21,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear, Timestamp}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
-import common.models.errors.RuleTypeOfBusinessIncorrectError
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.request.Def1_RetrieveUkPropertyAnnualSubmissionRequestData
 import v6.retrieveUkPropertyAnnualSubmission.def1.model.response.Def1_RetrieveUkPropertyAnnualSubmissionResponse

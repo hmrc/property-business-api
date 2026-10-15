@@ -21,7 +21,6 @@ import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import common.models.domain.PropertyId
-import common.models.errors.*
 import play.api.libs.json.*
 import v6.updateForeignPropertyDetails.def1.model.Def1_UpdateForeignPropertyDetailsFixtures.*
 import v6.updateForeignPropertyDetails.def1.model.request.Def1_UpdateForeignPropertyDetailsRequestData

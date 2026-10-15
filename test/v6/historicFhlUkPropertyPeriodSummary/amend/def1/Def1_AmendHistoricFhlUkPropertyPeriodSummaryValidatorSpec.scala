@@ -21,7 +21,6 @@ import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import common.models.domain.PeriodId
-import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.*

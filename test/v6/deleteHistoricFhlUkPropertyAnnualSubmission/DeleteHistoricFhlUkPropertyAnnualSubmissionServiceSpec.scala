@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import common.models.domain.HistoricPropertyType
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.deleteHistoricFhlUkPropertyAnnualSubmission.model.request.Def1_DeleteHistoricFhlUkPropertyAnnualSubmissionRequestData
 
@@ -67,7 +66,7 @@ class DeleteHistoricFhlUkPropertyAnnualSubmissionServiceSpec extends ServiceSpec
           "NOT_FOUND"              -> NotFoundError,
           "NOT_FOUND_PROPERTY"     -> NotFoundError,
           "GONE"                   -> NotFoundError,
-          "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+          "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
           "SERVER_ERROR"           -> InternalError,
           "SERVICE_UNAVAILABLE"    -> InternalError
         )

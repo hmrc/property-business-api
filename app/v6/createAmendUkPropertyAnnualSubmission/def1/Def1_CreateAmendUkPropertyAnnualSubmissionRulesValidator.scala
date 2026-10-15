@@ -22,7 +22,6 @@ import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError}
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.Def1_CreateAmendUkPropertyAnnualSubmissionRequestData
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukFhlProperty.*
 import v6.createAmendUkPropertyAnnualSubmission.def1.model.request.ukProperty.*

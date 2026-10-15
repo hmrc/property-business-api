@@ -18,12 +18,11 @@ package v6.createUkPropertyPeriodSummary.def2
 
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.ResolveParsedNumber
-import api.models.errors.MtdError
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
-import common.models.errors.RuleBothExpensesSuppliedError
 import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukFhlProperty.*
 import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukNonFhlProperty.*
 import v6.createUkPropertyPeriodSummary.def2.model.request.def2_ukPropertyRentARoom.Def2_Create_UkPropertyExpensesRentARoom

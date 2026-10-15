@@ -21,7 +21,6 @@ import api.models.utils.JsonErrorValidators
 import api.services.*
 import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.errors.*
 import play.api.libs.json.*
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.WSBodyWritables.{writeableOf_JsValue, writeableOf_String}
@@ -147,7 +146,7 @@ class Def1_UpdateForeignPropertyDetailsISpec extends IntegrationBaseSpec with Js
         (UNPROCESSABLE_ENTITY, "1248", BAD_REQUEST, RulePropertyBusinessCeasedError),
         (UNPROCESSABLE_ENTITY, "1249", BAD_REQUEST, RuleMissingEndDetailsError),
         (UNPROCESSABLE_ENTITY, "4200", BAD_REQUEST, RuleOutsideAmendmentWindowError),
-        (NOT_IMPLEMENTED, "5000", BAD_REQUEST, RuleHistoricTaxYearNotSupportedError)
+        (NOT_IMPLEMENTED, "5000", BAD_REQUEST, RuleTaxYearNotSupportedError)
       )
 
       errors.foreach(args => serviceErrorTest.tupled(args))

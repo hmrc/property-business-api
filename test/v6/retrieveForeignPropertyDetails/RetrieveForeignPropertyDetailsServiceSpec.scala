@@ -21,7 +21,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import common.models.domain.PropertyId
-import common.models.errors.PropertyIdFormatError
 import v6.retrieveForeignPropertyDetails.def1.model.Def1_RetrieveForeignPropertyDetailsFixture
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 import v6.retrieveForeignPropertyDetails.model.request.RetrieveForeignPropertyDetailsRequestData

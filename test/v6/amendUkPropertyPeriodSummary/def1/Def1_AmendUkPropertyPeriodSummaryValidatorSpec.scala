@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import common.models.domain.SubmissionId
-import common.models.errors.{RuleBothExpensesSuppliedError, SubmissionIdFormatError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import v6.amendUkPropertyPeriodSummary.AmendUkPropertyPeriodSummaryValidatorFactory

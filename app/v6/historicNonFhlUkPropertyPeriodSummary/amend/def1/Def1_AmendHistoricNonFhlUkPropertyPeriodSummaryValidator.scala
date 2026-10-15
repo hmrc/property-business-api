@@ -19,12 +19,11 @@ package v6.historicNonFhlUkPropertyPeriodSummary.amend.def1
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
-import api.models.errors.MtdError
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.controllers.validators.resolvers.ResolvePeriodId
-import common.models.errors.RuleBothExpensesSuppliedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}

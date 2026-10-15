@@ -20,7 +20,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
 import common.models.domain.SubmissionId
-import common.models.errors.SubmissionIdFormatError
 import config.MockPropertyBusinessConfig
 import v6.retrieveUkPropertyPeriodSummary.RetrieveUkPropertyPeriodSummaryValidatorFactory
 import v6.retrieveUkPropertyPeriodSummary.model.request.*

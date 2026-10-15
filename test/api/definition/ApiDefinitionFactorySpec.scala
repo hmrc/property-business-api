@@ -23,30 +23,59 @@ import api.mocks.MockHttpClient
 import api.routing.*
 import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
-import definition.PropertyBusinessApiDefinitionFactory
 
 import scala.language.reflectiveCalls
 
-class ApiDefinitionFactorySpec extends UnitSpec {
+class ApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
+
+  "definition" when {
+    "called" should {
+      "return a valid Definition case class" in new Test {
+
+        MockedAppConfig.apiStatus(Version6) returns "BETA"
+        MockedAppConfig.endpointsEnabled(Version6) returns true
+        MockedAppConfig.deprecationFor(Version6).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled returns false
+
+        apiDefinitionFactory.definition shouldBe
+          Definition(
+            api = APIDefinition(
+              name = "Property Business (MTD)",
+              description = "An API for providing property business data",
+              context = "individuals/business/property",
+              categories = List("INCOME_TAX_MTD"),
+              versions = List(
+                APIVersion(
+                  Version6,
+                  status = BETA,
+                  access = APIAccessType.PUBLIC,
+                  endpointsEnabled = true
+                )
+              ),
+              requiresTrust = None
+            )
+          )
+      }
+    }
+  }
 
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
 
       s"return the expected status" in new Test {
-        setupMockConfig(Version9)
         MockedAppConfig.apiStatus(Version9) returns "BETA"
+        MockedAppConfig.deprecationFor(Version9).returns(NotDeprecated.valid).anyNumberOfTimes()
 
-        val result: APIStatus = checkBuildApiStatus(Version9)
+        val result: APIStatus = apiDefinitionFactory.buildAPIStatus(Version9)
         result shouldBe BETA
       }
     }
 
     "the 'apiStatus' parameter is present but invalid" should {
       s"default to alpha" in new Test {
-        setupMockConfig(Version9)
         MockedAppConfig.apiStatus(Version9) returns "not-a-status"
-
-        checkBuildApiStatus(Version9) shouldBe ALPHA
+        MockedAppConfig.deprecationFor(Version9).returns(NotDeprecated.valid).anyNumberOfTimes()
+        apiDefinitionFactory.buildAPIStatus(Version9) shouldBe ALPHA
       }
     }
 
@@ -60,7 +89,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
           .anyNumberOfTimes()
 
         val exception: Exception = intercept[Exception] {
-          checkBuildApiStatus(Version9)
+          apiDefinitionFactory.buildAPIStatus(Version9)
         }
 
         val exceptionMessage: String = exception.getMessage
@@ -69,19 +98,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
   }
 
-  trait Test extends UnitSpec with MockHttpClient with MockAppConfig {
-    MockedAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
-
-    val apiDefinitionFactory: ApiDefinitionFactory       = new PropertyBusinessApiDefinitionFactory(mockAppConfig)
-    def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
-
-    protected def setupMockConfig(version: Version): Unit = {
-      MockedAppConfig
-        .deprecationFor(version)
-        .returns(NotDeprecated.valid)
-        .anyNumberOfTimes()
-    }
-
+  class Test extends MockHttpClient with MockAppConfig {
+    val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
+    MockedAppConfig.apiGatewayContext returns "individuals/business/property"
   }
 
 }

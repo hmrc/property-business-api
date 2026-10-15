@@ -21,7 +21,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import common.models.errors.RuleOutsideAmendmentWindowError
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.deletePropertyAnnualSubmission.model.request.{Def1_DeletePropertyAnnualSubmissionRequestData, DeletePropertyAnnualSubmissionRequestData}
 

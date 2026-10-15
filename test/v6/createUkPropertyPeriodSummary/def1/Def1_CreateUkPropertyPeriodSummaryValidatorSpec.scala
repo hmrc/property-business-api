@@ -20,7 +20,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleToDateBeforeFromDateError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.*
 import v6.createUkPropertyPeriodSummary.def1.model.request.def1_ukFhlProperty.*

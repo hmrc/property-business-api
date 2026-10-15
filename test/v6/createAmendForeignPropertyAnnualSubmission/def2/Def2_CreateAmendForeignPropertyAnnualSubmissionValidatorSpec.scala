@@ -20,7 +20,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.models.errors.{RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicateCountryCodeError}
 import play.api.libs.json.*
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.*
 import v6.createAmendForeignPropertyAnnualSubmission.def2.model.request.def2_foreignProperty.*

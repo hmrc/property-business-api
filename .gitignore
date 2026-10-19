@@ -24,9 +24,7 @@ node_modules/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
-/.bsp
-.DS_Store
-**/*.DS_Store
+app/.DS_Store
 app/v2/.DS_Store
 .bloop/bloop.settings.json
 .metals/metals.lock.db
@@ -42,9 +40,7 @@ project/.bloop/bloop.settings.json
 project/metals.sbt
 project/.bloop/property-business-api-build.json
 .gitignore
-.gitignore
 .bloop/property-business-api-it.json
 .bloop/*
 .vscode/*
-.gitignore
 package-lock.json

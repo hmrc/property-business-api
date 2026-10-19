@@ -18,15 +18,37 @@ package api.definition
 
 import api.config.Deprecation.NotDeprecated
 import api.config.MockAppConfig
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.definition.APIStatus.{ALPHA, BETA}
-import api.mocks.MockHttpClient
 import api.routing.*
 import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
 
-import scala.language.reflectiveCalls
-
 class ApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
+
+  "set the access level" when {
+    "the controlled access flag is enabled" should {
+      "return CONTROLLED" in new Test {
+        MockedAppConfig.endpointsEnabled(Version6) returns true
+        MockedAppConfig.apiStatus(Version6) returns "BETA"
+        MockedAppConfig.deprecationFor(Version6).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled returns true
+
+        apiDefinitionFactory.definition.api.versions.head.access shouldBe CONTROLLED
+      }
+    }
+
+    "the controlled access flag is disabled" should {
+      "return PUBLIC" in new Test {
+        MockedAppConfig.endpointsEnabled(Version6) returns true
+        MockedAppConfig.apiStatus(Version6) returns "BETA"
+        MockedAppConfig.deprecationFor(Version6).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled returns false
+
+        apiDefinitionFactory.definition.api.versions.head.access shouldBe PUBLIC
+      }
+    }
+  }
 
   "definition" when {
     "called" should {
@@ -62,7 +84,7 @@ class ApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
 
-      s"return the expected status" in new Test {
+      "return the expected status" in new Test {
         MockedAppConfig.apiStatus(Version9) returns "BETA"
         MockedAppConfig.deprecationFor(Version9).returns(NotDeprecated.valid).anyNumberOfTimes()
 
@@ -72,7 +94,7 @@ class ApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
     }
 
     "the 'apiStatus' parameter is present but invalid" should {
-      s"default to alpha" in new Test {
+      "default to alpha" in new Test {
         MockedAppConfig.apiStatus(Version9) returns "not-a-status"
         MockedAppConfig.deprecationFor(Version9).returns(NotDeprecated.valid).anyNumberOfTimes()
         apiDefinitionFactory.buildAPIStatus(Version9) shouldBe ALPHA
@@ -98,7 +120,7 @@ class ApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
     }
   }
 
-  class Test extends MockHttpClient with MockAppConfig {
+  class Test extends MockAppConfig {
     val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
     MockedAppConfig.apiGatewayContext returns "individuals/business/property"
   }

@@ -34,3 +34,5 @@ project/.bloop/property-business-api-build.json
 .bloop/*
 .vscode/*
 package-lock.json
+.DS_Store
+**/*.DS_Store

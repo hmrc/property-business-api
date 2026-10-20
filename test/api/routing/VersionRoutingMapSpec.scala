@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package routing
+package api.routing
 
-import api.routing.*
+import api.utils.UnitSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.routing.Router
 
-import javax.inject.Inject
+class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite {
 
-// Add routes corresponding to available versions...
-case class PropertyBusinessVersionRoutingMap @Inject() (defaultRouter: Router, v6Router: v6.Routes) extends VersionRoutingMap {
+  private val defaultRouter: Router = mock[Router]
+  private val v6Routes: v6.Routes   = app.injector.instanceOf[v6.Routes]
 
-  val map: Map[Version, Router] = Map(
-    Version6 -> v6Router
+  private val versionRoutingMap: VersionRoutingMapImpl = VersionRoutingMapImpl(
+    defaultRouter = defaultRouter,
+    v6Router = v6Routes
   )
+
+  "VersionRoutingMap" when {
+    "routing to v6" should {
+      "return the v6 router" in {
+        versionRoutingMap.map(Version6) shouldBe v6Routes
+      }
+    }
+  }
 
 }

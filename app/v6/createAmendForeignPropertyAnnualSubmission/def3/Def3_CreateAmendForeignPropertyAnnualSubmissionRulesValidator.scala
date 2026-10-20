@@ -24,7 +24,6 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveUuid
 import common.models.domain.PropertyId
-import common.models.errors.{PropertyIdFormatError, RuleBothAllowancesSuppliedError, RuleBuildingNameNumberError, RuleDuplicatePropertyIdError}
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.Def3_CreateAmendForeignPropertyAnnualSubmissionRequestData
 import v6.createAmendForeignPropertyAnnualSubmission.def3.model.request.def3_foreignProperty.{
   Def3_Create_Amend_ForeignAllowances,

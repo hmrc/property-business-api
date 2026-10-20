@@ -19,11 +19,10 @@ package v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
-import api.models.errors.MtdError
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.{catsSyntaxTuple3Semigroupal, toTraverseOps}
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.PropertyBusinessConfig
 import play.api.libs.json.JsValue
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.{HistoricNonFhlAnnualAdjustments, HistoricNonFhlAnnualAllowances}
@@ -38,8 +37,8 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionValidator @Inject(
   private val resolveTaxYear = ResolveDetailedTaxYear(
     TaxYear.fromMtd(config.historicMinimumTaxYear),
     Some(TaxYear.fromMtd(config.historicMaximumTaxYear)),
-    minError = RuleHistoricTaxYearNotSupportedError,
-    maxError = RuleHistoricTaxYearNotSupportedError
+    minError = RuleTaxYearNotSupportedError,
+    maxError = RuleTaxYearNotSupportedError
   )
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestBody]()

@@ -19,7 +19,6 @@ package v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.def1
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorFactory
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
@@ -86,7 +85,7 @@ class Def1_RetrieveHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends
 
         val result: Either[ErrorWrapper, RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData] =
           validator(validNino, taxYearString).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "given an invalid taxYear range" in new SetupConfig {

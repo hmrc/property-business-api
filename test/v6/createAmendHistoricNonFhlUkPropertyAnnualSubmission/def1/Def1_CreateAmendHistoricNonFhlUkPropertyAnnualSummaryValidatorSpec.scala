@@ -21,7 +21,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.*
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.def1.model.request.*
@@ -150,7 +149,7 @@ class Def1_CreateAmendHistoricNonFhlUkPropertyAnnualSummaryValidatorSpec extends
       def disallowsTaxYear(taxYearString: String): Unit = {
 
         val result = validator(validNino, taxYearString, validBody).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "given a taxYear with an invalid range" in new SetupConfig {

@@ -22,7 +22,6 @@ import api.models.domain.TaxYear
 import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import common.models.errors.*
 import v6.createForeignPropertyDetails.def1.model.request.{Def1_CreateForeignPropertyDetailsRequestData, EndReason}
 
 import scala.util.matching.Regex

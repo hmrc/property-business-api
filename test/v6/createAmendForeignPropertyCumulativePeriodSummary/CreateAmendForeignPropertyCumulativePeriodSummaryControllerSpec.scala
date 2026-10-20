@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.utils.MockIdGenerator
-import common.models.errors.RuleMisalignedPeriodError
 import play.api.Configuration
 import play.api.libs.json.JsObject
 import play.api.mvc.Result

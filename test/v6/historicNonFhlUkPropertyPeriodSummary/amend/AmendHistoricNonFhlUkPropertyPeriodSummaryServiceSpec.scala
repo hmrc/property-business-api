@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.{ServiceOutcome, ServiceSpec}
 import common.models.domain.PeriodId
-import common.models.errors.{PeriodIdFormatError, RuleBothExpensesSuppliedError}
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.historicNonFhlUkPropertyPeriodSummary.amend.model.request.{
   AmendHistoricNonFhlUkPropertyPeriodSummaryRequestData,

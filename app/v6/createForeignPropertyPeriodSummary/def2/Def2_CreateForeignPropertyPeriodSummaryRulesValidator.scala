@@ -23,7 +23,6 @@ import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
 import common.controllers.validators.resolvers.ResolveFromAndToDates
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError}
 import v6.createForeignPropertyPeriodSummary.def2.model.request.Def2_foreignFhlEea.{
   Def2_Create_CreateForeignFhlEea,
   Def2_Create_CreateForeignFhlEeaExpenses

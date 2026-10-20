@@ -18,11 +18,10 @@ package v6.createAmendUkPropertyCumulativeSummary.def1
 
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.ResolveParsedNumber
-import api.models.errors.MtdError
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.toTraverseOps
-import common.models.errors.RuleBothExpensesSuppliedError
 import common.utils.DateValidator
 import v6.createAmendUkPropertyCumulativeSummary.def1.model.request.{Def1_CreateAmendUkPropertyCumulativeSummaryRequestData, Expenses, UkProperty}
 

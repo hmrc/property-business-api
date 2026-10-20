@@ -20,7 +20,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsNumber, JsObject, JsValue, Json}
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.def1.model.request.*
@@ -229,7 +228,7 @@ class Def1_CreateAmendHistoricFhlUkPropertyAnnualSubmissionValidatorSpec extends
 
       def disallowsTaxYear(taxYearString: String): Unit = {
         validator(validNino, taxYearString, validRequestBody).validateAndWrapResult() shouldBe
-          Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a request body with a mandatory field missing" in new SetupConfig {

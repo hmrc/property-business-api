@@ -21,7 +21,6 @@ import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import common.models.domain.SubmissionId
-import common.models.errors.{RuleBothExpensesSuppliedError, RuleDuplicateCountryCodeError, SubmissionIdFormatError}
 import config.MockPropertyBusinessConfig
 import play.api.libs.json.{JsArray, JsNumber, JsValue, Json}
 import v6.amendForeignPropertyPeriodSummary.def2.model.request.def2_foreignFhlEea.*

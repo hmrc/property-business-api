@@ -21,7 +21,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.createAmendHistoricNonFhlUkPropertyAnnualSubmission.model.request.{
   CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionRequestData,
@@ -72,7 +71,7 @@ class CreateAmendHistoricNonFhlUkPropertyAnnualSubmissionServiceSpec extends Uni
         "NOT_FOUND_PROPERTY"     -> NotFoundError,
         "NOT_FOUND"              -> NotFoundError,
         "GONE"                   -> InternalError,
-        "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR"           -> InternalError,
         "SERVICE_UNAVAILABLE"    -> InternalError
       )

@@ -22,7 +22,6 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
 import common.models.domain.PeriodId
-import common.models.errors.*
 import uk.gov.hmrc.http.HeaderCarrier
 import v6.historicFhlUkPropertyPeriodSummary.create.model.request.{
   Def1_CreateHistoricFhlUkPiePeriodSummaryRequestBody,
@@ -76,7 +75,7 @@ class CreateHistoricFhlUkPropertyPeriodSummaryServiceSpec extends UnitSpec {
         "NOT_CONTIGUOUS_PERIOD"   -> RuleNotContiguousPeriodError,
         "INVALID_PERIOD"          -> RuleToDateBeforeFromDateError,
         "BOTH_EXPENSES_SUPPLIED"  -> RuleBothExpensesSuppliedError,
-        "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+        "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
         "SERVER_ERROR"            -> InternalError,
         "SERVICE_UNAVAILABLE"     -> InternalError
       )

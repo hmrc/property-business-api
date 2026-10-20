@@ -20,7 +20,6 @@ import api.models.domain.{BusinessId, Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
 import common.models.domain.PropertyId
-import common.models.errors.PropertyIdFormatError
 import v6.retrieveForeignPropertyDetails.def1.model.request.Def1_RetrieveForeignPropertyDetailsRequestData
 
 class Def1_RetrieveForeignPropertyDetailsValidatorSpec extends UnitSpec {

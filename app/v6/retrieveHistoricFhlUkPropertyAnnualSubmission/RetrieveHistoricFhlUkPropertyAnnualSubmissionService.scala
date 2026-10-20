@@ -20,7 +20,6 @@ import api.controllers.RequestContext
 import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v6.retrieveHistoricFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricFhlUkPropertyAnnualSubmissionResponse
 
@@ -47,7 +46,7 @@ class RetrieveHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connector:
       "INVALID_CORRELATIONID"   -> InternalError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "NOT_FOUND_PERIOD"        -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )

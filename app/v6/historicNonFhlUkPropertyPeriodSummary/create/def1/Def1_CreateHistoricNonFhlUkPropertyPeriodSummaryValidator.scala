@@ -18,12 +18,11 @@ package v6.historicNonFhlUkPropertyPeriodSummary.create.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveParsedNumber}
-import api.models.errors.MtdError
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveFromAndToDates
-import common.models.errors.RuleBothExpensesSuppliedError
 import play.api.libs.json.JsValue
 import v6.historicNonFhlUkPropertyPeriodSummary.create.def1.model.request.{UkNonFhlPropertyExpenses, UkNonFhlPropertyIncome}
 import v6.historicNonFhlUkPropertyPeriodSummary.create.model.request.{

@@ -19,7 +19,6 @@ package v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.def1
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import config.MockPropertyBusinessConfig
 import v6.deleteHistoricNonFhlUkPropertyAnnualSubmission.model.request.*
 
@@ -87,7 +86,7 @@ class Def1_DeleteHistoricNonFhlUkPropertyAnnualSubmissionValidatorSpec extends U
 
         val result = validator(validNino, taxYearString).validateAndWrapResult()
         result shouldBe
-          Left(ErrorWrapper(correlationId, RuleHistoricTaxYearNotSupportedError))
+          Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
       }
 
       "passed a taxYear spanning an invalid tax year range" in new SetupConfig {

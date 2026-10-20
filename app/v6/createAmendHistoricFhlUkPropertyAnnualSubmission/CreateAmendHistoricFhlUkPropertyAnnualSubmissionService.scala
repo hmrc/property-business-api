@@ -20,7 +20,6 @@ import api.controllers.RequestContext
 import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.request.CreateAmendHistoricFhlUkPropertyAnnualSubmissionRequestData
 import v6.createAmendHistoricFhlUkPropertyAnnualSubmission.model.response.CreateAmendHistoricFhlUkPropertyAnnualSubmissionResponse
 
@@ -48,7 +47,7 @@ class CreateAmendHistoricFhlUkPropertyAnnualSubmissionService @Inject() (connect
       "NOT_FOUND_PROPERTY"     -> NotFoundError,
       "NOT_FOUND"              -> NotFoundError,
       "GONE"                   -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleHistoricTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"           -> InternalError,
       "SERVICE_UNAVAILABLE"    -> InternalError
     )

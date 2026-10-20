@@ -17,10 +17,9 @@
 package v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission
 
 import api.controllers.RequestContext
-import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError}
+import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import common.models.errors.RuleHistoricTaxYearNotSupportedError
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.request.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionRequestData
 import v6.retrieveHistoricNonFhlUkPropertyAnnualSubmission.model.response.RetrieveHistoricNonFhlUkPropertyAnnualSubmissionResponse
 
@@ -46,7 +45,7 @@ class RetrieveHistoricNonFhlUkPropertyAnnualSubmissionService @Inject() (connect
       "INVALID_CORRELATIONID"   -> InternalError,
       "INCOME_SOURCE_NOT_FOUND" -> NotFoundError,
       "NOT_FOUND_PERIOD"        -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED"  -> RuleHistoricTaxYearNotSupportedError,
+      "TAX_YEAR_NOT_SUPPORTED"  -> RuleTaxYearNotSupportedError,
       "SERVER_ERROR"            -> InternalError,
       "SERVICE_UNAVAILABLE"     -> InternalError
     )
